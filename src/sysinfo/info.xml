@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>System Info</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>3.2.10</version>
+
+<!-- release date of THIS version -->
+  <release>November 19,2018</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>4.4</tested>
+
+<!-- What does your plugin do? -->
+  <description>A system info dashboard based on http://phpsysinfo.github.io/phpsysinfo/. PLEASE NOTE: If you get an error about "com_dotnet" (usually on Windows), you need to make a change to your php.ini.  Find the path of the file in System Snapshot on the UserSpice Dashboard. Add the line "extension=php_com_dotnet.dll" on its own line (without quotes) and restart your server. </description>
+
+<!-- This is the launch button in the plugin manager -->
+  <button>Launch SysInfo</button>
+</plugin>

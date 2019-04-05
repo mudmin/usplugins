@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>File Manager</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.6.0</version>
+
+<!-- release date of THIS version -->
+  <release>November 19,2018</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>4.4</tested>
+
+<!-- What does your plugin do? -->
+  <description>Manage your ENTIRE server's files from this plugin, Use and enable with caution.  Note that on windows the left side file tree may not work properly, but you can click on the path at the top and browse files quickly from the right side.
+    Based entirely on the work of dulldusk at https://sourceforge.net/projects/phpfm/.  Converted to a UserSpice plugin by Dan Hoover.</description>
+
+<!-- This is the launch button in the plugin manager -->
+  <button>Run Fileman</button>
+</plugin>

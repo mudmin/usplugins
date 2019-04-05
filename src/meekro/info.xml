@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>MeekroDB Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>2.3.0</version>
+
+<!-- release date of THIS version -->
+  <release>November 21,2018</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>4.4</tested>
+
+<!-- What does your plugin do? -->
+  <description>This is the MeekroDB plugin for UserSpice. An advanced database class for your UserSpice project.
+    Free for personal use. Purchase a 1 time or bulk commercial license at <a href="https://meekro.com/">https://meekro.com/</a></description>
+
+<!-- This is the launch button in the plugin manager -->
+  <button>Configure Plugin</button>
+</plugin>

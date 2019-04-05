@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Stripe Credit Cards</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>0.01</version>
+
+<!-- release date of THIS version -->
+  <release>October 12,2018</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>4.4</tested>
+
+<!-- What does your plugin do? -->
+  <description>Charge credit cards with stripe!  Setup your keys in by clicking "Configure Plugin" on the left.</description>
+
+<!-- This is the launch button in the plugin manager -->
+  <button>Configure Plugin</button>
+</plugin>
