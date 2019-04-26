@@ -22,7 +22,7 @@ function commentsHere($opt = []){
       'approved'=>$settings->cmntapprvd
     );
     $db->insert('us_comments_plugin',$fields);
-    dnd($db->errorInfo());
+    // dnd($db->errorInfo());
   }
   $token = Token::generate();
   getPageForComments();
