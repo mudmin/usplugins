@@ -224,7 +224,7 @@ function array_to_object( $var ) {
     }
     return $obj;
 }
-class config {
+class cfg {
     var $data;
     function __construct(){
         $this->data = array(
@@ -271,7 +271,7 @@ class config {
 // +--------------------------------------------------
 // | Config Load
 // +--------------------------------------------------
-$cfg = new config();
+$cfg = new cfg();
 $cfg->load();
 if (strlen($timezone)) @date_default_timezone_set($timezone);
 //@setlocale(LC_CTYPE, 'C');

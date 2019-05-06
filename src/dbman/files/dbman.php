@@ -17,10 +17,10 @@ $ACCESS_PWD=''; #!!!IMPORTANT!!! this is script access password, SET IT if you w
 #DEFAULT db connection settings
 # --- WARNING! --- if you set defaults - it's recommended to set $ACCESS_PWD to protect your db!
 $DBDEF=array(
-'user'=>"",#required
-'pwd'=>"", #required
-'db'=>"",  #optional, default DB
-'host'=>"",#optional
+'user'=>Config::get('mysql/username'),#required
+'pwd'=>Config::get('mysql/password'), #required
+'db'=>Config::get('mysql/db'),  #optional, default DB
+'host'=>Config::get('mysql/host'),#optional
 'port'=>"",#optional
 'chset'=>"utf8",#optional, default charset
 );
