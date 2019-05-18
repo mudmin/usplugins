@@ -37,6 +37,7 @@ $hooks = [];
 //postion options are post,body,form,bottom
 //See documentation for more information
 $hooks['login.php']['body'] = 'hooks/loginbody.php';
+$hooks['join.php']['body'] = 'hooks/loginbody.php';
 
 registerHooks($hooks,$plugin_name);
 

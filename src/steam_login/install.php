@@ -28,6 +28,11 @@ if($check > 0){
 		logger($user->data()->id,"USPlugins","Failed to to install plugin, Error: ".$db->errorString());
  }
 }
+$db->query("ALTER TABLE users ADD COLUMN steam_id varchar(255)");
+$db->query("ALTER TABLE users ADD COLUMN steam_un varchar(255)");
+$db->query("ALTER TABLE users ADD COLUMN steam_avatar varchar(255)");
+$db->query("ALTER TABLE settings ADD COLUMN steam_api varchar(255)");
+$db->query("ALTER TABLE settings ADD COLUMN steam_domain varchar(255)");
 
 //do you want to inject your plugin in the middle of core UserSpice pages?
 $hooks = [];
@@ -37,8 +42,12 @@ $hooks = [];
 //postion options are post,body,form,bottom
 //See documentation for more information
 $hooks['login.php']['body'] = 'hooks/loginbody.php';
-$hooks['join.php']['body'] = 'hooks/loginbody.php';
-
+$hooks['join.php']['body'] = 'hooks/joinbody.php';
+$hooks['account.php']['body'] = 'hooks/link_button_account.php';
+$hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
+// $hooks['login.php']['form'] = 'hooks/loginform.php';
+// $hooks['login.php']['bottom'] = 'hooks/loginbottom.php';
+// $hooks['login.php']['post'] = 'hooks/loginpost.php';
 registerHooks($hooks,$plugin_name);
 
 } //do not perform actions outside of this statement

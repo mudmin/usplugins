@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-  <name>Google Login Plugin</name>
+  <name>Steam Login Plugin</name>
   <author>Dan Hoover</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
@@ -9,14 +9,14 @@
   <version>1.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>May 18, 2019</release>
+  <release>May 18,2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0</tested>
+  <tested>4.4</tested>
 
 <!-- What does your plugin do? -->
-  <description>This Google login plugin replaces the feature that was built into UserSpice 4.4 and below.</description>
+  <description>Join, login, or link your Steam Account to UserSpice</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Configure Google</button>
+    <button>Steam Login Config</button>
 </plugin>
