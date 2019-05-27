@@ -155,6 +155,11 @@ if (!empty($_POST['login_hook'])) {
             if($lookupC > 0){
               $lookup = $lookupQ->first();
               $_SESSION['user'] = $lookup->id;
+              $fields = array(
+                'fname' => Input::sanitize($data[0]["givenname"][0]),
+                'lname' => Input::sanitize($data[0]["sn"][0])
+              );
+              $db->update('users',$lookup->id,$fields);
               $db->update('users',$lookup->id, ['logins'=>$lookup->logins+1]);
               if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir')){
                 include($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir');
