@@ -408,6 +408,7 @@ if (isset($_POST['name']) && isset($_GET['database'])){
         $div_number = 2;
     } else {
         $div_class1 = "";
+        $div_number = 1;
     }
     
     $div_class2 = Input::get('div_class2');
