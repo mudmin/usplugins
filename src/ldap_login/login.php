@@ -115,7 +115,7 @@ if (!empty($_POST['login_hook'])) {
     $ldapPort = $settings->ldap_port;
     $ldapVersion =  $settings->ldap_version;
 
-    $ldap_search_entry = "(|(cn=$username)(uid=$username))";        // or we can add "mail" if we want to allow users to login with email
+    $ldap_search_entry = "(|(cn=$username)(uid=$username)(sAMAccountName=$username))";
     $attribute_mapping_definition = "email:mail,username:uid,fname:givenname,lname:sn";     // map userSpice DB field with LDAP attribute
 
     // prepare attribte mapping array
@@ -130,6 +130,7 @@ if (!empty($_POST['login_hook'])) {
     //ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, 7);
     $ldapconn = ldap_connect($ldapserver, $ldapPort) or die("Could not connect to LDAP server.");
     ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, $ldapVersion);
+    ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0); // We need this for doing an LDAP search.
 
     if($ldapconn) {
         // binding to ldap server
