@@ -164,6 +164,13 @@ class fb_createform {
                         'database_where'    => Input::get('database_where'),
                     ];
             }
+        } elseif($_POST['database_name']) {
+            $insert_query += [
+                'databasevalue'             => '',
+                'database_name'             => Input::get('database_name'),
+                'database_value'            => '',
+                'database_where'            => '',
+            ];
         } else {
             $insert_query += [
                 'databasevalue'     => '',
@@ -192,6 +199,16 @@ class fb_createform {
                 'input_html'      => '',
                 'required'        => '',
             );
+        } elseif($_POST['field_type'] == 'label'){
+            $insert_query = array(
+                'div_class1'      => $div_class1,
+                'div_class2'      => Input::get('div_class2'),
+                'label'           => Input::get('label'),
+                'label_class'     => Input::get('label_class'),
+                'input_class'     => '',
+                'input_html'      => '',
+                'required'        => '',
+            );    
         } else {
             $insert_query = array(
                 'div_class1'      => $div_class1,
@@ -372,11 +389,11 @@ if (isset($_POST['database_submit'])){
     $createform->create();
     
     $db = DB::getInstance();
-    $count = $db->findById(1,'fb_settings')->count();
-    if($count == 0){
-        $submit_new = $db->submit_new;
-        if($submit_new == 1){
-            redirect::to($us_url_root.'usersc/plugins/formbuilder/index.php');
+    $count = $db->query("SELECT submit_new FROM fb_settings WHERE id = 1")->count();
+    if($count > 0){
+        $submit_new = $db->first()->submit_new;
+        if($submit_new === true){
+            redirect::to($us_url_root.'usersc/plugins/formbuilder/index.php?form_preview='.$createform->database);
         } else {
             if(isset($_GET['id'])){
                 $basename = basename($_SERVER['REQUEST_URI']);
@@ -397,6 +414,7 @@ if (isset($_POST['database_submit'])){
 
 if (isset($_POST['name']) && isset($_GET['database'])){
 
+    $token = Token::generate();
     $database = Input::get('database');
 
     $fb_order = Input::get('fb_order');
@@ -423,7 +441,8 @@ if (isset($_POST['name']) && isset($_GET['database'])){
     $database_type = Input::get('database_type');
         if($database_type == "manual"){
             $databasetype = "manual";
-            $databasevalue_Content = json_decode($databasevalue,true);
+            $databasevalue = $createform->databasevalue;
+            $databasevalue_Content = $databasevalue;
             $databaseids = $databasevalue_Content->databaseids;
             $databasevalue = $databasevalue_Content->databasevalue;
         }elseif($database_type == 'database'){
@@ -438,6 +457,9 @@ if (isset($_POST['name']) && isset($_GET['database'])){
                 $database_value = Input::get('database_value');
             }
         }
+    }
+    if(isset($_POST['database_name'])){
+        $database_name = Input::get('database_name');
     }
     
     $databasevalue = $createform->databasevalue;
@@ -547,6 +569,13 @@ if (isset($_POST['name']) && isset($_GET['database'])){
                         $database_value = $result->database_value;
                     }
                 }
+                
+                if($result->field_type == 'hidden'){
+                    if(isset($result->database_name)){
+                        $database_name = $result->database_name;
+                    }
+                }
+                
 
                 $requirements = json_decode($result->requirements);
 
@@ -645,7 +674,78 @@ if (isset($_POST['name']) && isset($_GET['database'])){
     }
 
     $type = $_GET["type"];
-    if($type == 'hidden' || $type == 'hidden_timestamp'){
+    if ($type == 'hidden_timestamp' || $type == 'blank_line'){
+    
+    }elseif($type == 'hidden'){
+        $count = $db->query("SELECT form FROM fb_formbuilder WHERE form != 'fb_settings' ORDER BY form")->count();
+        if($count > 0){ ?>
+        <div class="form-group">
+            <label for="label">Link Database:</label>
+            <select name="database_name" class="form-control">
+                <option value="">--Optional--</option>
+            <?php foreach ($db->results() as $result){ ?>
+                <option value="<?=$result->form?>"><?=$result->form?></option>
+            <?php
+            }?>    
+            </select>
+        </div>
+        <?php    
+        }
+    }elseif($type == 'javascript'){
+        $count = $db->query("SELECT fb_java_name FROM fb_javascript ORDER BY fb_java_name")->count();
+        if($count > 0){ ?>
+        <div class="form-group">
+            <label for="label">JavaScript Name:</label>
+            <select name="database_value" class="form-control">
+                <option value="">--Optional--</option>
+            <?php foreach ($db->results() as $result){ ?>
+                <option value="<?=$result->fb_java_name?>"><?=$result->fb_java_name?></option>
+            <?php
+            }?>    
+            </select>
+        </div>
+        <?php    
+        }
+    }elseif($type == 'empty_div'){
+        ?>
+        <div class="form-group">
+            <label for="label">Number of Div's?</label>
+            <select name="div_number" class="form-control" onchange="js_div_number(this.value)">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+        <div id="div_number">
+            <div class="form-group">
+                <label for="label">div Class:</label>
+                <input type="text" class="form-control" name="div_class2" id="div_class2" value="<?=$result->div_class2?>" required />
+            </div>
+        </div>
+        <?php
+    }elseif($type == 'label'){
+        ?>
+        <div class="form-group">
+            <label for="label">Number of Div's?</label>
+            <select name="div_number" class="form-control" onchange="js_div_number(this.value)">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+        <div id="div_number">
+            <div class="form-group">
+                <label for="label">div Class:</label>
+                <input type="text" class="form-control" name="div_class2" id="div_class2" value="<?=$result->div_class2?>" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="label">Label:</label>
+            <input type="text" class="form-control" name="label" id="label" required />
+        </div>
+        <div class="form-group">
+            <label for="label">Label Class:</label>
+            <input type="text" class="form-control" name="label_class" id="label_class" value="<?php if(isset($result->label_class)){echo $result->label_class;}else{ echo 'form-group';}?>" required />
+        </div>
+        <?php
     }else{
         ?>
         <div class="form-group">
@@ -658,7 +758,7 @@ if (isset($_POST['name']) && isset($_GET['database'])){
         <div id="div_number">
             <div class="form-group">
                 <label for="label">div Class:</label>
-                <input type="text" class="form-control" name="div_class2" id="div_class2" value="form-group" required />
+                <input type="text" class="form-control" name="div_class2" id="div_class2" value="<?=$result->div_class2?>" required />
             </div>
         </div>
         <div class="form-group">

@@ -17,7 +17,7 @@ class fb_create_database {
             $this->create_db($database);
             $this->create_db_fb_fields($database);
         } else {
-            $error_message = $database." already exists!";
+            $error_message = [$database." already exists!"];
         }
     }
 
@@ -61,10 +61,10 @@ if (isset($_POST['database_submit'])){
         $createdatabase->create(Input::get('database'));
         Redirect::to('FormBuilder.php?database='.Input::get('database'));
     } else {
-        $error_message = "Only Lower Case, Numbers and Underscore only";
+        $error_message = ["Only Lower Case, Numbers and Underscore only"];
     }
 }elseif(isset($_POST['form_design_submit'])){
-    require_once '../../../../users/init.php';
+    //require_once '../../../../users/init.php';
     if(!Token::check(Input::get('csrf'))){
        require_once $abs_us_root.$us_url_root.'usersc/scripts/token_error.php';
     }
@@ -92,14 +92,16 @@ if (isset($_POST['database_submit'])){
                     $db->update($database,$data->id,['fb_order' => Input::get($data->id)]);
                 }
             }else{
-                $error_message = $validation->errors();
+                $error_message = [$validation->errors()];
             }
             Redirect::to($us_url_root.'usersc/plugins/formbuilder/index.php');
         }
     } else {
-        $error_message = "$form not found!";
+        $error_message = ["$form not found!"];
     }
-}elseif(isset($_GET['form_design'])){
+}
+/*
+elseif(isset($_GET['form_design'])){
     require_once '../../../../users/init.php';
     $database = Input::get('form_design')."_fb_fields";
     $db = DB::getInstance();
@@ -159,7 +161,9 @@ if (isset($_POST['database_submit'])){
 </div>
         <?php
     }
-}elseif(isset($_GET['form_preview'])){
+}
+
+elseif(isset($_GET['form_preview'])){
     require_once '../../../../users/init.php';
     $database = Input::get('form_preview');
     require_once 'fb_displayform.php';
@@ -169,3 +173,4 @@ if (isset($_POST['database_submit'])){
     );
     fb_displayform($database,$options);
 }
+*/
