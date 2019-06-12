@@ -5,7 +5,8 @@ include "plugin_info.php";
 include $abs_us_root.$us_url_root."usersc/plugins/spice_shaker/assets/style.php";
 pluginActive($plugin_name);
 $type = '';
-$api = "http://userspice.com/bugs/api.php";
+$api = "https://userspice.com/bugs/api.php";
+// $api = "http://localhost/bugs/api.php";
 if(!empty($_POST['type'])){
   $type = Input::get('type');
   //create a new cURL resource
@@ -15,6 +16,30 @@ if(!empty($_POST['type'])){
       'key' => $settings->spice_api,
       'type' => $type,
       'call' => 'loadtype'
+  );
+  $payload = json_encode($data);
+    //attach encoded JSON string to the POST fields
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    //set the content type to application/json
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    //return response instead of outputting
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //execute the POST request
+  $result = curl_exec($ch);
+    //close cURL resource
+  curl_close($ch);
+
+}
+if(!empty($_POST['goSearch'])){
+  $search = Input::get('search');
+  // dnd($search);
+  //create a new cURL resource
+  $ch = curl_init($api);
+    //setup request to send json via POST
+  $data = array(
+      'key' => $settings->spice_api,
+      'search' => $search,
+      'call' => 'search'
   );
   $payload = json_encode($data);
     //attach encoded JSON string to the POST fields
@@ -58,9 +83,21 @@ if(!empty($_POST['type'])){
  </form>
  </div>
 </div>
+<div class="row">
+  <div class="col-4 offset-2">
+    <form class="" action="" method="post">
+      <input type="text" name="search" class="form-control" value="" placeholder="Search all addons" autocomplete="off">
+  </div>
+  <div class="col-3">
+    <input type="submit" name="goSearch" value="Search">
+  </form>
+  </div>
+  <br><br>
+   </div>
 <?php if(isset($result)){
   $dev = json_decode($result);
   $counter = 0;
+  if(!is_null($dev)){
   foreach($dev as $d){
   ?>
 
@@ -78,6 +115,7 @@ if(!empty($_POST['type'])){
           </div>
           <div class="card-body" style="overflow-y: auto">
             <h4 class="card-title"><?=$d->project?> v<?=$d->version." (".$d->status.")";?></h4>
+            <p><strong><?=ucfirst($d->category)?></strong></p>
             <p class="card-text"><?=$d->descrip?></p>
           </div>
           <div class="card-footer" style="background: inherit; border-color: inherit;">
@@ -92,6 +130,11 @@ if(!empty($_POST['type'])){
   <?php
   $counter++;
   }
+}else{
+  ?>
+  <p align="center"><font color="red"><strong>No results found</font></strong></p>
+  <?php
+}
 }?>
 </div>
 <script type="text/javascript">
