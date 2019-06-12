@@ -68,6 +68,7 @@ switch ($fb_version) {
             `label_class` VARCHAR(255) NULL ,
             `input_class` VARCHAR(255) NULL ,
             `type_html` VARCHAR(255) NULL ,
+            `install_check` INT(11) NULL ,
             PRIMARY KEY (`id`)) ENGINE = InnoDB;
             ";
         $db->query("CREATE TABLE IF NOT EXISTS `$fb_settings` $columns2");
@@ -160,9 +161,9 @@ switch ($fb_version) {
         if($check == 0 && $check2 == 0){
             $insert5 = array(
                 'fb_order' => '1',
-                'name' => 'div_class',
+                'name' => 'submit_new',
                 'field_type' => 'text',
-                'field_html' => '{"div_class":"form-group","label":"div Class: (DEFAULT)","label_class":"form-group","input_class":"form-control","input_html":"","required":"No","input_step":""}'
+                'field_html' => '{"div_class1":"","div_class2":"form-group","label":"When Creating Form, On Submit: Exit?","label_class":"form-group","input_class":"form-control","input_html":"","required":"1","input_step":""}'
             ); 
             $db->insert($database_name,$insert5);
             $db->query("ALTER TABLE $table_name ADD $database_column VARCHAR(255) NULL AFTER type_html");    
@@ -219,11 +220,203 @@ switch ($fb_version) {
         }
         
         $fb_version ++;
-    //case 3:
+    case 3:
+        
+        // 6/1/2019
+        // Join 2 form's together onto 1 form.
+        // Update the Index.php
+        // Update All files.
+        
+        // Applying Fix for Update.
+        // Removing & Readding FB_Settings database's.
+        
+        // Still testing the Link with Hidden Fields.
+        // Hidden Fields dont show up on webpage any longer.
+        
+        // Hide FB_SETTING form.
+        
+        $db->delete('fb_formbuilder',array('form','=','fb_settings'));
+        $db->query("DROP TABLE `fb_settings`, `fb_settings_fb_fields`;");
+
+        $check = $db->query("SELECT NULL FROM fb_formbuilder WHERE form = ?",['fb_settings'])->count();
+        if($check < 1){
+        $insert_settings = array(
+                'form' => 'fb_settings',
+        );
+        $db->insert($fb_formbuilder,$insert_settings);
+        }
+
+        $fb_settings = "fb_settings";
+        $columns2 = "(
+                `id` INT(11) NOT NULL AUTO_INCREMENT ,
+                `div_class1` VARCHAR(255) NULL ,
+                `div_class2` VARCHAR(255) NULL ,
+                `label_class` VARCHAR(255) NULL ,
+                `input_class` VARCHAR(255) NULL ,
+                `type_html` VARCHAR(255) NULL ,
+                `submit_new` VARCHAR(255) NULL ,
+                `install_check` INT(11) NULL ,
+                `fb_version` INT(11) NULL ,
+                PRIMARY KEY (`id`)) ENGINE = InnoDB;
+                ";
+        $db->query("CREATE TABLE IF NOT EXISTS `$fb_settings` $columns2");
+        $check = $db->query("SELECT NULL FROM fb_settings WHERE install_check = ?",[1])->count();
+        if($check < 1){
+        $insert = array(
+                'div_class1' => 'form-row',
+                'div_class2' => 'form-group',
+                'label_class' => 'form-group',
+                'input_class' => 'form-control',
+                'install_check' => 1,
+                'submit_new'	=> 'false'
+        );
+        $db->insert($fb_settings,$insert);
+        }
+
+        $database_fb_fields = $fb_settings.'_fb_fields';
+        $columns3 = "(
+                `id` INT(11) NOT NULL AUTO_INCREMENT ,
+                `fb_order` INT(11) NOT NULL ,
+                `name` VARCHAR(255) NOT NULL ,
+                `field_type` TEXT NOT NULL ,
+                `field_html` TEXT NOT NULL ,
+                `requirements` TEXT NOT NULL ,
+                `databasevalue` VARCHAR(255) NULL DEFAULT NULL ,
+                `database_name` VARCHAR(255) NULL DEFAULT NULL ,
+                `database_value` VARCHAR(255) NULL DEFAULT NULL ,
+                `database_where` VARCHAR(255) NULL DEFAULT NULL ,
+                PRIMARY KEY (`id`)) ENGINE = InnoDB;
+                ";
+        $db->query("CREATE TABLE IF NOT EXISTS `$database_fb_fields` $columns3");
+
+        $check = $db->query("SELECT NULL FROM fb_settings_fb_fields WHERE fb_order = 1")->count();
+        if($check < 1){
+        $insert0 = array(
+                'fb_order' => '1',
+                'name' => 'div_class1',
+                'field_type' => 'text',
+                'field_html' => '{"div_class2":"form-group","label":"div Class1: (DEFAULT)","label_class":"form-group","input_class":"form-control","input_html":"","input_step":""}'
+        );
+        $insert1 = array(
+                'fb_order' => '2',
+                'name' => 'div_class2',
+                'field_type' => 'text',
+                'field_html' => '{"div_class2":"form-group","label":"div Class2: (DEFAULT)","label_class":"form-group","input_class":"form-control","input_html":"","input_step":""}'
+        );
+        $insert2 = array(
+                'fb_order' => '3',
+                'name' => 'label_class',
+                'field_type' => 'text',
+                'field_html' => '{"div_class2":"form-group","label":"Label Class: (DEFAULT)","label_class":"form-group","input_class":"form-control","input_html":"","input_step":""}'
+        );
+        $insert3 = array(
+                'fb_order' => '4',
+                'name' => 'input_class',
+                'field_type' => 'text',
+                'field_html' => '{"div_class2":"form-group","label":"Input Class: (DEFAULT)","label_class":"form-group","input_class":"form-control","input_html":"","input_step":""}'
+        );
+        $insert4 = array(
+                'fb_order' => '5',
+                'name' => 'type_html',
+                'field_type' => 'text',
+                'field_html' => '{"div_class2":"form-group","label":"Type HTML: (DEFAULT)","label_class":"form-group","input_class":"form-control","input_html":"","input_step":""}'
+        );
+        $insert5 = array(
+                'fb_order' => '6',
+                'name' => 'submit_new',
+                'field_type' => 'dropdown',
+                'field_html' => '{"div_class1":"","div_class2":"form-group","label":"When Creating Form, On Submit: Exit?","label_class":"form-group","input_class":"form-control","input_html":"","required":"1","input_step":""}',
+                'databasevalue' => '[{"id":"true","value":"Yes"},{"id":"false","value":"No"}]'
+        );
+        $db->insert($database_fb_fields,$insert0); 
+        $db->insert($database_fb_fields,$insert1);
+        $db->insert($database_fb_fields,$insert2);
+        $db->insert($database_fb_fields,$insert3);
+        $db->insert($database_fb_fields,$insert4);
+        $db->insert($database_fb_fields,$insert5);
+        }
+        
+        $fb_version ++;
+    //case 4:
+        
+        // 6/4/2019
+        // Add Blank Div used with Javascript
+        // Add Blank Line in form
+        // Adding Javascript Feature
+        
+        $fb_javascript = "fb_javascript";
+        $columns2 = "(
+            `id` INT(11) NOT NULL AUTO_INCREMENT ,
+            `div_class1` VARCHAR(255) NULL ,
+            `div_class2` VARCHAR(255) NULL ,
+            `label_class` VARCHAR(255) NULL ,
+            `input_class` VARCHAR(255) NULL ,
+            `type_html` VARCHAR(255) NULL ,
+            `submit_new` VARCHAR(255) NULL ,
+            `install_check` INT(11) NULL ,
+            `fb_version` INT(11) NULL ,
+            PRIMARY KEY (`id`)) ENGINE = InnoDB;
+            ";
+        $db->query("CREATE TABLE IF NOT EXISTS `$fb_javascript` $columns2");
+
+        $fb_javascript_fb_fields = 'fb_javascript_fb_fields';
+        $columns3 = "(
+            `id` INT(11) NOT NULL AUTO_INCREMENT ,
+            `fb_order` INT(11) NOT NULL ,
+            `name` VARCHAR(255) NOT NULL ,
+            `field_type` TEXT NOT NULL ,
+            `field_html` TEXT NOT NULL ,
+            `requirements` TEXT NOT NULL ,
+            `databasevalue` VARCHAR(255) NULL DEFAULT NULL ,
+            `database_name` VARCHAR(255) NULL DEFAULT NULL ,
+            `database_value` VARCHAR(255) NULL DEFAULT NULL ,
+            `database_where` VARCHAR(255) NULL DEFAULT NULL ,
+            PRIMARY KEY (`id`)) ENGINE = InnoDB;
+            ";
+        $db->query("CREATE TABLE IF NOT EXISTS `$fb_javascript_fb_fields` $columns3");
+
+        $check = $db->query("SELECT NULL FROM fb_settings_fb_fields WHERE fb_order = 1")->count();
+        if($check < 1){
+        $insert0 = array(
+            'fb_order' => '1',
+            'name' => 'fb_java_name',
+            'field_type' => 'text',
+            'field_html' => '{"div_class1":"form-row","div_class2":"form-group col-md-6","label":"Name","label_class":"form-group","input_class":"form-control","input_html":"","required":"1","input_step":""}',
+            'requirements' => '{"display":"Name","required":true}'
+        );
+        $insert1 = array(
+            'fb_order' => '2',
+            'name' => 'fb_java_html',
+            'field_type' => 'text',
+            'field_html' => '{"div_class1":"form-row","div_class2":"form-group col-md-6","label":"JavaScript HTML","label_class":"form-group","input_class":"form-control","input_html":"","required":"","input_step":""}',
+            'requirements' => '{"display":"JavaScript HTML"}'
+        );
+        $insert2 = array(
+            'fb_order' => '3',
+            'name' => 'fb_java_code',
+            'field_type' => 'textarea',
+            'field_html' => '{"div_class1":"","div_class2":"form-group","label":"JavaScript Code","label_class":"form-group","input_class":"form-control","input_html":"rows=&quot;10&quot;","required":"1","input_step":""}',
+            'requirements' => '{"display":"JavaScript Code"}'
+        );
+        $insert3 = array(
+            'fb_order' => '4',
+            'name' => 'fb_java_information',
+            'field_type' => 'textarea',
+            'field_html' => '{"div_class1":"","div_class2":"form-group","label":"Information","label_class":"form-group","input_class":"form-control","input_html":"rows=&quot;5&quot;","required":"1","input_step":""}',
+            'requirements' => '{"display":"Information"}'
+        );
+
+        $db->insert($fb_javascript_fb_fields,$insert0); 
+        $db->insert($fb_javascript_fb_fields,$insert1);
+        $db->insert($fb_javascript_fb_fields,$insert2);
+        $db->insert($fb_javascript_fb_fields,$insert3);
+        }
+        
+        $fb_version ++;
+    //case 5:
         
     case 'END':
         $db->update('fb_settings',1,['fb_version'=>$fb_version]);
-        
         break;
 }
 

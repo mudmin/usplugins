@@ -24,12 +24,16 @@ class fb_processing {
             'validation'=>false,
             'token'=>false,
         );
-        $token = $_POST['csrf'];
-        if(!Token::check($token)){
-            require_once $abs_us_root.$us_url_root.'usersc/scripts/token_error.php';
+        if(isset($opts["csrf_pass"])){
+            $token = $_POST['csrf'];
+            if(!Token::check($token)){
+                require_once $abs_us_root.$us_url_root.'usersc/scripts/token_error.php';
+            }else{
+                $this->response['token'] = true;
+            }
         }else{
             $this->response['token'] = true;
-        }
+        }    
         $name = $this->form_name;
         $form = $name.'_fb_fields';
         $fields = [];
@@ -143,6 +147,7 @@ class fb_processing {
             }
         }else{
             $this->_db->insert($this->response['name'],$this->response['fields']);
+            return $this->_db->lastId();
         }
         $this->response['errors'] = $this->_db->errorInfo();
     }

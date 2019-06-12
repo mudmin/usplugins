@@ -1,4 +1,4 @@
-<?php $token = Token::generate();
+<?php if(empty($_POST)){ $token = Token::generate(); };
 $db = DB::getInstance();
 ?>
 <div class="row bg-light">
@@ -15,6 +15,7 @@ $db = DB::getInstance();
     <li class="nav-item">
       <a class="nav-link" href="<?=$us_url_root?>usersc/plugins/formbuilder/index.php">Home</a>
     </li>
+    <?php if(empty($_POST)){ ?>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Create New Form</a>
         <div class="dropdown-menu">
@@ -29,22 +30,25 @@ $db = DB::getInstance();
             </form>
         </div>
     </li>
-    <?php
-    $count = $db->query("SELECT form FROM fb_formbuilder")->count();
+    <?php }
+    $count = $db->query("SELECT form FROM fb_formbuilder WHERE form != 'fb_settings' AND form != 'fb_javascript")->count();
     if($count > 0){
         $results = $db->results();
     ?>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Existing Form</a>
         <div class="dropdown-menu">
-            <?php foreach($results as $result){ ?>
+            <?php foreach($results as $result){?>
             <a class="dropdown-item" href="<?=$us_url_root?>usersc/plugins/formbuilder/FormBuilder.php?database=<?=$result->form?>"><?=$result->form?></a>
-            <?php } ?>
+                <?php } ?>
         </div>
     </li>
     <?php
     }
     ?>
+    <li class="nav-item">
+        <a class="nav-link" href="<?=$us_url_root?>usersc/plugins/formbuilder/java_list.php">JavaScript Design</a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="<?=$us_url_root?>usersc/plugins/formbuilder/settings.php?id=1">Settings</a>
     </li>
@@ -63,3 +67,13 @@ $db = DB::getInstance();
 </nav>
 
 <p class="text-center">Please note: While the forms are designed to be filled out by the end user,<br />the forms manager is not designed to be accessible by the public.<br />Please keep it as master account only.</p>
+
+<?php
+if(isset($error_message)){
+    echo "<UL CLASS='bg-danger'>";
+    foreach($error_message as $error){
+    echo '<h4 class="text-center">'.$error.'</h4>';
+    }
+    echo "</UL>";
+}
+?>

@@ -10,20 +10,20 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/fb_dis
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Form Builder Settings</title>
-        <?php require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/bootstrap4.php'; ?>
-        <script type="text/JavaScript" src="assist/formbuilder.js"></script>
+        <title>Form Builder</title>
+        <?php
+        require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/bootstrap4.php'; 
+        // require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
+        ?>
+        <script type="text/JavaScript" src="<?=$us_url_root?>usersc/plugins/formbuilder/assist/formbuilder.js"></script>
     </head>
     <body>
         <?php require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/fb_nav_bar.php';?>
         <div id="page-wrapper">
             <div class="container">
-                <div class="row justify-content-md-center">
-                    <?php
-                    $options = ['navigation'=>$us_url_root."usersc/plugins/formbuilder/index.php"];
-                    fb_displayform('fb_settings',$options);
-                    ?>
-                </div>
+                <?php
+                fb_displayform('fb_javascript');
+                ?>
             </div>
         </div>
     </body>

@@ -38,6 +38,9 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/fb_cre
                             <label for="label">Input Type:</label>
                             <select name="field_type" class="form-control" onchange="js_input_type(this.value)">
                                 <option selected disabled>--Select One--</option>
+                                <option disabled>--Text Only--</option>
+                                <option <?php if(isset($field_type)){if($field_type == "label"){echo "selected";}}?> value="label">Label</option>
+                                <option disabled>--Input Type--</option>
                                 <option <?php if(isset($field_type)){if($field_type == "text"){echo "selected";}}?> value="text">Text</option>
                                 <option <?php if(isset($field_type)){if($field_type == "password"){echo "selected";}}?> value="password">Password</option>
                                 <option <?php if(isset($field_type)){if($field_type == "e_password"){echo "selected";}}?> value="password">Encrypted Password</option>
@@ -50,8 +53,13 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/fb_cre
                                 <option <?php if(isset($field_type)){if($field_type == "dropdown"){echo "selected";}}?> value="dropdown">Dropdown</option>
                                 <option <?php if(isset($field_type)){if($field_type == "checkbox"){echo "selected";}}?> value="checkbox">Checkbox</option>
                                 <option <?php if(isset($field_type)){if($field_type == "radio"){echo "selected";}}?> value="radio">Radio</option>
+                                <option disabled>--Hidden Items--</option>
                                 <option <?php if(isset($field_type)){if($field_type == "hidden"){echo "selected";}}?> value="hidden">Hidden</option>
                                 <option <?php if(isset($field_type)){if($field_type == "hidden_timestamp"){echo "selected";}}?> value="hidden_timestamp">TimeStamp (Hidden)</option>
+                                <option disabled>--Other--</option>
+                                <option <?php if(isset($field_type)){if($field_type == "blank_line"){echo "selected";}}?> value="blank_line">Blank Line</option>
+                                <option <?php if(isset($field_type)){if($field_type == "empty_div"){echo "selected";}}?> value="empty_div">Empty Div</option>
+                                <option <?php if(isset($field_type)){if($field_type == "javascript"){echo "selected";}}?> value="javascript">JavaScript</option>
                                 <?php
                                 /*
                                     ******************************
@@ -68,7 +76,57 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/formbuilder/assets/fb_cre
                         <div id="type_insert">
                             <?php
                             if(isset($_GET['id']) || isset($field_type)){
-                                if($field_type != 'hidden'){
+                                if($field_type == 'hidden'){
+                                    $count = $db->query("SELECT form FROM fb_formbuilder WHERE form != '$database' AND form != 'fb_settings' ORDER BY form")->count();
+                                    if($count > 0){ ?>
+                                    <div class="form-group">
+                                        <label for="label">Link Database:</label>
+                                        <select name="database_name" class="form-control">
+                                            <option value="">--Optional--</option>
+                                        <?php foreach ($db->results() as $result){ ?>
+                                            <option <?php if(isset($database_name)){if($database_name == $result->form){echo "selected";}}?> value="<?=$result->form?>"><?=$result->form?></option>
+                                        <?php
+                                        }?>    
+                                        </select>
+                                    </div>
+                                    <?php    
+                                    }
+                                }elseif($field_type == 'label'){
+                                    ?>
+                                    <div class="form-group">
+                                        <label for="label">Number of Div's?</label>
+                                        <select name="div_number" class="form-control" onchange="js_div_number(this.value)">
+                                            <option <?php if(isset($div_number)){if($div_number == "1"){echo "selected";}}?> value="1">1</option>
+                                            <option <?php if(isset($div_number)){if($div_number == "2"){echo "selected";}}?> value="2">2</option>
+                                        </select>
+                                    </div>
+                                    <div id="div_number">
+                                        <?php if($div_number == "2"){ ?>
+                                        <div class="form-group">
+                                            <label for="label">div Class 1:</label>
+                                            <input type="text" class="form-control" name="div_class1" id="div_class1" <?php if(isset($div_class1)){echo 'value="'.$div_class1.'"';}else{'value="form-group"';}?> required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="label">div Class 2:</label>
+                                            <input type="text" class="form-control" name="div_class2" id="div_class2" <?php if(isset($div_class2)){echo 'value="'.$div_class2.'"';}else{'value="form-group"';}?> required />
+                                        </div>
+                                        <?php } else { ?>
+                                        <div class="form-group">
+                                            <label for="label">div Class:</label>
+                                            <input type="text" class="form-control" name="div_class2" id="div_class2" <?php if(isset($div_class2)){echo 'value="'.$div_class2.'"';}else{'value="form-group"';}?> required />
+                                        </div>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="label">Label:</label>
+                                        <input type="text" class="form-control" name="label" id="label" <?php if(isset($label)){echo 'value="'.$label.'"';}?> required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="label">Label Class:</label>
+                                        <input type="text" class="form-control" name="label_class" id="label_class" <?php if(isset($label_class)){echo 'value="'.$label_class.'"';}else{'value="form-group"';}?> required />
+                                    </div>
+                                    <?php
+                                }elseif($field_type != 'hidden'){
                                     ?>
                                     <div class="form-group">
                                         <label for="label">Number of Div's?</label>
