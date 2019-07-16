@@ -3,6 +3,12 @@ if (empty($_SESSION['steam_uptodate']) or empty($_SESSION['steam_personaname']))
 	require 'SteamConfigLink.php';
 	$url = file_get_contents("https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$steamauth['apikey']."&steamids=".$_SESSION['steamid']);
 	$content = json_decode($url, true);
+	if(!$url){
+		$_SESSION['steam_uptodate'] = "";
+		$_SESSION['steam_personaname'] = "";
+		$_SESSION['steamid'] = "";
+		Redirect::to($us_url_root."users/account.php?err=Steam+system+error.+Please+contact+admin.");
+	}
 	$_SESSION['steam_steamid'] = $content['response']['players'][0]['steamid'];
 	$_SESSION['steam_communityvisibilitystate'] = $content['response']['players'][0]['communityvisibilitystate'];
 	$_SESSION['steam_profilestate'] = $content['response']['players'][0]['profilestate'];

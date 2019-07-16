@@ -2,6 +2,9 @@
 
     if(!isset($user) || !$user->isLoggedIn()){
     require ('assets/steamauthlogin.php');
+    if(isset($err) && $err=="This+Steam+account+is+not+linked+to+a+user+on+this+site"){
+      $err = "";
+    }
 ?>
 		<?php
 if(!isset($_SESSION['steamid'])) {
@@ -21,7 +24,8 @@ if(!isset($_SESSION['steamid'])) {
       }
       Redirect::to('account.php');
     }else {
-      Redirect::to($us_url_root.'users/login.php?err=This+Steam+account+is+not+linked+to+a+user+on+this+site');
+      $_SESSION = [];
+      Redirect::to($us_url_root.'users/login.php?msg=There+was+a+problem+with+your+Steam+login');
     }
 
 

@@ -1,7 +1,7 @@
 <?php
 // require '../../../../users/init.php';
 // $db = DB::getInstance();
-// $settings = $db->query("SELECT * FROM settings")->first();
+$settings = $db->query("SELECT * FROM settings")->first();
 function loginbutton($buttonstyle = "square") {
 	$button['rectangle'] = "01";
 	$button['square'] = "02";
