@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Localhost Login</name>
+  <author>Brandin Arsenault</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.000</version>
+
+<!-- release date of THIS version -->
+  <release>August 23, 2019</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>4.4</tested>
+
+<!-- What does your plugin do? -->
+  <description>This is the plugin to allow you to authenticate to an account from a public facing page with no password. This bypasses 2FA and other security. Security practices are in place to ensure access from a localhost server only.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button></button>
+</plugin>
