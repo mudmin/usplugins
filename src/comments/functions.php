@@ -27,11 +27,46 @@ function commentsHere($opt = []){
   $token = Token::generate();
   getPageForComments();
 ?>
+<style type="text/css">
+.comment-box {
+    margin-top: 10px !important;
+}
+.comment-box img {
+    width: 50px;
+    height: 50px;
+}
+.comment-box .media-left {
+    padding-right: 4px;
+    width: 65px;
+}
+.comment-box .media-body p {
+    padding: 2px;
+}
+.comment-box .media-body .media p {
+    margin-bottom: 0;
+}
+.comment-box .media-heading {
+    padding: 7px 10px;
+    position: relative;
+    margin-bottom: -1px;
+}
+.comment-box .media-heading:before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-width: 1px 0 0 1px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 10px;
+    left: -6px;
+}
+</style>
+
 <form class="" action="" method="post">
   <input type="hidden" value="<?=$token;?>" name="csrf">
-  Post your comment<br>
-  <textarea name="comment" rows="4" cols="120"></textarea><br>
-  <input type="submit" name="submitComment" value="Post Comment">
+  <textarea name="comment" rows="4" class="form-control" placeholder="Leave a Comment"></textarea><br>
+  <input type="submit" class='btn btn-success btn-sm' name="submitComment" value="Post Comment">
 </form>
 <?php
 $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND approved = 1 AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
@@ -44,36 +79,40 @@ if($commentsC < 1){
   <h3 align="center">Comments</h3>
 
       <?php foreach($comments as $c){
-        $thatUserQ = $db->query("SELECT email FROM users WHERE id = ?",array($c->user));
-        $thatUserC = $thatUserQ->count();
-        if($thatUserC > 0){
-          $thatUser = $thatUserQ->first();
-
-        $grav = get_gravatar(strtolower(trim($thatUser->email)));
-      	$useravatar = '<img src="'.$grav.'" class="img img-thumbnail img-fluid">';
-        }
         ?>
-        <div class="row">
-              	    <div class="col-md-2">
-                      <?php
-                      if($thatUserC > 0){
-                      echo $useravatar;
-                    } ?>
-              	    </div>
-              	    <div class="col-md-10">
-              	        <p>
-              	            <a class="float-left" href="#"><strong><?php echouser($c->user);?></strong></a> at
-                            <?=$c->timestamp?>
-              	       </p>
-              	       <div class="clearfix"></div>
-              	        <p><?=$c->comment?></p>
-              	        <p>
-              	            <!-- <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
-              	            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
-              	       </p>
-              	    </div>
-      	        </div>
+        <div class='media comment-box'>
+          <?php
+          $thatUserQ = $db->query("SELECT email FROM users WHERE id = ?",array($c->user));
+          $thatUserC = $thatUserQ->count();
+          if($thatUserC > 0){
+            $thatUser = $thatUserQ->first();
+          $grav = get_gravatar(strtolower(trim($thatUser->email)));
+        	$useravatar = '<img src="'.$grav.'" class="img img-thumbnail img-fluid rounded">';
+          }
+          ?>
+            <div class='media-left'>
+              <?php
+                if($thatUserC > 0){
+                echo $useravatar;
+                }
+              ?>
+            </div>
+            <div class='media-body text-break'>
+              <div class='media-heading bg-default'>
+                <a href="#"><strong><?php echouser($c->user);?></strong></a> at
+                <?=$c->timestamp?>
+              </div>
+              <div class='media-content'>
+                <?=$c->comment?>
+              </div>
+
+                	            <!-- <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
+                	            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
+
+            </div>
+        </div>
       <?php } ?>
+
   <?php
 }
 }
