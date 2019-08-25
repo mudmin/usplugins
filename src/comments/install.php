@@ -27,6 +27,8 @@ $db->query("ALTER TABLE `us_comments_plugin`
 
 $db->query("ALTER TABLE `settings` ADD COLUMN cmntapprvd tinyint(1) DEFAULT '1'");
 
+$db->query("ALTER TABLE `settings` ADD COLUMN cmntpub tinyint(1) DEFAULT '1'");
+
 $db->query("ALTER TABLE `users` ADD COLUMN commentmod tinyint(1) DEFAULT '0'");
 
 //all actions should be performed here.

@@ -6,10 +6,10 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.00</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>December 15,2018</release>
+  <release>August 24, 2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
   <tested>4.4</tested>
@@ -18,5 +18,5 @@
   <description>A simple plugin allowing users to comment on content.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Configure</button>
+    <button>Comments Settings</button>
 </plugin>

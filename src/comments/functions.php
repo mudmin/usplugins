@@ -1,6 +1,13 @@
 <?php
+/**
+* Main Comments Display Function
+* This function can be called anywhere on the site that you want
+* comments to display.
+**/
 function commentsHere($opt = []){
-  global $db, $settings,$user;
+  global $db,$settings,$user;
+
+  /** Get Comment Page info **/
   if(!isset($opt['id'])){
     $id = getPageForComments();
   }else{
@@ -10,7 +17,40 @@ function commentsHere($opt = []){
     echo "This page id is not in the database";
     exit();
   }
-  if(!empty($_POST['submitComment'])){
+
+  /** Get Current Page for Redirect **/
+  $cur_page = currentPage();
+
+  /** Get user permissions **/
+  if(isset($user) && $user->isLoggedIn()){ $user_loggedin = true; }else{ $user_loggedin = false; }
+
+  /** Check if Public Comments are Alllowed **/
+  if($settings->cmntpub == 1){ $allow_comments = true; }else{ $allow_comments = false; }
+
+  /** Check if Comments require Moderation **/
+  if($settings->cmntapprvd == 1){
+    $require_mod = true;
+    $com_approved = 0;
+  }else{
+    $require_mod = false;
+    $com_approved = 1;
+  }
+
+  /** Check to see if Users Must be logged in to post comments **/
+  if($allow_comments == false){
+    /** Make sure user is logged in **/
+    if($user_loggedin == true){
+      $ok_post = true;
+    }else{
+      $ok_post = false;
+    }
+  }else{
+    /** Public Comments allowed **/
+    $ok_post = true;
+  }
+
+  /** Check to see if user is submitting a comment **/
+  if(!empty($_POST['submitComment']) && $ok_post == true){
     $token = $_POST['csrf'];
     if(!Token::check($token)){
       Redirect::to($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
@@ -19,59 +59,125 @@ function commentsHere($opt = []){
       'page'=>$id,
       'user'=>$user->data()->id,
       'comment'=>Input::get('comment'),
-      'approved'=>$settings->cmntapprvd
+      'approved'=>$com_approved
     );
     $db->insert('us_comments_plugin',$fields);
-    // dnd($db->errorInfo());
+    if($require_mod == true){
+      $successes[]='Comment Submitted and Waiting for Moderator Approval';
+    }else{
+      $successes[]='Comment Posted';
+    }
   }
+
+  /** Check to see if user or mod is deleting a comment **/
+  if(!empty($_POST['deleteComment']) && $ok_post == true){
+    $token = $_POST['csrf'];
+    if(!Token::check($token)){
+      Redirect::to($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+    }
+    $com_id = Input::get('com_id');
+    $db->update('us_comments_plugin',$com_id,['deleted'=>1]);
+    $successes[]='Comment Deleted';
+  }
+
+  /** Check to see if user is a Moderator **/
+  $specQ = $db->query("SELECT id FROM users WHERE commentmod = 1 AND id = ? ", array($user->data()->id));
+  $specC = $specQ->count();
+  $user_mod_check = $specQ->results();
+  if(!empty($user_mod_check)){ $user_is_mod = true; }else{ $user_is_mod = false; }
+
+  /** Check to see if mod is approving a comment **/
+  if(!empty($_POST['approveComment']) && $ok_post == true && $user_is_mod == true){
+    $token = $_POST['csrf'];
+    if(!Token::check($token)){
+      Redirect::to($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+    }
+    $com_id = Input::get('com_id');
+    $db->update('us_comments_plugin',$com_id,['approved'=>1]);
+    $successes[]='Comment Approved';
+  }
+
+  /** Get csrf token for security **/
   $token = Token::generate();
   getPageForComments();
 ?>
+<!-- Comments Display Body -->
 <style type="text/css">
+.comment {
+	white-space: pre-line;
+	display: block;
+	unicode-bidi: embed;
+}
 .comment-box {
-    margin-top: 10px !important;
+  margin-top: 10px !important;
 }
 .comment-box img {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 .comment-box .media-left {
-    padding-right: 4px;
-    width: 65px;
+  padding-right: 4px;
+  width: 65px;
 }
 .comment-box .media-body p {
-    padding: 2px;
+  padding: 2px;
 }
 .comment-box .media-body .media p {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 .comment-box .media-heading {
-    padding: 7px 10px;
-    position: relative;
-    margin-bottom: -1px;
+  padding: 7px 10px;
+  position: relative;
+  margin-bottom: -1px;
 }
-.comment-box .media-heading:before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    border-width: 1px 0 0 1px;
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    position: absolute;
-    top: 10px;
-    left: -6px;
+.comment-box .media-body p {
+  border: 1px solid;
+  padding: 2px;
 }
-</style>
+.comment-box .media-content {
+  border: 1px solid;
+  padding: 2px;
+}
+.comment-box .media-heading {
+  border: 1px solid;
+}
+.media-content .comment {
+  padding: 4px;
+}
 
+</style>
+<?php if(!$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
+<?php if(!$successes=='') {?><div class="alert alert-success"><?=display_successes($successes);?></div><?php } ?>
+<?php
+/** Check to see if user is logged in, and if public comments are allowed **/
+if($ok_post == true){
+?>
 <form class="" action="" method="post">
   <input type="hidden" value="<?=$token;?>" name="csrf">
   <textarea name="comment" rows="4" class="form-control" placeholder="Leave a Comment"></textarea><br>
   <input type="submit" class='btn btn-success btn-sm' name="submitComment" value="Post Comment">
 </form>
 <?php
-$commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND approved = 1 AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
-$commentsC = $commentsQ->count();
-$comments = $commentsQ->results();
+}else{
+?>
+<a href="../users/login.php">Login</a> to post comments.
+<?php
+}
+/** Get Comments **/
+/** Display all comments if user is mod **/
+if($user_is_mod == true){
+  /** Get all comments **/
+  $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
+  $commentsC = $commentsQ->count();
+  $comments = $commentsQ->results();
+}else{
+  /** Get approved Comments **/
+  $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND approved = 1 AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
+  $commentsC = $commentsQ->count();
+  $comments = $commentsQ->results();
+}
+
+/** Display Comments **/
 if($commentsC < 1){
   echo "There are no comments. Leave one!";
 }else{
@@ -79,6 +185,12 @@ if($commentsC < 1){
   <h3 align="center">Comments</h3>
 
       <?php foreach($comments as $c){
+        /** Check to see if comment is approved - if not then if Mod display approval/delete buttons **/
+        if($c->approved == 0){
+          $com_not_approved = true; $com_mod_style = 'bg-danger';
+        }else{
+          $com_not_approved = false; $com_mod_style = '';
+        }
         ?>
         <div class='media comment-box'>
           <?php
@@ -98,17 +210,36 @@ if($commentsC < 1){
               ?>
             </div>
             <div class='media-body text-break'>
-              <div class='media-heading bg-default'>
-                <a href="#"><strong><?php echouser($c->user);?></strong></a> at
-                <?=$c->timestamp?>
+              <div class='media-heading bg-dark'>
+                <a href="#"><strong><?php echouser($c->user);?></strong></a>
+                <font class='text-muted' size='1'><?php echo dateDiff("now", "$c->timestamp", 1) . " ago "; ?></font>
               </div>
-              <div class='media-content'>
-                <?=$c->comment?>
+              <div class='media-content <?=$com_mod_style?>'>
+                <div class='comment'><?=$c->comment?></div>
+                <?php
+                  /** Display Approve Button if Mod and not approved **/
+                  if($user_is_mod == true && $com_not_approved == true){
+                    echo "
+                      <strong><font color='red'>Comment Waiting for Approval!</font></strong><Br>
+                      <form class='' action='' method='post' style='display:inline'>
+                        <input type='hidden' value='$token' name='csrf'>
+                        <input type='hidden' value='$c->id' name='com_id'>
+                        <input type='submit' class='btn btn-sm btn-link' name='approveComment' value='Approve'>
+                      </form>
+                    ";
+                  }
+                  /** Display Delete Button if Mod or Owner **/
+                  if($user_loggedin == true && ($user_is_mod == true || $c->user == $user->data()->id)){
+                    echo "
+                      <form class='' action='' method='post' style='display:inline'>
+                        <input type='hidden' value='$token' name='csrf'>
+                        <input type='hidden' value='$c->id' name='com_id'>
+                        <input type='submit' class='btn btn-sm btn-link' name='deleteComment' value='Delete'>
+                      </form>
+                    ";
+                  }
+                ?>
               </div>
-
-                	            <!-- <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
-                	            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
-
             </div>
         </div>
       <?php } ?>
@@ -117,6 +248,7 @@ if($commentsC < 1){
 }
 }
 
+/** Get's current page id for Comments display **/
 function getPageForComments(){
   global $db;
   $page = currentPage();
@@ -129,4 +261,67 @@ function getPageForComments(){
     $id = $idF->id;
   }
   return $id;
+}
+
+// Time format is UNIX timestamp or
+// PHP strtotime compatible strings
+function dateDiff($time1, $time2, $precision = 6) {
+  // If not numeric then convert texts to unix timestamps
+  if (!is_int($time1)) {
+    $time1 = strtotime($time1);
+  }
+  if (!is_int($time2)) {
+    $time2 = strtotime($time2);
+  }
+
+  // If time1 is bigger than time2
+  // Then swap time1 and time2
+  if ($time1 > $time2) {
+    $ttime = $time1;
+    $time1 = $time2;
+    $time2 = $ttime;
+  }
+
+  // Set up intervals and diffs arrays
+  $intervals = array('year','month','day','hour','minute','second');
+  $diffs = array();
+
+  // Loop thru all intervals
+  foreach ($intervals as $interval) {
+    // Set default diff to 0
+    $diffs[$interval] = 0;
+    // Create temp time from time1 and interval
+    $ttime = strtotime("+1 " . $interval, $time1);
+    // Loop until temp time is smaller than time2
+    while ($time2 >= $ttime) {
+$time1 = $ttime;
+$diffs[$interval]++;
+// Create new temp time from time1 and interval
+$ttime = strtotime("+1 " . $interval, $time1);
+    }
+  }
+
+  $count = 0;
+  $times = array();
+  // Loop thru all diffs
+  foreach ($diffs as $interval => $value) {
+    // Break if we have needed precission
+    if ($count >= $precision) {
+break;
+    }
+    // Add value and interval
+    // if value is bigger than 0
+    if ($value > 0) {
+// Add s if value is not 1
+if ($value != 1) {
+  $interval .= "s";
+}
+// Add value and interval to times array
+$times[] = $value . " " . $interval;
+$count++;
+    }
+  }
+
+  // Return string with times
+  return implode(", ", $times);
 }
