@@ -11,12 +11,14 @@ $plugin_name = strtolower($plugin_name);//you're welcome
 
 $db->query("CREATE TABLE `us_comments_plugin` (
 	`id` int(11) NOT NULL,
-	`user` int(11),
-	`page` int(11),
-	`comment` text,
-	`deleted` tinyint(1) DEFAULT '0',
-	`approved` tinyint(1) DEFAULT '0',
-	`timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `user` int(11) DEFAULT NULL,
+  `page` int(11) DEFAULT NULL,
+  `location` varchar(255) DEFAULT '0',
+  `location_id` int(11) DEFAULT '0',
+  `comment` text,
+  `deleted` tinyint(1) DEFAULT '0',
+  `approved` tinyint(1) DEFAULT '0',
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
 $db->query("ALTER TABLE `us_comments_plugin`

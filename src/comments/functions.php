@@ -8,14 +8,22 @@ function commentsHere($opt = []){
   global $db,$settings,$user;
 
   /** Get Comment Page info **/
-  if(!isset($opt['id'])){
-    $id = getPageForComments();
+  if(isset($opt['location'])){
+    $id = 0;
+    $com_location = $opt['location'];
+    $com_location_id = $opt['location_id'];
   }else{
-    $id = $opt['id'];
-  }
-  if($id == 0){
-    echo "This page id is not in the database";
-    exit();
+    if(!isset($opt['id'])){
+        $id = getPageForComments();
+    }else{
+      $id = $opt['id'];
+    }
+    if($id == 0){
+      echo "This page id is not in the database";
+      exit();
+    }
+    $com_location = 0;
+    $com_location_id = 0;
   }
 
   /** Get Current Page for Redirect **/
@@ -55,17 +63,24 @@ function commentsHere($opt = []){
     if(!Token::check($token)){
       Redirect::to($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
     }
-    $fields = array(
-      'page'=>$id,
-      'user'=>$user->data()->id,
-      'comment'=>Input::get('comment'),
-      'approved'=>$com_approved
-    );
-    $db->insert('us_comments_plugin',$fields);
-    if($require_mod == true){
-      $successes[]='Comment Submitted and Waiting for Moderator Approval';
+    $com_content = Input::get('comment');
+    if(empty($com_content)){
+      $errors[]='Comment is Blank';
     }else{
-      $successes[]='Comment Posted';
+      $fields = array(
+        'page'=>$id,
+        'location'=>$com_location,
+        'location_id'=>$com_location_id,
+        'user'=>$user->data()->id,
+        'comment'=>$com_content,
+        'approved'=>$com_approved
+      );
+      $db->insert('us_comments_plugin',$fields);
+      if($require_mod == true){
+        $successes[]='Comment Submitted and Waiting for Moderator Approval';
+      }else{
+        $successes[]='Comment Posted';
+      }
     }
   }
 
@@ -167,14 +182,26 @@ if($ok_post == true){
 /** Display all comments if user is mod **/
 if($user_is_mod == true){
   /** Get all comments **/
-  $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
-  $commentsC = $commentsQ->count();
-  $comments = $commentsQ->results();
+  if($com_location != '0'){
+    $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE location = ? AND location_id = ? AND deleted = 0 ORDER BY id DESC LIMIT 100",array($com_location, $com_location_id));
+    $commentsC = $commentsQ->count();
+    $comments = $commentsQ->results();
+  }else{
+    $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
+    $commentsC = $commentsQ->count();
+    $comments = $commentsQ->results();
+  }
 }else{
-  /** Get approved Comments **/
-  $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND approved = 1 AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
-  $commentsC = $commentsQ->count();
-  $comments = $commentsQ->results();
+  if($com_location != 0){
+    $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE location = ? AND location_id = ? AND approved = 1 AND deleted = 0 ORDER BY id DESC LIMIT 100",array($com_location, $com_location_id));
+    $commentsC = $commentsQ->count();
+    $comments = $commentsQ->results();
+  }else{
+    /** Get approved Comments **/
+    $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE page = ? AND approved = 1 AND deleted = 0 ORDER BY id DESC LIMIT 100",array($id));
+    $commentsC = $commentsQ->count();
+    $comments = $commentsQ->results();
+  }
 }
 
 /** Display Comments **/

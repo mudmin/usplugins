@@ -36,11 +36,38 @@ if(!Token::check($token)){
      Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=comments&err=User+not+found');
    }
  }
+ if(!empty($_POST['approveComment'])){
+   $com_id = Input::get('approveComment');
+   $check = $db->query("SELECT id FROM us_comments_plugin WHERE id = ?",array($com_id))->count();
+   if($check > 0){
+     $db->update('us_comments_plugin',$com_id,['approved'=>1]);
+     Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=comments&err=Comment+Approved');
+   }else{
+     Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=comments&err=Comment+Not+Found');
+   }
+ }
+ if(!empty($_POST['deleteComment'])){
+   $com_id = Input::get('deleteComment');
+   $check = $db->query("SELECT id FROM us_comments_plugin WHERE id = ?",array($com_id))->count();
+   if($check > 0){
+     $db->update('us_comments_plugin',$com_id,['deleted'=>1]);
+     Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=comments&err=Comment+Deleted');
+   }else{
+     Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=comments&err=Comment+Not+Found');
+   }
+ }
  $token = Token::generate();
 
  ?>
 
 <!-- Plugin Configure Body -->
+<style>
+.comment {
+	white-space: pre-line;
+	display: block;
+	unicode-bidi: embed;
+}
+</style>
 <div class="content mt-3">
   <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  		<div class="row">
@@ -84,7 +111,15 @@ if(!Token::check($token)){
             <h3>Instructions</h3>
           </div>
           <div class="card-body">
-            On any page that you want comments, simply put the tag <font color="red">commentsHere();</font> Note that this should be a protected page in the database because it relies on the page id.  If it is not in the database, you can supply your own id, but putting <font color="red">commentsHere(['id'=>3]);</font> Where 3 is the id you want to use. Just make sure that id will not be used in the pages table in the database.
+            On any page that you want comments, simply put the tag <font color="red">commentsHere();</font>
+            Note that this should be a protected page in the database because it relies on the page id.
+            If it is not in the database, you can supply your own id, but putting
+            <font color="red">commentsHere(['id'=>3]);</font> Where 3 is the id you want to use.
+            Just make sure that id will not be used in the pages table in the database.<br><br>
+            If using on a user's profile or anything where IDs can be used, use the following:
+            <font color="red">commentsHere(['location'=>'profile', 'location_id'=>$userid]);</font>
+            Change "profile" to the name of the page, and change $userid to the unique id related
+            to where comments show.
             <br><br>
             The comment manager is at <a href="<?=$us_url_root?>usersc/plugins/comments/files/index.php">usersc/plugins/comments/files/index.php</a>
           </div>
@@ -140,5 +175,61 @@ if(!Token::check($token)){
           </div>
         </div>
       </div>
+
+      <div class="col-12">
+        <div class="card no-padding">
+          <div class="card-header">
+            <h3>Comments Needing Approval</h3>
+          </div>
+          <div class="card-body">
+            <?php
+            $commentsQ = $db->query("SELECT * FROM us_comments_plugin WHERE approved = 0 AND deleted = 0 ORDER BY id DESC LIMIT 50");
+            $commentsC = $commentsQ->count();
+            $comments = $commentsQ->results();
+            if($comments > 0){?>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Page ID</th><th>User</th><th>Comment Content</th><th>Approve</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($comments as $c){ ?>
+                  <tr>
+                    <td>
+                      <?php
+                        if($c->location != '0'){
+                          echo $c->location." - ".$c->location_id;
+                        }else{
+                          echo $c->page;
+                        }
+                      ?>
+                    </td>
+                    <td><?php echouser($c->user);?></td>
+                    <td><div class="comment"><?=$c->comment?></div></td>
+                    <td>
+                      <form class="" action="" method="post" style="display:inline">
+                        <input type="hidden" value="<?=$token;?>" name="csrf">
+                        <input type="hidden" name="approveComment" value="<?=$c->id?>">
+                        <input type="submit" name="approve" value="Approve" class="btn btn-success">
+                      </form>
+                      <form class="" action="" method="post" style="display:inline">
+                        <input type="hidden" value="<?=$token;?>" name="csrf">
+                        <input type="hidden" name="deleteComment" value="<?=$c->id?>">
+                        <input type="submit" name="delete" value="Delete" class="btn btn-danger">
+                      </form>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+            <?php }else{
+              echo "none";
+            } ?>
+          </div>
+        </div>
+      </div>
+
  		</div> <!-- /.row -->
 <!-- </div>  -->
