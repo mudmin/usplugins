@@ -1,3 +1,0 @@
-<?php
-//do somethign here
-?>

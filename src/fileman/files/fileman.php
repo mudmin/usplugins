@@ -1,5 +1,5 @@
 <?php
-
+if(!isset($authorized) || $authorized != 1){die();};
 $version = '1.7.8';
 $charset = 'UTF-8';
 $debug_mode = false;

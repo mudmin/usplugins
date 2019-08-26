@@ -1,3 +1,4 @@
+<?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted ?>
 <div class="col-sm-8">
   <div class="page-header float-right">
     <div class="page-title">

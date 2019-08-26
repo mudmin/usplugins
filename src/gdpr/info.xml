@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>November 21,2018</release>
+  <release>8-23-2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.0.1</tested>
 
 <!-- What does your plugin do? -->
   <description>Note: I am not a lawyer and do not make any claims as to the compliance of this plugin with any laws.
@@ -21,5 +21,5 @@
    </description>
 
  <!-- This is the launch button in the plugin manager -->
-   <button>Configure Plugin</button>
+   <button>GDPR Config</button>
 </plugin>

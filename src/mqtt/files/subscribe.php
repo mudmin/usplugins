@@ -32,7 +32,7 @@ require_once $abs_us_root.$us_url_root.'users/classes/Config.php';
 require_once $abs_us_root.$us_url_root.'users/classes/DB.php';
 require_once $abs_us_root.$us_url_root.'users/classes/Input.php';
 require_once $abs_us_root.$us_url_root.'users/classes/Validate.php';
-require_once $abs_us_root.$us_url_root.'users/classes/phpMQTT.php';
+require_once $abs_us_root.$us_url_root.'usersc/plugins/mqtt/assets/phpMQTT.php';
 $db = DB::getInstance();
 
 //put in your mqtt server credentials

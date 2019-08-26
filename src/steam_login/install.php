@@ -42,7 +42,7 @@ $hooks = [];
 //postion options are post,body,form,bottom
 //See documentation for more information
 $hooks['login.php']['body'] = 'hooks/loginbody.php';
-$hooks['join.php']['body'] = 'hooks/joinbody.php';
+//$hooks['join.php']['body'] = 'hooks/joinbody.php';
 $hooks['account.php']['body'] = 'hooks/link_button_account.php';
 $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
 // $hooks['login.php']['form'] = 'hooks/loginform.php';

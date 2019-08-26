@@ -42,8 +42,9 @@ $token = Token::generate();
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  					<h1>Configure the GDPR Plugin!</h1>
-          <form class="" action="" method="post">
-            <input type="hidden" name="csrf" $value=<?=$token;?>" />
+          <form class="" action="admin.php?view=plugins_config&plugin=gdpr" method="post">
+            <input type="hidden" name="csrf" value="<?=$token?>" />
+
             Please note: Every update of the GDPR/Cookie Policy creates a new version of the policy and makes each user re-acknowledge. For this reason, you can disable the notice itself
             below without disabling the whole plugin. Your users will not see the notice until you enable the notice. DO NOT edit the notices in the database itself. Only use this form.
             If you are using the default "More info", be sure to edit it according to your needs and put your contact info at the bottom.
@@ -56,8 +57,8 @@ $token = Token::generate();
             <input type="submit" name="changeAct" value="Update">
           </form>
         <br><strong>This policy was created on <?=$last->created_on?></strong><br>
-          <form class="" action="" method="post">
-            <input type="hidden" name="csrf" $value=<?=$token;?>" />
+          <form class="" action="admin.php?view=plugins_config&plugin=gdpr" method="post">
+            <input type="hidden" name="csrf" value="<?=$token?>" />
             <table>
               <thead>
                 <tr>

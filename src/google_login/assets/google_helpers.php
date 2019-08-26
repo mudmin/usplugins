@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted 
 require_once $abs_us_root.$us_url_root.'usersc/plugins/google_login/assets/Google/Google_Client.php';
 require_once $abs_us_root.$us_url_root.'usersc/plugins/google_login/assets/Google/contrib/Google_Oauth2Service.php';
 if(!isset($settings)){

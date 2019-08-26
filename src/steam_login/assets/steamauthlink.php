@@ -5,7 +5,7 @@
 function loginbutton($buttonstyle = "square") {
 	$button['rectangle'] = "01";
 	$button['square'] = "02";
-	$button = "<a href='?login'><img src='assets/steam.png'></a>";
+	$button = "<a href='?login'><img class=\"img-responsive\" src='assets/steam.png'></a>";
 
 	echo $button;
 }
