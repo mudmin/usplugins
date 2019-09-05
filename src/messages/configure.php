@@ -3,7 +3,7 @@
 <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
-Redirect::to("admin.php?view=messages");
+Redirect::to("admin.php?view=_messages");
 if(!empty($_POST)){
   $token = $_POST['csrf'];
 if(!Token::check($token)){
