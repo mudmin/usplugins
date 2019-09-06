@@ -28,7 +28,7 @@ function formField($o, $v = []){
         if($o->field_type == 'passwordE'){$type = "password";}
         ?>
         <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-        value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
+        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=$o->input_html?>
         >
