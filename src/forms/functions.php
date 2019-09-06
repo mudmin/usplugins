@@ -100,31 +100,37 @@ function formField($o, $v = []){
 
           if($o->field_type == "checkbox"){
             $options = json_decode($o->select_opts);
-            if($u == 1){$option = json_decode($value);}
+            if($u == 1){
+              $option = json_decode($value);
+            }
+            $n=0;
             foreach($options as $k=>$v){
               ?>
+              <input type="hidden" name='<?=$o->col?>[<?=$n?>]' value=""/>
               <label class="<?=$o->field_class?>"><input type='checkbox'  <?php if($u == 1){
-                if(in_array($k,$option)){ echo "checked='checked'";}} ?> name='<?=$o->col?>[]' value='<?=$k?>'
+                if(in_array($k,$option)){ echo "checked='checked'";}} ?> name='<?=$o->col?>[<?=$n?>]' value='<?=$k?>'
                 <?php if($o->required == 1){echo "required";}?>
                 <?=$o->input_html?>
                 ><?=$v?></label>
-              <?php }
-            } //end if checkbox
-
-            if($o->field_type == "radio") {
-              $options = json_decode($o->select_opts);
-              foreach($options as $k=>$v){
-                ?>
-                <div class="radio">
-                  <label><input type="radio" value="<?=$k?>" <?php if($u == 1){if($value == $k){echo "checked='checked'";}} ?> <?php echo $o->input_html;?> name='<?=$o->col?>'><?=$v?></label>
-                </div>
-              <?php } //end radio
+              <?php 
+              $n++;    
             }
+          } //end if checkbox
 
-            if($o->field_type == "timestamp") {
-              //do nothing.
-            }
-            ?>
+          if($o->field_type == "radio") {
+            $options = json_decode($o->select_opts);
+            foreach($options as $k=>$v){
+              ?>
+              <div class="radio">
+                <label><input type="radio" value="<?=$k?>" <?php if($u == 1){if($value == $k){echo "checked='checked'";}} ?> <?php echo $o->input_html;?> name='<?=$o->col?>'><?=$v?></label>
+              </div>
+            <?php } //end radio
+          }
+
+          if($o->field_type == "timestamp") {
+            //do nothing.
+          }
+          ?>
 
             <!-- final div -->
           </div>
@@ -295,6 +301,9 @@ function formField($o, $v = []){
                         continue;
                       }elseif(isJSON($v)){
                         $v = json_decode($v);
+                        $v = array_filter($v, function ($element) {
+                          return is_string($element) && '' !== trim($element);
+                        });
                         $v = rtrim(implode(',', $v), ','); ?>
                         <td><?=$v?></td>
                         <?php
