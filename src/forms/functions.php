@@ -42,6 +42,16 @@ function formField($o, $v = []){
         <?=$o->input_html?>
         >
       <?php } //end if int
+
+      if($o->field_type == "float"){
+        ?>
+        <input type="number" step="any" name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
+        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
+        <?php if($o->required == 1){echo "required";}?>
+        <?=$o->input_html?>
+        >
+      <?php } //end if float
+
       if($o->field_type == "money"){
         ?>
         <input type="number" step=".01" name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
