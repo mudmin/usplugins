@@ -1,10 +1,10 @@
 <br><h2>Delete and Reorder</h2>
+<p>Deleting a field does not delete form data</p>
 <?php   $q = $db->query("SELECT id, ord, form_descrip, validation FROM $name ORDER BY ord");
 $c = $q->count();
 if($c > 0){
   $r = $q->results(); ?>
   <table class="table table-striped">
-    Deleting a field does not delete form data
     <thead>
       <tr>
         <th>Order</th><th>Description</th><th>Validation</th><th>Edit</th><th>Delete</th>
