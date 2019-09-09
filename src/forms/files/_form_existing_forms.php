@@ -8,7 +8,9 @@ if($formsC > 0){
 <h2>Your Forms</h2>
 <table id="forms" class='table table-hover table-list-search'>
 	<thead>
-		<th>Form Name</th><th>Shortcode</th><th>Manage</th>
+		<tr>
+			<th>Form Name</th><th>Shortcode</th><th>Manage</th>
+		</tr>
 	</thead>
 	<tbody>
 		<?php

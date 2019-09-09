@@ -191,7 +191,7 @@ if(!empty($_POST['deleteThisForm'])){
               <?php } ?>
             </select>
             <br />
-            <strong>This action <font color="red">cannot</font> be undone!<br>
+            <strong>This action <font color="red">cannot</font> be undone!</strong><br>
               <br />
               <div class="btn-group pull-left"><input class='btn btn-danger' type='submit' name="deleteTable" value='Delete the Form AND related DB Table' class='submit' /></div>
               <div class="btn-group pull-right"><input class='btn btn-success' type='submit' name="delete" value='Delete the Form!' class='submit' /></div><br />
