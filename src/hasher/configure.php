@@ -11,38 +11,26 @@ $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hasher');
  ?>
 <div class="content mt-3">
  		<div class="row">
- 			<div class="col-sm-8 offset-2">
+ 			<div class="col-sm-12">
       <h3 align="center">Hasher</h3>
-        <form class="" action="" method="post">
-          <label for="type"></label>
-          <div class="d-flex">
-          <select class="form-control" name="file">
-            <option value="" disabled selected="selected">--Select File--</option>
+      <br>
             <?php
             foreach ($files as $file) {
               $extension = pathinfo($file, PATHINFO_EXTENSION);
-              if ($extension == 'zip') { ?>
-                <option value="<?=$file?>"><?=$file?></option>
-              <?php }
+              if ($extension == 'zip') {
+                $zip = new ZipArchive;
+                	if($zip->open($abs_us_root.$us_url_root.'/usersc/plugins/hasher/'.$file) != "true")
+                	{
+                	 echo "Error :- Unable to open the Zip File";
+                 }else{
+                	$newCrc = base64_encode(hash_file("sha256",$zip->filename));
+                	?>
+                  <h4 align="center"><?=$file?></strong><br>
+                  <p class="text-center"><?=$newCrc?></p>
+                  <?php
+                  }
+                  ?>
+                  <hr>
+                  <?php
+               }
             }
-            ?>
-          </select>
-           <input type="submit" name="plugin_hasher" value="Go">
-        </div>
-        </form>
-        <?php
-if($f != ''){
-$zip = new ZipArchive;
-	if($zip->open($abs_us_root.$us_url_root.'/usersc/plugins/hasher/'.$f) != "true")
-	{
-	 echo "Error :- Unable to open the Zip File";
- }else{
-	$newCrc = base64_encode(hash_file("sha256",$zip->filename));
-	?>
-  <br><br>
-  <h4 align="center">The hash of <strong><?=$f?></strong> is...</h4><br>
-  <p class="text-center"><?=$newCrc?></p>
-  <?php
-  }
-}
-?>

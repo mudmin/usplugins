@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Form Builder Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.00</version>
+
+<!-- release date of THIS version -->
+  <release>August 12,2019</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.0.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>Bring the UserSpice 4 Form Builder system to UserSpice 5...or use this as a guide to create your own form plugin.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Form Builder</button>
+</plugin>

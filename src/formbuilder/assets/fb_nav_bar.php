@@ -1,8 +1,10 @@
-<?php if(empty($_POST)){ $token = Token::generate(); };
+<?php
+if(!hasPerm([2],$user->data()->id)){die();}
+if(empty($_POST)){ $token = Token::generate(); };
 $db = DB::getInstance();
 ?>
 <div class="row bg-light">
-    <br />    
+    <br />
 </div>
 <div class="row bg-light justify-content-center">
     <h2>Form Builder</h2>

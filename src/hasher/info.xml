@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>0.01</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>April 26,2018</release>
+  <release>September 3, 2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.0.1</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the hasher plugin for UserSpice. It serves as a plugin for your own plugin design.</description>
+  <description>This is the hasher plugin for UserSpice. If you want to upload plugins for others to download in SpiceShaker we need the latest hash.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Run Hasher</button>

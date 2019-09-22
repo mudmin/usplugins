@@ -1,7 +1,5 @@
 <?php
-if ($authorized != 1) {
-  die("unauthorized");
-}
+if(!isset($authorized) || $authorized != 1){die();};
 /*
  PHP Mini MySQL Admin
  (c) 2004-2017 Oleg Savchuk <osalabs@gmail.com> http://osalabs.com

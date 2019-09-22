@@ -9,10 +9,10 @@
   <version>1.9.170730</version>
 
 <!-- release date of THIS version -->
-  <release>November 19,2018</release>
+  <release>August 28, 2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.0.1</tested>
 
 <!-- What does your plugin do? -->
   <description>An extremely lightweight phpMyAdmin-type plugin based on https://sourceforge.net/projects/phpminiadmin/ by Oleg Savchuk.</description>

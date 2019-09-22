@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
 <?php
-
+if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted 
 $value=null;
 $gender=null;
 $link=null;
