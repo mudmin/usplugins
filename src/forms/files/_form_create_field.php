@@ -5,7 +5,6 @@
       <option value=""></option>
       <option value="text">text</option>
       <option value="number">whole number</option>
-      <option value="float">floating point number</option>
       <option value="money">money(xxx.xx)</option>
       <option value="textarea">textarea</option>
       <option value="dropdown">dropdown</option>

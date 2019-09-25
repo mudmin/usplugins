@@ -31,11 +31,6 @@ if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us
 }
 }
 
-$file = "combobox.js";
-if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/js/".$file)) {
-    echo "failed to copy $file...\n";
-		$cpyfail=1;
-}
 
 $file = "form_validation.php";
 if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/parsers/".$file)) {

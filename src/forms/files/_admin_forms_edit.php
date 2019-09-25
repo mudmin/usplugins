@@ -135,12 +135,6 @@ if(!empty($_POST['create_field'])){
         }
         $db->query("ALTER TABLE $mainTable ADD $col $field_type($length)");
         $db->update($name,$id,['col_type'=>'int']);
-      }elseif($field_type == "float"){
-        $field_type = 'float';
-
-        $db->query("ALTER TABLE $mainTable ADD $col $field_type");
-        $db->update($name,$id,['col_type'=>'int']);
-
       }elseif($field_type == "date" || $field_type == "datetime"){
         $db->query("ALTER TABLE $mainTable ADD $col $field_type");
         $fields = array(
