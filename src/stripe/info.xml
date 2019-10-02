@@ -6,17 +6,17 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>0.01</version>
+  <version>1.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>October 12,2018</release>
+  <release>October 2,2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.0.4</tested>
 
 <!-- What does your plugin do? -->
-  <description>Charge credit cards with stripe!  Setup your keys in by clicking "Configure Plugin" on the left.</description>
+  <description>Charge credit cards with stripe!  Be sure to setup your Stripe API keys on the config page.</description>
 
 <!-- This is the launch button in the plugin manager -->
-  <button>Configure Plugin</button>
+  <button>Stripe</button>
 </plugin>
