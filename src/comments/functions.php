@@ -4,6 +4,12 @@
 * This function can be called anywhere on the site that you want
 * comments to display.
 **/
+if(!isset($user) || !$user->isLoggedIn){
+  $commentsUserId = 0;
+}else{
+  $commentsUserId = $user->data()->id;
+}
+
 function commentsHere($opt = []){
   global $db,$settings,$user;
 
@@ -59,6 +65,7 @@ function commentsHere($opt = []){
 
   /** Check to see if user is submitting a comment **/
   if(!empty($_POST['submitComment']) && $ok_post == true){
+    global $commentsUserId ;
     $token = $_POST['csrf'];
     if(!Token::check($token)){
       Redirect::to($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
@@ -71,7 +78,7 @@ function commentsHere($opt = []){
         'page'=>$id,
         'location'=>$com_location,
         'location_id'=>$com_location_id,
-        'user'=>$user->data()->id,
+        'user'=>$commentsUserId,
         'comment'=>$com_content,
         'approved'=>$com_approved
       );
@@ -96,9 +103,13 @@ function commentsHere($opt = []){
   }
 
   /** Check to see if user is a Moderator **/
+  if(isset($user) && $user->isLoggedIn()){
   $specQ = $db->query("SELECT id FROM users WHERE commentmod = 1 AND id = ? ", array($user->data()->id));
   $specC = $specQ->count();
   $user_mod_check = $specQ->results();
+}else{
+  $specC = 0;
+}
   if(!empty($user_mod_check)){ $user_is_mod = true; }else{ $user_is_mod = false; }
 
   /** Check to see if mod is approving a comment **/
@@ -161,8 +172,8 @@ function commentsHere($opt = []){
 }
 
 </style>
-<?php if(!$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
-<?php if(!$successes=='') {?><div class="alert alert-success"><?=display_successes($successes);?></div><?php } ?>
+<?php if(isset($errors) && !$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
+<?php if(isset($successes) && !$successes=='') {?><div class="alert alert-success"><?=display_successes($successes);?></div><?php } ?>
 <?php
 /** Check to see if user is logged in, and if public comments are allowed **/
 if($ok_post == true){
