@@ -4,11 +4,6 @@
 * This function can be called anywhere on the site that you want
 * comments to display.
 **/
-if(!isset($user) || !$user->isLoggedIn){
-  $commentsUserId = 0;
-}else{
-  $commentsUserId = $user->data()->id;
-}
 
 function commentsHere($opt = []){
   global $db,$settings,$user;
@@ -65,11 +60,13 @@ function commentsHere($opt = []){
 
   /** Check to see if user is submitting a comment **/
   if(!empty($_POST['submitComment']) && $ok_post == true){
-    global $commentsUserId ;
-    $token = $_POST['csrf'];
-    if(!Token::check($token)){
-      Redirect::to($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+    global $user;
+    if(!$user || !$user->isLoggedIn()){
+      $commentsUserId = 0;
+    }else{
+      $commentsUserId = $user->data()->id;
     }
+
     $com_content = Input::get('comment');
     if(empty($com_content)){
       $errors[]='Comment is Blank';
