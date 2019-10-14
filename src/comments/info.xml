@@ -6,17 +6,17 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.01</version>
+  <version>1.02</version>
 
 <!-- release date of THIS version -->
-  <release>August 24, 2019</release>
+  <release>October 12, 2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.0.5</tested>
 
 <!-- What does your plugin do? -->
   <description>A simple plugin allowing users to comment on content.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Comments Settings</button>
+    <button>Comments</button>
 </plugin>
