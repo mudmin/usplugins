@@ -146,11 +146,6 @@ if(!function_exists('transferPoints')) {
     $fail = false;
     $msg = [];
 
-    if(strtolower($to) == strtolower($from)){
-      $fail = true;
-      $msg['reason'] = "You cannot transfer to/from the same user";
-    }
-
     if(!is_numeric($points)){
       $fail = true;
       $msg['reason'] = $name." not provided";
@@ -182,6 +177,11 @@ if(!function_exists('transferPoints')) {
     if($checkTo == false){
       $msg['reason'] = "$to does not exist";
       $fail = true;
+    }
+
+    if($checkTo->id == $checkFrom->id){
+      $fail = true;
+      $msg['reason'] = "You cannot transfer to/from the same user";
     }
 
     if(!$fail){
