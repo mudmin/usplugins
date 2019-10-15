@@ -1,7 +1,7 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted Leave this line in place?>
 <?php
 //This demo will list permission levels a user has
-
+global $user;
 if(isset($user) && $user->isLoggedIn()){
   $plgPermsData = [];
   $plgPerms = $data = fetchUserPermissions($user->data()->id);
@@ -13,7 +13,7 @@ if(isset($user) && $user->isLoggedIn()){
       $plgPermsData[] = $pn->name;
     }
   }
-}
+
 sort($plgPermsData);
  ?>
 <strong>Permissions</strong><br>
@@ -21,4 +21,5 @@ sort($plgPermsData);
   //if($p != 'User'){
   echo $p."<br>";
   //}
+}
 }

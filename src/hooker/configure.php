@@ -5,7 +5,7 @@ include "plugin_info.php";
 pluginActive($plugin_name);
 $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hooker/hooks');
 if(!empty($_POST['addHook'])){
-  $pages = ['account.php','admin.php?view=general','join.php','login.php','user_settings.php'];
+  $pages = ['account.php','admin.php?view=general','join.php','login.php','user_settings.php','admin.php?view=user','admin.php?view=users'];
   $positions = ['pre','post','body','form','bottom'];
   $valid = false;
   $page = Input::get('page');
@@ -56,6 +56,8 @@ if(!empty($_POST['deleteHook'])){
                   <option value="" disabled selected="selected">--Choose Page--</option>
                   <option value="account.php">account.php (no post or form)</option>
                   <option value="admin.php?view=general">admin.php?view=general (no post,form, or bottom)</option>
+                  <option value="admin.php?view=user">admin.php?view=user (v5.0.5+)</option>
+                  <option value="admin.php?view=users">admin.php?view=users (v5.0.5+)</option>
                   <option value="join.php">join.php (all positions available)</option>
                   <option value="login.php">login.php (all positions available)</option>
                   <option value="user_settings.php">user_settings.php (all positions available)</option>
