@@ -44,7 +44,7 @@ $db->query("CREATE TABLE `plg_points_trans` (
 	`ts` datetime,
 	`reason` varchar(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
-
+$db->query("ALTER TABLE plg_points_trans ADD column points varchar(255)");
 $db->query("ALTER TABLE plg_points_settings ADD column term_sing varchar(255)");
 $db->query("ALTER TABLE users ADD column plg_points varchar(255) DEFAULT 0");
 

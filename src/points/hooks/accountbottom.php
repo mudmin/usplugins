@@ -6,7 +6,9 @@ $pntSettings = $db->query("SELECT * FROM plg_points_settings")->first();
 if($pntSettings->show_trans_acct == 1){ ?>
 
   <h4><?=$uc?> Transactions</h4>
-  <?php $trans = $db->query("SELECT * FROM plg_points_trans WHERE (trans_from = ? OR trans_to = ?) ORDER BY id DESC",[$user->data()->id,$user->data()->id])->results();
+  <?php $trans = $db->query("SELECT * FROM plg_points_trans WHERE trans_from = ? OR trans_to = ? ORDER BY id DESC",[$user->data()->id,$user->data()->id])->results();
+  // dump($db->errorString());
+  // dump($trans);
   ?>
   <table class="table table-striped" id="paginatePoints">
     <thead>
