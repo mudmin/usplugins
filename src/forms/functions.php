@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="<?=$us_url_root?>usersc/plugins/forms/assets/jquery-ui.min.css">
-<link rel="stylesheet" href="<?=$us_url_root?>usersc/plugins/forms/assets/timepicker.css">
 <?php
 function formField($o, $v = []){
   global $abs_us_root;
@@ -55,12 +53,18 @@ function formField($o, $v = []){
 
       if($o->field_type == "time" ){
         ?>
-        <input type="text"name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
+        <input type="text" name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=$o->input_html?>
-        >
-      <?php } //end if int
+        ><?php
+        //set your custom datetimepicker options in this file in usersc
+        if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php')){
+        include($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php');
+        }else{
+        include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/timepicker.php');
+        }
+      } //end if int
 
       if($o->field_type == "textarea") { ?>
         <textarea name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
