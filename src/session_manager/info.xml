@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Session Manager</name>
+  <author>Brandin Arsenault/Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.2</version>
+
+<!-- release date of THIS version -->
+  <release>December 4, 2019</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.0.7</tested>
+
+<!-- What does your plugin do? -->
+  <description>Gives you control over who is logged into your project.  Allows you to log someone out with the click of a button. New feature includes the option to allow a user to be logged in from only one place at a time.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Session Manager</button>
+</plugin>
