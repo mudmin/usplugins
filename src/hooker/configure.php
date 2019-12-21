@@ -26,7 +26,7 @@ if(!empty($_POST['addHook'])){
 if(!empty($_POST['deleteHook'])){
 
   $hookid = Input::get('hookid');
-  $checkQ = $db->query("SELECT * FROM us_plugin_hooks WHERE id = ? AND folder = ?",[$hookid,'hooker']);
+  $checkQ = $db->query("SELECT * FROM us_plugin_hooks WHERE id = ?",[$hookid]);
   $checkC = $checkQ->count();
   if($checkC > 0){
     $db->query("DELETE FROM us_plugin_hooks WHERE id = ?",[$hookid]);
@@ -99,18 +99,19 @@ if(!empty($_POST['deleteHook'])){
     <div class="row">
       <div class="col-12">
         <?php
-        $existing = $db->query("SELECT * FROM us_plugin_hooks WHERE folder = ?",['hooker'])->results();
+        $existing = $db->query("SELECT * FROM us_plugin_hooks",['hooker'])->results();
         ?>
         <table class="table table striped">
           <thead>
             <tr>
-              <th>Page</th><th>Position</th><th>Hook</th><th>Delete</th>
+              <th>Plugin</th><th>Page</th><th>Position</th><th>Hook</th><th>Delete</th>
             </tr>
           </thead>
           <tbody>
             <?php
             foreach($existing as $e){?>
               <tr>
+                <td><?=ucfirst($e->folder);?></td>
                 <td><?=$e->page?></td>
                 <td><?=$e->position?></td>
                 <td><?=$e->hook?></td>
