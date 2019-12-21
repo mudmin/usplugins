@@ -114,7 +114,7 @@ $perm = $db->query("SELECT SUM(permissions) AS count FROM users WHERE id = ? OR 
 if($perm < 2 && $settings->msg_blocked_users==0) $errors[] = "User is banned, you cannot reply.";
 if($thread->hidden_from==1 || $thread->hidden_to==1) $errors[] = "The other user deleted this thread, so you cannot reply.";
 
-if (($single->msg_to != $user->data()->id) && ($single->msg_from != $user->data()->id)){
+if (($single->msg_to != $user->data()->id) && ($single->msg_from != $user->data()->id) && !hasPerm([2],$user->data()->id)){
   $ip = ipCheck();
   $fields = array(
     'user'              => $user->data()->id,

@@ -229,12 +229,12 @@ if (!empty($_POST)) {
                           ?>
                           <td style="width:200px">
                             <span class="chat-img pull-left" style="padding-left:5px">
-                              <a class="nounderline" href="admin_message.php?id=<?=$m->id?>">
+                              <a class="nounderline" href="<?=$us_url_root?>users/message.php?id=<?=$m->id?>">
                                 <img src="<?=$fromGrav ?>" width="75" class="img-thumbnail">
                               </a>
                             </span>
                             <span class="chat-img pull-right" style="padding-right:5px">
-                              <a class="nounderline" href="admin_message.php?id=<?=$m->id?>">
+                              <a class="nounderline" href="<?=$us_url_root?>users/message.php?id=<?=$m->id?>">
                                 <img src="<?=$toGrav ?>" width="75" class="img-thumbnail">
                               </a>
                             </span>
@@ -243,12 +243,12 @@ if (!empty($_POST)) {
                           <td class="pull-left">
                             <h4>
                               <input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/>
-                              <a class="nounderline" href="admin_message.php?id=<?=$m->id?>">
+                              <a class="nounderline" href="<?=$us_url_root?>users/message.php?id=<?=$m->id?>">
                                 <?=$m->msg_subject?> - between <?=echouser($m->msg_from);?> and <?=echouser($m->msg_to);?>
                               </a>
                               <?php $unread = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND msg_to = ? AND msg_read = ?",array($m->id,$user->data()->id,0));
                               $unreadCount = $unread->count();?></h4>
-                              <a class="nounderline" href="admin_message.php?id=<?=$m->id?>">
+                              <a class="nounderline" href="<?=$us_url_root?>users/message.php?id=<?=$m->id?>">
                                 Updated <?=$last_update?> by <?php echouser($m->last_update_by);?>
                               </a>
                             </td>
