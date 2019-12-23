@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-  <name>Payments</name>
+  <name>Membership Plugin</name>
   <author>Dan Hoover</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>0.8 Alpha</version>
+  <version>1.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>Decmber 23,2019</release>
+  <release>December 23, 2019</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
   <tested>5.0</tested>
 
 <!-- What does your plugin do? -->
-  <description>A flexible plugin for various payment gateways.</description>
+  <description>Allows you to add membership options to your UserSpice project. Each membership option is one of your existing
+  permission levels, except that it is automatically added when the person pays and remove when the time expires.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Payments</button>
+    <button>Membership</button>
 </plugin>

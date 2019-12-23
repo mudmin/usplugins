@@ -1,4 +1,11 @@
 <?php if(count(get_included_files()) ==1) die();
+if(haltPayment('check')){die("This form of payment is disabled");}
+global $user;
+if(isset($user) && $user->isLoggedIn()){
+  $fn = $user->data()->fname." ".$user->data()->lname;
+}else{
+  $fn = "";
+}
 //This is the required part of the form. You may add additional form fields as necessary
 if(!isset($formInfo)){
   die("The formInfo variable is required.  Please see documentation for an explaination.");
@@ -12,7 +19,7 @@ if(!isset($formInfo)){
 <div class="form-row">
 <label>
   <span>Full Name*</span>
-  <input class="form-control" type="text" size="50" name="fullname" value="" id="fullName" required />
+  <input class="form-control" type="text" size="50" name="fullname" value="<?=$fn?>" id="fullName" required />
 </label>
 </div>
-<?php 
+<?php

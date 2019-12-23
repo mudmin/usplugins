@@ -1,4 +1,5 @@
 <?php if(count(get_included_files()) ==1) die();
+if(haltPayment('check')){die("This form of payment is disabled");}
 //This is the javascript below the form and the closing form tag
 ?>
 

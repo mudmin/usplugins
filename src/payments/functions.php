@@ -1,4 +1,38 @@
 <?php
+function haltPayment($option){
+  $db = DB::getInstance();
+  $check = $db->query("SELECT * FROM plg_payments_options WHERE option = ? AND enabled = 1",[$option])->count();
+  if($check < 1){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function showPaymentOptions($opts = []){
+  $db = DB::getInstance();
+  $q = $db->query("SELECT * FROM plg_payments_options WHERE enabled = 1");
+  $c = $q->count();
+  $r = $q->results();
+    echo "<label>Please select a Payment Option</label>";
+  if($c < 1){
+    echo "All payment options are currently disabled. Please contact an administrator<br>";
+  }else{
+    ?>
+    <div class="form-group">
+      <select class="<?php if(isset($opts['class'])){echo $opts['class'];}?>" name="paymentOption" required>
+        <?php if($c > 1){?>
+        <option value="" disabled>--Please select a payment option</option>
+      <?php }
+      foreach($r as $p){ ?>
+        <option value="<?=$p->option?>"><?=ucfirst($p->option)?></option>
+      <?php } ?>
+      </select>
+    </div>
+<?php
+  }
+}
+
 function displayPayment($formInfo){
   global $user,$db,$abs_us_root,$us_url_root;
   $method = $formInfo['method'];

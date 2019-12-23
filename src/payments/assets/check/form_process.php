@@ -1,6 +1,6 @@
 <?php if(count(get_included_files()) ==1) die();
+if(haltPayment('check')){die("This form of payment is disabled");}
 //This is the payment form processor. It will be loaded above the form
-
 ?>
 <strong><font color="red">
   <script type="text/javascript" src="https://js.stripe.com/v2/"></script>

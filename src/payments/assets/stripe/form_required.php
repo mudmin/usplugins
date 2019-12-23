@@ -1,4 +1,5 @@
 <?php if(count(get_included_files()) ==1) die();
+if(haltPayment('stripe')){die("This form of payment is disabled");}
 //This is the required part of the form. You may add additional form fields as necessary
 if(!isset($formInfo)){
   die("The formInfo variable is required.  Please see documentation for an explaination.");

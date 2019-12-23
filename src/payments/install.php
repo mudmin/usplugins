@@ -55,6 +55,22 @@ CREATE TABLE `plg_payments` (
  `failed` int(1) default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ");
+$db->query("
+CREATE TABLE `plg_payments_options` (
+ `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+ `option` varchar(255) ,
+ `enabled` tinyint(11) default 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+");
+
+$dirs = glob($abs_us_root . $us_url_root . 'usersc/plugins/payments/assets/*', GLOB_ONLYDIR);
+foreach($dirs as $d){
+	$asset = str_replace($abs_us_root . $us_url_root . 'usersc/plugins/payments/assets/','',$d);
+	$check = $db->query("SELECT * FROM plg_payments_options WHERE option = ?",[$asset])->count();
+	if($check < 1){
+		$db->insert('plg_payments_options',['option'=>$asset]);
+	}
+}
 $db->query("ALTER TABLE `keys` ADD COLUMN currency varchar(3) default 'usd'");
 $db->query("ALTER TABLE `keys` ADD COLUMN paypal_email varchar(255)");
 $db->query("ALTER TABLE `keys` ADD COLUMN paypal_sandbox varchar(5) default 'TRUE'");
