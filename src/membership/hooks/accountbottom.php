@@ -22,6 +22,9 @@ if(!empty($_POST && $membershipChange == "membership" && $opt == "checkout")){
   $po = Input::get('paymentOption');
   if(haltPayment($po)){Redirect::to('account.php?change=membership&err=Invalid+payment+method');}
   $plan = Input::get('plan');
+    if($status == "Active" && $plan != $user->data()->plg_mem_level){
+      Redirect::to('account.php?change=membership&err=Only+an+admin+can+change+your+plan');
+    }
   $cost = Input::get('plan_cst');
   $check1 = $db->query("SELECT * FROM plg_mem_plans WHERE disabled = 0 AND id = ?",[$plan])->count();
   $check2Q = $db->query("SELECT * FROM plg_mem_cost WHERE id = ? AND plan = ? AND disabled = 0",[$cost,$plan]);
@@ -57,8 +60,9 @@ Membership Plan:  <?=echoPlanName($user->data()->plg_mem_level);?> <br>
 Membership Expires: <?=$user->data()->plg_mem_exp; ?><br>
 <?php if($memSettings->payments == 1 && $membershipChange == "membership" && !$pass){?>
   <form class="" action="" method="get">
+    <input type="hidden" name="plan" value="<?=$user->data()->plg_mem_level?>">
     Extend your expiration date with the following plan. If you would like to change your membership level, please contact an administrator. <br>
-    <select class="" name="cst">
+    <select class="" name="plan_cst">
       <option value="" disabled selected="selected">---Please Choose a Plan---</option>
       <?php
       $costs = $db->query("SELECT * FROM plg_mem_cost WHERE plan = ? AND disabled = 0 ORDER BY days",[$user->data()->plg_mem_level])->results();
@@ -110,7 +114,7 @@ if($formInfo['success'] == true){
     $db->update('users',$user->data()->id,['plg_mem_exp'=>$newdate->format('Y-m-d')]);
     logger($user->data()->id,"Membership","Extended Membership through ".$newdate->format('Y-m-d')." for ".$formInfo['total']);
   }else{
-    $newdate = new DateTime($user->data()->plg_mem_exp);
+    $newdate = new DateTime(date("Y-m-d"));
     $newdate->add(new DateInterval('P'.$check2->days.'D'));
     $db->update('users',$user->data()->id,['plg_mem_exp'=>$newdate->format('Y-m-d'),'plg_mem_level'=>$plan]);
     changeOfPlans(0,$plan,$user->data()->id);

@@ -146,10 +146,10 @@ $db->update('plg_mem_settings',1,$fields);
 
             <div class="form-group">
               <label  for="icon">Icon Filename (Just the filename located in usersc/membership/icons)</label>
-              <input class="form-control" type="text" name="icon" value="<?php if($e){echo $thisPlan->icon;}?>" required>
+              <input class="form-control" type="text" name="icon" value="<?php if($e){echo $thisPlan->icon;}?>">
             </div>
 
-            <div class="form-group">;
+            <div class="form-group">
               <label for="icon">Permissions Added</label><br>
               <?php
               $perms = $db->query("SELECT * FROM permissions WHERE id > 2 ORDER BY name")->results();
@@ -262,7 +262,7 @@ $db->update('plg_mem_settings',1,$fields);
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Plan Name</th><th>Description</th><th>Days</th><th>Cost</th><th>Script</th><th>Edit</th>
+              <th>Plan Name</th><th>Description</th><th>Days</th><th>Cost</th><th>Edit</th>
           </thead>
           <tbody>
             <?php
@@ -275,7 +275,6 @@ $db->update('plg_mem_settings',1,$fields);
                    <td><?=$c->descrip?></td>
                    <td><?=$c->days?></td>
                    <td><?=$c->cost?></td>
-                   <td><?=$c->script?></td>
                    <td>edit</td>
                  </tr>
 
