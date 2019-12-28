@@ -17,7 +17,6 @@ if(!isset($_GET['id'])){
 if(isset($userID))
 	{
 	$userQ = $db->query("SELECT * FROM profiles LEFT JOIN users ON user_id = users.id WHERE user_id = ?",array($userID));
-	dnd($db->errorString());
 	$thatUser = $userQ->first();
 
 	if($thisUserID == $userID)
