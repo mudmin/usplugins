@@ -7,44 +7,17 @@ require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 $hooks =  getMyHooks();
 includeHook($hooks,'pre');
 
-
-
-if(!empty($_POST['uncloak'])){
-	logger($user->data()->id,"Cloaking","Attempting Uncloak");
-	if(isset($_SESSION['cloak_to'])){
-		$to = $_SESSION['cloak_to'];
-		$from = $_SESSION['cloak_from'];
-		unset($_SESSION['cloak_to']);
-		$_SESSION['user'] = $_SESSION['cloak_from'];
-		unset($_SESSION['cloak_from']);
-		logger($from,"Cloaking","uncloaked from ".$to);
-		Redirect::to($us_url_root.'users/admin.php?view=users&err=You+are+now+you!');
-		}else{
-			Redirect::to($us_url_root.'users/logout.php?err=Something+went+wrong.+Please+login+again');
-		}
-}
-
-
-//dealing with if the user is logged in
-if($user->isLoggedIn() || !$user->isLoggedIn() && !checkMenu(2,$user->data()->id)){
-	if (($settings->site_offline==1) && (!in_array($user->data()->id, $master_account)) && ($currentPage != 'login.php') && ($currentPage != 'maintenance.php')){
-		$user->logout();
-		logger($user->data()->id,"Errors","Sending to Maint");
-		Redirect::to($us_url_root.'users/maintenance.php');
-	}
-}
-?>
-
-<?php
-//PHP Goes Here!
-
 if($user->isLoggedIn()) { $thisUserID = $user->data()->id;} else { $thisUserID = 0; }
-
-if(isset($_GET['id']))
-	{
+if(!isset($_GET['id'])){
+	$userID = $user->data()->id;
+}else{
 	$userID = Input::get('id');
-	
+}
+
+if(isset($userID))
+	{
 	$userQ = $db->query("SELECT * FROM profiles LEFT JOIN users ON user_id = users.id WHERE user_id = ?",array($userID));
+	dnd($db->errorString());
 	$thatUser = $userQ->first();
 
 	if($thisUserID == $userID)
@@ -55,7 +28,7 @@ if(isset($_GET['id']))
 		{
 		$editbio = '';
 		}
-	
+
 	$ususername = ucfirst($thatUser->username)."'s Profile";
 	$grav = get_gravatar(strtolower(trim($thatUser->email)));
 	$useravatar = '<img src="'.$grav.'" class="img-thumbnail" alt="'.$ususername.'">';
@@ -83,18 +56,18 @@ else
 						<div class="col-xs-12 col-md-10">
 						<h1><?php echo $ususername;?></h1>
 							<h2><?php echo $usbio.$editbio;?></h2>
-	
+
 					</div>
 					</div>
 				</div>
-				
+
 										<a class="btn btn-success" href="view_all_users.php" role="button">All Users</a>
 
 
     </div> <!-- /container -->
 
 </div> <!-- /#page-wrapper -->
- 
+
 <?php require_once $abs_us_root.$us_url_root.'usersc/templates/'.$settings->template.'/container_close.php'; //custom template container ?>
 
 <!-- footers -->
