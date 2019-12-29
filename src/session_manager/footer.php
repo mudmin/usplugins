@@ -4,7 +4,7 @@
 				setInterval(function(){
             $.ajax({
                 type: "POST",
-                url: "<?=$us_url_root?>users/api/",
+                url: "<?=$us_url_root?>usersc/plugins/session_manager/api/",
                 data: {
                     action: "checkSessionStatus",
                 },
