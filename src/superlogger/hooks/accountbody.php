@@ -8,7 +8,7 @@ if($settings->plg_sl_opt_out == 1 && $user->data()->plg_sl_opt_out == 0){
   }
     ?>
   <form class="" action="" method="post">
-    <input type="submit" name="optOutLoggingData" value="Opt Out of Logging" class="btn btn-primary">
+    <input type="submit" name="optOutLoggingData" value="Opt Out of Logging" class="btn btn-primary btn-block">
   </form><br>
 <?php }
 
@@ -20,6 +20,6 @@ if(!empty($_POST['deleteMyLoggingData'])){
 }
   ?>
 <form class="" action="" method="post">
-  <input type="submit" name="deleteMyLoggingData" value="Delete My Logging Data" class="btn btn-danger">
+  <input type="submit" name="deleteMyLoggingData" value="Delete My Logging Data" class="btn btn-danger btn-block">
 </form>
 <?php } ?>

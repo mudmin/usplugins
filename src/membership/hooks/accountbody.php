@@ -2,6 +2,6 @@
 $memSettings = $db->query("SELECT * FROM plg_mem_settings")->first();
 if($memSettings->payments == 1){?>
 <div class="form-group">
-  <button type="button" onclick="window.location.href = 'account.php?change=membership';" name="button" class="btn btn-primary">Manage Membership</button>
+  <button type="button" onclick="window.location.href = 'account.php?change=membership';" name="button" class="btn btn-primary btn-block">Manage Membership</button>
 </div>
 <?php } ?>
