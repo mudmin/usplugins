@@ -6,7 +6,7 @@
 **/
 
 function commentsHere($opt = []){
-  global $db,$settings,$user;
+  global $db,$settings,$user,$us_url_root;
 
   /** Get Comment Page info **/
   if(isset($opt['location'])){
@@ -229,7 +229,7 @@ if($commentsC < 1){
         ?>
         <div class='media comment-box'>
           <?php
-          $thatUserQ = $db->query("SELECT email FROM users WHERE id = ?",array($c->user));
+          $thatUserQ = $db->query("SELECT * FROM users WHERE id = ?",array($c->user));
           $thatUserC = $thatUserQ->count();
           if($thatUserC > 0){
             $thatUser = $thatUserQ->first();
@@ -240,8 +240,12 @@ if($commentsC < 1){
             <div class='media-left'>
               <?php
                 if($thatUserC > 0){
+                  if(pluginActive('profile_pic') && $thatUser->profile_pic != ''){ ?>
+                    <img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$thatUser->profile_pic?>" class="img-thumbnail">
+                  <?php }else{
                 echo $useravatar;
                 }
+              }
               ?>
             </div>
             <div class='media-body text-break'>
