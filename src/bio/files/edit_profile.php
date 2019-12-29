@@ -51,7 +51,16 @@ if(!empty($_POST)) {
 				<div class="well">
 					<div class="row">
 						<div class="col-xs-12 col-md-2">
-							<p><img src="<?=$grav; ?>" alt=""class="left-block img-thumbnail" alt="Generic placeholder thumbnail"></p>
+              <p>
+              <?php
+              if(pluginActive('profile_pic') && $user->data()->profile_pic != ''){ ?>
+                <img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$user->data()->profile_pic?>" class="img-thumbnail">
+              <?php }else{
+                $grav = get_gravatar(strtolower(trim($thatUser->email)));
+                $useravatar = '<img src="'.$grav.'" class="img-thumbnail" alt="'.$user->data()->username.'">';
+                echo $useravatar;
+              } ?>
+              </p>
 						</div>
 						<div class="col-xs-12 col-md-10">
 						<h1><?=ucfirst($user->data()->username)?>'s Profile</h1>

@@ -8,7 +8,13 @@ if (in_array($user->data()->id, $master_account)){
 $db = DB::getInstance();
 include "plugin_info.php";
 
-
+$users = $db->query("SELECT id FROM users")->results();
+foreach($users as $u){
+$check = $db->query("SELECT id FROM profiles WHERE user_id = ?",[$u->id])->count();
+if($check < 1){
+  $db->insert('profiles',['user_id'=>$u->id,'bio'=>"This is your bio"]);
+}
+}
 
 //all actions should be performed here.
 $check = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name))->count();

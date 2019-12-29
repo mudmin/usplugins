@@ -29,11 +29,7 @@ if(isset($userID))
 		}
 
 	$ususername = ucfirst($thatUser->username)."'s Profile";
-	$grav = get_gravatar(strtolower(trim($thatUser->email)));
-	$useravatar = '<img src="'.$grav.'" class="img-thumbnail" alt="'.$ususername.'">';
 	$usbio = html_entity_decode($thatUser->bio);
-	//Uncomment out the line below to see what's available to you.
-	//dump($thisUser);
 	}
 else
 	{
@@ -50,7 +46,15 @@ else
 				<div class="well">
 					<div class="row">
 						<div class="col-xs-12 col-md-2">
-							<p><?php echo $useravatar;?></p>
+							<p>
+							<?php if(pluginActive('profile_pic') && $thatUser->profile_pic != ''){ ?>
+								<img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$thatUser->profile_pic?>" class="img-thumbnail">
+							<?php }else{
+								$grav = get_gravatar(strtolower(trim($thatUser->email)));
+								$useravatar = '<img src="'.$grav.'" class="img-thumbnail" alt="'.$ususername.'">';
+								echo $useravatar;
+							} ?>
+							</p>
 						</div>
 						<div class="col-xs-12 col-md-10">
 						<h1><?php echo $ususername;?></h1>

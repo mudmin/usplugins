@@ -22,19 +22,6 @@ $users = $userQ->results();
 			<div class="col-xs-12 col-md-6">
 				<h1 >View All Users</h1>
 			</div>
-
-			<div class="col-xs-12 col-md-6">
-				<!-- <form class="">
-					<label for="system-search">Search:</label>
-					<div class="input-group">
-						<input class="form-control" id="system-search" name="q" placeholder="Search Users..." type="text">
-						<span class="input-group-btn">
-							<button type="submit" class="btn btn-default"><i class="fa fa-times"></i></button>
-						</span>
-					</div>
-				</form> -->
-			</div>
-
 		</div>
 
 		<div class="row">
@@ -54,19 +41,25 @@ $users = $userQ->results();
 
 								$ususername = ucfirst($v1->username);
 								$ususerbio = ucfirst($v1->bio);
-								$grav = get_gravatar(strtolower(trim($v1->email)));
-								$useravatar = '<img src="'.$grav.'" class="img-responsive img-thumbnail" alt="'.$ususername.'">';
 
 								?>
 
 								<tr>
 									<td>
+										<?php
+										if(pluginActive('profile_pic') && $v1->profile_pic != ''){ ?>
+										<a href="<?=$us_url_root?>users/profile.php?id=<?=$v1->id?>"><img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$v1->profile_pic?>" class="img-responsive img-thumbnail"></a>
+										<?php }else{
+										$grav = get_gravatar(strtolower(trim($v1->email)));
+										$useravatar = '<img src="'.$grav.'" class="img-responsive img-thumbnail" alt="'.$ususername.'">'; ?>
 										<a href="<?=$us_url_root?>users/profile.php?id=<?=$v1->id?>"><?php echo $useravatar;?></a>
+										<?php } ?>
+
 									</td>
 
 									<td>
 										<h4><a href="<?=$us_url_root?>users/profile.php?id=<?=$v1->id?>"><?=$ususername?>  </a></h4>
-										<p><?=$ususerbio?></p>
+										<p><?php //echo $ususerbio ?></p>
 									</td>
 								</tr>
 							<?php } ?>
