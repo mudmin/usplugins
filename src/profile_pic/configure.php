@@ -25,7 +25,7 @@ if(!Token::check($token)){
     <div class="row">
       <?php foreach($pics as $p){?>
       <div class="col-6 col-3">
-      <a href="<?=$us_url_root?>users/admin.php?view=user&id=<?=$p->?>">
+      <a href="<?=$us_url_root?>users/admin.php?view=user&id=<?=$p->id?>">
       <img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$p->profile_pic?>" alt="">
       </a>
       </div>
