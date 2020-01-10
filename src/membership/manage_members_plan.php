@@ -27,12 +27,14 @@ $date = date("Y-m-d");
 $id = Input::get('userid');
 $method = Input::get('method');
 $uiQ = $db->query("SELECT * FROM users WHERE id = ?",[$id]);
+
 $uiC = $uiQ->count();
 if($uiC < 1){
 	Redirect::to('manage_members.php?err=User+not=found');
 }
 $u = $uiQ->first();
 $plans = $db->query("SELECT * FROM plg_mem_plans WHERE disabled = 0 ORDER BY ordering")->results();
+
 $ps = false;
 $pl = Input::get('ps');
 if(is_numeric($pl)){$ps = true;}
@@ -40,7 +42,9 @@ $sel = false;
 $costSel = false;
 if($ps){
 	$costs = $db->query("SELECT * FROM plg_mem_cost WHERE plan = ? AND disabled = 0 ORDER BY days",[$pl])->results();
+
 	$selected = $db->query("SELECT * FROM plg_mem_plans WHERE id = ?",[$pl])->first();
+
 	$sel = true;
 	$cst = Input::get('cst');
 	if(is_numeric($cst)){
@@ -157,7 +161,7 @@ if($ps){
 									'plg_mem_exp'=> $nd,
 									'plg_mem_level'=>$pl,
 									'plg_mem_cred'=>$cred,
-									'plg_mem_cost'=>$billed,
+									'plg_mem_cost'=>$costPlan->id,
 								);
 								$db->update('users',$id,$fields);
 								if($cred > 0){

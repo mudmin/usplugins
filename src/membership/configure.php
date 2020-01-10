@@ -205,7 +205,7 @@ $db->update('plg_mem_settings',1,$fields);
 
             <div class="form-group">
               <label for="cost">Cost - No Symbols</label>
-              <input class="form-control" type="number" name="cost" value="" min=".01" step=".01" placeholder="30.00" required>
+              <input class="form-control" type="number" name="cost" value="" min=".00" step=".01" placeholder="30.00" required>
             </div>
 
             <div class="form-group">
