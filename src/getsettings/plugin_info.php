@@ -1,3 +1,3 @@
 <?php
-$plugin_name = "localhostlogin"; 
+$plugin_name = "getsettings"; 
  ?>

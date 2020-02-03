@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-  <name>getSettings Function</name>
+  <name>Default Remember Me</name>
   <author>Brandin Arsenault</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.001</version>
+  <version>1.000</version>
 
 <!-- release date of THIS version -->
   <release>February 3, 2020</release>
@@ -15,7 +15,7 @@
   <tested>5.0.9</tested>
 
 <!-- What does your plugin do? -->
-  <description>This plugin allows you to call a getSettings function from any page where the init.php file has been called. Useful in times that you have not loaded the navigation or header.</description>
+  <description>This plugin will check the Remember Me button on the login form by default.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button></button>

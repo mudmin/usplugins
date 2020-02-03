@@ -1,0 +1,6 @@
+<?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted?>
+<script>
+window.onload = function() {
+  document.getElementById("remember").checked = true;
+}
+</script>
