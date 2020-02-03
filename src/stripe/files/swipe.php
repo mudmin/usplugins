@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
+//typical userspice includes
+require_once '../../../../users/init.php';
+require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 //This block of code will allow only https connections
 include "../plugin_info.php";
 pluginActive($plugin_name);
@@ -34,11 +37,6 @@ if ($use_sts && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 }
 
 //end stripe-specific security statements
-
-//typical userspice includes
-require_once '../../../../users/init.php';
-require_once $abs_us_root.$us_url_root.'users/includes/header.php';
-require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
@@ -60,8 +58,8 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/stripe/assets/stripe-php/
   <div class="container-fluid">
     <?php
     if ($_POST) {
-      $token = $_POST['csrf'];
-      if(!Token::check($token)){
+      $csrf = $_POST['csrf'];
+      if(!Token::check($csrf)){
         include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
       }
       $fname = Input::get('fname');
@@ -141,13 +139,13 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/stripe/assets/stripe-php/
         // Something else happened, completely unrelated to Stripe
       }
     }
-    $token = Token::generate();
+    $csrf = Token::generate();
     ?>
     <div class="row">
       <div class="col-xs-3"></div>
       <div class="col-xs-6">
         <form action="" method="POST" id="payment-form">
-            <input type="hidden" name="csrf" $value=<?=$token;?>" />
+            <input type="hidden" name="csrf" value="<?=$csrf;?>" />
           <span class="payment-errors"></span>
           <div class="form-row">
             <label>

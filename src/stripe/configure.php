@@ -26,24 +26,13 @@
     <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
     <h1>Configure the Stripe Plugin</h1>
     <h3><a href="<?=$us_url_root?>usersc/plugins/stripe/files/example.php"><font color="blue">View the Example Form</font></a></h3>
-    Note: To must be on a live server (not localhost) and have properly configured https. You will also need an account at stripe.com and your API keys.
+    <strong>Note: To must be on a live server (not localhost) and have properly configured https. You will also need an account at stripe.com and your API keys entered below.</strong>
     <form class="" action="" method="post">
       <label for="">Your Stripe Secret Key</label>
-      <input type="password" name="stripe_private" value="<?=$settings->stripe_private?>"><br>
+      <input type="password" class="form-control" name="stripe_private" value="<?=$settings->stripe_private?>"><br>
       <label for="">Your Stripe Publishable Key</label>
-      <input type="text" name="stripe_public" value="<?=$settings->stripe_public?>"><br>
-
-      <label for="">Your Test Stripe Secret Key</label>
-      <input type="password" name="stripe_private_test" value="<?=$settings->stripe_private_test?>"><br>
-      <label for="">Your Test Stripe Publishable Key</label>
-      <input type="text" name="stripe_public_test" value="<?=$settings->stripe_public_test?>"><br>
-      <input type="hidden" name="csrf" value="<?=$token?>">
-      Please note that live mode will force https, so you will want to have that configured first.<br>
-      <label for="">Stripe Mode</label>
-      <select class="" name="stripe_live">
-        <option <?php if($settings->stripe_live == 0){echo "selected";} ?> value="0">Test Mode</option>
-        <option <?php if($settings->stripe_live == 1){echo "selected";} ?> value="1">Live Mode</option>
-      </select><br>
+      <input type="text" class="form-control" name="stripe_public" value="<?=$settings->stripe_public?>"><br>
+      Please note that stripe will force https, so you will want to have that configured before using stripe.<br>
       <input type="submit" name="stripe_credit" value="Update" class="btn btn-primary">
     </p>
   </form>

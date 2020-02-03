@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Ye Olde Bio/Profile System</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.3</version>
+
+<!-- release date of THIS version -->
+  <release>December 29,2019</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.0</tested>
+
+<!-- What does your plugin do? -->
+  <description>This is old user bio system from UserSpice 3,and 4x. Will not work natively on 4.4.  The includes will have to be updated manually.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Bio</button>
+</plugin>

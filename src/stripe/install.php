@@ -39,9 +39,9 @@ if($check > 0){
  $db->query("ALTER TABLE `stripe_transactions`
 	 ADD PRIMARY KEY (`id`)");
 
-	 $db->query("ALTER TABLE `stripe_transactions`
+	$db->query("ALTER TABLE `stripe_transactions`
 		 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT");
-
+  $db->update('settings',1,['stripe_live'=>1]);
 
  if(!$db->error()) {
 	 	err($plugin_name.' installed');

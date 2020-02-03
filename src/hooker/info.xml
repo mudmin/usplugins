@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Hooker Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.2</version>
+
+<!-- release date of THIS version -->
+  <release>December 21, 2019</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.0.8</tested>
+
+<!-- What does your plugin do? -->
+  <description>Sometimes you do not need an entire plugin, you just need to take advantage of the hooks that plugins can use. This does that. It also allows you to manage ALL the hooks on your system.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Hooker</button>
+</plugin>

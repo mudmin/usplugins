@@ -28,7 +28,7 @@ function formField($o, $v = []){
         if($o->field_type == 'passwordE'){$type = "password";}
         ?>
         <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
+        value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=$o->input_html?>
         >
@@ -42,16 +42,6 @@ function formField($o, $v = []){
         <?=$o->input_html?>
         >
       <?php } //end if int
-
-      if($o->field_type == "float"){
-        ?>
-        <input type="number" step="any" name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
-        <?php if($o->required == 1){echo "required";}?>
-        <?=$o->input_html?>
-        >
-      <?php } //end if float
-
       if($o->field_type == "money"){
         ?>
         <input type="number" step=".01" name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
@@ -63,12 +53,18 @@ function formField($o, $v = []){
 
       if($o->field_type == "time" ){
         ?>
-        <input type="text"name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
+        <input type="text" name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=$o->input_html?>
-        >
-      <?php } //end if int
+        ><?php
+        //set your custom datetimepicker options in this file in usersc
+        if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php')){
+        include($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php');
+        }else{
+        include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/timepicker.php');
+        }
+      } //end if int
 
       if($o->field_type == "textarea") { ?>
         <textarea name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
@@ -98,49 +94,51 @@ function formField($o, $v = []){
             <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>" value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>">
             <?php
             //set your custom datepicker options in this file in usersc
+            if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php')){
             include($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php');
+            }else{
+            include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datepicker.php');
+            }
           }
           if($o->field_type == "datetime"){?>
             <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>"
             value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>">
             <?php
             //set your custom datetimepicker options in this file in usersc
+            if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php')){
             include($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php');
+            }else{
+            include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datetimepicker.php');
+            }
           }
 
           if($o->field_type == "checkbox"){
             $options = json_decode($o->select_opts);
-            if($u == 1){
-              $option = json_decode($value);
-            }
-            $n=0;
+            if($u == 1){$option = json_decode($value);}
             foreach($options as $k=>$v){
               ?>
-              <input type="hidden" name='<?=$o->col?>[<?=$n?>]' value=""/>
               <label class="<?=$o->field_class?>"><input type='checkbox'  <?php if($u == 1){
-                if(in_array($k,$option)){ echo "checked='checked'";}} ?> name='<?=$o->col?>[<?=$n?>]' value='<?=$k?>'
+                if(in_array($k,$option)){ echo "checked='checked'";}} ?> name='<?=$o->col?>[]' value='<?=$k?>'
                 <?php if($o->required == 1){echo "required";}?>
                 <?=$o->input_html?>
                 ><?=$v?></label>
-              <?php 
-              $n++;    
+              <?php }
+            } //end if checkbox
+
+            if($o->field_type == "radio") {
+              $options = json_decode($o->select_opts);
+              foreach($options as $k=>$v){
+                ?>
+                <div class="radio">
+                  <label><input type="radio" value="<?=$k?>" <?php if($u == 1){if($value == $k){echo "checked='checked'";}} ?> <?php echo $o->input_html;?> name='<?=$o->col?>'><?=$v?></label>
+                </div>
+              <?php } //end radio
             }
-          } //end if checkbox
 
-          if($o->field_type == "radio") {
-            $options = json_decode($o->select_opts);
-            foreach($options as $k=>$v){
-              ?>
-              <div class="radio">
-                <label><input type="radio" value="<?=$k?>" <?php if($u == 1){if($value == $k){echo "checked='checked'";}} ?> <?php echo $o->input_html;?> name='<?=$o->col?>'><?=$v?></label>
-              </div>
-            <?php } //end radio
-          }
-
-          if($o->field_type == "timestamp") {
-            //do nothing.
-          }
-          ?>
+            if($o->field_type == "timestamp") {
+              //do nothing.
+            }
+            ?>
 
             <!-- final div -->
           </div>
@@ -311,9 +309,6 @@ function formField($o, $v = []){
                         continue;
                       }elseif(isJSON($v)){
                         $v = json_decode($v);
-                        $v = array_filter($v, function ($element) {
-                          return is_string($element) && '' !== trim($element);
-                        });
                         $v = rtrim(implode(',', $v), ','); ?>
                         <td><?=$v?></td>
                         <?php

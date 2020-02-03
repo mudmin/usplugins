@@ -177,7 +177,7 @@
 </div>
 
     <script src="../users/js/jwerty.js"></script>
-    <script src="../users/js/combobox.js"></script>
+    <script src="<?=$us_url_root?>usersc/plugins/forms/assets/combobox.js"></script>
     <script>
     $(document).ready(function() {
       $('.show-tooltip').tooltip();
