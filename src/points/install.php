@@ -69,6 +69,8 @@ $hooks = [];
 $hooks['account.php']['pre'] = 'hooks/accountpre.php';
 $hooks['account.php']['body'] = 'hooks/accountbody.php';
 $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
+$hooks['admin.php?view=users']['body'] = 'hooks/uman_thead.php';
+$hooks['admin.php?view=users']['bottom'] = 'hooks/uman_tbody.php';
 registerHooks($hooks,$plugin_name);
 
 } //do not perform actions outside of this statement
