@@ -1,12 +1,11 @@
 <?php
 //Security and UserSpice Includes
 require_once '../../../../users/init.php';
-require_once $abs_us_root.$us_url_root.'users/includes/header.php';
-require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-require_once $abs_us_root.$us_url_root.'users/includes/plugin_info.php';
+require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
+include 'plugin_info.php';
 
 $db = DB::getInstance();
-pluginActive();
+pluginActive($plugin_name);
 
 
 //check for permission to use the plugin in general
