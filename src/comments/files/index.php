@@ -2,7 +2,7 @@
 //Security and UserSpice Includes
 require_once '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
-include "plugin_info.php";
+include 'plugin_info.php';
 
 $db = DB::getInstance();
 pluginActive($plugin_name);
