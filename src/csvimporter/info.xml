@@ -6,7 +6,7 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0</version>
+  <version>1.1</version>
 
 <!-- release date of THIS version -->
   <release>February 23,2020</release>
@@ -15,7 +15,7 @@
   <tested>5.0.9</tested>
 
 <!-- What does your plugin do? -->
-  <description>Bulk import users with a CSV file.</description>
+  <description>Flexible plugin for bulk user creation/import from as little as just an email address per user. You can specify plain text or bcrypt encrypted passwords, usernames, and real names. You can also force password reset and even specify a list of permission levels per user on import.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>CSV Importer</button>

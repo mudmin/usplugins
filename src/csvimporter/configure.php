@@ -62,7 +62,10 @@ pluginActive($plugin_name);
 
      //if the password is not already encrypted in bcrypt, encrypt it
      if(substr($pass,0,4) != "$2y$"){
+       $prePass = $pass;
        $pass = password_hash($pass, PASSWORD_BCRYPT, array('cost' => 12));
+     }else{
+       $prePass = "Pre-Encrypted Password Provided";
      }
 
      //get an array of valid permissions for this user
@@ -108,7 +111,7 @@ pluginActive($plugin_name);
        if($rest == 1){$db->update('users',$theNewId,['force_pr'=>1]);}
        include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
        logger($theNewId,"User","Registered via CSV Import");
-       $added[] = [$theNewId,$email];
+       $added[] = [$theNewId,$email,$prePass];
 
    }//end foreach
    unlink($newfilename);
@@ -136,7 +139,8 @@ pluginActive($plugin_name);
             <table class="table">
               <thead>
                 <tr>
-                  <th>ID</th><th>Email</th>
+                  <th>ID</th><th>Email</th><th>Password (<input id="chkShowPassword" type="checkbox" />
+                Show password</label>)</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,6 +148,7 @@ pluginActive($plugin_name);
                   <tr>
                     <td><?=$add[0];?></td>
                     <td><?=$add[1];?></td>
+                    <td><span class="pwtoggle" style="display:none;"><?=$add[2];?></span></td>
                   </tr>
                 <?php } ?>
               </tbody>
@@ -186,3 +191,15 @@ pluginActive($plugin_name);
         </font>
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
+    <script type="text/javascript">
+        $(function () {
+            $("#chkShowPassword").bind("click", function () {
+                if ($(this).is(":checked")) {
+                  $(".pwtoggle").show();
+                } else {
+                  $(".pwtoggle").hide();
+                }
+            });
+        });
+
+    </script>
