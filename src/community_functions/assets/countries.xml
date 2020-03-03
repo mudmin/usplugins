@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <name>Country Functions</name>
+  <author>Dan Hoover</author>
+  <updated>March 3, 2020</updated>
+  <description>A group of functions that allow you to deal with world wide country codes.</description>
+  <documentation>
+
+    <function>
+      <name>isValidCountry()</name>
+      <description>Returns true if a 2 or 3 digit country code is valid. Otherwise returns false.</description>
+      <usage>$check = isValidCountry("USA"); //returns true!</usage>
+    </function>
+
+    <function>
+      <name>countryFromCode($string)</name>
+      <description>Returns the name of a country from a 2 or 3 digit country code is valid. Returns false if invalid.</description>
+      <usage>$country = countryFromCode("USA"); //returns "United States"</usage>
+    </function>
+
+    <function>
+      <name>countryCodes2()</name>
+      <description>Returns an array of ISO 3166-1 alpha-2 2-digit country codes in ABC order. Great for generating forms. </description>
+      <usage>$countries = countryCodes2(); //returns array</usage>
+    </function>
+
+    <function>
+      <name>countryCodes3()</name>
+      <description>Returns an array of ISO 3166-1 alpha-3 3-digit country codes in ABC order. Great for generating forms. </description>
+      <usage>$countries = countryCodes2(); //returns array</usage>
+    </function>
+  </documentation>
+
+
+</package>
