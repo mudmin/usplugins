@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <name>United States Functions</name>
+  <author>Dan Hoover</author>
+  <updated>March 3, 2020</updated>
+  <description>A group of functions that allow you to deal with US State abbreviations.</description>
+  <documentation>
+
+    <function>
+      <name>stateFromAbbrevUS($string)</name>
+      <description>Returns the full state name when provided with an abbreviation. Returns false if invalid. Deals with capitalization automagically.</description>
+      <usage>$state = stateFromAbbrevUS("fl"); //returns "Florida"</usage>
+    </function>
+
+    <function>
+      <name>abbrevFromStateUS($string)</name>
+      <description>Returns the abbreviation when provided with a state name. Returns false if invalid. Deals with capitalization automagically.</description>
+      <usage> $state = abbrevFromStateUS("Florida"); //returns "FL"</usage>
+    </function>
+
+    <function>
+      <name>statesUS()</name>
+      <description>Returns an array of US State abbreviations in ABC order. Great for generating forms. </description>
+      <usage>$states = statesUS(); //returns array</usage>
+    </function>
+  </documentation>
+
+
+</package>

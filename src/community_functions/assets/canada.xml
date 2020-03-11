@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <name>Canadian Functions</name>
+  <author>Dan Hoover</author>
+  <updated>March 3, 2020</updated>
+  <description>A group of functions that allow you to deal with Canadian stuff. Not like moose and Tim Horton's. More like provinces.</description>
+  <documentation>
+
+    <function>
+      <name>$prov = provFromAbbrevCA($string);</name>
+      <description>Returns the full province name when provided with an abbreviation. Returns false if invalid. Passing "french" as the second parameter returns the results in French.  Deals with capitalization automagically.</description>
+      <usage>$prov = provFromAbbrevCA("YT"); //returns "Yukon", $prov = provFromAbbrevCA("YT","french"); //returns "Territoire du Yukon" </usage>
+    </function>
+
+    <function>
+      <name>providencesCA()</name>
+      <description>Returns an array of US State abbreviations in ABC order. Great for generating forms. Passing "french" in the function returns the names in French.</description>
+      <usage>$provs = providencesCA(); //returns an array of provinces in English.</usage>
+    </function>
+
+  </documentation>
+</package>

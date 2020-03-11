@@ -395,7 +395,7 @@ function formField($o, $v = []){
               if(is_array($k)){
               }
             }
-
+            $errorArray = [];
             foreach($submitted as $c){
               $val = [];
               if($c['field_type'] == "checkbox"){
@@ -428,6 +428,9 @@ function formField($o, $v = []){
                   if($validation->passed()) {
                     // die("Passed");
                   }else{
+                    foreach($validation->errors() as $ve){
+                      $errorArray[] = $ve;
+                    }
                     if($opts != '' && isset($opts['debug'])){
                       dump($validation);
                     }
@@ -436,12 +439,12 @@ function formField($o, $v = []){
               }
             }
 
-            if(!$validation->errors()=='') {
+            if(!$errorArray==[]) {
               ?>
               <div class="alert alert-danger">
-                <?=display_errors($validation->errors());?>
-              </div><?php }
-              if($validation->passed()) {
+                <?=display_errors($errorArray);?>
+              </div><?php
+            }else{
                 $response['validation']=true;
                 if($opts != '' && isset($opts['debug'])){
                   dnd($db->errorInfo());
