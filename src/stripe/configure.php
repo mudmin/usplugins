@@ -28,6 +28,7 @@
     <h3><a href="<?=$us_url_root?>usersc/plugins/stripe/files/example.php"><font color="blue">View the Example Form</font></a></h3>
     <strong>Note: To must be on a live server (not localhost) and have properly configured https. You will also need an account at stripe.com and your API keys entered below.</strong>
     <form class="" action="" method="post">
+      <input type="hidden" name="csrf" value="<?=$token?>">
       <label for="">Your Stripe Secret Key</label>
       <input type="password" class="form-control" name="stripe_private" value="<?=$settings->stripe_private?>"><br>
       <label for="">Your Stripe Publishable Key</label>
