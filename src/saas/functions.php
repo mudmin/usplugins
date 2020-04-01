@@ -44,7 +44,7 @@ function saasPlanInfo($account_owner){
   $planC = $planQ->count();
   if($planC < 1){return false;}
   $p->used = $m;
-  return $plan->first();
+  return $planQ->first();
 }
 
 if(!function_exists('echoPerm')){
