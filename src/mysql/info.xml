@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>MySQL Expert Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>April 2,2020</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>This is a very powerful plugin that lets your run direct MySQL queries on your database.  It is designed
+  as an alternative to something like phpMyAdmin for people who know what they're doing!  Use at your own risk. It does not hold your hand
+  in most situations. Master Account Only.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>MySQL Expert</button>
+</plugin>

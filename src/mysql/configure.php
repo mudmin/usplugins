@@ -1,0 +1,93 @@
+  <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
+
+<?php
+include "plugin_info.php";
+pluginActive($plugin_name);
+ if(!empty($_POST)){
+   $token = $_POST['csrf'];
+if(!Token::check($token)){
+  include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+}
+  $queryQ = $db->query($_POST['query']);
+  $queryC = $queryQ->count();
+  $queryR = $queryQ->results();
+
+ }
+ $token = Token::generate();
+ ?>
+ <?php
+ if(!function_exists('tableFromQueryPlugin')) {
+ function tableFromQueryPlugin($results,$opts = []){
+   if(!isset($opts['class'])) {$opts['class'] = "table table-striped paginate"; }
+   if(!isset($opts['thead'])) {$opts['thead'] = ""; }
+   if(!isset($opts['tbody'])) {$opts['tbody'] = ""; }
+   if(!isset($opts['keys'])){
+     foreach($results['0'] as $k=>$v){
+       $opts['keys'][] = $k;
+     }
+     }
+
+   ?>
+
+   <table class="<?=$opts['class']?>">
+     <thead class="<?=$opts['thead']?>">
+       <tr>
+         <?php foreach($opts['keys'] as $k){?>
+           <th><?php echo ucfirst($k);?></th>
+         <?php } ?>
+       </tr>
+     </thead>
+     <tbody class="<?=$opts['tbody']?>">
+       <?php foreach($results as $r){?>
+         <tr>
+           <?php foreach($r as $k=>$v){ ?>
+             <td><?=$v?></td>
+           <?php } ?>
+         </tr>
+       <?php } ?>
+     </tbody>
+   </table>
+ <?php }
+ }
+  ?>
+<div class="content mt-3">
+ 		<div class="row">
+ 			<div class="col-sm-12">
+          <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
+          <form class="" action="" method="post" id="queryForm">
+            <input type="hidden" name="csrf" value="<?=$token?>" />
+            Enter your query here...
+            <input class = "form-control" type="text" name="query" id="query" value="<?php if(!empty($_POST['query'])){
+              echo $_POST['query'];
+            }?>" placeholder="SELECT id,username FROM users ORDER BY id DESC LIMIT 5">
+            <div class="text-right"><input type="submit" name="plugin_mysql" value="Execute" class="btn btn-danger"></div>
+          </form>
+          <?php if(!empty($_POST['query'])){?>
+            <strong>Error Message:</strong> <?=$db->errorString();?><br>
+            <strong># of Results:</strong> <?=$queryC?>
+            <?php if($queryC > 0){
+              tableFromQueryPlugin($queryR);
+             } ?>
+
+          <?php } //end query?>
+
+ 			</div> <!-- /.col -->
+ 		</div> <!-- /.row -->
+<script type="text/javascript">
+$("#queryForm").submit(function(e){
+  e.preventDefault();
+
+  var form = this;
+  var query = $("#query").val();
+  query = query.toLowerCase();
+  if (query.indexOf("drop") >= 0 || query.indexOf("delete") >= 0){
+    if (confirm('This looks dangerous. Are you sure you want to do this?')) {
+    form.submit();
+    } else {
+        // Do nothing!
+    }
+  }else{
+    form.submit();
+  }
+});
+</script>
