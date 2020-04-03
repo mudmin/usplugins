@@ -29,7 +29,7 @@ if(!Token::check($token)){
 
    ?>
 
-   <table class="<?=$opts['class']?>">
+   <table class="<?=$opts['class']?>" id="paginate">
      <thead class="<?=$opts['thead']?>">
        <tr>
          <?php foreach($opts['keys'] as $k){?>
@@ -53,10 +53,12 @@ if(!Token::check($token)){
 <div class="content mt-3">
  		<div class="row">
  			<div class="col-sm-12">
-          <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
+          <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a><br>
+
+          You may want to consider <a href="admin.php?view=backup"><font color="red"><strong>backing up your database</strong></font></a> if you are doing something dangerous.<br>
           <form class="" action="" method="post" id="queryForm">
-            <input type="hidden" name="csrf" value="<?=$token?>" />
-            Enter your query here...
+            <input type="hidden" name="csrf" value="<?=$token?>" /><br>
+            <font color="black"><strong>Enter your query here...</strong></font>
             <input class = "form-control" type="text" name="query" id="query" value="<?php if(!empty($_POST['query'])){
               echo $_POST['query'];
             }?>" placeholder="SELECT id,username FROM users ORDER BY id DESC LIMIT 5">
@@ -90,4 +92,13 @@ $("#queryForm").submit(function(e){
     form.submit();
   }
 });
+</script>
+<link href="<?=$us_url_root?>users/js/pagination/datatables.min.css" rel="stylesheet">
+<script type="text/javascript" src="js/pagination/datatables.min.js"></script>
+<script>
+
+$(document).ready(function () {
+   $('#paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
+  });
+
 </script>
