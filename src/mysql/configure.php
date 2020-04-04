@@ -59,9 +59,11 @@ if(!Token::check($token)){
           <form class="" action="" method="post" id="queryForm">
             <input type="hidden" name="csrf" value="<?=$token?>" /><br>
             <font color="black"><strong>Enter your query here...</strong></font>
-            <input class = "form-control" type="text" name="query" id="query" value="<?php if(!empty($_POST['query'])){
+            <textarea class = "form-control" rows="8" name="query" id="query" placeholder="SELECT id,username FROM users ORDER BY id DESC LIMIT 5">
+              <?php if(!empty($_POST['query'])){
               echo $_POST['query'];
-            }?>" placeholder="SELECT id,username FROM users ORDER BY id DESC LIMIT 5">
+            }?>
+          </textarea>
             <div class="text-right"><input type="submit" name="plugin_mysql" value="Execute" class="btn btn-danger"></div>
           </form>
           <?php if(!empty($_POST['query'])){?>

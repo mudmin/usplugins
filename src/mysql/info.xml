@@ -6,10 +6,10 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>April 3,2020</release>
+  <release>April 4,2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
   <tested>5.1</tested>
@@ -17,7 +17,7 @@
 <!-- What does your plugin do? -->
   <description>This is a very powerful plugin that lets your run direct MySQL queries on your database.  It is designed
   as an alternative to something like phpMyAdmin for people who know what they're doing!  Use at your own risk. It does not hold your hand
-  in most situations. Master Account Only.</description>
+  in most situations. You can even paste reasonably sized SQL dumps into the textarea. Master Account Only.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>MySQL Expert</button>
