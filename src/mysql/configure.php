@@ -33,7 +33,7 @@ if(!Token::check($token)){
      <thead class="<?=$opts['thead']?>">
        <tr>
          <?php foreach($opts['keys'] as $k){?>
-           <th><?php echo ucfirst($k);?></th>
+           <th><?php echo $k;?></th>
          <?php } ?>
        </tr>
      </thead>
@@ -59,7 +59,7 @@ if(!Token::check($token)){
           <form class="" action="" method="post" id="queryForm">
             <input type="hidden" name="csrf" value="<?=$token?>" /><br>
             <font color="black"><strong>Enter your query here...</strong></font>
-            <textarea autofocus class = "form-control" rows="8" name="query" id="query"><?php if(!empty($_POST['query'])){echo $_POST['query'];}?></textarea>
+            <textarea autofocus class = "form-control" rows="4" name="query" id="query"><?php if(!empty($_POST['query'])){echo $_POST['query'];}?></textarea>
             <div class="text-right"><input type="submit" name="plugin_mysql" value="Execute" class="btn btn-danger"></div>
           </form>
           <?php if(!empty($_POST['query'])){?>
