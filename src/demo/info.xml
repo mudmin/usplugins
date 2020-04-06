@@ -6,17 +6,17 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>0.01</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>April 26,2018</release>
+  <release>April 6,2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.1</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the demo plugin for UserSpice. It serves as a plugin for your own plugin design.</description>
+  <description>Description Here</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Configure Button</button>
+    <button>Demo</button>
 </plugin>
