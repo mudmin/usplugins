@@ -19,6 +19,7 @@ if(is_numeric($edit)){
 }else{
   $e = false;
 }
+
  if(!empty($_POST)){
   $token = $_POST['csrf'];
   if(!Token::check($token)){
@@ -130,17 +131,17 @@ $db->update('plg_mem_settings',1,$fields);
  		<div class="row">
  			<div class="col-sm-7 col-12">
 
-          <h3>Add New Level</h3>
+          <h3><?php if($e){ echo "Update"; }else{ echo "Add New";}?> Level</h3>
           <form class="" action="<?php if($e){ echo "admin.php?view=plugins_config&plugin=membership&edit=$edit";}?>" method="post" >
             <input type="hidden" name="csrf" value="<?=$token?>" />
 
             <div class="form-group">
-              <label  for="plan_name">Level Name</label>
+              <label  for="plan_name">Level Name*</label>
               <input class="form-control" type="text" name="plan_name" value="<?php if($e){echo $thisPlan->plan_name;}?>" required>
             </div>
 
             <div class="form-group">
-              <label for="plan_desc">Description</label>
+              <label for="plan_desc">Description*</label>
               <input class="form-control" type="text" name="plan_desc" value="<?php if($e){echo $thisPlan->plan_desc;}?>" required>
             </div>
 
@@ -150,7 +151,7 @@ $db->update('plg_mem_settings',1,$fields);
             </div>
 
             <div class="form-group">
-              <label for="icon">Permissions Added</label><br>
+              <label for="icon">Permissions Added*</label><br>
               <?php
               $perms = $db->query("SELECT * FROM permissions WHERE id > 2 ORDER BY name")->results();
               foreach($perms as $p){?>
@@ -184,7 +185,7 @@ $db->update('plg_mem_settings',1,$fields);
           </form>
  			</div> <!-- /.col -->
       <div class="col-sm-5 col-12">
-          <h3>Add Pricing Option</h3>
+          <h3><?php if($e){ echo "Update"; }?> Pricing Option</h3>
           <form class="" action="<?php if($e){ echo "admin.php?view=plugins_config&plugin=membership&edit=$edit";}?>" method="post" >
             <input type="hidden" name="csrf" value="<?=$token?>" />
 
@@ -214,11 +215,8 @@ $db->update('plg_mem_settings',1,$fields);
             </div>
 
             <div class="form-group">
-              <?php if($o){ ?>
-                <input type="submit" name="plugin_cost" value="Update Level" class="btn btn-primary">
-              <?php }else{ ?>
+
                 <input type="submit" name="plugin_cost" value="Add Option" class="btn btn-primary">
-              <?php } ?>
 
             </div>
           </form>
@@ -248,7 +246,7 @@ $db->update('plg_mem_settings',1,$fields);
                     <input type="submit" name="disableButton" value="Delete" class="btn btn-danger">
                   </form>
                 </td>
-                <td><button type="button" onclick="window.location.href = 'admin.php?view=plugins_config&plugin=membership&edit=<?=$l->id?>';" name="button" class="btn btn-success">Edit</button></td>
+                <td><button type="button" onclick="window.location.href = 'edit=<?=$l->id?>';" name="button" class="btn btn-success">Edit</button></td>
               </tr>
             <?php } ?>
           </tbody>
@@ -275,7 +273,7 @@ $db->update('plg_mem_settings',1,$fields);
                    <td><?=$c->descrip?></td>
                    <td><?=$c->days?></td>
                    <td><?=$c->cost?></td>
-                   <td>edit</td>
+                   <td><button type="button" onclick="window.location.href = '<?=$us_url_root?>usersc/plugins/membership/paymentOption.php?edit=<?=$c->id?>';" name="button" class="btn btn-success">Edit</button></td>
                  </tr>
 
              <?php }  ?>

@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 
 <!-- release date of THIS version -->
-  <release>January 10, 2020</release>
+  <release>April 9, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0</tested>
+  <tested>5.1</tested>
 
 <!-- What does your plugin do? -->
   <description>Allows you to add membership options to your UserSpice project. Each membership option is one of your existing
