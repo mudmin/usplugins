@@ -21,6 +21,7 @@ if(file_exists($abs_us_root.$us_url_root."usersc/plugins/cms/assets/".$method.".
   include $abs_us_root.$us_url_root."usersc/plugins/cms/assets/".$method.".php";
 }else{ ?>
   <h3>Basic Documentation</h3>
+  <h4><a href="https://youtu.be/E0ud3miS2X4">Click Here for a Video Tour</a></h4>
   <p>This plugin is great for creating content that will be stored in the database so you
   do not need to create a new php file for each page (like Wordpress/Joomla).  While it's
   not meant to be a replacement for those systems, it does have one big trick up its sleeve--
