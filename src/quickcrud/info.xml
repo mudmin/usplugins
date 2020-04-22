@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Quick CRUD Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>April 22,2020</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>This plugin is for backend use only and provides automatic tables with basic CRUD (Create, Read, Update, Delete)
+    functionality. It is just for quick and dirty use on the backend when it doesn't make sense to code a full page for each feature.
+  </description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Quick CRUD</button>
+</plugin>
