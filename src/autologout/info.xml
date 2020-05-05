@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Auto Logout Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>May 5,2020</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>A very simple plugin that uses javascript to auto logout a user who does not load a new page for x number of minutes. Can be used on all users, only admins, or anyone except admins.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Auto Logout</button>
+</plugin>
