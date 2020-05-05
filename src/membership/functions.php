@@ -58,6 +58,7 @@ function changeOfPlans($from,$to,$uid){
     $c = $q->count();
     if($c > 0){
       $f = $q->first();
+      $db->update('users',$user->data()->id,['plg_mem_level'=>$to,'plg_mem_expired'=>0]);
       $perms = explode(",",$f->perms_added);
       foreach($perms as $p){
         $fields = array(

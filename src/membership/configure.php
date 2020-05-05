@@ -114,7 +114,8 @@ $db->update('plg_mem_settings',1,$fields);
           <input type="text" name="cur" value="<?=$memset->cur?>" size="3">
         </div>
         <div class="col-5 form-group">
-          <label for="">Allow Plan Selection/Payments on account.php?</label>
+          <label for="">Allow Plan Selection/Payments on account.php?</label><br>
+          (Only works if payments plugin is installed and properly configured)
           <select class="" name="payments">
             <option value="0" <?php if($memset->payments == 0){echo "selected='selected'";}?>>No</option>
             <option value="1" <?php if($memset->payments == 1){echo "selected='selected'";}?>>Yes</option>
@@ -153,7 +154,7 @@ $db->update('plg_mem_settings',1,$fields);
             <div class="form-group">
               <label for="icon">Permissions Added*</label><br>
               <?php
-              $perms = $db->query("SELECT * FROM permissions WHERE id > 2 ORDER BY name")->results();
+              $perms = $db->query("SELECT * FROM permissions WHERE id > 2")->results();
               foreach($perms as $p){?>
                 <div class="col-4">
                   <input type="checkbox" name="perm[]" value="<?=$p->id?>" <?php if($e && in_array($p->id,$thesePerms)){echo "checked";}?>> <?=ucfirst($p->name)." ($p->id)"?>

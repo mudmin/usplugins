@@ -158,6 +158,7 @@ if($ps){
 								$billed = Input::get('billed');
 								$cred = Input::get('cred');
 								$fields = array(
+									'plg_mem_expired'=>0,
 									'plg_mem_exp'=> $nd,
 									'plg_mem_level'=>$pl,
 									'plg_mem_cred'=>$cred,
