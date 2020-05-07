@@ -43,7 +43,7 @@ if(!Token::check($token)){
              <option value="1" <?php if($e->fname == 1){echo "selected";}?>>Yes</option>
            </select>
 
-           <label for="">Hide First Name (Username/Email will be used instead)</label>
+           <label for="">Hide Last Name (Username/Email will be used instead)</label>
            <select class="form-control" name="lname">
              <option value="0" <?php if($e->lname == 0){echo "selected";}?>>No</option>
              <option value="1" <?php if($e->lname == 1){echo "selected";}?>>Yes</option>
