@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <name>Misc Functions</name>
+  <author>UserSpice Community</author>
+  <updated>May 8, 2020</updated>
+  <description>Functions that don't fit anywhere else</description>
+  <documentation>
+
+    <function>
+      <name>isMobileDevice()</name>
+      <description>Jamie Howard submitted this function that returns true if the device looking at the site is mobile. </description>
+      <usage>if(isMobileDevice() == true){//do something}</usage>
+    </function>
+
+    <function>
+      <name>get_profile_pic($user_id,$width)</name>
+      <description>Telnz submitted this To either get the profile pic as uploaded using the profile pic plugin or use the Gravitar. Great for backwards compatibility.</description>
+      <usage>$pic = get_profile_pic($user->data()->id,200)</usage>
+    </function>
+  </documentation>
+
+
+</package>

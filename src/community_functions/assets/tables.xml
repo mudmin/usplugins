@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <name>Table Functions</name>
+  <author>Dan Hoover</author>
+  <updated>May 8, 2020</updated>
+  <description>Currently just tableFrom Query with DataTables</description>
+  <documentation>
+
+    <function>
+      <name>tableFromQuery($results,$opts = [])</name>
+      <description>Generates a full striped table from the results of a DB query. Options include passing an opts array of class, head, body for adding classes to those the whole table, head, or body.  Passing an $opts['keys'] = an array of keys will override the default table headings.  $opts['ucFirst'] = 1 will capitalize the first letters of the default keys.</description>
+      <usage>tableFromQuery($db->query("SELECT * FROM pages")->results());</usage>
+    </function>
+  </documentation>
+
+
+</package>
