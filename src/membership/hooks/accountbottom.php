@@ -1,4 +1,5 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if(pluginActive('payments',true)){
 $status = "";
 global $user,$settings;
 $memset = $db->query("SELECT * FROM plg_mem_settings")->first();
@@ -117,7 +118,7 @@ if($formInfo['success'] == true){
     $newdate = new DateTime(date("Y-m-d"));
     $newdate->add(new DateInterval('P'.$check2->days.'D'));
     $db->update('users',$user->data()->id,['plg_mem_exp'=>$newdate->format('Y-m-d'),'plg_mem_level'=>$plan]);
-    changeOfPlans(0,$plan,$user->data()->id);
+    changeOfPlans($user->data()->plg_mem_level,$plan,$user->data()->id);
     logger($user->data()->id,"Membership","Paid ".$formInfo['total']." via ".$formInfo['method']." for level $plan at cost $cost.");
   }
   Redirect::to('account.php?err=Payment+was+successful');
@@ -132,6 +133,7 @@ $formInfo = payment3($formInfo);
 }
 if($formInfo['processed'] == true && $formInfo['processed'] == false && $membershipChange == "membership" && $pass){
   Redirect::to('account.php?change=membership&err=Something+went+wrong+with+your+payment');
+}
 }
 ?>
 

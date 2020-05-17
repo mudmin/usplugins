@@ -29,6 +29,7 @@ global $abs_us_root,$us_url_root,$db,$user;
 }
 
 function saasPlanInfo($account_owner){
+  //thanks to Benjamin G for a bug fix on this!
   global $db;
     $m = $db->query("SELECT id FROM users WHERE account_owner = ?",[$account_owner])->count();
   if($account_owner == 1){
@@ -36,15 +37,19 @@ function saasPlanInfo($account_owner){
     $p->used = $m;
     return $p;
   }
+
   $q = $db->query("SELECT level FROM us_saas_orgs WHERE id = ?",[$account_owner]);
   $c = $q->count();
   if($c < 1){return false;}
   $p = $q->first();
   $planQ = $db->query("SELECT * from us_saas_levels WHERE id = ?",[$p->level]);
   $planC = $planQ->count();
+
   if($planC < 1){return false;}
   $p->used = $m;
-  return $plan->first();
+  $planQ->first()->used = $p->used;
+  return $planQ->first();
+
 }
 
 if(!function_exists('echoPerm')){

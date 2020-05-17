@@ -19,6 +19,7 @@ if(is_numeric($edit)){
 }else{
   $e = false;
 }
+
  if(!empty($_POST)){
   $token = $_POST['csrf'];
   if(!Token::check($token)){
@@ -113,7 +114,8 @@ $db->update('plg_mem_settings',1,$fields);
           <input type="text" name="cur" value="<?=$memset->cur?>" size="3">
         </div>
         <div class="col-5 form-group">
-          <label for="">Allow Plan Selection/Payments on account.php?</label>
+          <label for="">Allow Plan Selection/Payments on account.php?</label><br>
+          (Only works if payments plugin is installed and properly configured)
           <select class="" name="payments">
             <option value="0" <?php if($memset->payments == 0){echo "selected='selected'";}?>>No</option>
             <option value="1" <?php if($memset->payments == 1){echo "selected='selected'";}?>>Yes</option>
@@ -130,17 +132,17 @@ $db->update('plg_mem_settings',1,$fields);
  		<div class="row">
  			<div class="col-sm-7 col-12">
 
-          <h3>Add New Level</h3>
+          <h3><?php if($e){ echo "Update"; }else{ echo "Add New";}?> Level</h3>
           <form class="" action="<?php if($e){ echo "admin.php?view=plugins_config&plugin=membership&edit=$edit";}?>" method="post" >
             <input type="hidden" name="csrf" value="<?=$token?>" />
 
             <div class="form-group">
-              <label  for="plan_name">Level Name</label>
+              <label  for="plan_name">Level Name*</label>
               <input class="form-control" type="text" name="plan_name" value="<?php if($e){echo $thisPlan->plan_name;}?>" required>
             </div>
 
             <div class="form-group">
-              <label for="plan_desc">Description</label>
+              <label for="plan_desc">Description*</label>
               <input class="form-control" type="text" name="plan_desc" value="<?php if($e){echo $thisPlan->plan_desc;}?>" required>
             </div>
 
@@ -150,9 +152,9 @@ $db->update('plg_mem_settings',1,$fields);
             </div>
 
             <div class="form-group">
-              <label for="icon">Permissions Added</label><br>
+              <label for="icon">Permissions Added*</label><br>
               <?php
-              $perms = $db->query("SELECT * FROM permissions WHERE id > 2 ORDER BY name")->results();
+              $perms = $db->query("SELECT * FROM permissions WHERE id > 2")->results();
               foreach($perms as $p){?>
                 <div class="col-4">
                   <input type="checkbox" name="perm[]" value="<?=$p->id?>" <?php if($e && in_array($p->id,$thesePerms)){echo "checked";}?>> <?=ucfirst($p->name)." ($p->id)"?>
@@ -184,7 +186,7 @@ $db->update('plg_mem_settings',1,$fields);
           </form>
  			</div> <!-- /.col -->
       <div class="col-sm-5 col-12">
-          <h3>Add Pricing Option</h3>
+          <h3><?php if($e){ echo "Update"; }?> Pricing Option</h3>
           <form class="" action="<?php if($e){ echo "admin.php?view=plugins_config&plugin=membership&edit=$edit";}?>" method="post" >
             <input type="hidden" name="csrf" value="<?=$token?>" />
 
@@ -214,11 +216,8 @@ $db->update('plg_mem_settings',1,$fields);
             </div>
 
             <div class="form-group">
-              <?php if($o){ ?>
-                <input type="submit" name="plugin_cost" value="Update Level" class="btn btn-primary">
-              <?php }else{ ?>
+
                 <input type="submit" name="plugin_cost" value="Add Option" class="btn btn-primary">
-              <?php } ?>
 
             </div>
           </form>
@@ -248,7 +247,7 @@ $db->update('plg_mem_settings',1,$fields);
                     <input type="submit" name="disableButton" value="Delete" class="btn btn-danger">
                   </form>
                 </td>
-                <td><button type="button" onclick="window.location.href = 'admin.php?view=plugins_config&plugin=membership&edit=<?=$l->id?>';" name="button" class="btn btn-success">Edit</button></td>
+                <td><button type="button" onclick="window.location.href = 'edit=<?=$l->id?>';" name="button" class="btn btn-success">Edit</button></td>
               </tr>
             <?php } ?>
           </tbody>
@@ -275,7 +274,7 @@ $db->update('plg_mem_settings',1,$fields);
                    <td><?=$c->descrip?></td>
                    <td><?=$c->days?></td>
                    <td><?=$c->cost?></td>
-                   <td>edit</td>
+                   <td><button type="button" onclick="window.location.href = '<?=$us_url_root?>usersc/plugins/membership/paymentOption.php?edit=<?=$c->id?>';" name="button" class="btn btn-success">Edit</button></td>
                  </tr>
 
              <?php }  ?>
