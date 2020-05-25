@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>August 5,2019</release>
+  <release>May 25,2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0.1</tested>
+  <tested>5.1.2</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the API Builder plugin for UserSpice. It gives you the tools you need to build secure APIs.</description>
+  <description>This is the API Builder plugin for UserSpice. It gives you the tools you need to build secure APIs. Offers various modes of authentication from keypools to ip locking or a combination of security options.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Run API Builder</button>
