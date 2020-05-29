@@ -38,7 +38,7 @@ $token = Token::generate();
     echo "<br><br>";
 ?>
 <form class="" action="" method="post">
-	<input type="hidden" name="csrf" $value=<?=$token;?>" />
+	<input type="hidden" name="csrf" value="<?=$token;?>" />
 	<input type="hidden" name="deleteHook" value="1">
 	<input type="submit" name="deny" value="<?=$last->btn_confirm_no?>" class="btn btn-primary">
 	<input type="submit" name="confirm" value="<?=$last->btn_confirm_yes?>" class="btn btn-danger">
