@@ -1,7 +1,7 @@
 <?php
 require_once '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
-
+if(pluginActive("gdpr",true)){
 $last = $db->query("SELECT * FROM us_gdpr ORDER BY id DESC LIMIT 1")->first();
 if($last->delete==0){redirect::to('moreinfo.php');}
 if(isset($user) && $user->isLoggedIn()){
@@ -31,12 +31,10 @@ if(isset($user) && $user->isLoggedIn()){
 $token = Token::generate();
 ?>
 <div id="page-wrapper">
-	<div class="container">
-			<h1 align="center"><?php echo $settings->site_name;?></h1>
-    <?php
-    echo htmlspecialchars_decode($last->confirm);
-    echo "<br><br>";
-?>
+	<div class="container" align="center">
+			<h2 align="center"><?php echo $settings->site_name;?></h2>
+<p class="text-primary" style="font-size:20px"> <?=$last->confirm?></p>
+
 <form class="" action="" method="post">
 	<input type="hidden" name="csrf" value="<?=$token;?>" />
 	<input type="hidden" name="deleteHook" value="1">
@@ -47,6 +45,6 @@ $token = Token::generate();
 </div>
 
 <!-- Place any per-page javascript here -->
-
+<?php } ?>
 
 <?php require_once $abs_us_root . $us_url_root . 'users/includes/html_footer.php'; ?>

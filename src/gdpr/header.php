@@ -27,12 +27,15 @@ if(isset($settings->gdpract) && $settings->gdpract == 1){
         Redirect::to($us_url_root.$settings->redirect_uri_after_login);
       }
     }
-    if($user->data()->gdpr == null || $user->data()->gdpr < $settings->gdprver){
+    if($user->data()->gdpr == null || $user->data()->gdpr < $settings->gdprver){ ?>
+      <div class="text-center">
+      <?php
       $last = $db->query("SELECT * FROM us_gdpr ORDER BY id DESC LIMIT 1")->first();
-      echo htmlspecialchars_decode($last->popup);
+      echo "<div class='text-primary'>".htmlspecialchars_decode($last->popup)."</div>";
       $page = currentPage();
       $token = Token::generate();
       ?>
+
       <form class="" action="" method="post">
         <input type="hidden" name="csrf" value="<?=$token?>" />
         <input type="hidden" name="gdprhook" value="1">
@@ -44,6 +47,7 @@ if(isset($settings->gdpract) && $settings->gdpract == 1){
           <input type="submit" name="gdprDelete" value="<?=$last->btn_delete?>">
         <?php } ?>
       </form>
+    </div>
       <?php
     } //out of date gdpr
   }

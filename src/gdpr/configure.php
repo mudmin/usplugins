@@ -103,13 +103,13 @@ $token = Token::generate();
               </tbody>
             </table>
             <br><label>GDPR/Cookie Notice</label><br>
-            <textarea name="popup" rows="8" cols=100><?=$last->popup?></textarea>
+            <textarea name="popup" class="tiny" rows="8" cols=100><?=$last->popup?></textarea>
 
             <br><label>More Details Notice</label><br>
-            <textarea name="detail" rows="8" cols=100><?=$last->detail?></textarea>
+            <textarea name="detail" class="tiny" rows="8" cols=100><?=$last->detail?></textarea>
 
             <br><label>Confirmation Message Before Deleting Account</label><br>
-            <textarea name="confirm" rows="3" cols=100><?=$last->confirm?></textarea>
+            <textarea name="confirm" class="tiny" rows="3" cols=100><?=$last->confirm?></textarea>
 
             <br><label>Offer the user the option to delete their account?</label><br>
             <select class="" name="delete">
@@ -121,3 +121,11 @@ $token = Token::generate();
           </form>
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
+    <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
+    <script>
+    $(document).ready(function(){
+      tinymce.init({
+        selector: '.tiny'
+      });
+    });
+    </script>

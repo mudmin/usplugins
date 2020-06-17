@@ -9,10 +9,10 @@ include "plugin_info.php";
 
 //all actions should be performed here.
 //you will probably be doing more than removing the item from the db
-$db->query("ALTER TABLE settings DROP COLUMN gdprver");
-$db->query("ALTER TABLE users DROP COLUMN gdpr");
-$db->query("ALTER TABLE users DROP COLUMN gdpr_date");
-$db->query("DROP TABLE `us_gdpr`");
+// $db->query("ALTER TABLE settings DROP COLUMN gdprver");
+// $db->query("ALTER TABLE users DROP COLUMN gdpr");
+// $db->query("ALTER TABLE users DROP COLUMN gdpr_date");
+// $db->query("DROP TABLE `us_gdpr`");
 $db->query("DELETE FROM us_plugins WHERE plugin = ?",array($plugin_name));
 if(!$db->error()) {
     err($plugin_name.' uninstalled');

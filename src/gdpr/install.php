@@ -9,6 +9,8 @@ $db = DB::getInstance();
 include "plugin_info.php";
 
 //all actions should be performed here.
+$hooks['user_settings.php']['bottom'] = 'hooks/settingsbottom.php';
+registerHooks($hooks,$plugin_name);
 $check = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name))->count();
 if($check > 0){
 	err($plugin_name.' has already been installed!');
@@ -34,7 +36,8 @@ if($check > 0){
 	 ADD PRIMARY KEY (`id`)");
 	 $db->query("ALTER TABLE `us_gdpr`
 		 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT");
-
+$check = $db->query("SELECT id FROM us_gdpr")->count();
+if($check < 1){
  $fields = array(
 	 'popup'=>"We use cookies and collect personal information in accordance with our policy to provide you with the best possible user experience.",
 	 'detail'=>"",
@@ -149,6 +152,9 @@ Right to object, at any time
 You have the right to object at any time to the processing of your personal data in some circumstances (in particular, where we don&rsquo;t have to process the data to meet a contractual or other legal requirement, or where we are using your data for direct marketing.&lt;br&gt;&lt;br&gt;
 You can exercise the above rights at any time by:&lt;br&gt;&lt;br&gt;"
 ]);
+} //end duplicate data check
+
+
 
  $fields = array(
 	 'plugin'=>$plugin_name,
