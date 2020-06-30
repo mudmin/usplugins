@@ -33,7 +33,7 @@ $token = Token::generate();
 <div id="page-wrapper">
 	<div class="container" align="center">
 			<h2 align="center"><?php echo $settings->site_name;?></h2>
-<p class="text-primary" style="font-size:20px"> <?=$last->confirm?></p>
+<p class="text-primary" style="font-size:20px"> <?=html_entity_decode($last->confirm);?></p>
 
 <form class="" action="" method="post">
 	<input type="hidden" name="csrf" value="<?=$token;?>" />

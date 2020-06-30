@@ -31,7 +31,7 @@ if(isset($settings->gdpract) && $settings->gdpract == 1){
       <div class="text-center">
       <?php
       $last = $db->query("SELECT * FROM us_gdpr ORDER BY id DESC LIMIT 1")->first();
-      echo "<div class='text-primary'>".htmlspecialchars_decode($last->popup)."</div>";
+      echo "<div class='text-primary'>".html_entity_decode($last->popup)."</div>";
       $page = currentPage();
       $token = Token::generate();
       ?>

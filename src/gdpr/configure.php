@@ -119,6 +119,7 @@ $token = Token::generate();
             <br><br>
             <input type="submit" name="newGDPR" value="Update Policy" class="btn btn-success">
           </form>
+          If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
     <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>

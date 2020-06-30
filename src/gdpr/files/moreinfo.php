@@ -8,7 +8,7 @@ if(isset($user) && $user->isLoggedIn()){
 	<div class="container">
 			<h1 align="center"><?php echo $settings->site_name;?></h1>
     <?php
-    echo htmlspecialchars_decode($last->detail);
+    echo html_entity_decode($last->detail);
 ?>
 	</div>
 </div>
