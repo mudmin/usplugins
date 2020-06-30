@@ -37,7 +37,7 @@ if (!empty($_FILES)) {
 Dropzone.options.myAwesomeDropzone = {
   maxFiles: 1,
   dictDefaultMessage: "Drag a photo here (png,jpg)<br>or click this box to open your file manager.",
-  acceptedFiles: ".png,.jpg,.jpeg",
+  acceptedFiles: "image/jpeg,image/gif,image/png",
   accept: function(file, done) {
     console.log("uploaded");
     done();

@@ -31,3 +31,4 @@ if(!Token::check($token)){
       </div>
       <?php } ?>
     </div>
+If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
