@@ -30,7 +30,7 @@ function formField($o, $v = []){
         <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
         <?php if($o->required == 1){echo "required";}?>
-        <?=$o->input_html?>
+        <?=html_entity_decode($o->input_html)?>
         >
       <?php } //end if text
 
@@ -39,7 +39,7 @@ function formField($o, $v = []){
         <input type="number" step="1" <?php if($o->field_type == "tinyint"){ echo "min='0' max='9'";}?> name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
         <?php if($o->required == 1){echo "required";}?>
-        <?=$o->input_html?>
+        <?=html_entity_decode($o->input_html)?>
         >
       <?php } //end if int
       if($o->field_type == "money"){
@@ -47,7 +47,7 @@ function formField($o, $v = []){
         <input type="number" step=".01" name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
         <?php if($o->required == 1){echo "required";}?>
-        <?=$o->input_html?>
+        <?=html_entity_decode($o->input_html)?>
         >
       <?php } //end if int
 
@@ -56,7 +56,7 @@ function formField($o, $v = []){
         <input type="text" name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
         <?php if($o->required == 1){echo "required";}?>
-        <?=$o->input_html?>
+        <?=html_entity_decode($o->input_html)?>
         ><?php
         //set your custom datetimepicker options in this file in usersc
         if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php')){
@@ -68,12 +68,12 @@ function formField($o, $v = []){
 
       if($o->field_type == "textarea") { ?>
         <textarea name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-          <?php if($o->required == 1){echo "required";}?>   <?=$o->input_html?>><?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?></textarea>
+          <?php if($o->required == 1){echo "required";}?>   <?=html_entity_decode($o->input_html)?>><?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?></textarea>
         <?php } //end if textarea?>
 
 
         <?php if($o->field_type == "dropdown") { ?>
-          <select <?=$o->input_html?> name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
+          <select <?=html_entity_decode($o->input_html)?> name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
             <?php if($o->required == 1){echo "required";}?>>
             <?php $options = json_decode($o->select_opts);
             if($u == 1){
@@ -123,7 +123,7 @@ function formField($o, $v = []){
               <label class="<?=$o->field_class?>"><input type='checkbox'  <?php if($u == 1){
                 if(in_array($k,$option)){ echo "checked='checked'";}} ?> name='<?=$o->col?>[]' value='<?=$k?>'
                 <?php if($o->required == 1){echo "required";}?>
-                <?=$o->input_html?>
+                <?=html_entity_decode($o->input_html)?>
                 ><?=$v?></label>
               <?php }
             } //end if checkbox
