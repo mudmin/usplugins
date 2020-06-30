@@ -23,10 +23,9 @@
     <div class="col-lg-6 col-12">
       <?php require_once($abs_us_root.$us_url_root.'users/views/_form_existing_views.php');?>
     </div>
-
   </div>
-
-
+  <br><br>
+  If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
   <!-- Modal -->
   <div id="newForm" class="modal" role="dialog">
     <div class="modal-dialog">

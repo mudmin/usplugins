@@ -114,7 +114,10 @@ function formField($o, $v = []){
 
           if($o->field_type == "checkbox"){
             $options = json_decode($o->select_opts);
-            if($u == 1){$option = json_decode($value);}
+            if($u == 1){
+              $option = json_decode($value);
+              if($option == ""){$option = [];}
+            }
             foreach($options as $k=>$v){
               ?>
               <label class="<?=$o->field_class?>"><input type='checkbox'  <?php if($u == 1){
