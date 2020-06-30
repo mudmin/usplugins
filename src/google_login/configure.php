@@ -50,5 +50,6 @@ $token = Token::generate();
       <input type="text" class="form-control ajxtxt" data-desc="Redirect URL"  name="gredirect" id="gredirect" value="<?=$settings->gredirect?>">
     </div>
 
+If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
 </div>
 </div>
