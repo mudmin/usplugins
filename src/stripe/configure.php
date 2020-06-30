@@ -11,9 +11,10 @@
     $fields = array(
       'stripe_public'=>trim(Input::get('stripe_public')),
       'stripe_private'=>trim(Input::get('stripe_private')),
+      'stripe_url'=>trim(Input::get('stripe_url')),
     );
     $db->update('settings',1,$fields);
-    err('Stripe+settings+updated!');
+    Redirect::to('admin.php?view=plugins_config&plugin=stripe&err=Settings+saved');
   }
   $tranQ = $db->query("SELECT * FROM stripe_transactions ORDER BY id DESC LIMIT 25");
   $tranC = $tranQ->count();
@@ -33,6 +34,8 @@
       <input type="password" class="form-control" name="stripe_private" value="<?=$settings->stripe_private?>"><br>
       <label for="">Your Stripe Publishable Key</label>
       <input type="text" class="form-control" name="stripe_public" value="<?=$settings->stripe_public?>"><br>
+      <label for="">Your Site URL (For confirmation pages, etc. No trailing /)</label>
+      <input type="text" class="form-control" name="stripe_url" value="<?=$settings->stripe_url?>"><br>
       Please note that stripe will force https, so you will want to have that configured before using stripe.<br>
       <input type="submit" name="stripe_credit" value="Update" class="btn btn-primary">
     </p>

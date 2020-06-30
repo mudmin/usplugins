@@ -24,7 +24,7 @@ require_once '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 //This block of code will allow only https connections
 include "../plugin_info.php";
-pluginActive($plugin_name);
+if(!pluginActive("stripe",true)){die("Plugin not active");}
 $use_sts = true;
 
 // iis sets HTTPS to 'off' for non-SSL requests

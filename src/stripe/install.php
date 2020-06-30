@@ -23,6 +23,8 @@ if($check > 0){
  $db->query("ALTER TABLE settings ADD stripe_private_test varchar(255)");
  $db->query("ALTER TABLE settings ADD stripe_public_test varchar(255)");
  $db->query("ALTER TABLE settings ADD stripe_live int(1)");
+ $db->query("ALTER TABLE settings ADD stripe_url varchar(255)");
+  $db->query("ALTER TABLE settings ADD stripe_currency varchar(3) default 'usd'");
  $db->query("CREATE TABLE `stripe_transactions` (
 	 `id` int(11) NOT NULL,
 	 `user` int(11) NOT NULL,
