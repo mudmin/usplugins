@@ -177,6 +177,7 @@ if(!empty($_POST['createCategory'])){
             </p>
             <h3>Updates</h3>
             <p>Writing free plugins that I don't have a personal use for is a lot of work.  I love doing it, but your feedback and support helps.  You can support by testing the plugin.  You can support with bug reports and fixes.
+
             You can support by donating at <a href="https://userspice.com/donate/">Donate</a>.  Regardless, I'm thrilled that you found this plugin and your feedback/support help ensure this plugin gets updated.</p>
 
             <h3>Warranty</h3>
