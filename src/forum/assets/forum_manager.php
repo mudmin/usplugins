@@ -170,7 +170,7 @@ $mods = explode(",",$settings->forum_mod_perms);
                 <td><?=$b->board?></td>
                 <td><?=bin($b->disabled);?></td>
                 <td>
-                  <a href="admin.php?view=plugins_config&plugin=forum&action=edit_board&id=<?=$c->id?>" class="btn btn-primary">Edit</a>
+                  <a href="admin.php?view=plugins_config&plugin=forum&action=edit_board&id=<?=$b->id?>" class="btn btn-primary">Edit</a>
                 </td>
               </tr>
             <?php } ?>
