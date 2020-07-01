@@ -2,7 +2,7 @@
 // For security purposes, it is MANDATORY that this page be wrapped in the following
 // if statement. This prevents remote execution of this code.
 include "plugin_info.php";
-if (in_array($user->data()->id, $master_account && pluginActive($plugin_name,true))){
+if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,true)){
 //all actions should be performed here.
 
 //check which updates have been installed
@@ -23,7 +23,7 @@ if($checkC > 0){
 
 
 
-  
+
   //list your updates here from oldest at the top to newest at the bottom.
   //Give your update a unique update number/code.
 
