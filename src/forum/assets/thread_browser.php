@@ -1,4 +1,5 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if(!pluginActive('forum',true)){die;}
 if(!forumAccess($board,"read",$uid)){
   Redirect::to($currentPage."?err=Board+not+available");
 }

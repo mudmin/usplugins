@@ -23,6 +23,24 @@ $read = true;
 $read = false;
 }
 
+$is_mod = false;
+$can_ban = false;
+if(hasPerm([2],$user->data()->id)){
+  $is_mod = true;
+  $can_ban = true;
+}elseif($settings->forum_mod_perms != ""){
+  $mods = explode(",",$settings->forum_mod_perms);
+  foreach($mods as $m){
+    if($m == "" || $m < 3){continue;}
+    if(hasPerm([$m],$user->data()->id)){
+      $is_mod = true;
+    }
+  }
+}
+if($is_mod && $settings->forum_mod_boot == 1){
+  $can_ban = true;
+}
+
 $aPath = $abs_us_root.$us_url_root.'usersc/plugins/forum/assets/';
 $cPath = $abs_us_root.$us_url_root.'usersc/plugins/forum/custom/';
 

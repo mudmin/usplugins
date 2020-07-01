@@ -1,4 +1,5 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if(!pluginActive('forum',true)){die;}
 if(!$write){
   Redirect::to($currentPage."?board=".$board."&err=Board+locked");
 }

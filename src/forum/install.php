@@ -87,4 +87,8 @@ $db->query("ALTER TABLE forum_messages DROP COLUMN title");
 $db->query("ALTER TABLE forum_messages DROP COLUMN last");
 $db->query("ALTER TABLE forum_messages ADD COLUMN pinned tinyint(1) DEFAULT 0");
 $db->query("ALTER TABLE forum_messages ADD COLUMN ip varchar(255)");
+$db->query("ALTER TABLE settings ADD COLUMN forum_mod_perms varchar(255)");
+$db->query("ALTER TABLE settings ADD COLUMN forum_mod_boot tinyint(1) DEFAULT 0");
+
+
 } //do not perform actions outside of this statement

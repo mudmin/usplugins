@@ -1,4 +1,5 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if(!pluginActive('forum',true)){die;}
 $cats = $db->query("SELECT * FROM forum_categories WHERE deleted = 0")->results();
 
 foreach($cats as $c){ ?>

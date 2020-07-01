@@ -1,7 +1,10 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if(!pluginActive('forum',true)){die;}
 if(!$read){
   Redirect::to($currentPage."?err=Board+not+available");
 }
+
+
 
 $b = $db->query("SELECT * FROM forum_boards WHERE id = ? AND disabled = 0",[$board])->first();
 $t = $db->query("SELECT * FROM forum_threads WHERE id = ? AND deleted = 0",[$thread])->first();
@@ -12,6 +15,63 @@ $images = []; //store this to lessen the number of queries
 $counter = 1;
 // $fp = $db->query("SELECT * FROM forum")
 
+if($is_mod && !empty($_POST['modHook'])){
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+  }
+
+  $msg = Input::get('msg');
+
+  $checkQ = $db->query("SELECT * FROM forum_messages WHERE id = ?",[$msg]);
+  $checkC = $checkQ->count();
+  if($checkC < 1){
+    Redirect::to('forum.php?board='.$board.'&thread='.$thread.'&err=Cannot+find+message');
+  }
+
+  if(isset($_POST['deletePost'])){
+    $check = $checkQ->first();
+    $db->update('forum_messages',$msg,['message'=>"{{{Deleted}}}",'disabled'=>1]);
+    logger($user->data()->id,"Forum Moderation", "Deleted message $msg by user $check->user_id");
+    Redirect::to('forum.php?board='.$board.'&thread='.$thread.'&err=Message+deleted');
+  }
+  if(isset($_POST['deleteThread'])){
+    $check = $checkQ->first();
+    $db->update('forum_threads',$check->thread,['title'=>"{{{Deleted}}}",'deleted'=>1]);
+    $msgs = $db->query("SELECT * FROM forum_messages WHERE thread = ?",[$check->thread])->results();
+    foreach($msgs as $m){
+      $db->update('forum_messages',$m->id,['message'=>"{{{Deleted}}}",'disabled'=>1]);
+    }
+    logger($user->data()->id,"Forum Moderation", "Deleted thread $check->thread by user $check->user_id");
+    Redirect::to('forum.php?board='.$board.'&err=Thread+deleted');
+  }
+  if($can_ban){
+    $bh = Input::get('banhammer');
+    if(hasPerm([2],$bh)){
+      logger($user->data()->id,"Forum Moderation", "Tried to banhammer admin $bh");
+      Redirect::to('forum.php?board='.$board.'&thread='.$thread.'&err=You+cannot+ban+an+admin!');
+    }
+    if(isset($_POST['banUser'])){
+      $check = $checkQ->first();
+      $db->update('users',$bh,['permissions'=>0]);
+
+      logger($user->data()->id,"Forum Moderation", "Banned $bh");
+      Redirect::to('forum.php?board='.$board.'&thread='.$thread.'&err=Member Banned');
+    }
+    if(isset($_POST['purgeUser'])){
+      $check = $checkQ->first();
+      $db->update('users',$bh,['permissions'=>0]);
+      $msgs = $db->query("SELECT * FROM forum_messages WHERE user_id = ?",[$bh])->results();
+      foreach($msgs as $m){
+        $db->update('forum_messages',$m->id,['message'=>"{{{Deleted}}}",'disabled'=>1]);
+      }
+      logger($user->data()->id,"Forum Moderation", "Purged $bh");
+      Redirect::to('forum.php?board='.$board.'&thread='.$thread.'&err=Member Purged');
+    }
+  }
+
+
+}
 
 if(!empty($_POST) && $write){
   $token = $_POST['csrf'];
@@ -114,7 +174,22 @@ if(!empty($_POST) && $write){
                 <?php
                 echo $m->created_on;
                 $counter++;
-                ?>
+
+                if($is_mod){ ?>
+                  <form class="" action="" method="post">
+                    <input type="hidden" name="csrf" value="<?=Token::generate();?>">
+                    <input type="hidden" name="modHook" value="1">
+                    <input type="hidden" name="msg" value="<?=$m->id?>">
+                    <input type="submit" name="deletePost" value="Delete Post">
+                    <input type="submit" name="deleteThread" value="Delete Thread">
+                    <?php if($can_ban && !hasPerm([2],$m->user_id)){?>
+                    <input type="hidden" name="banhammer" value="<?=$m->user_id?>">
+                    <input type="submit" name="banUser" value="Ban <?php echouser($m->user_id);?>">
+                    <input type="submit" name="purgeUser" value="Ban & Purge <?php echouser($m->user_id);?>">
+                  <?php } ?>
+                  </form>
+                <?php } ?>
+
               </div>
             </div>
             <hr>
@@ -160,7 +235,7 @@ if(!empty($_POST) && $write){
                     <div class="text-primary">
                       <?=echouser($m->user_id);?><br>
                     </div>
-                    <?php $count = $db->query("SELECT COUNT(*) AS c FROM forum_messages WHERE user_id = ?",[$m->user_id])->first();
+                    <?php $count = $db->query("SELECT COUNT(*) AS c FROM forum_messages WHERE user_id = ? AND disabled = 0",[$m->user_id])->first();
                     echo $count->c;
                     if($count->c == 1){echo " post";}else{echo " posts";}
                     ?>
