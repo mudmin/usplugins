@@ -17,10 +17,6 @@ if(!Token::check($token)){
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  					<h1>Configure the Demo Plugin!</h1>
-          <form class="" action="" method="post">
-            <input type="hidden" name="csrf" value="<?=$token?>" />
-            How awesome is this demo plugin?
-            <button type="button" name="button" class="btn btn-primary">Pretty Awesome</button>
-          </form>
+
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
