@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>2.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>December 21, 2019</release>
+  <release>July 11, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0.8</tested>
+  <tested>5.1.4</tested>
 
 <!-- What does your plugin do? -->
   <description>Sometimes you do not need an entire plugin, you just need to take advantage of the hooks that plugins can use. This does that. It also allows you to manage ALL the hooks on your system.</description>
