@@ -140,7 +140,7 @@ if(!empty($_POST['deleteHook'])){
     </div>
     <script type="text/javascript">
     $("#pageSelect").change(function () {
-       var cl = $('select[name="page"] :selected').attr('class')
+       var cl = $('select[name="page"] :selected').attr('class');
        if(cl == "event"){
          $("#pos").val('body');
        }
