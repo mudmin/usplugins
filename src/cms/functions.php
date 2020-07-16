@@ -65,11 +65,12 @@ if(!function_exists('displayLayout')){
           $widget = $widgetQ->first();
           if($widget->widget_type == 1){
             $widget->file = str_replace(" ","",$widget->file);
-            if(file_exists($abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file)){
-              include $abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file;
-            }else{
-              echo "<h3 align='center'>Widget not found</h3>";
-            }
+            if(file_exists($abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file.".php")){
+                  include $abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file.".php";
+                }else{
+                  echo "<h3 align='center'>Widget not found</h3>";
+                 echo " usersc/plugins/cms/widgets/".$widget->file."php";
+                }
           }
           if($widget->widget_type == 2){
             echo htmlspecialchars_decode($widget->content);
