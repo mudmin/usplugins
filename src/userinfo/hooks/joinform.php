@@ -3,15 +3,21 @@ global $user;
 $check = $db->query("SELECT id FROM users_form")->count();
 if($check > 0){
   if(currentPage() == 'join.php'){
+  if(pluginActive("forms",true)){
   $plgform = displayForm('users',['nosubmit'=>true,'noclose'=>1]);
+  }
 }else{
     $e = $db->query("SELECT * FROM plg_userinfo")->first();
     if(currentPage() == "user_settings.php"){
       $us = true;
+      if(pluginActive("forms",true)){
       $plgform = displayForm('users',['nosubmit'=>true,'noclose'=>1,'update'=>$user->data()->id]);
+      }
     }else{
       $us = false;
+      if(pluginActive("forms",true)){
       $plgform = displayForm('users',['nosubmit'=>true,'noclose'=>1]);
+      }
     }
 
     $string = randomstring(10);

@@ -1,8 +1,9 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 
 $e = $db->query("SELECT * FROM plg_userinfo")->first();
+if(pluginActive("forms",true)){
 $plgform = displayForm('users',['nosubmit'=>true,'noclose'=>1,'update'=>1]);
-
+}
 
 $string = randomstring(10);
 if($e->fname == 1){ ?>

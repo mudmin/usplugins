@@ -8,7 +8,9 @@ if(currentPage() == "user_settings.php"){
 }
 
 $e = $db->query("SELECT * FROM plg_userinfo")->first();
+if(pluginActive("forms",true)){
 $plgform = displayForm('users',['nosubmit'=>true,'noclose'=>1,'update'=>$usFormUpdate]);
+}
 
 
 $string = randomstring(10);

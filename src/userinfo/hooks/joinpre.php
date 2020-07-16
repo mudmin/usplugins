@@ -3,6 +3,7 @@ $e = $db->query("SELECT * FROM plg_userinfo")->first();
 global $form_valid;
 $check = $db->query("SELECT id FROM users_form")->count();
 if($check > 0){
+  if(pluginActive("forms",true)){
   if(!empty($_POST)){
 
     $response = preProcessForm();
@@ -14,6 +15,7 @@ if($check > 0){
 
     }
   }
+}
 }
 
 if(!empty($_POST)){

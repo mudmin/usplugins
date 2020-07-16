@@ -6,17 +6,17 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>May 7, 2020</release>
+  <release>July 16, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.1.0</tested>
+  <tested>5.1.5</tested>
 
 <!-- What does your plugin do? -->
   <description>Requires 5.1 or later. Allows you to add or remove fields used in user creation. Uses the Official
-  Form Builder (v1.1.3 or later) plugin to add fields.</description>
+  Form Builder (v1.1.3 or later) plugin to add fields. Without that plugin installed, you lose some functionality. </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>User Info</button>
