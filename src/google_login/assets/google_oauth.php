@@ -48,7 +48,8 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 					}
 				}
 				$gUser = new User();
-				$_SESSION["user"]=$value;
+				$sessionName = Config::get('session/session_name');
+				Session::put($sessionName, $value);
 				//Deal with a user having an account but no google creds
 				$findExistingUS=$db->query("SELECT * FROM users WHERE email = ?",array($userProfile['email']));
 				$feusc = $findExistingUS->count();
@@ -84,19 +85,14 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 						include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
 				}
 				//Add UserSpice info to session
-				$_SESSION["user"]=$feusr->id;
+				Session::put($sessionName, $feusr->id);
 				//Add Google info to the session
 				$_SESSION['google_data'] = $userProfile;
 
 				$_SESSION['token'] = $gClient->getAccessToken();
 
-				$twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 1",[$feusr->id]);
-				if($twoQ->count()>0) {
-					$_SESSION['twofa']=1;
-						$page=encodeURIComponent(Input::get('redirect'));
-						logger($user->data()->id,"Two FA","Two FA being requested.");
-						Redirect::To($us_url_root.'users/twofa.php');
-					}
+				$hooks = getMyHooks(['page'=>'loginSuccess']);
+				includeHook($hooks,'body');
 
 			} else {
 				$authUrl = $gClient->createAuthUrl();
