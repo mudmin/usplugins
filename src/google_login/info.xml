@@ -9,10 +9,10 @@
   <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>Jun2 30, 2020</release>
+  <release>July 31, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.1.4</tested>
+  <tested>5.1.5</tested>
 
 <!-- What does your plugin do? -->
   <description>This Google login plugin replaces the feature that was built into UserSpice 4.4 and below.</description>
