@@ -144,7 +144,7 @@ includeHook($hooks,'body');
       'ip' => $ip,
     ));
   }
-Redirect::to($us_url_root.'users/account.php');
+Redirect::to($us_url_root.$whereNext);
 }else{
   if($settings->registration==0) {
     session_destroy();

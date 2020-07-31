@@ -16,7 +16,7 @@ $token = Token::generate();
   <div class="row">
     <div class="col-6 offset-3">
       <h2>Facebook Login Settings</h2>
-<strong>Please note:</strong> Social logins require that you do some configuration on your own with Google and/or Facebook.It is strongly recommended that you  <a href="http://www.userspice.com/documentation-social-logins/" target="_blank"><font color="blue">check the documentation at UserSpice.com.</font></a><br><br>
+<strong>Please note:</strong> Social logins require that you do some configuration on your own with Facebook. It is strongly recommended that you  <a href="http://www.userspice.com/documentation-social-logins/" target="_blank"><font color="blue">check the documentation at UserSpice.com.</font></a><br><br>
 
 
 <!-- left -->
@@ -58,3 +58,6 @@ $token = Token::generate();
 
   		</div>
   		</div>
+      <br><br>
+      If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
+<br><br>

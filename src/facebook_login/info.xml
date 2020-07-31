@@ -6,17 +6,19 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>May 18, 2019</release>
+  <release>July 31, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0</tested>
+  <tested>5.1.5</tested>
 
 <!-- What does your plugin do? -->
-  <description>This Facebook login plugin replaces the one that was built into 4.4 and below.</description>
+  <description>Use Facebook oAuth in your project. Allows users to both register and login with Facebook
+    and will merge accounts if multiple login methods are used from the same email address.
+  </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Configure Facebook</button>
+    <button>Facebook Login</button>
 </plugin>
