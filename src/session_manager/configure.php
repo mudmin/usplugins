@@ -171,6 +171,9 @@ if (!empty($_POST)) {
       <?php if($showAllSessions==1) {?><a href="?view=sessions" class="btn btn-primary nounderline pull-right">Show Active Sessions Only</a><?php } ?>
     </div>
   </form>
+  <br><br>
+    If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
+<br><br>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" integrity="sha256-4F7e4JsAJyLUdpP7Q8Sah866jCOhv72zU5E8lIRER4w=" crossorigin="anonymous"></script>
   <script>
   $(function () {

@@ -23,7 +23,7 @@ if($settings->session_manager == 1 && !isset($_SESSION['fingerprint'])) {?>
                 var fingerprint = murmur;
                 $.ajax({
                   type: "POST",
-                  url: '<?=$us_url_root?>users/parsers/fingerprint_post.php',
+                  url: '<?=$us_url_root?>usersc/plugins/session_manager/assets/fingerprint_post.php',
                   data: ({fingerprint:fingerprint}),
                 });
               })
