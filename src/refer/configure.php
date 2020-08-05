@@ -2,6 +2,25 @@
 
 <?php
 include "plugin_info.php";
+if(!isset($settings->site_url)){
+  $db->query("ALTER TABLE settings ADD COLUMN site_url varchar(255)");
+  $settings = $db->query("SELECT * FROM settings")->first();
+}
+if($settings->site_url == ""){
+  bold("PLEASE make sure to setup your site url (https://mydomain.com)");
+}
+$u1Q = $db->query("SELECT plg_ref FROM users WHERE id = 1");
+if($u1Q->count() < 1){
+  $nou1 = true;
+}else{
+  $nou1 = false;
+  $u1 = $u1Q->first();
+  if($u1->plg_ref == ""){
+    $random = randomstring(6);
+    $db->update('users',1,['plg_ref'=>$random]);
+    $u1->plg_ref = $random;
+  }
+}
 
 if(!empty($_POST['updateSettings'])){
   $fields = array(
@@ -10,11 +29,27 @@ if(!empty($_POST['updateSettings'])){
     'show_acct'=>Input::get('show_acct'),
   );
 $db->update('plg_refer_settings',1,$fields);
+if($nou1 == false){
+  $db->update('users',1,['plg_ref'=>Input::get('user1')]);
+}
+$link = Input::get('site_url');
+$seven = strtolower(substr($link,0,7));
+$eight = strtolower(substr($link,0,8));
+
+if($seven != "http://" && $eight != "https://"){
+  Redirect::to("admin.php?view=plugins_config&plugin=refer&?err=Site URL");
+}else{
+  if(substr($link, -1)== "/"){
+    $link = substr($link, 0, -1);
+  }
+  $db->update('settings',1,["site_url"=>$link]);
+}
 Redirect::to('admin.php?view=plugins_config&plugin=refer&err=Settings+saved');
 }
 
  $token = Token::generate();
  $refSettings = $db->query("SELECT * FROM plg_refer_settings")->first();
+
  ?>
 <div class="content mt-3">
   <div class="row">
@@ -28,6 +63,22 @@ Redirect::to('admin.php?view=plugins_config&plugin=refer&err=Settings+saved');
         <br>
           <form class="" action="" method="post">
             <input type="hidden" name="csrf" value="<?=$token?>" />
+            <div class="form-group">
+              <label for="">Your site's home url (https://mydomain.com)</label>
+              <input type="text" name="site_url" value="<?=$settings->site_url?>" class="form-control">
+            </div>
+            <?php if($nou1 == true){?>
+              <div class="form-group">
+                <label for="">Since you don't have a user with an id of 1, you cannot use the single referral link feature</label>
+              </div>
+            <?php }else{ ?>
+            <div class="form-group">
+              <label for="">If you only want to use one referral link for the whole site, you can use the link
+              of user #1, whose code is...</label>
+              <input type="text" name="user1" value="<?=$u1->plg_ref?>" class="form-control">
+              <strong>Your referral link is: <font color="red"><?=$settings->site_url?>/users/join.php?ref=<?=$u1->plg_ref?></font></strong>
+            </div>
+          <?php } ?>
             <div class="form-group">
               <label for="">Allow ONLY registrations with valid referrals?</label>
               <select class="form-control" name="only_refer">

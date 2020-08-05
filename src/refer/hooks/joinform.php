@@ -3,6 +3,9 @@
 $refSettings = $db->query("SELECT * FROM plg_refer_settings")->first();
 $refReq = $refSettings->only_refer == 1 ? true : false;
 $refCode = Input::get('ref');
+if($refReq && $refCode == ""){
+  bold("<font color='red'>You must have a valid referral code to register</font>");
+}
 ?>
 <div class="form-group">
 <?php

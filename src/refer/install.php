@@ -48,11 +48,12 @@ $c = $db->query("SELECT * FROM plg_refer_settings")->count();
 if($c < 1){
 	$fields = array(
 		'only_refer'=>0,
-		'show_acct'=>1,
+		'show_acct'=>0,
 		'allow_un'=>0
 	);
 	$db->insert('plg_refer_settings',$fields);
 }
+
 //do you want to inject your plugin in the middle of core UserSpice pages?
 $hooks = [];
 
