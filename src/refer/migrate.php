@@ -44,6 +44,18 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00003';
+  if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE plg_refer_settings ADD COLUMN ref_string varchar(255)");
+  $db->query("ALTER TABLE plg_refer_settings ADD COLUMN ref_notice varchar(255)");
+  $db->update("plg_refer_settings",1,["ref_string"=>"Please enter your referral code"]);
+  $db->update("plg_refer_settings",1,["ref_notice"=>"You must have a valid referral code to register"]);
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
+
 
 
 

@@ -27,6 +27,8 @@ if(!empty($_POST['updateSettings'])){
     'only_refer'=>Input::get('only_refer'),
     'allow_un'=>Input::get('allow_un'),
     'show_acct'=>Input::get('show_acct'),
+    'ref_string'=>Input::get('ref_string'),
+    'ref_notice'=>Input::get('ref_notice'),
   );
 $db->update('plg_refer_settings',1,$fields);
 if($nou1 == false){
@@ -63,6 +65,14 @@ Redirect::to('admin.php?view=plugins_config&plugin=refer&err=Settings+saved');
         <br>
           <form class="" action="" method="post">
             <input type="hidden" name="csrf" value="<?=$token?>" />
+            <div class="form-group">
+              <label for="">Enter the string you want shown on your join form</label>
+              <input type="text" name="ref_string" value="<?=$refSettings->ref_string?>" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="">Enter the string you want to show to let people know they must have a valid code</label>
+              <input type="text" name="ref_notice" value="<?=$refSettings->ref_notice?>" class="form-control">
+            </div>
             <div class="form-group">
               <label for="">Your site's home url (https://mydomain.com)</label>
               <input type="text" name="site_url" value="<?=$settings->site_url?>" class="form-control">

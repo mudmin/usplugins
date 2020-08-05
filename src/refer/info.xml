@@ -6,7 +6,7 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
   <release>August 4, 2020</release>
@@ -15,7 +15,7 @@
   <tested>5.1.6</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the refer-a-friend style plugin for UserSpice.</description>
+  <description>This is the refer-a-friend style plugin for UserSpice. It can also be used to restrict people from registering without a code.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Referrals</button>
