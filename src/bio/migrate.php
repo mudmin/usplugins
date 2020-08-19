@@ -61,25 +61,6 @@ if($checkC > 0){
   $count++;
   }
 
-  //after all updates are done. Keep this at the bottom.
-$new = json_encode($existing);
-$db->update('us_plugins',$check->id,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);
-if(!$db->error()) {
-  logger($user->data()->id,"Migrations","$count migration(s) susccessfully triggered for $plugin_name");
-} else {
-  logger($user->data()->id,"USPlugins","Failed to save updates, Error: ".$db->errorString());
-}
-}//do not perform actions outside of this statement
-}
-
-
-
-
-
-
-
-
-
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
