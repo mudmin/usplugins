@@ -47,7 +47,7 @@ else
 					<div class="row">
 						<div class="col-xs-12 col-md-2">
 							<p>
-							<?php if(pluginActive('profile_pic') && $thatUser->profile_pic != ''){ ?>
+							<?php if(pluginActive('profile_pic',true) && $thatUser->profile_pic != ''){ ?>
 								<img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$thatUser->profile_pic?>" class="img-thumbnail">
 							<?php }else{
 								$grav = get_gravatar(strtolower(trim($thatUser->email)));

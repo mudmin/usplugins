@@ -16,11 +16,10 @@ if(!Token::check($token)){
  		<div class="row">
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
- 					<h1>Configure the Bio Plugin!</h1>
-          <form class="" action="" method="post">
-            <input type="hidden" name="csrf" value="<?=$token?>" />
-            How awesome is this bio plugin?
-            <button type="button" name="button" class="btn btn-primary">Pretty Awesome</button>
-          </form>
+ 					<h1>There's nothing to configure!</h1>
+          <br><br>
+          If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
+          <br><br>
+
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->

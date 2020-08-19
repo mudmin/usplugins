@@ -47,7 +47,7 @@ $users = $userQ->results();
 								<tr>
 									<td>
 										<?php
-										if(pluginActive('profile_pic') && $v1->profile_pic != ''){ ?>
+										if(pluginActive('profile_pic',true) && $v1->profile_pic != ''){ ?>
 										<a href="<?=$us_url_root?>users/profile.php?id=<?=$v1->id?>"><img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$v1->profile_pic?>" class="img-responsive img-thumbnail"></a>
 										<?php }else{
 										$grav = get_gravatar(strtolower(trim($v1->email)));

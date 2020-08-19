@@ -46,6 +46,7 @@ $publicPages = [
 	'view_all_users.php',
 ];
 foreach($publicPages as $a){
+  unlink($abs_us_root.$us_url_root."users/".$a);
 	copy($abs_us_root.$us_url_root."usersc/plugins/bio/files/".$a, $abs_us_root.$us_url_root."users/".$a);
 	$check = $db->query("SELECT * FROM pages WHERE page = ?",['users/'.$a])->count();
 
