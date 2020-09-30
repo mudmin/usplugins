@@ -56,6 +56,7 @@ $values = implode(', ',$values);
   		}]
   	},
   	options: {
+      maintainAspectRatio: false,
       legend: { display: <?=$legend?> },
   		title: {
   			display: true,
