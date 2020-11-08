@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>July 16, 2020</release>
+  <release>November 8, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.1.5</tested>
+  <tested>5.2.0</tested>
 
 <!-- What does your plugin do? -->
   <description>Requires 5.1 or later. Allows you to add or remove fields used in user creation. Uses the Official

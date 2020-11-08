@@ -9,9 +9,9 @@ if($check > 0){
     $response = preProcessForm();
     if($response['form_valid'] == true){
       //do something here after the form has been validated
-      postProcessForm($response,['update'=>$theNewId]);
+       $db->update("users",$theNewId,$response['fields']);
       //temporary compatibility fix
-      $db->query("DELETE FROM users WHERE password IS NULL AND email = ? AND username = ?",["",""]);
+      $db->query("DELETE FROM users WHERE password = ? AND email = ? AND username = ?",["",""]);
       $form_valid=TRUE;
     }else{
       $db->query("DELETE FROM users WHERE id = ?",[$theNewId]);

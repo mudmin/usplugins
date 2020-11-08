@@ -36,6 +36,12 @@ $existing[] = $update; //add the update you just did to the existing update arra
 $count++;
 }
 
+$update = '00002';
+if(!in_array($update,$existing)){
+	$db->query("DELETE FROM us_plugin_hooks WHERE folder = ? AND page = ?",['userinfo','admin.php?view=users']);
+$existing[] = $update; //add the update you just did to the existing update array
+$count++;
+}
 
 //after all updates are done. Keep this at the bottom.
 $new = json_encode($existing);

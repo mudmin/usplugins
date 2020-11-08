@@ -49,3 +49,9 @@ if($e->uname == 2){?>
 </script>
 <?php
 }
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#adminUser :input').prop("required", false);
+  });
+</script>

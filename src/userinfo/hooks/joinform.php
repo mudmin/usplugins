@@ -1,5 +1,6 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 global $user;
+
 $check = $db->query("SELECT id FROM users_form")->count();
 if($check > 0){
   if(currentPage() == 'join.php'){
