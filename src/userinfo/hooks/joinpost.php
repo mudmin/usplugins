@@ -10,8 +10,8 @@ if($check > 0){
     if($response['form_valid'] == true){
       //do something here after the form has been validated
        $db->update("users",$theNewId,$response['fields']);
-      //temporary compatibility fix
-      $db->query("DELETE FROM users WHERE password = ? AND email = ? AND username = ?",["",""]);
+      //temporary compatibility fix to clean up old bad data
+      $db->query("DELETE FROM users WHERE password = ? AND email = ? AND username = ?",["","",""]);
       $form_valid=TRUE;
     }else{
       $db->query("DELETE FROM users WHERE id = ?",[$theNewId]);

@@ -1,10 +1,6 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 global $user,$userId,$usFormUpdate,$form_valid;
-if(currentPage() == "user_settings.php"){
-  $usFormUpdate = $user->data()->id;
-}else{
-  $usFormUpdate = $userId;
-}
+$usFormUpdate = $user->data()->id;
 
 $check = $db->query("SELECT id FROM users_form")->count();
 if($check > 0){
