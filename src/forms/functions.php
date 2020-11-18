@@ -28,11 +28,12 @@ function formField($o, $v = []){
         if($o->field_type == 'passwordE'){$type = "password";}
         ?>
         <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-        value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
+        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=html_entity_decode($o->input_html)?>
         >
-      <?php } //end if text
+      <?php
+    } //end if text
 
       if($o->field_type == "number" || $o->field_type == "tinyint"){
         ?>
@@ -150,7 +151,7 @@ function formField($o, $v = []){
       } //end of function
 
       function displayForm($name, $opts = []){
-        $db = DB::getInstance();
+          $db = DB::getInstance();
         $formatted = formatName($name);
         $u = 0;
         if(isset($opts['update'])){
@@ -160,7 +161,7 @@ function formField($o, $v = []){
           if($c > 0){
             $u = 1;
             $v = $q->first();
-          }else{
+              }else{
             die("Form record not found. Check your id");
           }
         }
@@ -186,6 +187,7 @@ function formField($o, $v = []){
               formField($f);
             }else{
               $v->update = $id;
+
               formField($f,$v);
             }
           }
