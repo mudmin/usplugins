@@ -1,7 +1,7 @@
 <?php
 function haltPayment($option){
   $db = DB::getInstance();
-  $check = $db->query("SELECT * FROM plg_payments_options WHERE option = ? AND enabled = 1",[$option])->count();
+  $check = $db->query("SELECT * FROM plg_payments_options WHERE `option` = ? AND enabled = 1",[$option])->count();
   if($check < 1){
     return true;
   }else{
