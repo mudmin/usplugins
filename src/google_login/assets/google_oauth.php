@@ -27,13 +27,13 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 	require_once $abs_us_root.$us_url_root.'usersc/plugins/google_login/assets/google_helpers.php';
 	if(isset($_REQUEST['code'])){
 				$gClient->authenticate();
-				$_SESSION['token'] = $gClient->getAccessToken();
+				$_SESSION['google_token'] = $gClient->getAccessToken();
 				header('Location: ' . filter_var($redirectUrl, FILTER_SANITIZE_URL));
 			}
 			$gClient->setAccessType('online');
 			$gClient->setApprovalPrompt('auto') ;
-			if (isset($_SESSION['token'])) {
-				$gClient->setAccessToken($_SESSION['token']);
+			if (isset($_SESSION['google_token'])) {
+				$gClient->setAccessToken($_SESSION['google_token']);
 			}
 
 			if ($gClient->getAccessToken()) {
@@ -55,7 +55,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 				$feusc = $findExistingUS->count();
 				if($feusc>0){$feusr = $findExistingUS->first();}
 				if($feusc == 1){
-					$fields=array('gpluslink'=>'https://plus.google.com/'.$userProfile['id'],'picture'=>$userProfile['picture'],'locale'=>$userProfile['locale'],'gender'=>'unknown','oauth_provider'=>"google",'oauth_uid'=>$userProfile['id']);
+					$fields=array('gpluslink'=>'https://plus.google.com/'.$userProfile['id'],'picture'=>$userProfile['picture'],'locale'=>$userProfile['locale'],'oauth_provider'=>"google",'oauth_uid'=>$userProfile['id']);
 					$db->update('users',$feusr->id,$fields);
 					$date = date("Y-m-d H:i:s");
 					$db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$feusr->id]);
@@ -89,7 +89,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 				//Add Google info to the session
 				$_SESSION['google_data'] = $userProfile;
 
-				$_SESSION['token'] = $gClient->getAccessToken();
+				$_SESSION['google_token'] = $gClient->getAccessToken();
 
 				$hooks = getMyHooks(['page'=>'loginSuccess']);
 				includeHook($hooks,'body');
