@@ -4,7 +4,7 @@
 include "plugin_info.php";
 pluginActive($plugin_name);
 $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hooker/hooks');
-$events = ['hitBanned','forgotPassword','loginFail','loginSuccess','logout','noAccess','joinFail'];
+$events = ['hitBanned','forgotPassword','loginFail','loginSuccess','logout','noAccess','joinFail','verifySuccess','verifyFail','verifyResend'];
 if(!empty($_POST['addHook'])){
   $pages = ['account.php','admin.php?view=general','join.php','login.php','user_settings.php','admin.php?view=user','admin.php?view=users'];
   $positions = ['pre','post','body','form','bottom'];
