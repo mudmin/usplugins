@@ -56,9 +56,10 @@ $hooks = [];
 //Note you can include the same filename on multiple pages if that makes sense;
 //postion options are post,body,form,bottom
 //See documentation for more information
-$hooks['login.php']['body'] = 'hooks/redir.php';
 $hooks['join.php']['body'] = 'hooks/redir.php';
 $hooks['user_settings.php']['body'] = 'hooks/user_settings.php';
+$hooks['loginSuccess']['body'] = 'hooks/loginSuccess_body.php';
+$hooks['loginFail']['body'] = 'hooks/loginFail_body.php';
 
 registerHooks($hooks,$plugin_name);
 
