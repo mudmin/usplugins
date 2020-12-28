@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>July 31, 2020</release>
+  <release>December 28, 2020</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.1.5</tested>
+  <tested>5.2.3</tested>
 
 <!-- What does your plugin do? -->
   <description>This Google login plugin replaces the feature that was built into UserSpice 4.4 and below.</description>
