@@ -259,7 +259,8 @@ if (!empty($_POST)) {
 
             <!-- Place any per-page javascript here -->
 
-            <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
+            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/tinymce.min.js'></script>
+            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/jquery.tinymce.min.js'></script>
             <script src="<?=$us_url_root?>users/js/jwerty.js"></script>
             <script src="<?=$us_url_root?>users/js/combobox.js"></script>
             <script>

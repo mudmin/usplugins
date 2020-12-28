@@ -369,7 +369,9 @@ if (!empty($_POST)) {
                           </div> <!-- /.wrapper -->
                         </div>
                         <!-- Place any per-page javascript here -->
-                        <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
+                        <!-- <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script> -->
+                        <script src='<?=$us_url_root?>usersc/plugins/messages/assets/tinymce.min.js'></script>
+                        <script src='<?=$us_url_root?>usersc/plugins/messages/assets/jquery.tinymce.min.js'></script>
 						<script type="text/javascript" src="js/pagination/datatables.min.js"></script>
                         <script src="../users/js/jwerty.js"></script>
                         <script src="../users/js/combobox.js"></script>

@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+//this is new
 ?>
 <?php require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
@@ -368,7 +369,8 @@ $csrf = Token::generate();
             <!-- footers -->
             <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
-            <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
+            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/tinymce.min.js'></script>
+            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/jquery.tinymce.min.js'></script>
             <script src="../users/js/jwerty.js"></script>
             <script>
             tinymce.init({
