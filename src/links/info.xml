@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Links Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.1</version>
+
+<!-- release date of THIS version -->
+  <release>December 29,2020</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.2.9</tested>
+
+<!-- What does your plugin do? -->
+  <description>This is a quick links plugin.  It can be used as a url shortener with your own domain and a redirect or a simple place to store external links.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Links</button>
+</plugin>
