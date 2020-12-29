@@ -212,7 +212,7 @@ function echoCatPerms($cat){
         }
       }
     }
-    $string .= substr($string,0,-2);
+    $string = substr($string,0,-2);
     echo $string;
   }
 
