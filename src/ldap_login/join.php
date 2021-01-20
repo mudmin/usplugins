@@ -12,7 +12,7 @@ if(!isset($_SESSION['steamid'])) {
     $lookupC = $lookupQ->count();
     if($lookupC > 0){
       $lookup = $lookupQ->first();
-      $_SESSION['user'] = $lookup->id;
+      $_SESSION[Config::get('session/session_name')] = $lookup->id;
       $db->update('users',$lookup->id, ['logins'=>$lookup->logins+1]);
       if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir')){
         include($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir');
