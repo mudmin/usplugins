@@ -48,11 +48,6 @@ if(file_exists($abs_us_root.$us_url_root."usersc/plugins/cms/assets/".$method.".
   using the article slug.
 </p>
 
-  <p><strong>Issues:</strong> I'm still tinkering wtih the WYSIWYG editors. Ideally you will be
-    able to choose from several editors to meet your needs.  I'm also tinkering with adding/editing
-    images and media.  Right now in TinyMCE you an upload images but it's clunky.  I think this
-    can be a VERY POWERFUL plugin and I would love to see the community help develop it.
-  </p>
   <p>
     Finally, due to the powerful nature of storing code in the database, content is designed to be
     created <strong>by master account admins only</strong>. This may change as the plugin matures
