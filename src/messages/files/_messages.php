@@ -369,22 +369,18 @@ if (!empty($_POST)) {
                           </div> <!-- /.wrapper -->
                         </div>
                         <!-- Place any per-page javascript here -->
-                        <!-- <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script> -->
-                        <script src='<?=$us_url_root?>usersc/plugins/messages/assets/tinymce.min.js'></script>
-                        <script src='<?=$us_url_root?>usersc/plugins/messages/assets/jquery.tinymce.min.js'></script>
-						<script type="text/javascript" src="js/pagination/datatables.min.js"></script>
+                      	<script type="text/javascript" src="js/pagination/datatables.min.js"></script>
                         <script src="../users/js/jwerty.js"></script>
                         <script src="../users/js/combobox.js"></script>
+                        <!-- include summernote css/js -->
+                        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+                        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
                         <script>
                         $(document).ready(function(){
                           $('.combobox').combobox();
                         });
-                        tinymce.init({
-                          selector: '#mytextarea'
-                        });
-                        tinymce.init({
-                          selector: '#mytextarea2'
-                        });
+                        $('#mytextarea').summernote();
+                        $('#mytextarea2').summernote();
                         $('.checkAllMsg').on('click', function(e) {
                           $('.maincheck').prop('checked', $(e.target).prop('checked'));
                         });

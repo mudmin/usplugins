@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.01</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>December 28, 2020</release>
+  <release>January 20, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0</tested>
+  <tested>5.2.3</tested>
 
 <!-- What does your plugin do? -->
   <description>Bring the UserSpice 4 messaging system to UserSpice 5...or use this as a guide to create your own plugin.</description>

@@ -368,14 +368,12 @@ $csrf = Token::generate();
             <?php require_once $abs_us_root.$us_url_root.'usersc/templates/'.$settings->template.'/container_close.php'; //custom template container ?>
             <!-- footers -->
             <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
-
-            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/tinymce.min.js'></script>
-            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/jquery.tinymce.min.js'></script>
+            <!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
             <script src="../users/js/jwerty.js"></script>
             <script>
-            tinymce.init({
-              selector: '#mytextarea'
-            });
+            $('#mytextarea').summernote();
             jwerty.key('esc', function () {
               $('.modal').modal('hide');
             });

@@ -258,21 +258,18 @@ if (!empty($_POST)) {
             <?php //require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
             <!-- Place any per-page javascript here -->
-
-            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/tinymce.min.js'></script>
-            <script src='<?=$us_url_root?>usersc/plugins/messages/assets/jquery.tinymce.min.js'></script>
             <script src="<?=$us_url_root?>users/js/jwerty.js"></script>
             <script src="<?=$us_url_root?>users/js/combobox.js"></script>
+            <!-- include summernote css/js -->
+            <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+            <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
             <script>
             $(document).ready(function(){
               $('.combobox').combobox();
             });
-            tinymce.init({
-              selector: '#mytextarea'
-            });
-            tinymce.init({
-              selector: '#mytextarea2'
-            });
+
+            $('#mytextarea').summernote();
+            $('#mytextarea2').summernote();
             $('.checkAllMsg').on('click', function(e) {
               $('.maincheck').prop('checked', $(e.target).prop('checked'));
             });
@@ -282,21 +279,21 @@ if (!empty($_POST)) {
             jwerty.key('esc', function () {
               $('.modal').modal('hide');
             });
-            </script>
+          </script>
 
-            <script>
-            $(document).ready(function() {
-              $('#paginate').DataTable(
-                {  searching: false,
-                  "stateSave": true,
-                  "pageLength": 10
-                }
-              );
-            } );
-            </script>
-            <!-- <script src="../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script> -->
-            <script src="<?=$us_url_root?>users/js/pagination/datatables.min.js" type="text/javascript"></script>
+          <script>
+          $(document).ready(function() {
+            $('#paginate').DataTable(
+              {  searching: false,
+                "stateSave": true,
+                "pageLength": 10
+              }
+            );
+          } );
+        </script>
+        <!-- <script src="../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script> -->
+        <script src="<?=$us_url_root?>users/js/pagination/datatables.min.js" type="text/javascript"></script>
 
-            <?php require_once $abs_us_root . $us_url_root . 'usersc/templates/' . $settings->template . '/footer.php'; //custom template footer
+        <?php require_once $abs_us_root . $us_url_root . 'usersc/templates/' . $settings->template . '/footer.php'; //custom template footer
 
-            ?>
+        ?>

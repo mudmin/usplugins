@@ -64,6 +64,55 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00003';
+  function deleteDirectory($dirPath) {
+    if (is_dir($dirPath)) {
+        $objects = scandir($dirPath);
+        foreach ($objects as $object) {
+            if ($object != "." && $object !="..") {
+                if (filetype($dirPath . DIRECTORY_SEPARATOR . $object) == "dir") {
+                    deleteDirectory($dirPath . DIRECTORY_SEPARATOR . $object);
+                } else {
+                    unlink($dirPath . DIRECTORY_SEPARATOR . $object);
+                }
+            }
+        }
+    reset($objects);
+    rmdir($dirPath);
+    }
+}
+deleteDirectory($abs_us_root.$us_url_root."usersc/plugins/messages/assets");
+  if(!in_array($update,$existing)){
+
+    $cpyfail = 0;
+
+    $file = "message.php";
+    unlink($abs_us_root.$us_url_root."users/".$file);
+    if (!copy($abs_us_root.$us_url_root."usersc/plugins/messages/files/".$file, $abs_us_root.$us_url_root."users/".$file)) {
+        echo "failed to copy $file...\n";
+        $cpyfail=1;
+    }
+
+    $file = "messages.php";
+    unlink($abs_us_root.$us_url_root."users/".$file);
+    if (!copy($abs_us_root.$us_url_root."usersc/plugins/messages/files/".$file, $abs_us_root.$us_url_root."users/".$file)) {
+        echo "failed to copy $file...\n";
+        $cpyfail=1;
+    }
+
+    $files = ["_messages.php","msg1.php","msg2.php","msg3.php","msg4.php"];
+    foreach($files as $file){
+    unlink($abs_us_root.$us_url_root."users/views/".$file);
+    if (!copy($abs_us_root.$us_url_root."usersc/plugins/messages/files/".$file, $abs_us_root.$us_url_root."users/views/".$file)) {
+        echo "failed to copy $file...\n";
+        $cpyfail=1;
+    }
+    }
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
 
 
 
