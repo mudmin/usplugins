@@ -15,7 +15,7 @@
   <tested>5.2.3</tested>
 
 <!-- What does your plugin do? -->
-  <description>Login with LDAP. Please note, for security reasons, if you use this plugin, all logins and joins (other than user 1 master admin) must be through LDAP.  Please go to the config page for more information.</description>
+  <description>Login with LDAP. Please note, for security reasons, if you use this plugin, all logins and joins (other than user 1 master admin) must be through LDAP.  Please go to the config page for more info.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>LDAP Config</button>
