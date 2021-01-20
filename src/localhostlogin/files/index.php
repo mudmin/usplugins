@@ -20,7 +20,7 @@ if (Input::exists()) {
   }
 
   $user = Input::get('username');
-  $_SESSION["user"] = $user;
+  $_SESSION[Config::get('session/session_name')] = $user;
   logger($user,"Localhost Login","Authenticated via Localhost Dropdown");
   Redirect::to('../../../../users/index.php');
 }
