@@ -34,7 +34,7 @@ unlink($abs_us_root.$us_url_root.'users/js/'.$file);
 $file = "form_validation.php";
 unlink($abs_us_root.$us_url_root.'users/parsers/'.$file);
 
-$db->update("settings",1,['forms'=>0]);
+// $db->update("settings",1,['forms'=>0]);
 $db->query("DELETE FROM us_plugins WHERE plugin = ?",array($plugin_name));
 if(!$db->error()) {
     err($plugin_name.' uninstalled');

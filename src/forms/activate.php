@@ -6,7 +6,7 @@ require_once("init.php");
 if (in_array($user->data()->id, $master_account)){
 $db = DB::getInstance();
 include "plugin_info.php";
-$db->update("settings",1,['forms'=>1]);
+// $db->update("settings",1,['forms'=>1]);
 
 //all actions should be performed here.
 $checkQ = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name));
