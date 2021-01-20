@@ -106,9 +106,14 @@
 
 		<script type="text/javascript">
 		$(document).ready(function() {
+			  console.log("ready2");
 			$("#add").click(function() {
-				$('#opts tbody>tr:last').clone(true).insertAfter('#opts tbody>tr:last');
-				$('#opts tbody>tr:last .clearIt').val('');
+				console.log("cliiicked");
+				var markup = "<tr><td><input type='text' name='key[]' value=''></td><td><input type='text' name='val[]' value=''></td></tr>";
+
+		    $('#opts').append(markup);
+				// $('#opts tbody>tr:last').clone(true).insertAfter('#opts tbody>tr:last');
+				// $('#opts tbody>tr:last .clearIt').val('');
 				return false;
 			});
 		});

@@ -116,9 +116,13 @@ function toggleOpts() {
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
+  console.log("ready1");
   $("#add").click(function() {
-    $('#opts tbody>tr:last').clone(true).insertAfter('#opts tbody>tr:last');
-    $('#opts tbody>tr:last .clearIt').val('');
+    console.log("clicked");
+    var markup = "<tr><td><input type='text' name='key[]' value=''></td><td><input type='text' name='val[]' value=''></td></tr>";
+    $('#opts').append(markup);
+    // $('#opts tbody>tr:last').find("input").val("").end();
+    // $('#opts tbody>tr:last .clearIt').val('');
     return false;
   });
 });
