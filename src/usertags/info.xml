@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>User Tags Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>January 30,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.2.4</tested>
+
+<!-- What does your plugin do? -->
+  <description>This plugin allows you to flag or tag a user with as many tags as you would like.
+    These can be used for times that you don't want to create an entire permission for a user. Management is much more limited than the user management system, but it's quick and handy.  Includes functions to check if someone has a particular tag or not.  
+  </description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>User Tags</button>
+</plugin>
