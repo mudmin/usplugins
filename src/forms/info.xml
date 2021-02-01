@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.1.7</version>
+  <version>1.1.8</version>
 
 <!-- release date of THIS version -->
-  <release>January 20, 2021</release>
+  <release>February 1, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.2.3</tested>
+  <tested>5.2.5</tested>
 
 <!-- What does your plugin do? -->
   <description>OFFICIAL US5 Form Builder. Bring the UserSpice 4 Form Builder system to UserSpice 5.</description>

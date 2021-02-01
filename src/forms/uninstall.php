@@ -28,9 +28,6 @@ foreach($files as $file){
 unlink($abs_us_root.$us_url_root.'users/views/'.$file);
 }
 
-$file = "combobox.js";
-unlink($abs_us_root.$us_url_root.'users/js/'.$file);
-
 $file = "form_validation.php";
 unlink($abs_us_root.$us_url_root.'users/parsers/'.$file);
 

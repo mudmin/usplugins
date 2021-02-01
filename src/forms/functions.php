@@ -3,6 +3,7 @@ function formField($o, $v = []){
   global $abs_us_root;
   global $us_url_root;
   $u = 0;
+  $value = "";
   if(isset($v->update)){
     $u = 1;
     $value = get_object_vars($v);

@@ -32,10 +32,34 @@ if($checkC > 0){
     "_form_edit_field.php",
   ];
   foreach($files as $file){
-    unlink($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/views/".$file);
+    if(file_exists($abs_us_root.$us_url_root."users/views/".$file)){
+      unlink($abs_us_root.$us_url_root."users/views/".$file);
+    }
   if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/views/".$file)) {
       echo "failed to copy $file...\n";
   		$cpyfail=1;
+  }
+}
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
+  //here is an example
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  //repeating this becaus 00001 was originally broken.
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $files = [
+    "_form_create_field.php",
+    "_form_edit_field.php",
+  ];
+  foreach($files as $file){
+    if(file_exists($abs_us_root.$us_url_root."users/views/".$file)){
+      unlink($abs_us_root.$us_url_root."users/views/".$file);
+    }
+  if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/views/".$file)) {
+      echo "failed to copy $file...\n";
+      $cpyfail=1;
   }
 }
   $existing[] = $update; //add the update you just did to the existing update array
