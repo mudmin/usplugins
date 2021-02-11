@@ -134,16 +134,18 @@ includeHook($hooks,'body');
   $c = $q->count();
   if($c < 1){
     $db->insert('us_ip_list', array(
-      'user_id' => $feusr->id,
+      'user_id' => $checkExisting->id,
       'ip' => $ip,
     ));
   }else{
     $f = $q->first();
     $db->update('us_ip_list',$f->id, array(
-      'user_id' => $feusr->id,
+      'user_id' => $checkExisting->id,
       'ip' => $ip,
     ));
   }
+
+
 Redirect::to($us_url_root.$whereNext);
 }else{
   if($settings->registration==0) {
@@ -167,16 +169,30 @@ Redirect::to($us_url_root.$whereNext);
     $fields=array('email'=>$fbEmail,'username'=>$username,'fname'=>$fb_fname,'lname'=>$fb_lname,'permissions'=>1,'logins'=>1,'join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>NULL,'fb_uid'=>$fbuser['id']);
 
     $db->insert('users',$fields);
-    $lastID = $db->lastId();
+    $theNewId = $db->lastId();
 
-    $insert2 = $db->query("INSERT INTO user_permission_matches SET user_id = $lastID, permission_id = 1");
+    $insert2 = $db->query("INSERT INTO user_permission_matches SET user_id = $theNewId, permission_id = 1");
 
-    $theNewId=$lastID;
+    $ip = ipCheck();
+    $q = $db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
+    $c = $q->count();
+    if($c < 1){
+      $db->insert('us_ip_list', array(
+        'user_id' => $theNewId,
+        'ip' => $ip,
+      ));
+    }else{
+      $f = $q->first();
+      $db->update('us_ip_list',$f->id, array(
+        'user_id' => $theNewId,
+        'ip' => $ip,
+      ));
+    }
     include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
 
     $sessionName = Config::get('session/session_name');
-    Session::put($sessionName, $lastID);
-    Redirect::to($us_url_root.$whereNext);
+    Session::put($sessionName, $theNewId);
+   Redirect::to($us_url_root.$whereNext);
   }
 }
 
