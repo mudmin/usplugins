@@ -164,7 +164,7 @@ Redirect::to($us_url_root.$whereNext);
     } else {
       $username=$fbEmail;
     }
-    $fields=array('email'=>$fbEmail,'username'=>$username,'fname'=>$fb_fname,'lname'=>$fb_lname,'permissions'=>1,'logins'=>1,'company'=>'none','join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>NULL,'fb_uid'=>$fbuser['id']);
+    $fields=array('email'=>$fbEmail,'username'=>$username,'fname'=>$fb_fname,'lname'=>$fb_lname,'permissions'=>1,'logins'=>1,'join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>NULL,'fb_uid'=>$fbuser['id']);
 
     $db->insert('users',$fields);
     $lastID = $db->lastId();
