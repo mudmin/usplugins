@@ -176,7 +176,7 @@ Redirect::to($us_url_root.$whereNext);
 
     $sessionName = Config::get('session/session_name');
     Session::put($sessionName, $lastID);
-    Redirect::to($whereNext);
+    Redirect::to($us_url_root.$whereNext);
   }
 }
 
