@@ -1,0 +1,1 @@
+Place your collections of javascript functions here in one or multiple files. Be sure to see the example file to understand how to declare these functions and pass arguments. Files with a .php extension will automatically be loaded.

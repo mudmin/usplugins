@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Watchdog Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.3</version>
+
+<!-- release date of THIS version -->
+  <release>February 15,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.2.5</tested>
+
+<!-- What does your plugin do? -->
+  <description>The watchdog plugin is primarily designed for SPAs, but you may find other uses for it. Essentially it has the client check in with the server every X amount of time to see if there are any tasks that need to be performed. This could be logging the client out, refreshing the page, redirecting, or sending a message.  SPA Single Page Applications</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Watchdog</button>
+</plugin>
