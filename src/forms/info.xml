@@ -6,10 +6,10 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.1.8</version>
+  <version>1.1.9</version>
 
 <!-- release date of THIS version -->
-  <release>February 1, 2021</release>
+  <release>February 23, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
   <tested>5.2.5</tested>

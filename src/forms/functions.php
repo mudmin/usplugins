@@ -55,17 +55,17 @@ function formField($o, $v = []){
 
       if($o->field_type == "time" ){
         ?>
-        <input type="text" name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
+        <input type="time" name='<?=$o->col?>' pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" id='<?=$o->col?>' placeholder="23:59 / 23:59:59" class='<?=$o->field_class?>'
         value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=html_entity_decode($o->input_html)?>
         ><?php
         //set your custom datetimepicker options in this file in usersc
-        if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php')){
-          include($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php');
-        }else{
-          include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/timepicker.php');
-        }
+        // if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php')){
+        //   include($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php');
+        // }else{
+        //   include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/timepicker.php');
+        // }
       } //end if int
 
       if($o->field_type == "textarea") { ?>
@@ -99,25 +99,26 @@ function formField($o, $v = []){
           <?php  } //end if dropdown
 
           if($o->field_type == "date"){?>
-            <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>" value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>">
+            <input type="date" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>" value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>">
             <?php
             //set your custom datepicker options in this file in usersc
-            if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php')){
-              include($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php');
-            }else{
-              include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datepicker.php');
-            }
+            // if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php')){
+            //   include($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php');
+            // }else{
+            //   include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datepicker.php');
+            // }
           }
           if($o->field_type == "datetime"){?>
-            <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>"
-            value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>">
+            <input type="datetime-local" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>"
+            value="<?php if($u == 1){echo date("Y-m-d\TH:i:s", strtotime($value));;}elseif(!empty($_POST)){echo
+              date("Y-m-d\TH:i:s", strtotime($_POST[$o->col]));}?>">
             <?php
             //set your custom datetimepicker options in this file in usersc
-            if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php')){
-              include($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php');
-            }else{
-              include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datetimepicker.php');
-            }
+            // if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php')){
+            //   include($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php');
+            // }else{
+            //   include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datetimepicker.php');
+            // }
           }
 
           if($o->field_type == "checkbox"){
