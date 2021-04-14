@@ -26,8 +26,7 @@ foreach($colors as $k=>$v){
  					<h1>Configure the Charts Plugin!</h1>
           <p>This plugin creates very basic charts from database queries and other data sets. Typical usage would look like:</p>
           <p style="background-color:black; color:white;">
-            $data = $db->query("SELECT username, logins FROM users LIMIT 10 ORDER BY logins DESC")->results();<br>
-            createChart($data,['title'=>'Logins Per User','type'=>'bar']);</p>
+            $data = $db->query("SELECT username, logins FROM users ORDER BY logins DESC LIMIT 10")->results(); createChart($data,['title'=>'Logins Per User','type'=>'bar']);</p>
             <p>Chart types include pie,line,doughnut,bar,polarArea,horizontalBar</p>
             <p>If you don't want to use a db query, you can build your data in a manner similar to the example below. It should be an
             array of objects with exactly 2 keys.</p>
