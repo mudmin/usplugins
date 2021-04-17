@@ -39,7 +39,7 @@ $seven = strtolower(substr($link,0,7));
 $eight = strtolower(substr($link,0,8));
 
 if($seven != "http://" && $eight != "https://"){
-  Redirect::to("admin.php?view=plugins_config&plugin=refer&?err=Site URL");
+  Redirect::to("admin.php?view=plugins_config&plugin=refer&err=Site URL");
 }else{
   if(substr($link, -1)== "/"){
     $link = substr($link, 0, -1);
