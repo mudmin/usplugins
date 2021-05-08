@@ -9,7 +9,7 @@ include "plugin_info.php";
 
 //all actions should be performed here.
 //you will probably be doing more than removing the item from the db
-
+unlink($abs_us_root.$us_url_root."usersc/includes/system_messages_footer.php");
 $db->query("DELETE FROM us_plugins WHERE plugin = ?",array($plugin_name));
 deRegisterHooks($plugin_name);
 if(!$db->error()) {

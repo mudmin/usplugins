@@ -9,6 +9,8 @@ include "plugin_info.php";
 
 
 //all actions should be performed here.
+copy($abs_us_root.$us_url_root."usersc/plugins/alerts/files/system_messages_footer.php",
+		 $abs_us_root.$us_url_root."usersc/includes/system_messages_footer.php");
 $checkQ = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name));
 $checkC = $checkQ->count();
 if($checkC > 0){
