@@ -15,7 +15,7 @@
   <tested>5.3.0</tested>
 
 <!-- What does your plugin do? -->
-  <description>OFFICIAL US5 Form Builder. Bring the UserSpice 4 Form Builder system to UserSpice 5.</description>
+  <description>OFFICIAL US5 Form Builder. Bring the UserSpice 4 Form Builder system to UserSpice 5. </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Form Builder</button>
