@@ -758,13 +758,15 @@ function formField($o, $v = []){
             return $msg;
             exit;
           }
-          $error = 'ERROR #0';
+
           //if you are building a form from an existing db table, you want to skip this
           //check because you NEED an existing table here.
           if(!in_array('existing',$opts)){
             $test = $db->query("SELECT * FROM $name")->first();
             $e = $db->errorString();
-            if (strpos($e, $error) !== false){
+
+            if (strpos($e, 'ERROR #0 ') !== false && strpos($e, 'ERROR #0') !== false){
+
               $msg['msg'] = "Sorry! A table with that name exists in your database!";
               return $msg;
               exit;
