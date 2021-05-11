@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Alerts Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>May 7,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3</tested>
+
+<!-- What does your plugin do? -->
+  <description>Requires version 5.3 or later. Allows you to use alternative styles for your system alert messages.  The community can create additional message styles and you can add those to the plugin.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Alerts</button>
+</plugin>
