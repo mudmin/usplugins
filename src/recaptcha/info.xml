@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>reCAPTCHA</name>
+  <author>BangingHeads</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.github.com/bangingheads/</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>May 13, 2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3</tested>
+
+<!-- What does your plugin do? -->
+  <description>Requires UserSpice 5.3+. Adds reCAPTCHA v2 or v3 to UserSpice and your own forms.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Configure reCAPTCHA</button>
+</plugin>
