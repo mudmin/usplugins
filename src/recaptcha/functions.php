@@ -4,7 +4,7 @@ if(!function_exists('verifyCaptcha')) {
     function verifyCaptcha($array = false) {
         require_once dirname(__FILE__) . '/assets/recaptcha/src/autoload.php';
         $db = DB::getInstance();
-        $gRecaptchaResponse = $_POST['g-recaptcha-response'];
+        $gRecaptchaResponse = Input::get('g-recaptcha-response');
         $recap = $db->query("SELECT recap_private from settings")->first();
         $secret = $recap->recap_private;
         $recaptcha = new \ReCaptcha\ReCaptcha($secret);
@@ -46,13 +46,15 @@ $('#<?=$formName?>').submit(function(event) {
     }
 });
 recaptchaCompleted = function() {
+    var submitName = $('#<?=$formName?>').find('[type="submit"]').attr('name');
+    var submitValue = $('#<?=$formName?>').find('[type="submit"]').attr('value');
+    if (submitName !== undefined) {
+        $('#<?=$formName?>').find('[type="submit"]').before(`<input type="hidden" name="${submitName}" value="${submitValue}" />`);
+    }
     $('#<?=$formName?>').submit();
 }
 </script>
 <?php
-        }
-        else {
-            echo 'NO VALID OPTIONS';
         }
     }
 }
