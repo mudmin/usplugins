@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>UserSpice v5 API Patch Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>May 18,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>For users of UserSpice 5.0.0 through 5.2.5. To provide better security updates, we made some changes that require system updates to your UserSpice installation. The BEST thing to do is to update to the latest version, but we understand that may not be practical for some people. If that's the case, you can still use UserSpice services by installing this plugin. Once it's installed, you can look on the config page and make sure there aren't any errors and then you are free to delete the plugin.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>API Upgrade Results</button>
+</plugin>
