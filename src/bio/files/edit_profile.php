@@ -87,14 +87,15 @@ if(!empty($_POST)) {
 
 </div> <!-- /#page-wrapper -->
 
-<?php if ($settings->wys == 1){  ?>
-  <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
-  <script>
-  tinymce.init({
-    selector: '#mytextarea'
-  });
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+$(document).ready(function(){
+  $('#mytextarea').summernote({ height: 300});
+});
+
+
 </script>
-<?php } ?>
 
 <!-- footers -->
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
