@@ -8,9 +8,8 @@ $hooks =  getMyHooks();
 includeHook($hooks,'pre');
 ?>
 <?php
-$userQ = $db->query("SELECT * FROM users LEFT JOIN profiles ON users.id = user_id ");
-// group active, inactive, on naughty step
-$users = $userQ->results();
+$users = $db->query("SELECT * FROM users")->results();
+
 ?>
 <div id="page-wrapper">
 
@@ -38,11 +37,8 @@ $users = $userQ->results();
 							<?php
 							//Cycle through users
 							foreach ($users as $v1) {
-
 								$ususername = ucfirst($v1->username);
-								$ususerbio = ucfirst($v1->bio);
-
-								?>
+							?>
 
 								<tr>
 									<td>

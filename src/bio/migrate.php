@@ -61,6 +61,30 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00003';
+  if(!in_array($update,$existing)){
+    $publicPages = [
+    	'edit_profile.php',
+    	'profile.php',
+    	'view_all_users.php',
+    ];
+    foreach($publicPages as $a){
+      unlink($abs_us_root.$us_url_root."users/".$a);
+    	copy($abs_us_root.$us_url_root."usersc/plugins/bio/files/".$a, $abs_us_root.$us_url_root."users/".$a);
+    	$check = $db->query("SELECT * FROM pages WHERE page = ?",['users/'.$a])->count();
+
+    		 if($check < 1){
+    			 $db->insert('pages',['page'=>'users/'.$a,'private'=>1]);
+    			 $newId = $db->lastId();
+    			 $db->insert('permission_page_matches',['permission_id'=>1,'page_id'=>$newId]);
+    			 $db->insert('permission_page_matches',['permission_id'=>2,'page_id'=>$newId]);
+    		 }
+    	}
+
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);

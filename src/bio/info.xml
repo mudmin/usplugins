@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 
 <!-- release date of THIS version -->
-  <release>December 29,2019</release>
+  <release>May 19, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0</tested>
+  <tested>5.3.1</tested>
 
 <!-- What does your plugin do? -->
   <description>This is old user bio system from UserSpice 3,and 4x. Will not work natively on 4.4.  The includes will have to be updated manually.</description>
