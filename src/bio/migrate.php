@@ -14,6 +14,7 @@ $checkQ = $db->query("SELECT id,updates FROM us_plugins WHERE plugin = ?",array(
 $checkC = $checkQ->count();
 if($checkC > 0){
   $check = $checkQ->first();
+  $plgid = $check->id;
   if($check->updates == ''){
   $existing = []; //deal with not finding any updates
   }else{
@@ -88,7 +89,7 @@ if($checkC > 0){
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
-  $db->update('us_plugins',$check->id,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);
+  $db->update('us_plugins',$plgid,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);
   if(!$db->error()) {
     logger($user->data()->id,"Migrations","$count migration(s) susccessfully triggered for $plugin_name");
   } else {
