@@ -4,9 +4,9 @@
 include "plugin_info.php";
 pluginActive($plugin_name);
 $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hooker/hooks');
-$events = ['hitBanned','forgotPassword','loginFail','loginSuccess','logout','noAccess','joinFail','verifySuccess','verifyFail','verifyResend'];
+$events = ['hitBanned','forgotPassword','loginFail','loginSuccess','logout','noAccess','joinAttempt','joinFail','verifySuccess','verifyFail','verifyResend'];
 if(!empty($_POST['addHook'])){
-  $pages = ['account.php','admin.php?view=general','join.php','login.php','user_settings.php','admin.php?view=user','admin.php?view=users'];
+  $pages = ['account.php','admin.php?view=general','admin.php?view=user','admin.php?view=users','forgot_password.php','join.php','login.php','user_settings.php',];
   $positions = ['pre','post','body','form','bottom'];
   $combined = array_merge($pages,$events);
   $valid = false;
@@ -64,6 +64,7 @@ if(!empty($_POST['deleteHook'])){
                   <option class="pg" value="admin.php?view=general">admin.php?view=general (no post,form, or bottom)</option>
                   <option class="pg" value="admin.php?view=user">admin.php?view=user (v5.0.5+)</option>
                   <option class="pg" value="admin.php?view=users">admin.php?view=users (v5.0.5+)</option>
+                  <option class="pg" value="forgot_password.php">forgot_password.php (no body or form)</option>
                   <option class="pg" value="join.php">join.php (all positions available)</option>
                   <option class="pg" value="login.php">login.php (all positions available)</option>
                   <option class="pg" value="user_settings.php">user_settings.php (all positions available)</option>
