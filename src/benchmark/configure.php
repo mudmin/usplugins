@@ -124,7 +124,11 @@ $count = 50000;
   $mathFunctions = array("abs", "acos", "asin", "atan", "bindec", "floor", "exp", "sin", "tan", "pi", "is_finite", "is_nan", "sqrt");
   for ($i = 0; $i < $count; $i++) {
       foreach ($mathFunctions as $function) {
-          call_user_func_array($function, array($i));
+          if($function == "pi"){
+            call_user_func_array($function, []);
+          }else{
+            call_user_func_array($function, array($i));
+          }
       }
   }
   $run += microtime(true);
