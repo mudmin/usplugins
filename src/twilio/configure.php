@@ -70,7 +70,7 @@
 
   <h5>Configuration</h5>
   <p>
-    When you sing up for Twilio, using the link above, they will give you at least $10 in credit. The first thing you need to do is use some of that credit to "purchase" a phone number.  They're about $1 per month.  Most people only need one, and it's handy for you to set one as your "primary" phone number in the settings above.  Then grab your "Account SID" and "Auth Token" off the dashboard and enter them above and you're ready to rock.
+    When you sign up for Twilio, using the link above, they will give you at least $10 in credit. The first thing you need to do is use some of that credit to "purchase" a phone number.  They're about $1 per month.  Most people only need one, and it's handy for you to set one as your "primary" phone number in the settings above.  Then grab your "Account SID" and "Auth Token" off the dashboard and enter them above and you're ready to rock.
   </p>
 
   <h5>Formatting Numbers</h5>
