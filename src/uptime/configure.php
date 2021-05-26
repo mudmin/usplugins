@@ -95,7 +95,9 @@ if(!Token::check($token)){
   <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
   <div class="row">
     <div class="col-12">
+
       <h3>Uptime Plugin General Settings</h3>
+          <a class="blue" href="<?=$us_url_root?>usersc/plugins/uptime/documentation.php">Complete Documentation Here</a>
       <br>
       <form class="" action="" method="post">
         <div class="col-12 col-sm-4">
