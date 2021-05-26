@@ -169,8 +169,8 @@ function commentsHere($opt = []){
 }
 
 </style>
-<?php if(isset($errors) && !$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
-<?php if(isset($successes) && !$successes=='') {?><div class="alert alert-success"><?=display_successes($successes);?></div><?php } ?>
+<?php if(isset($errors) && !$errors=='') {?><?=display_errors($errors);?><?php } ?>
+<?php if(isset($successes) && !$successes=='') {?><?=display_successes($successes);?><?php } ?>
 <?php
 /** Check to see if user is logged in, and if public comments are allowed **/
 if($ok_post == true){
@@ -240,7 +240,7 @@ if($commentsC < 1){
             <div class='media-left'>
               <?php
                 if($thatUserC > 0){
-                  if(pluginActive('profile_pic') && $thatUser->profile_pic != ''){ ?>
+                  if(pluginActive('profile_pic',true) && $thatUser->profile_pic != ''){ ?>
                     <img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$thatUser->profile_pic?>" class="img-thumbnail">
                   <?php }else{
                 echo $useravatar;
