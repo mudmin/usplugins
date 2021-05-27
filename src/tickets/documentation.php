@@ -32,7 +32,7 @@ if(!hasPerm([2],$user->data()->id)){
 
     <h3>Basic Configuration</h3>
     <p>
-      Most of the config on the Configuration page is pretty self explanitory.  You choose what permission level can work on tickets and which one can do things like assign tickets to other agents.  If you don't have a permission that works for this, create one.  There are a few terms that are customziable. If you would rather use the term Department instead of Category or the term SuperHero instead of Agent, this page lets you do that.  You can also create unlimited status' and categories.
+      Most of the config on the Configuration page is pretty self explanatory.  You choose what permission level can work on tickets and which one can do things like assign tickets to other agents.  If you don't have a permission that works for this, create one.  There are a few terms that are customizable. If you would rather use the term Department instead of Category or the term SuperHero instead of Agent, this page lets you do that.  You can also create unlimited status' and categories.
     </p>
 
     <h3>Creating Tickets</h3>
@@ -59,11 +59,11 @@ if(!hasPerm([2],$user->data()->id)){
 
     <h3>Emails</h3>
     <p>
-      Email is annoying and often hard to diagnose.  It's recommended that you keep these features off until you have time to test them.  Currently if you have emails in the "people to email when there is a new ticket" box, they will be sent an email when a new ticket is created. Sending email takes time and will slow down the ticket creation process, so you may want to consider sending to an email alias if you have a lot of people to notify.  If you enable the users/agents emails, new emails go out when someone ekse comments on the ticket. So if you want the end user to get a notification, leave a comment.
+      Email is annoying and often hard to diagnose.  It's recommended that you keep these features off until you have time to test them.  Currently if you have emails in the "people to email when there is a new ticket" box, they will be sent an email when a new ticket is created. Sending email takes time and will slow down the ticket creation process, so you may want to consider sending to an email alias if you have a lot of people to notify.  If you enable the users/agents emails, new emails go out when someone else comments on the ticket. So if you want the end user to get a notification, leave a comment.
     </p>
     <p>On the initial build of this plugin, I'm minimizing the number of emails that are sent.  More emails and logging will come over time as the bugs are worked out.</p>
 
     <h3>Custom Development</h3>
-    <p>If you need a custom developed ticket system or any other plugin, consider reaching out to me <a href="https://userspice.com/custom-userspice-development/" class="blue">at the userspice website.</a> </p>
+    <p>If you need a custom developed ticket system or any other plugin, consider reaching out to me <a href="https://userspice.com/custom-userspice-development/" class="blue">at the UserSpice website.</a> </p>
   </div>
 </div>
