@@ -21,6 +21,11 @@ foreach($sites as $s){
 
   $sendNotif = false;
   $remoteFile = $s->url;
+  $diag = Input::get('diag');
+  if($diag == "true"){
+    logger(1,"Uptime","Attempting ".$s->url);
+  }
+
   // Open file
   $handle = @fopen($remoteFile, 'r');
   // Check if file exists
@@ -67,7 +72,7 @@ foreach($sites as $s){
         $result = curl_exec($ch);
         curl_close($ch);
 
-        if(strpos($result, "SQLSTATE") !== false){
+      if(strpos($result, "SQLSTATE") !== false || strpos($result, "Error establishing a database") !== false  ){
           //sql is still down, but is it time to re-notify?
           $minutes = round( ( (strtotime($s->notified_down) - time()) / 60)*-1);
 
@@ -100,7 +105,7 @@ foreach($sites as $s){
     		$result = curl_exec($ch);
     		curl_close($ch);
 
-    		if(strpos($result, "SQLSTATE") !== false){
+      if(strpos($result, "SQLSTATE") !== false || strpos($result, "Error establishing a database") !== false  ){
           $sendNotif = true;
           $notifs[$s->site]['msg'] = "SQL is DOWN";
           $counter++;

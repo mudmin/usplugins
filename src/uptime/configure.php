@@ -97,8 +97,8 @@ if(!Token::check($token)){
     <div class="col-12">
 
       <h3>Uptime Plugin General Settings</h3>
-          <a class="blue" href="<?=$us_url_root?>usersc/plugins/uptime/documentation.php">Complete Documentation Here</a>
-      <br>
+      <a class="blue" href="<?=$us_url_root?>usersc/plugins/uptime/documentation.php">Complete Documentation Here</a>
+      <br><br>
       <form class="" action="" method="post">
         <div class="col-12 col-sm-4">
           <input type="hidden" name="csrf" value="<?=Token::generate();?>">
@@ -129,7 +129,8 @@ if(!Token::check($token)){
             </div>
 
             <div class="form-group">
-              <label for="">Is this a UserSpice site? We provide you with some extra data if it is.</label>
+              <label for="">Is this a UserSpice or Wordpress site?<br>
+                We provide you with some extra data if it is.</label>
               <select class="form-control" name="ustarget" required>
                 <option value="" disabled selected="selected">--Choose--</option>
                 <option value="1">Yes</option>
@@ -204,7 +205,7 @@ if(!Token::check($token)){
     <table class="table table-hover table-striped">
       <thead>
         <tr>
-          <th>Site</th><th>URL</th><th>Last Checked</th><th>UserSpice?</th><th>SW Ver</th><th>PHP Ver</th><th>Down Since</th><th>Delete</th>
+          <th>Site</th><th>URL</th><th>Last Checked</th><th>US/WP</th><th>SW Ver</th><th>PHP Ver</th><th>Down Since</th><th>Delete</th>
         </tr>
       </thead>
       <tbody>

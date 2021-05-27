@@ -36,6 +36,13 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE plg_uptime_settings ADD COLUMN method varchar(15) default 'fopen'");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
 

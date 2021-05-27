@@ -47,10 +47,10 @@ if(!pluginActive("uptime",true) || !hasPerm([2],$user->data()->id)){
 
     <h3>Your Targets</h3>
     <p>
-      As stated above, any file on your webserver could be a target, but it's not a bad idea to upload a dedicated file to each server for this application to hit.  If your site is a UserSpice site, we provide a special target file called target.php located in <b>usersc/plugins/uptime/files</b>.  Please copy this to the root of your target UserSpice project.
+      As stated above, any file on your webserver could be a target, but it's not a bad idea to upload a dedicated file to each server for this application to hit.  If your site is a UserSpice site, we provide a special target file called target.php located in <b>usersc/plugins/uptime/files</b>.  Please copy this to the root of your target UserSpice project. If your site is a Wordpress site, that same folder has a wp-target.php that's designed to be placed in the <b>root</b> of your Wordpress site.
     </p>
     <p>
-      It is <b>strongly recommended</b> that you comment in the lines about ipCheck() in on your target file and add the ip address of this system (the one that is hitting all the targets) to the built in UserSpice IP whitelist.  This keeps the information this file discloses private to anyone other than the Uptime monitor.
+      It is <b>strongly recommended</b> that you comment in the lines about ipCheck() in on your UserSpice target file and add the ip address of this system (the one that is hitting all the targets) to the target file.  This keeps the information this file discloses private to anyone other than the Uptime monitor.  There is a similar place to hard code one or multiple IPs in the Wordpress target file.
     </p>
     <p>
       If your site is not a UserSpice site, you are free to copy the file called uptime_target.php from <b>usersc/plugins/uptime/files</b> to all of your non UserSpice servers and no other configuration is required on that server.
@@ -71,6 +71,7 @@ if(!pluginActive("uptime",true) || !hasPerm([2],$user->data()->id)){
       </b>
     </p>
     <p>...but it may look a little different on your hosting provider. </p>
+    <p>As of v1.0.2 if you change your uptime.php?diag=true you will get additional diagnostic info in your logs every time you check a site. It's recommended that you get rid of this setting once everything is properly setup.</p>
 
     <h3>One Last Important Step</h3>
     <p>For security purposes, this uptime.php file can ONLY be triggered by IP addresses that are in your <a href="admin.php?view=ip" class="blue" target="_blank">UserSpice IP Whitelist</a>. This address may not be obvious, so after you setup your Cron job, check the bottom of the plugin config page and look for any logs that an invalid IP has hit your uptime.php. Add that IP to your whitelist and you will be good to go.</p>
