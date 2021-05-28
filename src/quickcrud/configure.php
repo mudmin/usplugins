@@ -39,10 +39,55 @@ if(!Token::check($token)){
           ];<br>
         </code>
       </p>
-      <h2>IMPORTANT NOTICE</h2>
+      <h3>IMPORTANT NOTICE</h3>
       <p>While there is some basic sanitization, <strong>THIS IS NOT FOR FRONT END USE</strong>.  This
         is to simplify making "control panel" type things for administrators. The parsers will not fire
         for non-admins and if you edit it to do so, it is totally at your own risk.
       </p>
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
+
+<?php if(in_array($user->data()->id,$master_account)){ ?>
+    <h3>Database Editor</h3>
+    <p>Please note, this database editor is very powerful. It is only recommended that you edit things if you know what you're doing.</p>
+    <?php // BEGIN DROPDOWN
+    $tables = $db->query('SHOW TABLES')->results();
+    $q = "";
+    $t = "Tablesin" . Config::get('mysql/db');
+    if(isset($tables[0]->$t)){
+      $q = $t;
+    }
+
+    $t = "Tables_in_" . Config::get('mysql/db');
+    if(isset($tables[0]->$t)){
+      $q = $t;
+    }
+    if($q == ""){ ?>
+
+      Your database schema will work with the Quick Crud plugin, however, it will not work with the automated database editor.  If you'd like to help us, please consider filling out a ticket at <a href="https://bugs.userspice.com">https://bugs.userspice.com</a> and passing along this diagnistic information:<br>
+      <?php dump($table[0]);?>
+      Thanks so much for your help.
+    <?php }else{ ?>
+    <form action="" name="form" method="post" >
+      <select id="tables" name="seek" onchange="this.form.submit()">
+       <option value="">Choose Table</option>
+    <?php
+    // populate select box
+
+
+    foreach($tables as $table){
+
+      ?>
+    <option value='<?=$table->$t?>'><?=$table->$t?></option>
+    <?php } ?>
+      </select>
+    </form>
+    <?php
+    $tbl = (!empty($_POST["seek"])) ? $_POST["seek"] : "Empty"; ?>
+    <H4>Currently Viewing '<?=ucfirst($tbl)?>' table</H4>
+    <?php
+    $query = $db->query("SELECT * FROM $tbl")->results();
+     quickCrud($query,$tbl);
+   }
+ }
+    // END DROPDOWN ?>
