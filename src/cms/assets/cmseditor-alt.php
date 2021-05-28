@@ -5,7 +5,7 @@
 ?>
 
 
- <script src="https://cdn.ckeditor.com/ckeditor5/18.0.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
 
  <style media="screen">
  .ck-editor__editable {
