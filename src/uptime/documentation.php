@@ -36,13 +36,17 @@ if(!pluginActive("uptime",true) || !hasPerm([2],$user->data()->id)){
 
     <h3>Configuring Notifications</h3>
     <p>
-      At launch, there were two ways to send out notifications about site outages.  You could use the built in UserSpice email system to send an email notification. You could also install the free Pushover plugin from Spice Shaker. This is the author's preferred method. The service is free, but mobile apps have a one time fee of $4.99.
+      At launch, there were two ways to send out notifications about site outages.  You could use the built in UserSpice email system to send an email notification. You could also install the free Pushover plugin from Spice Shaker. This is the author's preferred method. The service is free, but mobile apps have a one time fee of $4.99. A third option is Twilio for sending SMS messages.
     </p>
     <p>
-      To use email, you must properly configure your email on the <a class="blue" href="admin.php?view=email" target="_blank">Email Settings</a> page of the UserSpice Dashboard. Make sure you run the tests and that your emails are not going to spam.  Although you can send as many emails as you want, please check with your hosting provider to make sure you don't get shut down for "spamming."   Once everything is configured, you simply add any email address that you want to be notified on the dashboard.
+      To use email, you must properly configure your email on the <a class="blue" href="<?=$us_url_root?>users/admin.php?view=email" target="_blank">Email Settings</a> page of the UserSpice Dashboard. Make sure you run the tests and that your emails are not going to spam.  Although you can send as many emails as you want, please check with your hosting provider to make sure you don't get shut down for "spamming."   Once everything is configured, you simply add any email address that you want to be notified on the dashboard.
     </p>
     <p>
-      The <a class="blue"  href="admin.php?view=spice&search=pushover" target="_blank">Pushover Plugin</a> currently only allows you to send notifications to one Pushover account.  This is not a limitation of the service itself, so this could be extended in the future.  Pushover is great because it keeps these notifications out of the clutter of your email inbox. They're important and you want to see them
+      The <a class="blue"  href="<?=$us_url_root?>users/admin.php?view=spice&search=pushover" target="_blank">Pushover Plugin</a> currently only allows you to send notifications to one Pushover account.  This is not a limitation of the service itself, so this could be extended in the future.  Pushover is great because it keeps these notifications out of the clutter of your email inbox. They're important and you want to see them.
+    </p>
+
+    <p>
+      The <a class="blue"  href="<?=$us_url_root?>users/admin.php?view=spice&search=twilio" target="_blank">Twilio Plugin</a> allows you to send as many SMS notifications as you like.  Use my link in the Twilio plugin to sign up and get free credit and a free, no credit card required trial. Note that SMS messages are shorter to save you money on SMS segments. 
     </p>
 
     <h3>Your Targets</h3>
@@ -74,6 +78,6 @@ if(!pluginActive("uptime",true) || !hasPerm([2],$user->data()->id)){
     <p>As of v1.0.2 if you change your uptime.php?diag=true you will get additional diagnostic info in your logs every time you check a site. It's recommended that you get rid of this setting once everything is properly setup.</p>
 
     <h3>One Last Important Step</h3>
-    <p>For security purposes, this uptime.php file can ONLY be triggered by IP addresses that are in your <a href="admin.php?view=ip" class="blue" target="_blank">UserSpice IP Whitelist</a>. This address may not be obvious, so after you setup your Cron job, check the bottom of the plugin config page and look for any logs that an invalid IP has hit your uptime.php. Add that IP to your whitelist and you will be good to go.</p>
+    <p>For security purposes, this uptime.php file can ONLY be triggered by IP addresses that are in your <a href="<?=$us_url_root?>users/admin.php?view=ip" class="blue" target="_blank">UserSpice IP Whitelist</a>. This address may not be obvious, so after you setup your Cron job, check the bottom of the plugin config page and look for any logs that an invalid IP has hit your uptime.php. Add that IP to your whitelist and you will be good to go.</p>
   </div>
 </div>

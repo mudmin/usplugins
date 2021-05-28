@@ -129,6 +129,7 @@ foreach($sites as $s){
 
 $string = "";
 $html = "Uptime has the following important notifications for you.<br>";
+$sms = "";
 foreach($notifs as $k=>$v){
   $q = $db->query("SELECT * FROM plg_uptime WHERE site = ?",[$k]);
   $c = $q->count();
@@ -136,8 +137,10 @@ foreach($notifs as $k=>$v){
     logger(1,'uptimeError',"Trying to notify a site $k that does not exist");
   }else{
     $f = $q->first();
+    $db->update("plg_uptime",$f->id,['notified_down'=>date("Y-m-d H:i:s")]);
     $string .= $f->site."(".$f->url.") - ".$v['msg'];
     $html .= $f->site."(".$f->url.") - ".$v['msg']."<br>";
+    $sms .= $f->url." ".$v['msg'];
   }
 }
 
@@ -146,8 +149,13 @@ $settings = $db->query("SELECT * FROM settings")->first();
 $email = $db->query("SELECT * FROM email")->first();
 foreach($send as $s){
   if($sendNotif){ //make sure there's something to send
+
     if($s->method == "pushover" && pluginActive('pushover',true)){
       pushoverNotification($settings->plg_po_key,$string);
+    }
+
+    if($s->method == "twilio" && pluginActive('twilio',true)){
+      twilsms($sms,twilio($s->target));
     }
 
     if($s->method == "email"){
