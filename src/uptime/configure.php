@@ -206,7 +206,7 @@ if(!Token::check($token)){
           </thead>
           <tbody>
             <?php $n = $db->query("SELECT * FROM plg_uptime_notifications WHERE disabled = 0")->results();
-            dump($db->errorString());
+            
             foreach($n as $e){ ?>
               <tr>
                 <td><?=ucfirst($e->method);?></td>
