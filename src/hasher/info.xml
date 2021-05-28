@@ -6,17 +6,17 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>September 3, 2019</release>
+  <release>May 28, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0.1</tested>
+  <tested>5.3.1</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the hasher plugin for UserSpice. If you want to upload plugins for others to download in SpiceShaker we need the latest hash.</description>
+  <description>This is the hasher plugin for UserSpice. If you want to upload plugins for others to download in SpiceShaker we need the latest hash.  Hashing is a great way to ensure files aren't changed between when you upload them and they are downloaded by your users.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Run Hasher</button>
+    <button>Hasher</button>
 </plugin>
