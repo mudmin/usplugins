@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Badges Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>May 30,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>A simple plugin to assign badges to your users.  Badges can be added from the plugin config panel or automatically using built-in functions.  You can have an unlimited number of badges and they're relatively easy to manage. </description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Badges</button>
+</plugin>
