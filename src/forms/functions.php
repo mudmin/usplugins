@@ -775,7 +775,7 @@ function formField($o, $v = []){
           $name = $name."_form";
           $test = $db->query("SELECT * FROM $name")->first();
           $e = $db->errorString();
-          if (strpos($e, $error) !== false){
+          if (strpos($e, 'ERROR #0 ') !== false && strpos($e, 'ERROR #0') !== false){
             $msg['msg'] = "Sorry! It looks like you used to have a form by that name that was never fully deleted!";
             return $msg;
             exit;
