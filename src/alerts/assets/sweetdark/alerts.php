@@ -43,7 +43,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'question',
-    title: "<?=Input::get('err')?>",
+    title: "<?=htmlspecialchars_decode(Input::get('err'))?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -55,7 +55,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'info',
-    title: "<?=Input::get('msg')?>",
+    title: "<?=htmlspecialchars_decode(Input::get('msg'))?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -67,7 +67,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'error',
-    title: "<?=$usSessionMessages['valErr']?>",
+    title: "<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -79,7 +79,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'success',
-    title: "<?=$usSessionMessages['valSuc']?>",
+    title: "<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -91,7 +91,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'warning',
-    title: "<?=$usSessionMessages['genMsg']?>",
+    title: "<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });

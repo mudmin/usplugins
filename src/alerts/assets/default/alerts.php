@@ -31,17 +31,19 @@ $usSessionMessages = parseSessionMessages();
 // dump($usSessionMessages);
 
 ?>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" type="text/css" href="<?=$us_url_root?>usersc/plugins/alerts/assets/default/toastify.min.css">
+<script type="text/javascript" src="<?=$us_url_root?>usersc/plugins/alerts/assets/default/toastify-js.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
   let modals = [];
+  console.log("<?=htmlspecialchars_decode(Input::get('err'))?>");
     <?php
     //this handles err= in the URL
     if(Input::get('err') != ""){
     ?>
+
     Toastify({
-      text: "<?=Input::get('err')?>",
+      html: "<?=htmlspecialchars_decode(Input::get('err'))?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -59,7 +61,7 @@ $( document ).ready(function() {
     if(Input::get('msg') != ""){
     ?>
     Toastify({
-      text: "<?=Input::get('msg')?>",
+      html: "<?=htmlspecialchars_decode(Input::get('msg'))?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -77,7 +79,7 @@ $( document ).ready(function() {
     if($usSessionMessages['valErr'] != ""){
     ?>
     Toastify({
-      text: "<?=$usSessionMessages['valErr']?>",
+      html: "<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -94,7 +96,7 @@ $( document ).ready(function() {
     if($usSessionMessages['valSuc'] != ""){
     ?>
     Toastify({
-      text: "<?=$usSessionMessages['valSuc']?>",
+      html: "<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -111,7 +113,7 @@ $( document ).ready(function() {
     if($usSessionMessages['genMsg'] != ""){
     ?>
     Toastify({
-      text: "<?=$usSessionMessages['genMsg']?>",
+      html: "<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,

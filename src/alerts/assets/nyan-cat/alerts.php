@@ -49,7 +49,7 @@ let modals = [];
               left top
               no-repeat
             `,
-    title: "<?=Input::get('err')?>",
+    title: "<?=htmlspecialchars_decode(Input::get('err'))?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -69,7 +69,7 @@ let modals = [];
               left top
               no-repeat
             `,
-    title: "<?=Input::get('msg')?>",
+    title: "<?=htmlspecialchars_decode(Input::get('msg'))?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -89,7 +89,7 @@ let modals = [];
               left top
               no-repeat
             `,
-    title: "<?=$usSessionMessages['valErr']?>",
+    title: "<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -109,7 +109,7 @@ let modals = [];
               left top
               no-repeat
             `,
-    title: "<?=$usSessionMessages['valSuc']?>",
+    title: "<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -129,7 +129,7 @@ let modals = [];
               left top
               no-repeat
             `,
-    title: "<?=$usSessionMessages['genMsg']?>",
+    title: "<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>",
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
