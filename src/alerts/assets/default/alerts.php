@@ -19,10 +19,12 @@ All of these messages can be handled differently.  If you want to use a bootstra
 modal for another, that's totally up to you. You can mix and match.  You can stick any sort of conditional
 logic you can dream up in your alert system.
 
-This example uses the SweetAlert2 Library
-https://sweetalert2.github.io/#examples
+This example uses the Toastify-js
+https://github.com/apvarun/toastify-js
 
+IMPORTANT - If you use this as an example, you will see that the toastify library does not support html, so we're stripping it out.  You may want to look at a different example
 */
+
 
 $usSessionMessages = parseSessionMessages();
 // $usSessionMessages['valErr'] = "Something went wrong!@!!!";
@@ -43,7 +45,7 @@ $( document ).ready(function() {
     ?>
 
     Toastify({
-      text: "<?=strip_tags(htmlspecialchars_decode(Input::get('err')))?>",
+      text: "<?=htmlspecialchars_decode(Input::get('err'))?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -61,7 +63,7 @@ $( document ).ready(function() {
     if(Input::get('msg') != ""){
     ?>
     Toastify({
-      text: "<?=strip_tags(htmlspecialchars_decode(Input::get('msg')))?>",
+      text: "<?=htmlspecialchars_decode(Input::get('msg'))?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -78,8 +80,9 @@ $( document ).ready(function() {
     //this handles session based error message
     if($usSessionMessages['valErr'] != ""){
     ?>
+    console.log("<?=$usSessionMessages['valErr']?>")
     Toastify({
-      text: "<?=strip_tags(htmlspecialchars_decode($usSessionMessages['valErr']))?>",
+      text: "<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -96,7 +99,7 @@ $( document ).ready(function() {
     if($usSessionMessages['valSuc'] != ""){
     ?>
     Toastify({
-      text: "<?=strip_tags(htmlspecialchars_decode($usSessionMessages['valSuc']))?>",
+      text: "<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -113,7 +116,7 @@ $( document ).ready(function() {
     if($usSessionMessages['genMsg'] != ""){
     ?>
     Toastify({
-      text: "<?=strip_tags(htmlspecialchars_decode($usSessionMessages['genMsg']))?>",
+      text: "<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>",
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
