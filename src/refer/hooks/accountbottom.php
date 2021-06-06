@@ -3,7 +3,10 @@
 $refSettings = $db->query("SELECT * FROM plg_refer_settings")->first();
 if($refSettings->show_acct == 1){
 global $user;
-if($user->data()->plg_ref == ''){
+if($user->data()->plg_ref == '' && $refSettings->allow_un == 1){
+  $ref_link = 'http://'.$_SERVER['HTTP_HOST'].$us_url_root.'users/join.php?ref='.$user->data()->username;
+  echo "Your Referral Link: <strong>".$ref_link."</strong>";
+}elseif($user->data()->plg_ref == ''){
   if(!empty($_POST['genNewRef'])){
     $db->update("users",$user->data()->id,['plg_ref'=>uniqid()]);
     Redirect::to("account.php");
