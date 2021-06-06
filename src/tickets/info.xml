@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>May 24,2021</release>
+  <release>June 6,2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.1</tested>
+  <tested>5.3.3</tested>
 
 <!-- What does your plugin do? -->
   <description>This is a basic support ticket system that is designed to either be used standalone or edited to create a more complex system. This plugin requires the UserSpice official form builder to display and modify your support tickets with no coding required.</description>
