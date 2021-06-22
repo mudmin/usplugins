@@ -35,18 +35,18 @@ foreach($sites as $s){
       //Site is down!
       //did we know this already and if so
       if($s->notified_down == ""){ //we didn't know
-        dump("Should notify");
+        // dump("Should notify");
         $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
         $sendNotif = true;
         $notifs[$s->site]['msg'] = "Site is DOWN";
         $counter++;
         $db->update("plg_uptime",$s->id,['first_down'=>date("Y-m-d H:i:s")]);
       }else{
-        dump("already notified");
+        // dump("already notified");
         //ok, so we already knew it was down, but is it time to re-notify?
         $minutes = ((strtotime($s->notified_down) - time()) / 60)*-1;
         if($minutes >= $upset->notify_every){
-          dump("re-notify");
+          // dump("re-notify");
           $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
           $sendNotif = true;
           $notifs[$s->site]['msg'] = "Site is still DOWN";
