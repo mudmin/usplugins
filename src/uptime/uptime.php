@@ -30,19 +30,23 @@ foreach($sites as $s){
   $handle = @fopen($remoteFile, 'r');
   // Check if file exists
   if(!$handle){
+
        $ct = strtotime(date("Y-m-d H:i:s"));
       //Site is down!
       //did we know this already and if so
       if($s->notified_down == ""){ //we didn't know
+        dump("Should notify");
         $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
         $sendNotif = true;
         $notifs[$s->site]['msg'] = "Site is DOWN";
         $counter++;
         $db->update("plg_uptime",$s->id,['first_down'=>date("Y-m-d H:i:s")]);
       }else{
+        dump("already notified");
         //ok, so we already knew it was down, but is it time to re-notify?
         $minutes = ((strtotime($s->notified_down) - time()) / 60)*-1;
         if($minutes >= $upset->notify_every){
+          dump("re-notify");
           $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
           $sendNotif = true;
           $notifs[$s->site]['msg'] = "Site is still DOWN";
@@ -61,6 +65,7 @@ foreach($sites as $s){
         $db->insert("plg_uptime_downtime",['site'=>$s->id,'downtime'=>$minutes]);
         $db->update('plg_uptime',$s->id,['first_down'=>'','notified_down'=>'']);
         $sendNotif = true;
+        $minutes = round($minutes,1);
         $notifs[$s->site]['msg'] = "Site is back up after $minutes minutes";
         $counter++;
 
@@ -89,6 +94,7 @@ foreach($sites as $s){
           $db->insert("plg_uptime_downtime",['site'=>$s->id,'downtime'=>$minutes]);
           $db->update('plg_uptime',$s->id,['first_down'=>'','notified_down'=>'']);
           $sendNotif = true;
+          $minutes = round($minutes,1);
           $notifs[$s->site]['msg'] = "Site is back up after $minutes minutes. SQL has also been verified.";
           $counter++;
         }
@@ -137,7 +143,11 @@ foreach($notifs as $k=>$v){
     logger(1,'uptimeError',"Trying to notify a site $k that does not exist");
   }else{
     $f = $q->first();
-    $db->update("plg_uptime",$f->id,['notified_down'=>date("Y-m-d H:i:s")]);
+    if($f->first_down != ''){
+      //re-up this notification time if the site is not back up.
+      $db->update("plg_uptime",$f->id,['notified_down'=>date("Y-m-d H:i:s")]);
+    }
+
     $string .= $f->site."(".$f->url.") - ".$v['msg'];
     $html .= $f->site."(".$f->url.") - ".$v['msg']."<br>";
     $sms .= $f->url." ".$v['msg'];
