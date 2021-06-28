@@ -214,7 +214,10 @@ if(!empty($_POST['updateSettings'])){
   <div class="col-12">
     <h3>Documentation</h3>
         <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
-        <h4>Purpose</h4>
+        <h4>One Plugin, Two Uses</h4>
+        <p>This plugin is a bit of a Swiss Army Knife. Besides its original purpose of forcing actions to happen to logged in users, we've taken that same overhead and also added (optional) user tracking features.  See the bottom of this documentation for more information on those features.</p>
+
+        <h4>Original Purpose</h4>
         <p>The purpose of this plugin is to force things to happen on a page even if the user does not refresh the page. This is most useful in SPAs (Single Page Applications) but could also be used if you want all your users to logout or refresh or even if you have some sort of "event" starting and on your site and you want all your users to go to that place.</p>
         <p>It works on a watchdog timer where the user checks in to see if you have anything for them to do every x number of seconds. The default is 120 but can be as low as 10.  Obviously choose something that balances the load on your server and your need for immediate action. Note that the watchdog parser will fire on page load, so that could prove helpful if you redirect from one of your pages to another and need multiple watchdogs to fire off.</p>
 
@@ -229,6 +232,10 @@ if(!empty($_POST['updateSettings'])){
         <h4>Including the Watchdog Timer</h4>
         <p>There is a setting to optionally include the watchdog timer on every UserSpice page.  However, to reduce server load, you may decide to only include it on certain pages.  You may also need to do this for pages that do not include the UserSpice footer.  To include the watchdog add the line watchdogHere(); in php tags near the bottom of your page</p>
         <p>You can take a look at these watchdogs in action in your Chrome Inspector in the console and network tabs. </p>
+
+        <h4>New User Tracking Features</h4>
+        <p>A new user tracking feature allows you to see who is online and what page they are on (if that page is in the database).  If you enable the user tracking, it includes a hook that allows you to see this info in <a href="<?=$us_url_root?>users/admin.php?view=users">the user manager</a>. </p>
+
       </div>
 
 </div>

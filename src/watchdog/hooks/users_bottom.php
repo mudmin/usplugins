@@ -12,5 +12,8 @@ if($wdSettings->tracking == 1){
     <td class="text-center"><img src="<?=$us_url_root?>usersc/plugins/watchdog/images/offline.png" alt="" height="15px"></td>
   <?php
 }
+?>
+<td><?=$v1->last_page?></td>
+<?php
 }
 ?>
