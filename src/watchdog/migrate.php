@@ -36,8 +36,25 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $db->query("ALTER TABLE `plg_watchdog_settings` ADD COLUMN tracking tinyint(1) default 0");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
+  $update = '00003';
+  if(!in_array($update,$existing)){
+    $hooks = [];
+    $hooks['admin.php?view=users']['pre'] = 'hooks/users_pre.php';
+    $hooks['admin.php?view=users']['body'] = 'hooks/users_body.php';
+    $hooks['admin.php?view=users']['bottom'] = 'hooks/users_bottom.php';
+    registerHooks($hooks,$plugin_name);
 
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
   //after all updates are done. Keep this at the bottom.

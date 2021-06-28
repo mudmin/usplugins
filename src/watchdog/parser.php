@@ -16,8 +16,22 @@ if(isset($user) && $user->isLoggedIn()){
 
 $found = false;
 $cp = Input::get('currentPage');
+$cwd = Input::get('currentPath');
 $wd = $db->query("SELECT * FROM plg_watchdog_settings")->first();
 $dt = date("Y-m-d H:i:s");
+if($wd->tracking){
+  if($cwd == ""){
+    $page = $cp;
+  }else{
+    $page = $cwd."/".$cp;
+  }
+  $q = $db->query("UPDATE pages SET dwells = dwells+1 WHERE page = ?",[ltrim($page,'/')]);
+}
+
+if($wd->tracking == 1 && $li){
+  $db->update('users',$user->data()->id,['last_watchdog'=>$dt,'last_page'=>ltrim($page,'/')]);
+}
+
 $msg = [];
 $msg['func'] = "";
 $msg['args'] = [];

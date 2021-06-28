@@ -60,8 +60,14 @@ if(!empty($_POST['createWatchdog'])){
 }
 if(!empty($_POST['updateSettings'])){
   $wdtime = Input::get('wdtime');
+
   if(is_numeric($wdtime) && $wdtime > 9){
-    $db->update("plg_watchdog_settings",$wdSettings->id,["wd_time"=>$wdtime,"every_page"=>Input::get('every_page')]);
+    $db->update("plg_watchdog_settings",$wdSettings->id,["wd_time"=>$wdtime,"every_page"=>Input::get('every_page'),"tracking"=>Input::get('tracking')]);
+    if($wdSettings->tracking == 0 && Input::get('tracking') == 1){
+      $db->query("ALTER TABLE pages ADD COLUMN dwells bigint default 0");
+      $db->query("ALTER TABLE users ADD COLUMN last_watchdog datetime");
+      $db->query("ALTER TABLE users ADD COLUMN last_page varchar(255)");
+    }
       Redirect::to("admin.php?view=plugins_config&plugin=watchdog&err=Watchdog settings updated");
   }
 }
@@ -74,6 +80,7 @@ if(!empty($_POST['updateSettings'])){
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  					<h1>Watchdog Plugin</h1>
+          <a href="<?=$us_url_root?>usersc/plugins/watchdog/sample.php" class="btn btn-primary">View User Tracking Samples</a>
 
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
@@ -95,6 +102,16 @@ if(!empty($_POST['updateSettings'])){
           <option value="0" <?php if($wdSettings->every_page == 0){echo "selected = 'selected'";}?>>No</option>
 
           <option value="1" <?php if($wdSettings->every_page == 1){echo "selected = 'selected'";}?>>Yes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="">Enable User Tracking Features (Current Page and Online Status)</label>
+        <p>Note: These put a marginal load on the server, so the more active your site gets, it is suggested that you make your watchdog timer fire less often. Typical ranges are between 10 and 60 seconds.</p>
+        <select class="form-control" name="tracking">
+          <option value="0" <?php if($wdSettings->tracking == 0){echo "selected = 'selected'";}?>>No</option>
+
+          <option value="1" <?php if($wdSettings->tracking == 1){echo "selected = 'selected'";}?>>Yes</option>
         </select>
       </div>
       <input type="submit" name="updateSettings" value="Update Settings" class="btn btn-primary">
@@ -196,6 +213,7 @@ if(!empty($_POST['updateSettings'])){
 <div class="row">
   <div class="col-12">
     <h3>Documentation</h3>
+        <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
         <h4>Purpose</h4>
         <p>The purpose of this plugin is to force things to happen on a page even if the user does not refresh the page. This is most useful in SPAs (Single Page Applications) but could also be used if you want all your users to logout or refresh or even if you have some sort of "event" starting and on your site and you want all your users to go to that place.</p>
         <p>It works on a watchdog timer where the user checks in to see if you have anything for them to do every x number of seconds. The default is 120 but can be as low as 10.  Obviously choose something that balances the load on your server and your need for immediate action. Note that the watchdog parser will fire on page load, so that could prove helpful if you redirect from one of your pages to another and need multiple watchdogs to fire off.</p>
