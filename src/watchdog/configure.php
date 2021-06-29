@@ -236,6 +236,13 @@ if(!empty($_POST['updateSettings'])){
         <h4>New User Tracking Features</h4>
         <p>A new user tracking feature allows you to see who is online and what page they are on (if that page is in the database).  If you enable the user tracking, it includes a hook that allows you to see this info in <a href="<?=$us_url_root?>users/admin.php?view=users">the user manager</a>. </p>
 
+        <p>Beyond the basic capabilities, there are several other examples on the <a href="<?=$us_url_root?>usersc/plugins/watchdog/sample.php">Sample Page</a>. These include demonstrations of the various functions and even live views that update without refreshing the page.  Feel free to use some of that sample code throughout your project.</p>
+
+        <h4>Timer Time</h4>
+        <p>The more you fire the watchdog timer, the more work the database has to do. For most projects, even firing every 10 seconds is fine and will not even be noticeable.  However, if you have a large or busy site, you may want to increase that time to reduce server load.</p>
+
+        <h4>Multiplier</h4>
+        <p>You will see the term "multiplier" in some of the functions. This is how long a user can fail to report in without being reported as offline. In other words, if you have your frequency set to 10 seconds with a multiplier of 4, then the user would have to fail to report in for 41 seconds to be considered "offline". This is important because slow internet connections and packet loss can cause someone to miss a check in or two.</p>
       </div>
 
 </div>
