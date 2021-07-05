@@ -1,27 +1,14 @@
-<div class="col-sm-8">
-  <div class="page-header float-right">
-    <div class="page-title">
-      <ol class="breadcrumb text-right">
-        <li><a href="<?=$us_url_root?>users/admin.php">Dashboard</a></li>
-        <li>Tools</li>
-        <li class="active">Form Builder</li>
-      </ol>
-    </div>
-  </div>
-</div>
-</div>
-</header>
-<div class="content mt-3">
-  <?php require_once($abs_us_root.$us_url_root.'users/views/_form_manager_menu.php');?>
 
-  <div class="row">
+  <?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_manager_menu.php');?>
+
+
     <!-- Existing Forms -->
     <div class="col-lg-6 col-12">
-      <?php require_once($abs_us_root.$us_url_root.'users/views/_form_existing_forms.php');?>
+      <?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_existing_forms.php');?>
     </div>
     <!-- Existing Views -->
     <div class="col-lg-6 col-12">
-      <?php require_once($abs_us_root.$us_url_root.'users/views/_form_existing_views.php');?>
+      <?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_existing_views.php');?>
     </div>
   </div>
   <br><br>

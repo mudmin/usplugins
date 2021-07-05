@@ -1,0 +1,3 @@
+These form hooks allow you to inject code at various places during the form display and processing process.
+
+To add code to your form, simply put a file with the name of your form in the folder and it will be automatically loaded at the proper time.  So if your form name is testing123, add a testing123.php file to the location you want that code to execute.  No matter how many hooks you use, the filename is always the same as determined by the form name you see in the left column of the form manager.

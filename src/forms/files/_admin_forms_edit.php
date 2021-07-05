@@ -1,21 +1,7 @@
-<div class="col-sm-8">
-  <div class="page-header float-right">
-    <div class="page-title">
-      <ol class="breadcrumb text-right">
-        <ol class="breadcrumb text-right">
-          <li><a href="<?=$us_url_root?>users/admin.php">Dashboard</a></li>
-          <li>Tools</li>
-          <li><a href="<?=$us_url_root?>users/admin.php?view=_admin_forms">Forms</a></li>
-          <li class="active">Form Editor</li>
-        </ol>
-      </ol>
-    </div>
-  </div>
-</div>
-</div>
 <?php
 if(!in_array($user->data()->id,$master_account)){die();}
 if (!securePage($_SERVER['PHP_SELF'])){die();}
+
 //Errors Successes
 $errors = [];
 $successes = [];
@@ -52,7 +38,7 @@ $edit = Input::get('edit');
 $checkQ = $db->query("SELECT * FROM us_forms WHERE id = ?",array($edit));
 $checkC = $checkQ->count();
 if($checkC < 1 && is_numeric($edit)){
-  Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_edit&err=Form+not+found');
+  Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&err=Form+not+found');
 }elseif(is_numeric($edit)){
   $check = $checkQ->first();
   $name = formatName($check->form);
@@ -61,6 +47,22 @@ if($checkC < 1 && is_numeric($edit)){
   if($formC > 0){
     $form = $formQ->results();
   }
+}
+
+if(!empty($_GET['switchto'])){
+if(Input::get('switchto') == "manually"){
+  $fields = ["select_opts"=>"{\"\":\"\"}"];
+  $db->update($name,$field,$fields);
+}elseif(Input::get('switchto') == "database"){
+  $options = [];
+  $options["usformquery"] = "";
+  $options["key"] = "id";
+  $options["values"] = [];
+  $options = json_encode($options);
+  $fields = ["select_opts"=>$options];
+  $db->update($name,$field,$fields);
+}
+  Redirect::to("admin.php?view=plugins_config&newFormView=_admin_forms_edit&edit=".$edit."&field=".$field."&plugin=forms&editOpts=true");
 }
 
 $lastOrder = Input::get('lastOrder');
@@ -77,12 +79,12 @@ if(!is_numeric($lastOrder)){
   $lastOrder = $lastOrder + 10;
 }
 if(!empty($_POST['edit_field'])){
-  Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_edit&edit='.$edit.'&field='.$field);
+  Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$edit.'&field='.$field);
 }
 
 if(!empty($_POST['create_field'])){
   //need to check to make sure the column names are not protected sql keywords
-  // dnd($_POST);
+
   $field_type = Input::get('field_type');
   $editing = Input::get('editing');
   $col = Input::get('col');
@@ -104,17 +106,25 @@ if(!empty($_POST['create_field'])){
     $mainTable = substr($name, 0, -5); //name without _form
     $check = $db->query("SELECT * FROM $name WHERE col = ?",array($col))->count();
     if($check < 1){
+      if(isset($fields['optStyle'])){unset($fields['optStyle']);}
       $step1 = $db->insert($name,$fields);
-      $id = $db->lastId();
-      $keys = Input::get('key');
-      $vals = Input::get('val');
-      $opts = array_combine($keys, $vals);
-      $opts = json_encode($opts);
 
+      $id = $db->lastId();
+
+      if(Input::get('optStyle') == "database"){
+        $opts = [];
+        $opts["usformquery"] = "";
+        $opts["key"] = "id";
+        $opts["values"] = [];
+        $opts = json_encode($opts);
+      }else{
+        $opts = "{\"\":\"\"}";
+      }
       $fields = array(
         'select_opts'=>$opts,
         'col'=>$col,
       );
+
       $db->update($name,$id,$fields);
 
       if($field_type == "timestamp"){
@@ -170,7 +180,13 @@ if(!empty($_POST['create_field'])){
       bold("<br>A column already exists with that name");
       exit;
     }
-    Redirect::to($us_url_root."users/admin.php?view=_admin_forms_edit&edit=".$edit."&lastOrder=".$lastOrder);
+
+    if($field_type == "dropdown" || $field_type == "radio" || $field_type == "checkbox"){
+          Redirect::to($us_url_root."users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=".$edit."&field=".$id."&editOpts=".$id);
+    }else{
+          Redirect::to($us_url_root."users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=".$edit."&lastOrder=".$lastOrder);
+    }
+
   }//end of SQL protected checking
   bold("<br>".$col." is a SQL protected keyword, so you can't use it");
 }
@@ -179,7 +195,7 @@ if(!empty($_POST['create_field'])){
 if(!empty($_POST['delete_field'])){
   $delete = Input::get('delete');
   $q = $db->query("DELETE FROM $name WHERE id = ?",array($delete));
-  Redirect::to($us_url_root."users/admin.php?view=_admin_forms_edit&err=Field+deleted&edit=".$edit);
+  Redirect::to($us_url_root."users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&err=Field+deleted&edit=".$edit);
 }
 
 if(!empty($_POST['edit_this_field'])){
@@ -195,10 +211,41 @@ if(!empty($_POST['edit_this_field'])){
   );
   $db->update($name,$field,$fields);
   // dnd($db->errorInfo());
-  $id = $db->lastId();
+  // $id = $db->lastId();
+  // $keys = Input::get('key');
+  // $vals = Input::get('val');
+  // $opts = array_combine($keys, $vals);
+  // $opts = json_encode($opts);
+  //
+  //
+  // $fields = array(
+  //   'select_opts'=>$opts,
+  // );
+  // $db->update($name,$field,$fields);
+  Redirect::to($us_url_root."users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=".$edit);
+}
+
+if(!empty($_POST['edit_this_field_options'])){
+  $field = Input::get('editing');
+
   $keys = Input::get('key');
   $vals = Input::get('val');
   $opts = array_combine($keys, $vals);
+
+  if(isset($keys[0]) && $keys[0] == "usformquery"){
+    $sk = Input::get('schemakey');
+    $sv = Input::get('schemaval');
+    $opts['values'] = [];
+    // dump($sk);
+    // dump($sv);
+
+    $counter = 0;
+    foreach($sk as $k=>$v){
+
+      $opts['values'][$counter] = [$v=>$sv[$k]];
+      $counter++;
+    }
+  }
   $opts = json_encode($opts);
 
 
@@ -206,13 +253,13 @@ if(!empty($_POST['edit_this_field'])){
     'select_opts'=>$opts,
   );
   $db->update($name,$field,$fields);
-  Redirect::to($us_url_root."users/admin.php?view=_admin_forms_edit&edit=".$edit);
+  Redirect::to($us_url_root."users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=".$edit);
 }
 
 ?>
 
 <div class="content mt-3">
-  <?php require_once($abs_us_root.$us_url_root.'users/views/_form_manager_menu.php');?>
+  <?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_manager_menu.php');?>
   <?php if(is_numeric($autogen)){ ?>
     <div class="row">
       <div class="col-sm-12">
@@ -227,9 +274,11 @@ if(!empty($_POST['edit_this_field'])){
       <h3>Managing the "<font color="blue"><?=$check->form?></font>" form</h3>
       <?php
       if(!is_numeric($field)){
-        require_once($abs_us_root.$us_url_root.'users/views/_form_create_field.php');
+        require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_create_field.php');
+      }elseif(Input::get('editOpts') != ""){
+        require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_edit_options.php');
       }else{
-        require_once($abs_us_root.$us_url_root.'users/views/_form_edit_field.php');
+        require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_edit_field.php');
       }
 
       ?>
@@ -244,7 +293,7 @@ if(!empty($_POST['edit_this_field'])){
         }
         ?>
       </div>
-      <div class="col-sm-6"><?php require_once($abs_us_root.$us_url_root.'users/views/_form_edit_delete_reorder.php');?></div>
+      <div class="col-sm-6"><?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_edit_delete_reorder.php');?></div>
     <?php } //end editing section
     ?>
 

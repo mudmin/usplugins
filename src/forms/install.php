@@ -9,35 +9,6 @@ $db = DB::getInstance();
 $plugin_name = "forms"; //change this for your plugin!
 $plugin_name = strtolower($plugin_name);//you're welcome
 
-$cpyfail = 0;
-
-$files = [
-  "_admin_forms_edit.php",
-  "_admin_forms_preview.php",
-  "_admin_forms_views.php",
-  "_admin_forms.php",
-  "_form_create_field.php",
-  "_form_validation_options.php",
-  "_form_edit_delete_reorder.php",
-  "_form_edit_field.php",
-  "_form_existing_forms.php",
-  "_form_existing_views.php",
-  "_form_manager_menu.php",
-];
-foreach($files as $file){
-if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/views/".$file)) {
-    echo "failed to copy $file...\n";
-		$cpyfail=1;
-}
-}
-
-
-$file = "form_validation.php";
-if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."users/parsers/".$file)) {
-    echo "failed to copy $file...\n";
-		$cpyfail=1;
-}
-
 $check = $db->query("SHOW TABLES LIKE '%us_form_views%'")->count();
 if($check < 1){
 $db->query("CREATE TABLE `us_forms` (

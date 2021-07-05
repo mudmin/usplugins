@@ -1,18 +1,3 @@
-<div class="col-sm-8">
-  <div class="page-header float-right">
-    <div class="page-title">
-      <ol class="breadcrumb text-right">
-        <ol class="breadcrumb text-right">
-          <li><a href="<?=$us_url_root?>users/admin.php">Dashboard</a></li>
-          <li>Tools</li>
-          <li><a href="<?=$us_url_root?>users/admin.php?view=_admin_forms">Forms</a></li>
-          <li class="active">Form Views</li>
-        </ol>
-      </ol>
-    </div>
-  </div>
-</div>
-</div>
 <?php
 if(!in_array($user->data()->id,$master_account)){die();}
 if (!securePage($_SERVER['PHP_SELF'])){die();}
@@ -35,7 +20,7 @@ if(!empty($_POST['select_form'])){
   if($findC > 0){
     $find = $findQ->results();
   }else{
-    Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_views&err=Form+not+found.');
+    Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_views&err=Form+not+found.');
   }
   $demo = 'z';
 }
@@ -52,7 +37,7 @@ if(!empty($_POST['create_view'])){
       'fields'=>$selected,
     );
     $db->insert('us_form_views',$fields);
-    Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_views&err=View+created');
+    Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_views&err=View+created');
   }else{
     bold("You need to select at least one form field");
   }
@@ -64,12 +49,12 @@ if(!empty($_POST['delete_view'])){
   $c = $q->count();
   if($c > 0){
     $db->query("DELETE FROM us_form_views WHERE id = ?",array($delete));
-    Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_views&err=View+deleted');
+    Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_views&err=View+deleted');
   }
 }
 ?>
 <div class="content mt-3">
-  <?php require_once($abs_us_root.$us_url_root.'users/views/_form_manager_menu.php');?>
+  <?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_manager_menu.php');?>
   <div class="row">
     <div class="col-lg-6 col-12">
       <h2>Create a custom form view</h2>
@@ -87,7 +72,7 @@ if(!empty($_POST['delete_view'])){
         </form>
       </h4>
     <?php }else{ ?>
-      You don't have any forms! <a href="admin.php?view=_admin_forms">Create one </a>first.
+      You don't have any forms! <a href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms">Create one </a>first.
     <?php } ?>
 
 </div>
@@ -141,6 +126,6 @@ if(!empty($_POST['delete_view'])){
   </div>
   <div class="row">
     <div class="col-sm-12 well">
-      <?php require_once($abs_us_root.$us_url_root."users/views/_form_existing_views.php");?>
+      <?php require_once($abs_us_root.$us_url_root."usersc/plugins/forms/files/_form_existing_views.php");?>
     </div> <!-- /.col -->
   </div> <!-- /.row -->

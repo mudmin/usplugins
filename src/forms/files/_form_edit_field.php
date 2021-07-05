@@ -7,9 +7,12 @@
 	if($fieldC > 0){
 		$f = $fieldQ->first();
 	}else{
-		Redirect::to($us_url_root."admin.php?view=_admin_forms_edit&edit=".$edit."&err=Field+not+found.");
-	} ?>
-	<form autocomplete="off" class="" name="createForm" action="admin.php?view=_admin_forms_edit&edit=<?=$edit?>" method="post">
+		Redirect::to($us_url_root."admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=".$edit."&err=Field+not+found.");
+	}
+	if($f->field_type == "dropdown" || $f->field_type == "radio" || $f->field_type == "checkbox"){ ?>
+		<a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>&field=<?=$field?>&editOpts=<?=$field?>" class="btn btn-primary">Click here to edit your <?=$f->field_type?> options</a>
+	<?php } ?>
+	<form autocomplete="off" class="" name="createForm" action="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">
 		<div class="form-group">
 			<label for="">Label when displaying forms</label>
@@ -44,33 +47,7 @@
 			<label for="">Raw HTML inside input tag</label>
 			<textarea class="form-control"  name="input_html" rows="4" cols="120"><?=$f->input_html?></textarea>
 		</div>
-		<?php require_once($abs_us_root.$us_url_root."users/views/_form_validation_options.php");?>
-		<?php
-		if($f->field_type == 'dropdown' || $f->field_type == 'radio' || $f->field_type == 'checkbox'){
-			$current = json_decode($f->select_opts);
-			?>
-			<table class="table" id="opts">
-
-				<thead>
-					<tr>
-						<th>DB Value</th>
-						<th>Visible Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><a  id="add">+ Add Another Option</a></td>
-					</tr>
-					<?php foreach($current as $k=>$v){ ?>
-						<tr>
-							<td><input type="text" name="key[]" value="<?=$k?>"></td>
-							<td><input type="text" name="val[]" value="<?=$v?>"></td>
-						</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		<?php } ?>
-
+		<?php require_once($abs_us_root.$us_url_root."usersc/plugins/forms/files/_form_validation_options.php");?>
 		<input type="submit" name="edit_this_field" value="Save Field Settings" class="btn btn-primary">
 	</form>
 	<div class="form-group">

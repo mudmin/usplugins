@@ -21,28 +21,15 @@
       <option value="tinyint">1 digit number</option>
     </select>
   </div>
-  <table class="table" id="opts">
-    <thead>
-      <tr>
-        <th>DB Value</th>
-        <th>Visible Value</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a  id="add">+ Add Another Option</a></td>
-      </tr>
-      <tr>
-        <td><input type="text" name="key[]" value=""></td>
-        <td><input type="text" name="val[]" value=""></td>
-      </tr>
-      <tr>
-        <td><input type="text" name="key[]" value=""></td>
-        <td><input type="text" name="val[]" value=""></td>
-      </tr>
 
-    </tbody>
-  </table>
+  <div class="form-group" id="opts" style="display:none;">
+    <label for="">How do you want to create <span id="fieldType"></span> options the options for this field?</label>
+    <select class="form-control" name="optStyle">
+      <option value="" disabled selected="selected">--Select Style--</option>
+      <option value="manually">Manually enter these values</option>
+      <option value="database">Populate them from a database query</option>
+    </select>
+  </div>
 
   <div class="form-group">
     <label for="">Column name in DB</label>
@@ -86,26 +73,12 @@
 </form>
 <script>
 $(document).ready(function () {
-  // The depreciated js is commented out and will eventually be deleted
-  // toggleFields();
-  toggleOpts();// call this first so we start out with the correct visibility depending on the selected form values
-  // this will call our toggleFields function every time the selection value of our other field changes
-  // $("#col_type").change(function () {
-  //   toggleFields();
-  // });
+  toggleOpts();
 
   $("#field_type").change(function () {
     toggleOpts();
   });
-
 });
-
-// function toggleFields() {
-//   if (($("#col_type").val() === "varchar") || ($("#col_type").val() === "int"))
-//   $("#col-len").show();
-//   else
-//   $("#col-len").hide();
-// }
 
 function toggleOpts() {
   if (($("#field_type").val() === "checkbox") || ($("#field_type").val() === "dropdown") || ($("#field_type").val() === "radio"))
@@ -113,17 +86,4 @@ function toggleOpts() {
   else
   $("#opts").hide();
 }
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
-  console.log("ready1");
-  $("#add").click(function() {
-    console.log("clicked");
-    var markup = "<tr><td><input type='text' name='key[]' value=''></td><td><input type='text' name='val[]' value=''></td></tr>";
-    $('#opts').append(markup);
-    // $('#opts tbody>tr:last').find("input").val("").end();
-    // $('#opts tbody>tr:last .clearIt').val('');
-    return false;
-  });
-});
 </script>

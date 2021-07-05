@@ -1,7 +1,7 @@
 <?php
 function formField($o, $v = []){
-  global $abs_us_root;
-  global $us_url_root;
+  global $abs_us_root, $us_url_root;
+  $db = DB::getInstance();
   $u = 0;
   $value = "";
   if(isset($v->update)){
@@ -74,10 +74,13 @@ function formField($o, $v = []){
         <?php } //end if textarea?>
 
 
-        <?php if($o->field_type == "dropdown") { ?>
+        <?php if($o->field_type == "dropdown") {
+          $options = parseFormPluginInputOptions($o->select_opts);
+          ?>
           <select <?=html_entity_decode($o->input_html)?> name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
             <?php if($o->required == 1){echo "required";}?>>
-            <?php $options = json_decode($o->select_opts);
+            <?php
+
 
             if($u == 1){
               if($value == ''){ ?>
@@ -85,7 +88,9 @@ function formField($o, $v = []){
               <?php }else{
                 $option = get_object_vars($options);?>
 
-              <?php }}
+              <?php
+              }
+              }
               foreach($options as $k=>$v){
                 if($k == $value && $value != ''){ ?>
                   <option selected='selected' value="<?=$value?>"><?=$option[$value]?></option>
@@ -122,7 +127,7 @@ function formField($o, $v = []){
           }
 
           if($o->field_type == "checkbox"){
-            $options = json_decode($o->select_opts);
+            $options = parseFormPluginInputOptions($o->select_opts);
             if($u == 1){
               $option = json_decode($value);
               if($option == ""){$option = [];}
@@ -138,7 +143,7 @@ function formField($o, $v = []){
             } //end if checkbox
 
             if($o->field_type == "radio") {
-              $options = json_decode($o->select_opts);
+              $options = parseFormPluginInputOptions($o->select_opts);
               foreach($options as $k=>$v){
                 ?>
                 <div class="radio">
@@ -159,6 +164,7 @@ function formField($o, $v = []){
       } //end of function
 
       function displayForm($name, $opts = []){
+        global $abs_us_root,$us_url_root;
         $db = DB::getInstance();
         $formatted = formatName($name);
         $u = 0;
@@ -175,9 +181,15 @@ function formField($o, $v = []){
         }
 
         $o = $db->query("SELECT * FROM $formatted ORDER BY ord")->results();
+        if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php")){
+          include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php";
+        }
         ?>
         <form action="" method="post">
           <?php
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php";
+          }
           if(!isset($opts['token'])){ ?>
             <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
           <?php }else{ ?>
@@ -202,15 +214,22 @@ function formField($o, $v = []){
           ?>
           <input type="hidden" name="form_name" value="<?=$name?>">
           <?php
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$name.".php";
+          }
           include('form_submit_button.php');
           if(!isset($opts['noclose'])){
             echo "</form>";
+          }
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$name.".php";
           }
 
         }
 
 
         function displayView($view, $opts = []){
+          global $abs_us_root,$us_url_root;
           $db = DB::getInstance();
           $getViewQ = $db->query("SELECT * FROM us_form_views WHERE id = ?",array($view));
           $getViewC = $getViewQ->count();
@@ -235,9 +254,15 @@ function formField($o, $v = []){
               die("Form record not found. Check your id");
             }
           }
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php";
+          }
           ?>
           <form action="<?=$_SERVER['PHP_SELF'];?>" method="post">
             <?php
+            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php")){
+              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php";
+            }
             if(!isset($opts['token'])){ ?>
               <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
             <?php }else{ ?>
@@ -262,9 +287,17 @@ function formField($o, $v = []){
             }
             ?>
             <input type="hidden" name="form_name" value="<?=$getView->form_name?>">
-            <?php include('form_submit_button.php'); ?>
+            <?php
+            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$name.".php")){
+              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$name.".php";
+            }
+            include('form_submit_button.php'); ?>
           </form>
+
           <?php
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$name.".php";
+          }
         }
 
         function displayTable($name,$opts = []){
@@ -389,6 +422,10 @@ function formField($o, $v = []){
           $form = $name.'_form';
           $fields = [];
 
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_form_process/".$name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_form_process/".$name.".php";
+          }
+
           $s = $db->query("SELECT * FROM $form")->results(true);
           //only deal with the fields that were actually posted
           $submitted = [];
@@ -453,6 +490,9 @@ function formField($o, $v = []){
           }
 
           if(!$errorArray==[]) {
+            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/form_validation_fail/".$name.".php")){
+              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/form_validation_fail/".$name.".php";
+            }
             ?>
             <div class="alert alert-danger">
               <?=display_errors($errorArray);?>
@@ -460,7 +500,10 @@ function formField($o, $v = []){
           }else{
             $response['validation']=true;
             if($opts != '' && isset($opts['debug'])){
-              dnd($db->errorInfo());
+              dnd($db->errorString());
+            }
+            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/form_validation_success/".$name.".php")){
+              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/form_validation_success/".$name.".php";
             }
           }
           $response['fields'] = $fields;
@@ -473,6 +516,8 @@ function formField($o, $v = []){
 
         function postProcessForm($response,$opts = []){
           global $usFormUpdate;
+          global $abs_us_root;
+          global $us_url_root;
           $db = DB::getInstance();
           if(isset($usFormUpdate)){
             $db->update($response['name'],$usFormUpdate,$response['fields']);
@@ -480,7 +525,12 @@ function formField($o, $v = []){
           }else{
             $db->insert($response['name'],$response['fields']);
           }
-          $response['errors'] = $db->errorInfo();
+          $response['errors'] = $db->errorString();
+
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_form_process/".$response['name'].".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_form_process/".$response['name'].".php";
+          }
+
           return $response;
         }
 
@@ -523,9 +573,9 @@ function formField($o, $v = []){
             $db->query("CREATE TABLE IF NOT EXISTS $form ( $columns2 )");
             $db->insert('us_forms',['form'=>$name]);
             $id = $db->lastId();
-            Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_edit&edit='.$id.'&err=Form+created!');
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$id.'&err=Form+created!');
           }else{ //failed name check
-            Redirect::to($us_url_root.'users/admin.php?view=_admin_forms&err='.$check['msg']);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$check['msg']);
             exit;
           }
         }
@@ -613,9 +663,9 @@ function formField($o, $v = []){
                 exit;
               }
             }
-            Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_edit&autogen=1&edit='.$id);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&autogen=1&edit='.$id);
           }else{ //name check failed
-            Redirect::to($us_url_root.'users/admin.php?view=_admin_forms&err='.$check['msg']);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$check['msg']);
             exit;
           }
 
@@ -711,9 +761,9 @@ function formField($o, $v = []){
             foreach($copy as $c){
               $db->insert($new,$c);
             }
-            Redirect::to($us_url_root.'users/admin.php?view=_admin_forms_edit&edit='.$id.'&err=Form+duplicated!');
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$id.'&err=Form+duplicated!');
           }else{//name check failed
-            Redirect::to($us_url_root.'users/admin.php?view=_admin_forms&err='.$check['msg']);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$check['msg']);
             exit;
           }
         }
@@ -813,4 +863,41 @@ function formField($o, $v = []){
           if($opts['deleteTable'] == "YES"){
             $db->query("DROP TABLE IF EXISTS `$name`");
           }
+        }
+
+        function parseFormPluginInputOptions($options){
+          $db = DB::getInstance();
+          $options = json_decode($options);
+          //if this is set, we're grabbing opts from a db query
+          if(isset($options->usformquery)){
+            $dbOptions = new stdClass();
+            //run the raw query and loop it
+            $q = $db->query($options->usformquery)->results();
+            foreach($q as $v){
+              //since the key is stored as a string, we need to get the actual key which
+              //will be the 'value' on the form input. We need the data, not the string.
+              //This should be refactored, but it's functional.
+              $key = $options->key;
+              $key = $v->$key;
+              //create a blank string to be the form input visible value
+              $value = "";
+              foreach($options->values as $primary){
+                //visible values can be either strings or db columns.  Build the string accordingly
+                foreach($primary as $vkey=>$vvalue)
+                if($vkey == "col"){
+                  $value .= " ".$v->$vvalue;
+                }elseif($vkey == "str"){
+                  $value .= " ".$vvalue;
+                }
+                //assign this key value pair to the temporary $dbOptions variable
+                $dbOptions->$key = $value;
+              }
+            }
+            //replace the original $options variable with the db generated one
+            $options = $dbOptions;
+          }
+          if($options == ""){
+            return $options = new stdClass();
+          }
+          return $options;
         }

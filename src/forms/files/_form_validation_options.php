@@ -1,4 +1,5 @@
 <?php
+global $abs_us_root,$us_url_root;
 $valCount = 1;
 $opt = $db->query('SELECT * FROM us_form_validation')->results();?>
 <div class="form-group">
@@ -48,7 +49,7 @@ function updateValidation(evt){
   };
 
   jQuery.ajax({
-    url:"parsers/form_validation.php",
+    url:"<?=$us_url_root?>usersc/plugins/forms/files/form_validation.php",
     method:"POST",
     data:formData,
     success: updateValidationSuccess

@@ -22,7 +22,7 @@ if($previewsC > 0){
           <td><?=$v->form_name?></td>
           <td><?=$v->view_name?></td>
           <td>displayView(<?=$v->id?>);</td>
-          <td><a class="btn btn-default" href="admin.php?view=form_preview&demo=<?=$v->id?>">Preview</a></td>
+          <td><a class="btn btn-default" href="admin.php?view=plugins_config&plugin=forms&newFormView=form_preview&demo=<?=$v->id?>">Preview</a></td>
           <td>
             <form autocomplete="off" class="" action="" method="post">
               <input type="hidden" name="delete_view" value="<?=$v->id?>">

@@ -42,17 +42,17 @@ if(!empty($_POST['deleteThisForm'])){
     deleteForm($toDelete);
     $msg = "Form successfully deleted";
   }
-  Redirect::to($us_url_root.'users/admin.php?view=_admin_forms&err='.$msg);
+  Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$msg);
 }
 ?>
 <div class="row">
   <div class="col-12">
     <h2>Forms Manager
-      <a href="admin.php?view=_admin_forms" class="show-tooltip" title="Form manager home"><i class="fa fa-home"></i></a>
+      <a href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms" class="show-tooltip" title="Form manager home"><i class="fa fa-home"></i></a>
       <a href="#" data-toggle="modal" data-target="#newForm" class="show-tooltip" title="Create new form"><i class="fa fa-plus"></i></a>
       <a href="#" data-toggle="modal" data-target="#duplicate" class="show-tooltip" title="Duplicate an existing form"><i class="fa fa-clone"></i></a>
       <a href="#" data-toggle="modal" data-target="#fromDB" class="show-tooltip" title="Create form from existing db table"><i class="fa fa-tasks"></i></a>
-      <a href="admin.php?view=_admin_forms_views" class="show-tooltip" title="Manage form views"><i class="fa fa-eye"></i></a>
+      <a href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_views" class="show-tooltip" title="Manage form views"><i class="fa fa-eye"></i></a>
       <a href="#" data-toggle="modal" data-target="#deleteForm" class="show-tooltip" title="Delete a form"><i class="fa fa-times-circle"></i></a>
       <a href="#" onclick=" window.open('https://userspice.com/using-the-form-manager/','_blank')" class="show-tooltip" title="Help with forms"><i class="fa fa-question-circle"></i></a>
     </h2>

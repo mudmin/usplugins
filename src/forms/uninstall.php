@@ -25,7 +25,7 @@ $files = [
   "_form_manager_menu.php",
 ];
 foreach($files as $file){
-unlink($abs_us_root.$us_url_root.'users/views/'.$file);
+unlink($abs_us_root.$us_url_root.'usersc/plugins/forms/files/'.$file);
 }
 
 $file = "form_validation.php";
