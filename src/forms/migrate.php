@@ -27,19 +27,20 @@ if($checkC > 0){
   $update = '00001';
   if(!in_array($update,$existing)){
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-  $files = [
-    "_form_create_field.php",
-    "_form_edit_field.php",
-  ];
-  foreach($files as $file){
-    if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)){
-      unlink($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file);
-    }
-  if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)) {
-      echo "failed to copy $file...\n";
-  		$cpyfail=1;
-  }
-}
+//   $files = [
+//     "_form_create_field.php",
+//     "_form_edit_field.php",
+//   ];
+//   foreach($files as $file){
+//     if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)){
+//       unlink($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file);
+//     }
+//   if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)) {
+//       echo "failed to copy $file...\n";
+//   		$cpyfail=1;
+//   }
+// }
+//DEPRECATED
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
@@ -49,19 +50,20 @@ if($checkC > 0){
   if(!in_array($update,$existing)){
   //repeating this becaus 00001 was originally broken.
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-  $files = [
-    "_form_create_field.php",
-    "_form_edit_field.php",
-  ];
-  foreach($files as $file){
-    if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)){
-      unlink($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file);
-    }
-  if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)) {
-      echo "failed to copy $file...\n";
-      $cpyfail=1;
-  }
-}
+//   $files = [
+//     "_form_create_field.php",
+//     "_form_edit_field.php",
+//   ];
+//   foreach($files as $file){
+//     if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)){
+//       unlink($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file);
+//     }
+//   if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)) {
+//       echo "failed to copy $file...\n";
+//       $cpyfail=1;
+//   }
+// }
+//DEPRECATED
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
