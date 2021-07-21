@@ -60,3 +60,4 @@ if($action == "content"){
 $(document).ready(function () {
    $('#paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
   });
+</script>
