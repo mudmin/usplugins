@@ -11,25 +11,6 @@ $plugin_name = strtolower($plugin_name);//you're welcome
 //you will probably be doing more than removing the item from the db
 // unlink($abs_us_root.$us_url_root.'users/message.php');
 
-$files = [
-  "_admin_forms_edit.php",
-  "_admin_forms_preview.php",
-  "_admin_forms_views.php",
-  "_admin_forms.php",
-  "_form_create_field.php",
-  "_form_validation_options.php",
-  "_form_edit_delete_reorder.php",
-  "_form_edit_field.php",
-  "_form_existing_forms.php",
-  "_form_existing_views.php",
-  "_form_manager_menu.php",
-];
-foreach($files as $file){
-unlink($abs_us_root.$us_url_root.'usersc/plugins/forms/files/'.$file);
-}
-
-$file = "form_validation.php";
-unlink($abs_us_root.$us_url_root.'users/parsers/'.$file);
 
 // $db->update("settings",1,['forms'=>0]);
 $db->query("DELETE FROM us_plugins WHERE plugin = ?",array($plugin_name));

@@ -9,30 +9,30 @@ include "plugin_info.php";
 // $db->update("settings",1,['forms'=>1]);
 
 $cpyfail = 0;
-
-$files = [
-  "_admin_forms_edit.php",
-  "_admin_forms_preview.php",
-  "_admin_forms_views.php",
-  "_admin_forms.php",
-  "_form_create_field.php",
-  "_form_validation_options.php",
-  "_form_edit_delete_reorder.php",
-  "_form_edit_field.php",
-  "_form_existing_forms.php",
-  "_form_existing_views.php",
-  "_form_manager_menu.php",
-];
-foreach($files as $file){
-  if(file_exists($abs_us_root.$us_url_root."users/views/".$file)){
-    unlink($abs_us_root.$us_url_root."users/views/".$file);
-  }
-}
-
-$file = "form_validation.php";
-if(file_exists($abs_us_root.$us_url_root."users/parsers/".$file)){
-  unlink($abs_us_root.$us_url_root."users/parsers/".$file);
-}
+// 
+// $files = [
+//   "_admin_forms_edit.php",
+//   "_admin_forms_preview.php",
+//   "_admin_forms_views.php",
+//   "_admin_forms.php",
+//   "_form_create_field.php",
+//   "_form_validation_options.php",
+//   "_form_edit_delete_reorder.php",
+//   "_form_edit_field.php",
+//   "_form_existing_forms.php",
+//   "_form_existing_views.php",
+//   "_form_manager_menu.php",
+// ];
+// foreach($files as $file){
+//   if(file_exists($abs_us_root.$us_url_root."users/views/".$file)){
+//     unlink($abs_us_root.$us_url_root."users/views/".$file);
+//   }
+// }
+//
+// $file = "form_validation.php";
+// if(file_exists($abs_us_root.$us_url_root."users/parsers/".$file)){
+//   unlink($abs_us_root.$us_url_root."users/parsers/".$file);
+// }
 
 //all actions should be performed here.
 $checkQ = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name));
