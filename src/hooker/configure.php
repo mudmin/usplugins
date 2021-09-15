@@ -109,7 +109,7 @@ if(!empty($_POST['deleteHook'])){
     <div class="row">
       <div class="col-12">
         <?php
-        $existing = $db->query("SELECT * FROM us_plugin_hooks",['hooker'])->results();
+        $existing = $db->query("SELECT * FROM us_plugin_hooks WHERE folder = ?",['hooker'])->results();
         ?>
         <table class="table table striped">
           <thead>
