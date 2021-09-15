@@ -8,9 +8,12 @@ if(!function_exists('displayBadges')){
     $c = $q->count();
     if($c > 0){
       $badges = $q->results();
+      $badgeids = implode("', '", array_column($badges, 'badge_id'));
+      $q_badges = $db->query("SELECT * FROM plg_badges WHERE id = ('".$badgeids."')");
+      $badges = $q_badges->results();
       foreach($badges as $b){
-        if(file_exists($abs_us_root.$us_url_root."usersc/plugins/badges/files/".$b->badge_id.".png")){ ?>
-          <img src="<?=$us_url_root."usersc/plugins/badges/files/".$b->badge_id.".png"?>" alt="" height="<?=$size?>">
+        if(file_exists($abs_us_root.$us_url_root."usersc/plugins/badges/files/".$b->id.".png")){ ?>
+          <img src="<?=$us_url_root."usersc/plugins/badges/files/".$b->id.".png"?>" title="<?=$b->badge?>" alt="<?=$b->badge?>" height="<?=$size?>">
         <?php }
       }
     }
