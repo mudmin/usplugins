@@ -1,7 +1,7 @@
 <?php
 //For security purposes, it is MANDATORY that this page be wrapped in the following
 //if statement. This prevents remote execution of this code.
-require_once("../users/init.php");
+require_once("../../../users/init.php");
 	if (in_array($user->data()->id, $master_account)){
 //all actions should be performed here.
 
