@@ -22,7 +22,7 @@ foreach($sites as $s){
   $sendNotif = false;
   $remoteFile = $s->url;
   $diag = Input::get('diag');
-  if($diag == "true"){
+  if($diag == "true" || $upset->debug == 1){
     logger(1,"Uptime","Attempting ".$s->url);
   }
 

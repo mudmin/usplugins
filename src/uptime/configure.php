@@ -86,6 +86,10 @@ if(!Token::check($token)){
 
   if(!empty($_POST['saveSettings'])){
     $n = Input::get('notify_every');
+    $d = Input::get('debug');
+    if(is_numeric($d)){
+      $db->update('plg_uptime_settings',1,['debug'=>$d]);
+    }
     if(is_numeric($n) && $n >= 1){
       $db->update('plg_uptime_settings',1,['notify_every'=>$n]);
       Redirect::to("admin.php?view=plugins_config&plugin=uptime&err=Saved!");
@@ -124,9 +128,8 @@ if(!Token::check($token)){
         <div class="col-12 col-sm-6">
           <input type="hidden" name="csrf" value="<?=Token::generate();?>">
           Re-send notification if site stays offline for
-              <input type="number" name="notify_every" value="<?=$upset->notify_every?>" step="1" min="1" style="width: 4em" required> minutes.
-
-          <input type="submit" name="saveSettings" value="Save Setting" class="btn btn-primary">
+              <input type="number" name="notify_every" value="<?=$upset->notify_every?>" step="1" min="1" style="width: 4em" required> minutes.   Debug Mode(0/1): <input type="number" name="debug" value="<?=$upset->debug?>" min="0" max="1" style="width: 4em" required>
+          <input type="submit" name="saveSettings" value="Save Settings" class="btn btn-primary">
           </form>
         </div>
         <div class="col-12 col-sm-2">
@@ -206,7 +209,7 @@ if(!Token::check($token)){
           </thead>
           <tbody>
             <?php $n = $db->query("SELECT * FROM plg_uptime_notifications WHERE disabled = 0")->results();
-            
+
             foreach($n as $e){ ?>
               <tr>
                 <td><?=ucfirst($e->method);?></td>
