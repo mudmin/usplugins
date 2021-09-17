@@ -25,7 +25,9 @@ if(!function_exists('quickCrud')) {
         <thead class="<?=$opts['thead']?>">
           <tr>
 
-            <?php foreach($opts['keys'] as $k){?>
+            <?php foreach($opts['keys'] as $k){
+              if(isset($opts['noid']) && $k == "id"){ continue; };
+              ?>
               <th><?php echo $k;?></th>
             <?php } ?>
             <?php if(!isset($opts['nodupe'])){?>
@@ -42,7 +44,10 @@ if(!function_exists('quickCrud')) {
             $row = $r;
             ?>
             <tr>
-              <?php foreach($r as $k=>$v){ ?>
+              <?php foreach($r as $k=>$v){
+                if(isset($opts['noid']) && $k == "id"){ continue; };
+              ?>
+
                 <td
                  data-key="<?=$k?>" data-row="<?=$id?>" data-method="update"
                 <?php if($k == "id"){echo "class='uneditable'";}?>
