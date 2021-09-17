@@ -31,7 +31,7 @@ if(!Token::check($token)){
         You can pass a third parameter ($opts) with these options.<br>
         <code>
           $opts = [<br>
-            'noid'=>1, //hides the id column from the table
+            'noid'=>1, //hides the id column from the table<br>
             'nodupe'=>1, //hides duplicate button<br>
             'nodel'=>1, //hides delete button<br>
             'class'=>"classname", //optional class for entire table<br>
