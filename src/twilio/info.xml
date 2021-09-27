@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>May 26,2021</release>
+  <release>September 27,2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.1</tested>
+  <tested>5.3.6</tested>
 
 <!-- What does your plugin do? -->
   <description>The Twilio plugin allows you to send SMS text messages pretty much anywhere in the world with minimal configuration and great documentation. Beyond that, it gives you access to the entire Twilio suite of services. </description>

@@ -65,7 +65,7 @@
   <h4>Documentation</h4>
   <p>
     Twilio is super easy to setup. No credit card required. Free trial and you get enough free credit to buy a phone number and send a bunch of messages.
-    <a href="www.twilio.com/referral/pnDYsm" class="blue" target="_blank">If you use my link, we each get an extra $10. </a>
+    <a href="https://www.twilio.com/referral/pnDYsm" class="blue" target="_blank">If you use my link, we each get an extra $10. </a>
   </p>
 
   <h5>Configuration</h5>
