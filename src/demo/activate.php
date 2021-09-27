@@ -1,5 +1,9 @@
 <?php
 require_once("init.php");
+//Note that as of UserSpice 5.3.6, this file is no longer necessary.
+//It is called immediately after install.php on plugin activation.
+//If you would like to maintain compatibility with older versions of userspice,
+//you can simply include this boilerplate content as is.
 
 //For security purposes, it is MANDATORY that this page be wrapped in the following
 //if statement. This prevents remote execution of this code.
