@@ -79,3 +79,17 @@ if(!function_exists("manageBadge")){
     }
   }
 }
+
+if(!function_exists('countBadges')){
+  function countBadges($user_id){
+    $db = DB::getInstance();
+
+    $q = $db->query("SELECT * FROM plg_badges_match WHERE user_id = ?",[$user_id]);
+    $c = $q->count();
+    $return = 0;
+    if($c > 0){
+      $return = $c;
+    }
+    return $return;
+  }
+}
