@@ -93,3 +93,16 @@ if(!function_exists('countBadges')){
     return $return;
   }
 }
+
+if(!function_exists("hasBadge")){
+  function hasBadge($user_id,$badge){
+    $db = DB::getInstance();
+
+    $c = $db->query("SELECT id FROM plg_badges_match WHERE user_id = ? AND badge_id = ?",[$user_id,$badge])->count();
+    if($c > 0){
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
