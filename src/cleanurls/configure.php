@@ -49,6 +49,7 @@ if(!Token::check($token)){
               <xmp>
                 <IfModule mod_rewrite.c>
                  RewriteEngine On
+                 Rewritecond %{REQUEST_FILENAME} !/parsers
                  RewriteCond %{REQUEST_FILENAME} !-d
                  RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
                  RewriteRule ^ /%1 [NC,L,R]
