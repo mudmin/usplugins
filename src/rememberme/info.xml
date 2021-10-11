@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Remember Me Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>October 11,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3.6</tested>
+
+<!-- What does your plugin do? -->
+  <description>This plugin restores the Remember Me checkbox and feature that was removed in UserSpice 5.1 that everyone all of a sudden is complaining about.  Here. Have your checkbox. Don't get cookie jacked :) </description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Remember Me</button>
+</plugin>
