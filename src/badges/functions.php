@@ -79,3 +79,30 @@ if(!function_exists("manageBadge")){
     }
   }
 }
+
+if(!function_exists('countBadges')){
+  function countBadges($user_id){
+    $db = DB::getInstance();
+
+    $q = $db->query("SELECT * FROM plg_badges_match WHERE user_id = ?",[$user_id]);
+    $c = $q->count();
+    $return = 0;
+    if($c > 0){
+      $return = $c;
+    }
+    return $return;
+  }
+}
+
+if(!function_exists("hasBadge")){
+  function hasBadge($user_id,$badge){
+    $db = DB::getInstance();
+
+    $c = $db->query("SELECT id FROM plg_badges_match WHERE user_id = ? AND badge_id = ?",[$user_id,$badge])->count();
+    if($c > 0){
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
