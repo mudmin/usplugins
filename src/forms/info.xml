@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.0.3</version>
+  <version>2.0.4</version>
 
 <!-- release date of THIS version -->
-  <release>August 6, 2021</release>
+  <release>October 11, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.4</tested>
+  <tested>5.3.6</tested>
 
 <!-- What does your plugin do? -->
   <description>OFFICIAL US5 Form Builder. A simple form builder for UserSpice with validation and some decent flexibility.  It also integrates with other plugins to help you develop with minimal code. </description>

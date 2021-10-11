@@ -258,7 +258,7 @@ function formField($o, $v = []){
             include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php";
           }
           ?>
-          <form action="<?=$_SERVER['PHP_SELF'];?>" method="post">
+          <form action="" method="post">
             <?php
             if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php")){
               include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php";

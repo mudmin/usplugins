@@ -12,7 +12,7 @@
 	if($f->field_type == "dropdown" || $f->field_type == "radio" || $f->field_type == "checkbox"){ ?>
 		<a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>&field=<?=$field?>&editOpts=<?=$field?>" class="btn btn-primary">Click here to edit your <?=$f->field_type?> options</a>
 	<?php } ?>
-	<form autocomplete="off" class="" name="createForm" action="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>" method="post">
+	<form autocomplete="off" class="" name="createForm" action="" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">
 		<div class="form-group">
 			<label for="">Label when displaying forms</label>
