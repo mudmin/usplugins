@@ -20,6 +20,10 @@ if($checkC > 0){
   $existing = json_decode($check->updates);
   }
 
+
+
+
+
   //list your updates here from oldest at the top to newest at the bottom.
   //Give your update a unique update number/code.
 
@@ -27,57 +31,37 @@ if($checkC > 0){
   $update = '00001';
   if(!in_array($update,$existing)){
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-//   $files = [
-//     "_form_create_field.php",
-//     "_form_edit_field.php",
-//   ];
-//   foreach($files as $file){
-//     if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)){
-//       unlink($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file);
-//     }
-//   if (!copy($abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file, $abs_us_root.$us_url_root."usersc/plugins/forms/files/".$file)) {
-//       echo "failed to copy $file...\n";
-//   		$cpyfail=1;
-//   }
-// }
-//DEPRECATED
+
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
 
   $update = '00002';
   if(!in_array($update,$existing)){
-  //repeating this becaus 00001 was originally broken.
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-
-//DEPRECATED
+  $db->query("ALTER TABLE plg_api_settings ADD COLUMN spice_api tinyint(1) default '1'");
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
 
-
   $update = '00003';
   if(!in_array($update,$existing)){
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_insert tinyint(1) DEFAULT 0");
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_update tinyint(1) DEFAULT 0");
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_perms_insert varchar(255) DEFAULT '2'");
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_perms_update varchar(255) DEFAULT '2'");
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-
+  $db->query("ALTER TABLE plg_api_settings ADD COLUMN spice_user_api tinyint(1) default '1'");
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
 
   $update = '00004';
   if(!in_array($update,$existing)){
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_user_col varchar(255) DEFAULT ''");
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_force_user_col tinyint(1) DEFAULT '1'");
-
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-
+  $db->query("ALTER TABLE plg_api_settings ADD COLUMN dev_msg tinyint(1) default '0'");
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
+
+
+
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);

@@ -2,10 +2,10 @@
 // //DO NOT LEAVE THIS API commented in.  It is just for demo purposes. The only point of this API is to test wheher you can authenticate
 
 //This is the only line you need to authenticate the API call and do the basic data sanitization
-require_once "../assets/auth_and_sanitize.php";
+//require_once "../assets/auth_and_sanitize.php";
 
 //in our example, we will just return authentication data
-echo json_encode($auth);
+//echo json_encode($auth);
 //
 // //An example call would be
 // // {"key":"SOQ6T-SI9GT-K15D4-6DD77-B7A69"}

@@ -254,14 +254,14 @@ function formField($o, $v = []){
               die("Form record not found. Check your id");
             }
           }
-          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php")){
-            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$name.".php";
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$getView->form_name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/above_form/".$getView->form_name.".php";
           }
           ?>
           <form action="" method="post">
             <?php
-            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php")){
-              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$name.".php";
+            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$getView->form_name.".php")){
+              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_first_input/".$getView->form_name.".php";
             }
             if(!isset($opts['token'])){ ?>
               <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
@@ -288,15 +288,15 @@ function formField($o, $v = []){
             ?>
             <input type="hidden" name="form_name" value="<?=$getView->form_name?>">
             <?php
-            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$name.".php")){
-              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$name.".php";
+            if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$getView->form_name.".php")){
+              include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$getView->form_name.".php";
             }
             include('form_submit_button.php'); ?>
           </form>
 
           <?php
-          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$name.".php")){
-            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$name.".php";
+          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$getView->form_name.".php")){
+            include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/below_form/".$getView->form_name.".php";
           }
         }
 
@@ -388,7 +388,7 @@ function formField($o, $v = []){
           }
           $form = $name.'_form';
           $s = $db->query("SELECT * FROM $form WHERE id = ? ORDER BY ord LIMIT 1",array($row))->results();
-          dnd($s);
+
           $order=[];
           $newOrder = [];
           foreach($s as $key=>$value){
@@ -410,26 +410,42 @@ function formField($o, $v = []){
             'validation'=>false,
             'token'=>false,
           );
-          $token = $_POST['csrf'];
-          if(!Token::check($token)){
+          if(isset($opts['apiEndpoint']) && isset($opts['apiData'])){
+            $formData = $opts['apiData'];
+            $formData['csrf'] = "";
+          }else{
+            $formData = $_POST;
+          }
+
+          $token = $formData['csrf'];
+          if(!Token::check($token) && !isset($opts['apiEndpoint']) ){
             require_once $abs_us_root.$us_url_root.'usersc/scripts/token_error.php';
           }else{
             $response['token'] = true;
           }
           $validation = new Validate();
           $db = DB::getInstance();
-          $name = Input::get('form_name');
+          $name = Input::sanitize($formData['form_name']);
           $form = $name.'_form';
           $fields = [];
+
 
           if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_form_process/".$name.".php")){
             include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/before_form_process/".$name.".php";
           }
-
+          $errors = [];
+          $successes = [];
+          $errorArray = [];
           $s = $db->query("SELECT * FROM $form")->results(true);
+          foreach($s as $r){
+            if($r['required'] == 1 && !isset($formData[$r['col']])){
+              $errorArray[] = $r['table_descrip']." ".lang("GEN_REQ");
+            }
+          }
+
           //only deal with the fields that were actually posted
           $submitted = [];
-          foreach($_POST as $k=>$v){
+          foreach($formData as $k=>$v){
             foreach($s as $t){
               if(array_search($k,$t)){
                 $submitted[]= $t;
@@ -437,31 +453,30 @@ function formField($o, $v = []){
             }
           }
 
-          $errors = [];
-          $successes = [];
           //check for posted arrays
-          foreach($_POST as $k=>$v){
+          foreach($formData as $k=>$v){
             foreach($submitted as $t)
             if(is_array($k)){
             }
           }
-          $errorArray = [];
+
           foreach($submitted as $c){
+            $col = $c['col'];
             $val = [];
             if($c['field_type'] == "checkbox"){
-              if(! isset($_POST[$c['col']])){
+              if(! isset($formData[$c['col']])){
                 $data = [];
               }else{
-                $data = filter_var_array($_POST[$c['col']],FILTER_SANITIZE_ENCODED);
+                $data = filter_var_array($formData[$c['col']],FILTER_SANITIZE_ENCODED);
               }
               $data = json_encode($data);
               $fields[$c['col']] = $data;
             }elseif($c['field_type'] == "passwordE"){
-              $fields[$c['col']] = password_hash(Input::get($c['col']), PASSWORD_BCRYPT, array('cost' => 12));
+              $fields[$c['col']] = password_hash(Input::sanitize($formData[$col]), PASSWORD_BCRYPT, array('cost' => 12));
             }elseif($c['field_type'] == "timestamp"){
               continue;
             }else{
-              $fields[$c['col']] = Input::get($c['col']);
+              $fields[$c['col']] = Input::sanitize($formData[$col]);
               //dnd($c);
               //dnd($_POST);
               if($c['validation'] != "" && $c['validation'] != '[]'){
@@ -472,7 +487,7 @@ function formField($o, $v = []){
                 foreach($val as $key => $value){
                   $process[$key] = $value;
                 }
-                $validation->check($_POST,array(
+                $validation->check($formData,array(
                   $c['col'] => $process
                 ));
                 if($validation->passed()) {
@@ -493,11 +508,9 @@ function formField($o, $v = []){
             if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/form_validation_fail/".$name.".php")){
               include $abs_us_root.$us_url_root."usersc/plugins/forms/hooks/form_validation_fail/".$name.".php";
             }
-            ?>
-            <div class="alert alert-danger">
-              <?=display_errors($errorArray);?>
-            </div><?php
+            display_errors($errorArray);
           }else{
+
             $response['validation']=true;
             if($opts != '' && isset($opts['debug'])){
               dnd($db->errorString());
@@ -511,6 +524,7 @@ function formField($o, $v = []){
           if($response['validation'] == true && $response['token'] == true){
             $response['form_valid'] = true;
           }
+          $response['errors'] = $errorArray;
           return $response;
         }
 
@@ -900,4 +914,28 @@ function formField($o, $v = []){
             return $options = new stdClass();
           }
           return $options;
+        }
+
+        if(!function_exists("permInput")){
+          function permInput($input,$required=true){
+            if(!is_array($input)){
+              return false;
+            }
+            //if required, there needs to be at least 1 perm
+            if(count($input) < 1 && $required){
+              return false;
+            }
+            foreach($input as $i){
+              if(!is_numeric($i)){
+                //if anything other than a number is passed, fail the whole dang thing
+                return false;
+              }
+            }
+
+            if(count($input) < 1){
+              return "";
+            }else{
+              return implode(',', $input);
+            }
+          }
         }

@@ -54,6 +54,39 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
         </span>
       </div>
 
+      <div class="form-group">
+        <label for="site_offline">UserSpice API Offline <a href="#!" tabindex="-1" title="Note" data-trigger="focus" class="nounderline" data-toggle="popover" data-content="Enables the official UserSpice generic API. Requires the API to not be offline and the API mode must be 4 or 5."><i class="fa fa-question-circle"></i></a></label>
+        <span style="float:right;">
+          <label class="switch switch-text switch-success">
+            <input id="spice_api" type="checkbox" class="switch-input toggleapi" data-desc="UserSpice API" <?php if($apisettings->spice_api==1) echo 'checked="true"'; ?>>
+            <span data-on="Yes" data-off="No" class="switch-label"></span>
+            <span class="switch-handle"></span>
+          </label>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="site_offline">Hide API devMessage <a href="#!" tabindex="-1" title="Note" data-trigger="focus" class="nounderline" data-toggle="popover" data-content="These developer messages give you extra information on the success and failure of your API calls, but you may want to turn them off."><i class="fa fa-question-circle"></i></a></label>
+        <span style="float:right;">
+          <label class="switch switch-text switch-success">
+            <input id="dev_msg" type="checkbox" class="switch-input toggleapi" data-desc="Hide Developer Messages" <?php if($apisettings->dev_msg==1) echo 'checked="true"'; ?>>
+            <span data-on="Yes" data-off="No" class="switch-label"></span>
+            <span class="switch-handle"></span>
+          </label>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="site_offline">UserSpice API Generic User Update Offline <a href="#!" tabindex="-1" title="Note" data-trigger="focus" class="nounderline" data-toggle="popover" data-content="This addon to the UserSpice API allows you to update any column in the users table that has not been blacklisted.  Even with this feature off, you can still update core columns like username and password."><i class="fa fa-question-circle"></i></a></label>
+        <span style="float:right;">
+          <label class="switch switch-text switch-success">
+            <input id="spice_user_api" type="checkbox" class="switch-input toggleapi" data-desc="UserSpice User API" <?php if($apisettings->spice_user_api==1) echo 'checked="true"'; ?>>
+            <span data-on="Yes" data-off="No" class="switch-label"></span>
+            <span class="switch-handle"></span>
+          </label>
+        </span>
+      </div>
+
       <!-- Force SSL -->
       <div class="form-group">
         <label for="force_ssl">Force HTTPS<a href="#!" tabindex="-1" title="Note" data-trigger="focus" class="nounderline" data-toggle="popover" data-content="Because you are passing keys, you generally want to use https. Not that even with this setting enabled, you can make http calls from the server to itself."><i class="fa fa-question-circle"></i></a></label>
@@ -97,7 +130,11 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
       <br>
 
       <strong>Mode 5:</strong> Each user has their own API key and that key is locked to an IP or hostname.
-      <br>
+      <br><br>
+      <p>You can find the documentation for the generic UserSpice API <a href="https://docs.google.com/document/d/1qqNlqR1dkcbDUqG39nBAE__1ot_rDgvm6DFwW3IjKfA/edit?usp=sharing">here</a>.
+      </p>
+      
+      <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
 
     </div>
   </div>
@@ -148,6 +185,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
         <br><strong>Please Note:</strong> Users will still need to setup their IP/Hostname on their account.php page to access the API if IP verification is turned on.
       </form>
     </div>
+
   </div>
 
   <script type="text/javascript">
