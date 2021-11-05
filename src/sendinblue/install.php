@@ -36,6 +36,8 @@ $db->query("CREATE TABLE `plg_sendinblue` (
   `key` varchar(255),
 	`override` tinyint(1) default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+$db->query("ALTER TABLE `plg_sendinblue`	ADD PRIMARY KEY (`id`)");
+$db->query("ALTER TABLE `plg_sendinblue` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT");
 
 $db->query("ALTER TABLE plg_sendinblue ADD COLUMN from_name varchar(255)");
 $check = $db->query("SELECT * FROM plg_sendinblue")->count();
