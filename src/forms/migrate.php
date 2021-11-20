@@ -45,7 +45,6 @@ if($checkC > 0){
   $count++;
   }
 
-  //here is an example
   $update = '00002';
   if(!in_array($update,$existing)){
   //repeating this becaus 00001 was originally broken.
@@ -56,6 +55,29 @@ if($checkC > 0){
   $count++;
   }
 
+
+  $update = '00003';
+  if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE us_forms ADD COLUMN api_insert tinyint(1) DEFAULT 0");
+  $db->query("ALTER TABLE us_forms ADD COLUMN api_update tinyint(1) DEFAULT 0");
+  $db->query("ALTER TABLE us_forms ADD COLUMN api_perms_insert varchar(255) DEFAULT '2'");
+  $db->query("ALTER TABLE us_forms ADD COLUMN api_perms_update varchar(255) DEFAULT '2'");
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
+  $update = '00004';
+  if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE us_forms ADD COLUMN api_user_col varchar(255) DEFAULT ''");
+  $db->query("ALTER TABLE us_forms ADD COLUMN api_force_user_col tinyint(1) DEFAULT '1'");
+
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);

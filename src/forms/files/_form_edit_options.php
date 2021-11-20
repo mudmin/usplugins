@@ -45,9 +45,9 @@ if($fieldC > 0){
 		</ul>
 	</div>
 
-	<form autocomplete="off" class="" name="createForm" action="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>" method="post">
+	<form autocomplete="off" class="" name="createForm" action="" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">
-
+		<input type="hidden" name="editOpts" value="<?=Input::get('editOpts')?>">
 		<table class="table table-striped" id="opts">
 			Leave both columns of an option blank to make it go away.
 			<thead>
@@ -119,9 +119,9 @@ if($fieldC > 0){
 		<input type="submit" name="edit_this_field_options" value="Save Field Settings" class="btn btn-primary">
 	</form>
 <?php }else{ ?>
-	<form autocomplete="off" class="" name="createForm" action="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>" method="post">
+	<form autocomplete="off" class="" name="createForm" action="" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">
-
+		<input type="hidden" name="editOpts" value="<?=Input::get('editOpts')?>">
 		<table class="table" id="opts">
 			Leave both columns of an option blank to make it go away.
 			<thead>

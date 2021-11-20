@@ -49,7 +49,7 @@ function updateValidation(evt){
   };
 
   jQuery.ajax({
-    url:"<?=$us_url_root?>usersc/plugins/forms/files/form_validation.php",
+    url:"<?=$us_url_root?>usersc/plugins/forms/parsers/form_validation.php",
     method:"POST",
     data:formData,
     success: updateValidationSuccess

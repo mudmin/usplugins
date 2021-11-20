@@ -6,6 +6,7 @@
 include "plugin_info.php";
 pluginActive($plugin_name);
 $newFormView = Input::get('newFormView');
+
 if($newFormView  == ""){
   include "files/_admin_forms.php";
 }else{
