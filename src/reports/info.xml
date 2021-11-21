@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>May 20, 2021</release>
+  <release>November 21, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.1</tested>
+  <tested>5.3.8</tested>
 
 <!-- What does your plugin do? -->
-  <description>A plugin for generating Excel XLS reports from UserSpice database queries.</description>
+  <description>A plugin for generating Excel XLSX reports from UserSpice database queries.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Reports</button>

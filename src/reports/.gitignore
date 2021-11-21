@@ -1,0 +1,5 @@
+# removing this gitignore will most likely ruin your life
+vendor/
+/vendor/
+*.pack
+*.xlsx

@@ -15,6 +15,18 @@ class Conditional implements IComparable
     const CONDITION_CONTAINSBLANKS = 'containsBlanks';
     const CONDITION_NOTCONTAINSBLANKS = 'notContainsBlanks';
     const CONDITION_DATABAR = 'dataBar';
+    const CONDITION_NOTCONTAINSTEXT = 'notContainsText';
+
+    private const CONDITION_TYPES = [
+        self::CONDITION_CELLIS,
+        self::CONDITION_CONTAINSBLANKS,
+        self::CONDITION_CONTAINSTEXT,
+        self::CONDITION_DATABAR,
+        self::CONDITION_EXPRESSION,
+        self::CONDITION_NONE,
+        self::CONDITION_NOTCONTAINSBLANKS,
+        self::CONDITION_NOTCONTAINSTEXT,
+    ];
 
     // Operator types
     const OPERATOR_NONE = '';
@@ -100,13 +112,13 @@ class Conditional implements IComparable
     /**
      * Set Condition type.
      *
-     * @param string $pValue Condition type, see self::CONDITION_*
+     * @param string $type Condition type, see self::CONDITION_*
      *
      * @return $this
      */
-    public function setConditionType($pValue)
+    public function setConditionType($type)
     {
-        $this->conditionType = $pValue;
+        $this->conditionType = $type;
 
         return $this;
     }
@@ -124,13 +136,13 @@ class Conditional implements IComparable
     /**
      * Set Operator type.
      *
-     * @param string $pValue Conditional operator type, see self::OPERATOR_*
+     * @param string $type Conditional operator type, see self::OPERATOR_*
      *
      * @return $this
      */
-    public function setOperatorType($pValue)
+    public function setOperatorType($type)
     {
-        $this->operatorType = $pValue;
+        $this->operatorType = $type;
 
         return $this;
     }
@@ -148,13 +160,13 @@ class Conditional implements IComparable
     /**
      * Set text.
      *
-     * @param string $value
+     * @param string $text
      *
      * @return $this
      */
-    public function setText($value)
+    public function setText($text)
     {
-        $this->text = $value;
+        $this->text = $text;
 
         return $this;
     }
@@ -172,13 +184,13 @@ class Conditional implements IComparable
     /**
      * Set StopIfTrue.
      *
-     * @param bool $value
+     * @param bool $stopIfTrue
      *
      * @return $this
      */
-    public function setStopIfTrue($value)
+    public function setStopIfTrue($stopIfTrue)
     {
-        $this->stopIfTrue = $value;
+        $this->stopIfTrue = $stopIfTrue;
 
         return $this;
     }
@@ -196,16 +208,16 @@ class Conditional implements IComparable
     /**
      * Set Conditions.
      *
-     * @param bool|float|int|string|string[] $pValue Condition
+     * @param bool|float|int|string|string[] $conditions Condition
      *
      * @return $this
      */
-    public function setConditions($pValue)
+    public function setConditions($conditions)
     {
-        if (!is_array($pValue)) {
-            $pValue = [$pValue];
+        if (!is_array($conditions)) {
+            $conditions = [$conditions];
         }
-        $this->condition = $pValue;
+        $this->condition = $conditions;
 
         return $this;
     }
@@ -213,13 +225,13 @@ class Conditional implements IComparable
     /**
      * Add Condition.
      *
-     * @param string $pValue Condition
+     * @param string $condition Condition
      *
      * @return $this
      */
-    public function addCondition($pValue)
+    public function addCondition($condition)
     {
-        $this->condition[] = $pValue;
+        $this->condition[] = $condition;
 
         return $this;
     }
@@ -237,13 +249,13 @@ class Conditional implements IComparable
     /**
      * Set Style.
      *
-     * @param Style $pValue
+     * @param Style $style
      *
      * @return $this
      */
-    public function setStyle(?Style $pValue = null)
+    public function setStyle(?Style $style = null)
     {
-        $this->style = $pValue;
+        $this->style = $style;
 
         return $this;
     }
@@ -251,7 +263,7 @@ class Conditional implements IComparable
     /**
      * get DataBar.
      *
-     * @return ConditionalDataBar | null
+     * @return null|ConditionalDataBar
      */
     public function getDataBar()
     {
@@ -299,5 +311,13 @@ class Conditional implements IComparable
                 $this->$key = $value;
             }
         }
+    }
+
+    /**
+     * Verify if param is valid condition type.
+     */
+    public static function isValidConditionType(string $type): bool
+    {
+        return in_array($type, self::CONDITION_TYPES);
     }
 }
