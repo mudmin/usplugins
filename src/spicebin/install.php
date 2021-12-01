@@ -37,7 +37,7 @@ $db->query("CREATE TABLE plg_spicebin_settings(
 	tag varchar(255),
   create_page varchar(255) default 'usersc/plugins/spicebin/files/create.php',
   view_page varchar(255) default 'usersc/plugins/spicebin/files/view.php',
-  account tinyint(1) default 0
+  account tinyint(1) default 1
 )");
 logger("0","Spicebin","Installed - ".$db->errorString());
 $check = $db->query("SELECT * FROM plg_spicebin_settings")->count();
@@ -65,6 +65,7 @@ $db->query("CREATE TABLE plg_spicebin_lang(
 )");
 
 $db->query("ALTER TABLE plg_spicebin ADD COLUMN no_auto tinyint(1) default 0");
+
 $check = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name))->count();
 if($check > 0){
 	err($plugin_name.' has already been installed!');

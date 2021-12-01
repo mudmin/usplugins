@@ -58,6 +58,7 @@ include $abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_last_ten_logic
     if($pastesC > 0){ ?>
       <h2>Your <?=$pset->product_plural?></h2>
       <form class="" action="" method="post" onsubmit="return confirm('Do you really want to do this? It cannot be undone.');">
+        <input type="hidden" name="csrf" value="<?=Token::generate();?>">
         <div class="text-right" style="margin-bottom:2em;">
           <input type="submit" name="deleteSelected" value="Delete Selected" class="btn btn-danger">
         </div>

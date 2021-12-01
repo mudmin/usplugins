@@ -13,7 +13,7 @@ global $paste,$pset;
 <script src="<?=$us_url_root?>usersc/plugins/spicebin/assets/addon/edit/matchbrackets.js"></script>
 <?php
 $skip = ['clike','xml','css','htmlmixed','javascript'];
-if(isset($paste->lang) && !in_array($paste->lang,$skip)){ ?>
+if(isset($paste->lang) && !in_array($paste->lang,$skip) && $paste->lang != ""){ ?>
   <script src="<?=$us_url_root?>usersc/plugins/spicebin/assets/mode/<?=$paste->lang?>/<?=$paste->lang?>.js"></script>
 <?php } ?>
 
