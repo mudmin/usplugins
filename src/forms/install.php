@@ -8,20 +8,20 @@ if (in_array($user->data()->id, $master_account)){
 $db = DB::getInstance();
 $plugin_name = "forms"; //change this for your plugin!
 $plugin_name = strtolower($plugin_name);//you're welcome
-
+$cpyfail = 0;
 $check = $db->query("SHOW TABLES LIKE '%us_form_views%'")->count();
 if($check < 1){
 $db->query("CREATE TABLE `us_forms` (
   `id` int(11) NOT NULL,
   `form` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
 $db->query("CREATE TABLE `us_form_validation` (
   `id` int(11) NOT NULL,
   `value` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `params` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
 $db->query("INSERT INTO `us_form_validation` (`id`, `value`, `description`, `params`) VALUES
 (1, 'min', 'Minimum # of Characters', 'number'),
@@ -43,7 +43,7 @@ $db->query("CREATE TABLE `us_form_views` (
   `form_name` varchar(255) NOT NULL,
   `view_name` varchar(255) NOT NULL,
   `fields` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
 $db->query("ALTER TABLE `us_forms`
   ADD PRIMARY KEY (`id`);");
@@ -85,7 +85,7 @@ if($cpyfail == 1){
 	echo "The plugin installed but did not have permission to copy files.<br>";
 	echo "Please copy the files in the 'files' folder to the users/views directory.<br>";
 	echo "Please note that you will most likely have to remove these files manually if you uninstall the plugin.<br>";
-  die();
+
 }
 
 } //do not perform actions outside of this statement
