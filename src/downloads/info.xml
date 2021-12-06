@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>January 1, 2020</release>
+  <release>December 6, 2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.2</tested>
+  <tested>5.3.9</tested>
 
 <!-- What does your plugin do? -->
   <description>This is a plugin for offering protected digital downloads</description>
