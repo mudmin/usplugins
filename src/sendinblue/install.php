@@ -35,7 +35,7 @@ $db->query("CREATE TABLE `plg_sendinblue` (
   `reply` varchar(255),
   `key` varchar(255),
 	`override` tinyint(1) default 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 $db->query("ALTER TABLE `plg_sendinblue`	ADD PRIMARY KEY (`id`)");
 $db->query("ALTER TABLE `plg_sendinblue` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT");
 
