@@ -19,7 +19,7 @@ $db->query("CREATE TABLE `us_comments_plugin` (
   `deleted` tinyint(1) DEFAULT '0',
   `approved` tinyint(1) DEFAULT '0',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $db->query("ALTER TABLE `us_comments_plugin`
 	ADD PRIMARY KEY (`id`)");
