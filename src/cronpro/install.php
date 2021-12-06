@@ -34,7 +34,7 @@ $db->query("CREATE TABLE `plg_cronpro_single` (
 	`calldata` text,
 	`hit_time` DATETIME,
 	`complete` tinyint(1) default 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $db->query("CREATE TABLE `plg_cronpro_recurring` (
 	`id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -42,7 +42,7 @@ $db->query("CREATE TABLE `plg_cronpro_recurring` (
 	`schedule` varchar(255),
 	`calltype` varchar(255),
 	`calldata` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 //do you want to inject your plugin in the middle of core UserSpice pages?
 $hooks = [];
 

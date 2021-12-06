@@ -22,21 +22,21 @@ if($checkC > 0){
 
 
 
-
-
-  //list your updates here from oldest at the top to newest at the bottom.
-  //Give your update a unique update number/code.
-
-  //here is an example
   $update = '00001';
   if(!in_array($update,$existing)){
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+    $db->query("ALTER TABLE plg_cronpro_single CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+    $db->query("ALTER TABLE plg_cronpro_recurring CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
 
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
 
