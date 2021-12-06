@@ -2,6 +2,7 @@
 
 namespace MatrixTest\Functions;
 
+use Matrix\Div0Exception;
 use Matrix\Exception;
 use Matrix\Matrix;
 use Matrix\Functions as MatrixFunctions;
@@ -15,26 +16,10 @@ class inverseTest extends BaseTestAbstract
     /**
      * @dataProvider dataProvider
      */
-    public function testInverse($expected, $grid)
+    public function testInverseStatic($expected, $grid)
     {
         $matrix = new Matrix($grid);
         $result = MatrixFunctions::inverse($matrix);
-
-        //    Must return an object of the correct type...
-        $this->assertIsMatrixObject($result);
-        //    ... containing the correct data
-        $this->assertMatrixValues($result, count($expected), count($expected[0]), $expected);
-        // Verify that the original matrix remains unchanged
-        $this->assertOriginalMatrixIsUnchanged($grid, $matrix);
-    }
-
-    /**
-     * @dataProvider dataProviderSingle
-     */
-    public function testInverseFunction($expected, $grid)
-    {
-        $matrix = new Matrix($grid);
-        $result = inverse($matrix);
 
         //    Must return an object of the correct type...
         $this->assertIsMatrixObject($result);
@@ -129,7 +114,17 @@ class inverseTest extends BaseTestAbstract
 
     public function testInverseWithZeroDeterminant()
     {
+        // Div0Exception is an extension of Exception
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Inverse can only be calculated for a matrix with a non-zero determinant');
+
+        $matrix = new Matrix([[1, 15, 14, 4], [12, 6, 7, 9], [8, 10, 11, 5], [13, 3, 2, 16]]);
+        $result = $matrix->inverse();
+    }
+
+    public function testInverseWithZeroDeterminant2()
+    {
+        $this->expectException(Div0Exception::class);
         $this->expectExceptionMessage('Inverse can only be calculated for a matrix with a non-zero determinant');
 
         $matrix = new Matrix([[1, 15, 14, 4], [12, 6, 7, 9], [8, 10, 11, 5], [13, 3, 2, 16]]);

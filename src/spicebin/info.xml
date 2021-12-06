@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>SpiceBin Plugin</name>
+  <author>Dan Hoover and Marc J (mjaj72)</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.1</version>
+
+<!-- release date of THIS version -->
+  <release>December 1,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3.8</tested>
+
+<!-- What does your plugin do? -->
+  <description>SpiceBin is a Pastebin-style tool for UserSpice that allows public and private pastes as well as special non-public link sharing. Includes code-formatting for 120+ coding languages and 65 code styling themes.
+
+  Special thanks to Marc J (mjaj72) for all the work on the initial code formatting. </description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>SpiceBin</button>
+</plugin>
