@@ -5,7 +5,6 @@ include "plugin_info.php";
 
 if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,true)){
 //all actions should be performed here.
-echo "<br><br><br><br><br>";
 //check which updates have been installed
 $count = 0;
 $db = DB::getInstance();
