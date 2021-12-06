@@ -34,7 +34,7 @@ $db->query("CREATE TABLE `plg_refer_settings` (
   `only_refer` tinyint(1) DEFAULT 0,
   `show_acct` tinyint(1) DEFAULT 1,
 	`allow_un` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 
 $db->query("ALTER TABLE users ADD column plg_ref varchar(255)");
