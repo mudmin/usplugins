@@ -141,75 +141,66 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/stripe/assets/stripe-php/
 
     ?>
     <div class="row">
-      <div class="col-xs-3"></div>
-      <div class="col-xs-6">
-        <h1>This is an EXAMPLE Form</h1>
+      <div class="col-12 col-sm-4 offset-sm-4">
+        <h3>This is an EXAMPLE Form</h3>
         <strong>It's fine to use it for your project, but it's primarily designed to show you how to use Stripe and to make sure your payments are posting.</strong>
         <form action="" method="POST" id="payment-form">
           <input type="hidden" name="csrf" value="<?=$csrf?>" />
-          <span class="payment-errors"></span>
-          <div class="form-row">
-            <label>
-              <span>Amount to charge</span>
-              <input class="form-control" type = 'number' min="0.01" step="0.01" size="10" name="amount" value="" />
-            </label>
+          <span class="payment-errors">
+          <div class="form-group">
+            <label>Amount to charge</label>
+                <input class="form-control" type = 'number' min="0.01" step="0.01" size="10" name="amount" value="" />
           </div>
-          <div class="form-row">
-            <label>
-              <span>Card Number</span>
+          <div class="form-group">
+            <label>Card Number</label>
               <input class="form-control" type="text" size="20" data-stripe="number" value="" id="account" />
-            </label>
-          </div>
-          <label>
-            <span>Card Type</span>
+
+          <label>Card Type</label>
             <select class="form-control" name="type" id="type">
               <option value="">(Select card type)</option>
               <option value="amex">American Express</option>
               <option value="visa">Visa</option>
               <option value="mastercard">MasterCard</option>
               <option value="discover">Discover</option>
-            </select></label>
-
-            <div class="form-row">
+            </select>
+            </div>
+            <div class="form-group">
               <label>
-                <span>Expiration Month(MM)</span>
+                Expiration Month(MM)
                 <input class="form-control"type="text" size="2" data-stripe="exp-month" id="expMonth" value="" />
               </label>
-              <span> / </span>
+               /
               <label>
-                <span>Expiration Year(YY)</span>
+                Expiration Year(YY)
                 <input class="form-control" type="text" size="2" data-stripe="exp-year" value="" id="expYear" />
               </label>
             </div>
-            <div class="form-row">
-              <label>
-                <span>Cardholder First Name</span>
+            <div class="input-group">
+              <label for="">Customer First Name</label>
+              <input type="hidden" class="form-countrol" name="" value="">
+
+              <label for="">Customer Last name Name</label>
+              <input type="hidden" class="form-countrol" name="" value="">
+            </div>
+            <div class="input-group">
                 <input class="form-control" type="text" size="50" name="firstname" value="" id="firstName"/>
-              </label>
-              <label>
-                <span>Cardholder Last Name</span>
                 <input class="form-control" type="text" size="50" name="lastname" data-stripe="name" value="" id="lastName"/>
-              </label>
             </div>
 
-            <div class="form-row">
-              <label>
-                <span><font color="red">CVC</font></span>
-                <input class="form-control" type="text" size="4" data-stripe="cvc" value="" />
-              </label>
+            <div class="form-group">
+              <label><font color="red">CVC</font></label>
+                <input class="form-control w-25" type="text" size="4" data-stripe="cvc" value="" />
             </div>
 
-            <div class="form-row">
-              <label>
-                <span>Customer Email</span>
-                <input type="text" size="50" name="email" value="" />
-              </label>
+            <div class="form-group">
+              <label>Customer Email</label>
+                <input type="text" class="form-control" name="email" value="" />
             </div>
-            <div class="form-row">
-              <label>
-                <span>Notes</span>
-                <input type="text" size="50" name="notes" value="" />
-              </label>
+            <div class="form-group">
+              <label>Notes</label>
+
+                <input type="text" class="form-control" name="notes" value="" />
+
             </div>
 
             <button type="submit">Submit Payment</button>
