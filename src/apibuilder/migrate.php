@@ -60,6 +60,18 @@ if($checkC > 0){
   $count++;
   }
 
+  //unzip on every update
+  $zip = new ZipArchive;
+  if ($zip->open($abs_us_root.$us_url_root."/usersc/plugins/apibuilder/files/api.zip") === TRUE) {
+
+    // Unzip Path
+    $zip->extractTo($abs_us_root.$us_url_root);
+    $zip->close();
+
+} else {
+    logger($user->data()->id,"APIBuilder","Failed to unzip file");
+}
+
 
 
 
