@@ -32,7 +32,7 @@ if($check > 0){
 $db->query("CREATE TABLE `plg_charts_colors` (
 	`id` int(11) NOT NULL,
 	`color` varchar(40)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 $db->query("ALTER TABLE `plg_charts_colors`
 	ADD PRIMARY KEY (`id`)");
 	$db->query("ALTER TABLE `plg_charts_colors`

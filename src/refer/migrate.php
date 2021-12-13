@@ -12,6 +12,15 @@ $db = DB::getInstance();
 //Make sure the plugin is installed and get the existing updates
 $checkQ = $db->query("SELECT id,updates FROM us_plugins WHERE plugin = ?",array($plugin_name));
 $checkC = $checkQ->count();
+if($checkC < 1){
+  $fields = array(
+    'plugin'=>$plugin_name,
+    'status'=>'installed',
+  );
+  $db->insert('us_plugins',$fields);
+  $checkQ = $db->query("SELECT id,updates FROM us_plugins WHERE plugin = ?",array($plugin_name));
+  $checkC = $checkQ->count();
+}
 if($checkC > 0){
   $check = $checkQ->first();
   if($check->updates == ''){
@@ -19,10 +28,6 @@ if($checkC > 0){
   }else{
   $existing = json_decode($check->updates);
   }
-
-
-
-
 
   //list your updates here from oldest at the top to newest at the bottom.
   //Give your update a unique update number/code.
@@ -55,7 +60,13 @@ if($checkC > 0){
   $count++;
   }
 
-
+  $update = '00004';
+  if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE plg_refer_settings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
 

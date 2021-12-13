@@ -36,7 +36,7 @@ if($check > 0){
 	 `amount` varchar(30) NOT NULL,
 	 `card_type` varchar(30) NOT NULL,
 	 `charge_id` varchar(255) NOT NULL
- ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
  $db->query("ALTER TABLE `stripe_transactions`
 	 ADD PRIMARY KEY (`id`)");

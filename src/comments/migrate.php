@@ -22,56 +22,20 @@ if($checkC > 0){
 
 
 
-
-
-  //list your updates here from oldest at the top to newest at the bottom.
-  //Give your update a unique update number/code.
-
-  //here is an example
   $update = '00001';
   if(!in_array($update,$existing)){
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
 
   $update = '00002';
   if(!in_array($update,$existing)){
-  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-  $db->query("ALTER TABLE plg_api_settings ADD COLUMN spice_api tinyint(1) default '1'");
+    $db->query("ALTER TABLE plg_charts_colors CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
-
-  $update = '00003';
-  if(!in_array($update,$existing)){
-  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-  $db->query("ALTER TABLE plg_api_settings ADD COLUMN spice_user_api tinyint(1) default '1'");
-  $existing[] = $update; //add the update you just did to the existing update array
-  $count++;
-  }
-
-  $update = '00004';
-  if(!in_array($update,$existing)){
-  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
-  $db->query("ALTER TABLE plg_api_settings ADD COLUMN dev_msg tinyint(1) default '0'");
-  $existing[] = $update; //add the update you just did to the existing update array
-  $count++;
-  }
-
-  //unzip on every update
-  $zip = new ZipArchive;
-  if ($zip->open($abs_us_root.$us_url_root."/usersc/plugins/apibuilder/files/api.zip") === TRUE) {
-
-    // Unzip Path
-    $zip->extractTo($abs_us_root.$us_url_root);
-    $zip->close();
-
-} else {
-    logger($user->data()->id,"APIBuilder","Failed to unzip file");
-}
-
 
 
 

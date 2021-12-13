@@ -240,7 +240,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
 
       $.ajax({
         type 		: 'POST',
-        url 		: '../usersc/plugins/apibuilder/assets/parser.php',
+        url 		: '../usersc/plugins/apibuilder/parsers/parser.php',
         data 		: formData,
         dataType 	: 'json',
       })
@@ -266,7 +266,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
 
       $.ajax({
         type 		: 'POST',
-        url 		: '../usersc/plugins/apibuilder/assets/parser.php',
+        url 		: '../usersc/plugins/apibuilder/parsers/parser.php',
         data 		: formData,
         dataType 	: 'json',
       })
@@ -290,7 +290,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
 
       $.ajax({
         type 		: 'POST',
-        url 		: '../usersc/plugins/apibuilder/assets/parser.php',
+        url 		: '../usersc/plugins/apibuilder/parsers/parser.php',
         data 		: formData,
         dataType 	: 'json',
       })
@@ -320,7 +320,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
 
       $.ajax({
         type 		: 'POST',
-        url 		: '../usersc/plugins/apibuilder/assets/parser.php',
+        url 		: '../usersc/plugins/apibuilder/parsers/parser.php',
         data 		: formData,
         dataType 	: 'json',
       })

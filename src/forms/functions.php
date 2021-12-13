@@ -410,12 +410,19 @@ function formField($o, $v = []){
             'validation'=>false,
             'token'=>false,
           );
+          $valData = [];
+          //v2.1.1 & later. We don't want to send sanitized data to the validator because special characters etc throw off field lengths and other validations.
+          //this feature will probably not work for API forms since they're pre-sanitized.
+          //$formData is for the db
+          //$valData is to validate -- do not ever store in the db
+
           if(isset($opts['apiEndpoint']) && isset($opts['apiData'])){
-            $formData = $opts['apiData'];
+            $formData = $valData = $opts['apiData'];
             $formData['csrf'] = "";
           }else{
-            $formData = $_POST;
+            $formData = $valData = $_POST;
           }
+
 
           $token = $formData['csrf'];
           if(!Token::check($token) && !isset($opts['apiEndpoint']) ){
@@ -442,7 +449,6 @@ function formField($o, $v = []){
               $errorArray[] = $r['table_descrip']." ".lang("GEN_REQ");
             }
           }
-
           //only deal with the fields that were actually posted
           $submitted = [];
           foreach($formData as $k=>$v){
@@ -452,7 +458,6 @@ function formField($o, $v = []){
               }
             }
           }
-
           //check for posted arrays
           foreach($formData as $k=>$v){
             foreach($submitted as $t)
@@ -461,6 +466,7 @@ function formField($o, $v = []){
           }
 
           foreach($submitted as $c){
+
             $col = $c['col'];
             $val = [];
             if($c['field_type'] == "checkbox"){
@@ -477,8 +483,7 @@ function formField($o, $v = []){
               continue;
             }else{
               $fields[$c['col']] = Input::sanitize($formData[$col]);
-              //dnd($c);
-              //dnd($_POST);
+
               if($c['validation'] != "" && $c['validation'] != '[]'){
 
                 $val = json_decode($c['validation']);
@@ -487,11 +492,12 @@ function formField($o, $v = []){
                 foreach($val as $key => $value){
                   $process[$key] = $value;
                 }
-                $validation->check($formData,array(
+
+                $validation->check($valData,array(
                   $c['col'] => $process
                 ));
                 if($validation->passed()) {
-                  // die("Passed");
+
                 }else{
                   foreach($validation->errors() as $ve){
                     $errorArray[] = $ve;

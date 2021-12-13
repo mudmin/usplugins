@@ -18,7 +18,7 @@ CREATE TABLE `plg_download_files` (
 	`location` text,
 	`meta` text,
 	`downloads` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
 $db->query("
@@ -33,7 +33,7 @@ CREATE TABLE `plg_download_links` (
 	`used` int(11) UNSIGNED DEFAULT '0',
 	`expires` DATETIME,
 	`dlcode` varchar(255)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
 $db->query("
@@ -47,7 +47,7 @@ CREATE TABLE `plg_download_logs` (
 	`user` int(11) UNSIGNED NOT NULL,
 	`ts` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	`ip` VARCHAR(255)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
 $db->query("
@@ -57,7 +57,7 @@ CREATE TABLE `plg_download_settings` (
 	`baseurl` varchar(255),
 	`parser` varchar(255),
 	`perms` varchar(255)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
 $check = $db->query("SELECT * FROM plg_download_logs")->count();

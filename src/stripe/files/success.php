@@ -71,8 +71,8 @@ if(!empty($_GET['session_id'])){
                       'fname'=>$user->data()->fname,
                       'lname'=>$user->data()->lname,
                       'email'=>$email,
-                      'amount'=>$paidAmount
-                      'card_type'=>""
+                      'amount'=>$paidAmount,
+                      'card_type'=>"",
                       'charge_id'=>$session_id,
                     );
                     // Insert transaction data into the database

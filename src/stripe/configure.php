@@ -57,7 +57,7 @@
         <table class="table table-striped table-responsive">
           <thead>
             <tr>
-              <th>User</th><th>Timestamp</th><th>Type</th><th>Name</th><th>Amount</th><th>Email</th><th>ID</th><th>Live?</th>
+              <th>User</th><th>Timestamp</th><th>Name</th><th>Amount</th><th>Email</th><th>ID</th>
             </tr>
           </thead>
           <tbody>
@@ -65,13 +65,10 @@
               <tr>
                 <td><?php echoUser($t->user);?></td>
                 <td><?=$t->timestamp?></td>
-                <td><?=$t->trans_type?></td>
                 <td><?=$t->fname?> <?=$t->lname?></td>
-                <td><?=$t->email?></td>
                 <td><?php echo money($t->amount);?></td>
+                <td><?=$t->email?></td>
                 <td><?=$t->charge_id?></td>
-                <td><?php echo bin($t->live);?></td>
-              </tr>
             <?php } ?>
           </tbody>
         </table>
