@@ -1,6 +1,9 @@
 <?php
 // For security purposes, it is MANDATORY that this page be wrapped in the following
 // if statement. This prevents remote execution of this code.
+
+
+//Please jump donw to line 27 to see the example code.
 include "plugin_info.php";
 if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,true)){
 //all actions should be performed here.
@@ -19,9 +22,6 @@ if($checkC > 0){
   }else{
   $existing = json_decode($check->updates);
   }
-
-
-
 
 
   //list your updates here from oldest at the top to newest at the bottom.
@@ -44,7 +44,7 @@ if($checkC > 0){
   $new = json_encode($existing);
   $db->update('us_plugins',$check->id,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);
   if(!$db->error()) {
-    logger($user->data()->id,"Migrations","$count migration(s) susccessfully triggered for $plugin_name");
+    logger($user->data()->id,"Migrations","$count migration(s) successfully triggered for $plugin_name");
   } else {
    	logger($user->data()->id,"USPlugins","Failed to save updates, Error: ".$db->errorString());
   }
