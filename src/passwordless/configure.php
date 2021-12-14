@@ -18,7 +18,7 @@ $pwlset = $db->query("SELECT * FROM plg_passwordless_settings")->first();
    ];
    $db->update("plg_passwordless_settings",$pwlset->id,$fields);
    sessionValMessages("","Settings updated");
-   Redirect::to("admin?view=plugins_config&plugin=passwordless");
+   Redirect::to("admin.php?view=plugins_config&plugin=passwordless");
  }
 
 ?>
@@ -31,7 +31,7 @@ $pwlset = $db->query("SELECT * FROM plg_passwordless_settings")->first();
                 <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a style="color:blue;" href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
           <p>This plugin requires some basic setup and has a few options you might want to consider.</p>
           <p>It is <b>very important</b> to this plugin that your
-            <a style="color:blue;" href="<?=$us_url_root?>users/admin?view=email">Email Settings</a> are properly configured and tested.  <br>Beyond just being able to send an email, it is very important that the Site URL setting on that page is correct as we will be using it.
+            <a style="color:blue;" href="<?=$us_url_root?>users/admin.php?view=email">Email Settings</a> are properly configured and tested.  <br>Beyond just being able to send an email, it is very important that the Site URL setting on that page is correct as we will be using it.
           </p>
           <form class="" action="" method="post">
             <input type="submit" name="save" value="Save Settings" class="btn btn-primary">
