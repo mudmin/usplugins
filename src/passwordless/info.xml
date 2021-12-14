@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Passwordless Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>0.0.1</version>
+
+<!-- release date of THIS version -->
+  <release>December 14,2021</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.3.9</tested>
+
+<!-- What does your plugin do? -->
+  <description>This is beta software.  Passwordless logins allow you to login by clicking a "magic" link sent to an email. This plugin stores these links via one way password hashes so they cannot be reproduced and they expire after a certain number of minutes.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Passwordless</button>
+</plugin>
