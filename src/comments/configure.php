@@ -70,6 +70,7 @@ if(!Token::check($token)){
 </style>
 <div class="content mt-3">
   <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
+
  		<div class="row">
  			<div class="col-sm-6">
         <div class="card no-padding">
@@ -106,24 +107,7 @@ if(!Token::check($token)){
             </form>
           </div>
         </div>
-        <div class="card no-padding">
-          <div class="card-header">
-            <h3>Instructions</h3>
-          </div>
-          <div class="card-body">
-            On any page that you want comments, simply put the tag <font color="red">commentsHere();</font>
-            Note that this should be a protected page in the database because it relies on the page id.
-            If it is not in the database, you can supply your own id, but putting
-            <font color="red">commentsHere(['id'=>3]);</font> Where 3 is the id you want to use.
-            Just make sure that id will not be used in the pages table in the database.<br><br>
-            If using on a user's profile or anything where IDs can be used, use the following:
-            <font color="red">commentsHere(['location'=>'profile', 'location_id'=>$userid]);</font>
-            Change "profile" to the name of the page, and change $userid to the unique id related
-            to where comments show.
-            <br><br>
-            The comment manager is at <a href="<?=$us_url_root?>usersc/plugins/comments/files/index.php">usersc/plugins/comments/files/index.php</a>
-          </div>
-        </div>
+
    	  </div> <!-- /.col -->
       <div class="col-sm-6">
         <div class="card no-padding">
@@ -230,6 +214,48 @@ if(!Token::check($token)){
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card no-padding">
+            <div class="card-header">
+              <h3>Instructions</h3>
+            </div>
+            <div class="card-body">
+              <p>
+                On any page that you want comments, simply put the tag <font color="red">commentsHere();</font>
+                Note that this should be a protected page in the database because it relies on the page id.
+                If it is not in the database, you can supply your own id, but putting
+                <font color="red">commentsHere(['id'=>3]);</font> Where 3 is the id you want to use.
+                Just make sure that id will not be used in the pages table in the database.
+              </p>
 
+          <p>
+            If using on a user's profile or anything where IDs can be used, use the following:
+            <font color="red">commentsHere(['location'=>'profile', 'location_id'=>$userid]);</font>
+            Change "profile" to the name of the page, and change $userid to the unique id related
+            to where comments show.
+          </p>
+
+              <p>
+                To be completely dynamic for things like complicated GET variables or clean urls, you could do something like
+                <code>
+                if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){<br>
+                  $link = "https://";<br>
+                }else{<br>
+                  $link = "http://";<br>
+                };<br>
+                $link.= $_SERVER['HTTP_HOST'];   // Append the requested resource location to the URL <br>
+                $link.= $_SERVER['REQUEST_URI'];<br>
+                $parts = explode('/', $link);<br>
+                $location = end($parts);<br>
+                $location_id       = $db->cell("hp_products.id", ["product_name_tag","=","$location"]);<br>
+                commentsHere(['location'=>$location, 'location_id'=>$location_id]);<br>
+                </code>
+              </p>
+              The comment manager is at <a href="<?=$us_url_root?>usersc/plugins/comments/files/index.php">usersc/plugins/comments/files/index.php</a>
+            </div>
+          </div>
+        </div>
+      </div>
  		</div> <!-- /.row -->
 <!-- </div>  -->
