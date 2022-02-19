@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.1.1</version>
+  <version>2.1.2</version>
 
 <!-- release date of THIS version -->
-  <release>December 6, 2021</release>
+  <release>February 19, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.9</tested>
+  <tested>5.4.1</tested>
 
 <!-- What does your plugin do? -->
   <description>OFFICIAL US5 Form Builder. A simple form builder for UserSpice with validation and some decent flexibility.  It also integrates with other plugins to help you develop with minimal code. As of Version 2.0.5, form views can be used in conjunction with the API Builder plugin to create API Endpoints.</description>

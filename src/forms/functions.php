@@ -18,8 +18,15 @@ function formField($o, $v = []){
     ?>
     <div class="form-group">
       <?php if($o->field_type != 'timestamp'){ ?>
-        <label class="<?=$o->label_class?>" for="<?=$o->col?>"><?=$o->form_descrip?>
-          <?php if($o->required == 1){echo "*";}?>
+        <label class="<?=$o->label_class?>" for="<?=$o->col?>">
+          <?php
+          if(str_starts_with($o->form_descrip,'(LANG)')) {
+            echo lang(substr($o->form_descrip, 6));
+            } else {
+                echo $o->form_descrip;
+            }
+
+        if($o->required == 1){echo "*";}?>
         </label>
       <?php }
 
@@ -95,7 +102,15 @@ function formField($o, $v = []){
                 if($k == $value && $value != ''){ ?>
                   <option selected='selected' value="<?=$value?>"><?=$option[$value]?></option>
                 <?php }else{  ?>
-                  <option value="<?=$k?>"><?=$v?></option>
+                  <option value="<?=$k?>">
+                    <?php
+                    if(str_starts_with($v,'(LANG)')) {
+                      echo lang(substr($v, 6));
+                    } else {
+                      echo $v;
+                    }
+                    ?>
+                  </option>
                 <?php }
               }
               ?>
@@ -138,7 +153,15 @@ function formField($o, $v = []){
                 if(in_array($k,$option)){ echo "checked='checked'";}} ?> name='<?=$o->col?>[]' value='<?=$k?>'
                 <?php if($o->required == 1){echo "required";}?>
                 <?=html_entity_decode($o->input_html)?>
-                ><?=$v?></label>
+                >
+                <?php
+                if(str_starts_with($v,'(LANG)')) {
+                  echo lang(substr($v, 6));
+                } else {
+                  echo $v;
+                }
+                  ?>
+              </label>
               <?php }
             } //end if checkbox
 
@@ -147,7 +170,15 @@ function formField($o, $v = []){
               foreach($options as $k=>$v){
                 ?>
                 <div class="radio">
-                  <label><input type="radio" value="<?=$k?>" <?php if($u == 1){if($value == $k){echo "checked='checked'";}} ?> <?php echo $o->input_html;?> name='<?=$o->col?>'><?=$v?></label>
+                  <label><input type="radio" value="<?=$k?>" <?php if($u == 1){if($value == $k){echo "checked='checked'";}} ?> <?php echo $o->input_html;?> name='<?=$o->col?>'>
+                    <?php
+                    if(str_starts_with($v,'(LANG)')) {
+                      echo lang(substr($v, 6));
+                    } else {
+                      echo $v;
+                    }
+                    ?>
+                  </label>
                 </div>
               <?php } //end radio
             }
@@ -314,6 +345,9 @@ function formField($o, $v = []){
           $form = $name.'_form';
           $s = $db->query("SELECT * FROM $form ORDER BY ord")->results();
           $order=[];
+          if($opts['id'] == 1){
+            $order['id'] = "id";
+          }
           $newOrder = [];
           foreach($s as $key=>$value){
             $order[$value->col] = $value->table_descrip;
@@ -332,9 +366,6 @@ function formField($o, $v = []){
           <table class='<?=$opts['class']?>'>
             <thead>
               <?php
-              if($opts['id'] == 1){?>
-                <th>ID</th>
-              <?php }
               foreach($order as $key=>$value){?>
                 <th><?=$value?></th>
               <?php } ?>
@@ -501,6 +532,10 @@ function formField($o, $v = []){
                 }else{
                   foreach($validation->errors() as $ve){
                     $errorArray[] = $ve;
+                    //requires 5.3.8 or later
+                    if(method_exists($validation,"rulesBroken")){
+                      $response['rules_broken'] = $validation->rulesBroken();
+                    }
                   }
                   if($opts != '' && isset($opts['debug'])){
                     dump($validation);
@@ -823,7 +858,7 @@ function formField($o, $v = []){
           $db = DB::getInstance();
           $msg = [];
           $msg['success'] = false;
-          if (!preg_match("#^[a-z0-9]+$#", $name)) {
+          if (!preg_match("#^[a-z0-9_-]+$#", $name)) {
             $msg['msg'] = "Sorry! You can only use lowercase letters and numbers in your form name!";
             return $msg;
             exit;
@@ -945,3 +980,9 @@ function formField($o, $v = []){
             }
           }
         }
+
+if(!function_exists("str_starts_with")){
+  function str_starts_with ( $haystack, $needle ) {
+      return strpos( $haystack , $needle ) === 0;
+  }
+}
