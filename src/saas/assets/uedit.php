@@ -246,7 +246,6 @@ if($userdetails->account_owner != $user->data()->account_owner){
     <div class="content mt-3">
       <?=resultBlock($errors,$successes);?>
       <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
-        <form class="form" id='adminUser' name='adminUser' action='' method='post'>
           <div class="row">
             <div class="col-8">
               <h3><?=$userdetails->fname?> <?=$userdetails->lname?> - <?=$userdetails->username?> <div class="btn-group"><a class='btn btn-warning' href="<?=$us_url_root?>users/account.php">Cancel</a></div></h3>
@@ -278,6 +277,7 @@ if($userdetails->account_owner != $user->data()->account_owner){
 
                     <div class="row">
                       <div class="col-12">
+                        <form class="form" id='adminUser' name='adminUser' action='' method='post'>
                         <div class="form-group">
                           <label>Username:</label>
                           <input  class='form-control' type='text' name='unx' value='<?=$userdetails->username?>' autocomplete="new-password" />
@@ -347,7 +347,7 @@ if($userdetails->account_owner != $user->data()->account_owner){
                             ?>
                             <div class="col-4">
 
-                              <input type="checkbox" name="perms[]" value="<?=$p?>" <?php if($check > 0){echo "checked";}?>><?php echoPerm($p);?>
+                              <input type="checkbox" name="perms[]" value="<?=$p?>" <?php if($check > 0){echo "checked";}?>> <?php echoPerm($p);?>
                             </div>
                               <?php
                              }

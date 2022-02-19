@@ -31,9 +31,10 @@ if(!empty($_POST['createOrg'])){
       Redirect::to('admin.php?view=plugins_config&plugin=saas&v=manage_org&o='.$o->id.'&err=Owner+could+not_be+changed');
     }
 
+    $db->update('users',Input::get('owner'),['account_owner'=>$id]);
+    }
+    Redirect::to('admin.php?view=plugins_config&plugin=saas&v=org');
   }
-  $db->update('users',Input::get('owner'),['account_owner'=>$id]);
-  Redirect::to('admin.php?view=plugins_config&plugin=saas&v=org');
 }
 
 if(!empty($_POST['deact'])){

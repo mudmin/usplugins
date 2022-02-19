@@ -12,7 +12,7 @@ if(!empty($_POST['createPlan'])){
       unset($_POST['perms'][$k]);
     }
   }
-  $pr = implode($_POST['perms'],',');
+  $pr = implode(',', $_POST['perms']);
   $fields = array(
     'level'=>Input::get('level'),
     'users'=>Input::get('users'),
@@ -50,7 +50,7 @@ $perms = $db->query("SELECT * FROM permissions WHERE id > 2")->results();
         <?php
         $count = count($perms);
         if($count == 0){echo "<br>You do not have any permission levels higher than permission 2";}
-        foreach($perms as $p){ 
+        foreach($perms as $p){
           ?>
           <div class="col-4">
             <input type="checkbox" name="perms[]" value="<?=$p->id?>" <?php if(in_array($p->id,$explode)){echo "checked";}?>><?=$p->name?>

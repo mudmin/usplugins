@@ -6,9 +6,9 @@ if(saasMgr()){ //wrap everythng in this section!
   $planInfo = saasPlanInfo($user->data()->account_owner);
   if($planInfo->used >= $planInfo->users){
     $usersLeft = false;
-    }else{
-      $usersLeft = true;
-    }
+  }else{
+    $usersLeft = true;
+  }
 
   $users = $db->query("SELECT * FROM users WHERE account_owner = ? AND id != ?",[$user->data()->account_owner,$user->data()->id])->results();
   $mgrs = [];
@@ -21,25 +21,28 @@ if(saasMgr()){ //wrap everythng in this section!
 
   // dnd($permOps);
   $validation = new Validate();
-$planInfo = saasPlanInfo($user->data()->account_owner);?>
+  $planInfo = saasPlanInfo($user->data()->account_owner);?>
 
-<h5>You have used <font color='blue'><?=number_format($planInfo->used);?></font> of your <font color='blue'><?=number_format($planInfo->users);?></font> available users. </h5>
+  <h5>You have used <font color='blue'><?=number_format($planInfo->used);?></font> of your <font color='blue'><?=number_format($planInfo->users);?></font> available users. </h5>
 
 
-<?php
-if(count($mgrs) > 0){
+  <?php
+  if(count($mgrs) > 0){
+    echo '<div class="card">';
+    echo  '<div class="card-header">Your Managers</div>';
+    echo  '<div class="card-body">';
+    foreach($mgrs as $m){
+      echouser($m)."  ";
+    }
+    echo "</div></div>";
+  }
 
-echo  "<h6>Your Managers:</h6>";
-foreach($mgrs as $m){
-  echouser($m)."  ";
-}
-}
-if($v == ''){
-  include $abs_us_root.$us_url_root.'usersc/plugins/saas/assets/uman.php';
-}
-if($v == 'manage'){
+  if($v == ''){
+    include $abs_us_root.$us_url_root.'usersc/plugins/saas/assets/uman.php';
+  }
+  if($v == 'manage'){
     include $abs_us_root.$us_url_root.'usersc/plugins/saas/assets/uedit.php';
-}
+  }
 
 
- } // Nothing below this!!!
+} // Nothing below this!!!

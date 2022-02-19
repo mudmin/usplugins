@@ -7,7 +7,7 @@ if(!empty($_POST['createPlan'])){
       unset($_POST['perms'][$k]);
     }
   }
-  $pr = implode($_POST['perms'],',');
+  $pr = implode(',', $_POST['perms']);
 
   $fields = array(
     'level'=>Input::get('level'),
