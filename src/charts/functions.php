@@ -51,6 +51,9 @@ $values = implode(', ',$values);
   	data: {
   		labels: [<?=$labels?>],
   		datasets: [{
+        <?php if($opts['type'] == "line"){ ?>
+          fill: false,
+        <?php } ?>
   			backgroundColor: [<?=$colors?>],
   			data: [<?=$values?>]
   		}]

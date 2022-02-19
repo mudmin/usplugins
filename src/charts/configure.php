@@ -44,6 +44,9 @@ foreach($colors as $k=>$v){
             </p>
             <p>Data will appear in the order it is passed to the function. Colors will also. Colors can be reset below.</p>
             <p>This is just a starter plugin and I would love to see people extend its functionality.</p>
+    
+            <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
+
           <form class="" action="" method="post"><br>
             <input type="hidden" name="csrf" value="<?=$token?>">
             <input type="submit" name="update" value="Update Colors" class="btn btn-primary btn-block">
