@@ -19,6 +19,19 @@ if(!empty($_POST)){
   if(!Token::check($token)){
     include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
+
+  if(!empty($_POST['deleteAtt'])){
+    if(is_numeric(Input::get('delCat'))){
+      $db->query("DELETE FROM plg_tickets_cats WHERE id = ?",[Input::get('delCat')]);
+      usSuccess("Category Deleted");
+    }
+
+    if(is_numeric(Input::get('delStat'))){
+      $db->query("DELETE FROM plg_tickets_status WHERE id = ?",[Input::get('delStat')]);
+      usSuccess("Status Deleted");
+    }
+  }
+
   if(!empty($_POST['saveSettings'])){
     $fields = [
       'perm'=>Input::get('perm'),
@@ -215,21 +228,23 @@ $token = Token::generate();
       <select class="form-control" name="delCat">
         <option value="" disabled selected="selected">--None--</option>
         <?php
-        $cats = $db->query("SELECT * FROM plg_tickets_status")->results();
+        $cats = $db->query("SELECT * FROM plg_tickets_cats")->results();
+
         foreach($cats as $c){ ?>
-          <option value="<?=$c->id?>"><?=$c->status?></option>
+          <option value="<?=$c->id?>"><?=$c->cat?></option>
+
         <?php }
         ?>
       </select>
 
       <br>
       Delete a Status
-      <select class="form-control" name="delCat">
+      <select class="form-control" name="delStat">
         <option value="" disabled selected="selected">--None--</option>
         <?php
-        $cats = $db->query("SELECT * FROM plg_tickets_cats")->results();
+        $cats = $db->query("SELECT * FROM plg_tickets_status")->results();
         foreach($cats as $c){ ?>
-          <option value="<?=$c->id?>"><?=$c->cat?></option>
+          <option value="<?=$c->id?>"><?=$c->status?></option>
         <?php }
         ?>
       </select>
