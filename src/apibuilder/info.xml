@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.1.1</version>
+  <version>2.1.2</version>
 
 <!-- release date of THIS version -->
-  <release>December 3, 2021</release>
+  <release>March 23, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.9</tested>
+  <tested>5.4.2</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the API Builder plugin for UserSpice. It gives you the tools you need to build secure APIs. Offers various modes of authentication from keypools to ip locking or a combination of security options.  Includes a built in generic UserSpice API to allow you to perform any action that a typical UserSpice non-admin user can do.</description>
+  <description>This is the API Builder plugin for UserSpice. It gives you the tools you need to build secure APIs. Offers various modes of authentication from keypools to ip locking or a combination of security options.  Includes a built in generic UserSpice API to allow you to perform any action that a typical UserSpice non-admin user can do. Thanks to Mr. Serikus for the response code contributions.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>API Builder</button>

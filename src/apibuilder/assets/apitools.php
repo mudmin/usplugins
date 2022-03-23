@@ -1,4 +1,9 @@
 <?php
+//You can override any function in this file by including it in the file below
+if(file_exists($abs_us_root.$us_url_root."usersc/api/includes/custom_functions.php")){
+  require_once $abs_us_root.$us_url_root."usersc/api/includes/custom_functions.php";
+}
+
 if(!function_exists("apibuilderAuth")){
   function apibuilderAuth($key){
     $lang = "en-US";
@@ -120,6 +125,13 @@ if(!function_exists("apibuilderAuth")){
   }
 }
 
+//this is just a standard password_verify, but this function can be overridden if you want to use a different type of password
+if(!function_exists("apiPasswordCheck")){
+  function apiPasswordCheck($password,$u){
+    return password_verify($password,$u->password);
+  }
+}
+
 if(!function_exists("apibuilderLogin")){
   function apibuilderLogin($username,$password){
     $db = DB::getInstance();
@@ -237,11 +249,15 @@ if(!function_exists("apibuilderLogin")){
 }
 
 
-
 if(!function_exists("apibuilderBan")){
   function apibuilderBan($ip){
+    global $banRan;
+    //prevent this function from running twice on one call
+    if(isset($banRan) && $banRan == true){
+      return true;
+    }
     $db = DB::getInstance();
-    $settings = $db->query("SELECT * FROM settings")->first();
+    $settings = $db->query("SELECT * FROM plg_api_settings")->first();
     if($ip != "127.0.0.1"){
       $q = $db->query("SELECT * FROM plg_api_fails WHERE ip = ?",[$ip]);
       $c = $q->count();
@@ -266,6 +282,7 @@ if(!function_exists("apibuilderBan")){
         }
       }
     }
+    $banRan = true;
   }
 }
 
@@ -279,14 +296,16 @@ if(!function_exists("ipCheckApi")){
   }
 }
 
-if(!function_exists("apiResponse")){
-  function apiResponse($response){
+if (!function_exists("apiResponse")) {
+  function apiResponse($response, $response_code = 200)
+  {
     global $sendDevMessage;
-    if(!$sendDevMessage){
-      if(isset($response['devMessage'])){
+    if (!$sendDevMessage) {
+      if (isset($response['devMessage'])) {
         unset($response['devMessage']);
       }
     }
+    http_response_code($response_code); //set up http response code to PHP func
     echo json_encode($response);
     die();
   }
