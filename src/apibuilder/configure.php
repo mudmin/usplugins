@@ -42,7 +42,10 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
 <div class="content mt-3">
   <div class="row">
     <div class="col-sm-5">
-      <h3 align="center">API Builder Setup</h3><br>
+      <h3 align="center">API Builder Setup
+
+        <a href="https://docs.google.com/document/d/1qqNlqR1dkcbDUqG39nBAE__1ot_rDgvm6DFwW3IjKfA/edit#heading=h.vccqr7fkuegl">(<font color="blue">Documentation</font>)</a>
+      </h3><br>
       <div class="form-group">
         <label for="site_offline">API Temp Offline <a href="#!" tabindex="-1" title="Note" data-trigger="focus" class="nounderline" data-toggle="popover" data-content="Still allows you to manage settings."><i class="fa fa-question-circle"></i></a></label>
         <span style="float:right;">
@@ -133,7 +136,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
       <br><br>
       <p>You can find the documentation for the generic UserSpice API <a href="https://docs.google.com/document/d/1qqNlqR1dkcbDUqG39nBAE__1ot_rDgvm6DFwW3IjKfA/edit?usp=sharing">here</a>.
       </p>
-      
+
       <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
 
     </div>
