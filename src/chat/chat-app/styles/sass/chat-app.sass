@@ -1,0 +1,228 @@
+// variables
+$dark-gray: #0C0C0C
+$lt-gray: #767676
+$white-text: #F2F2F2
+$scrollbg: #242424
+$scrollthumb: #767676
+$windowHeight: 65vh
+$headerHeight: 55px
+$maxBodyHeight: calc(#{$windowHeight} - #{$headerHeight})
+
+=customScroll($bg, $thumb)
+  overflow-y: auto
+  scrollbar-width: thin
+  scrollbar-color: $thumb $bg
+  &::-webkit-scrollbar
+    width: 6px
+
+  &::-webkit-scrollbar-track
+    background: $bg
+    border-radius: 3px
+    margin-left: 6px
+
+  &::-webkit-scrollbar-thumb
+    background-color: $thumb
+    border-radius: 3px
+    border: 1px solid $bg
+
+section#chatWindow
+  display: none
+  position: fixed
+  width: 800px
+  height: $windowHeight
+  left: 50px
+  top: 110px
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.3)
+  background-color: #FFF
+  z-index: auto
+  // overflow: hidden
+  &.show
+    display: block
+  .control-hidden
+    overflow: hidden
+
+  header
+    background-color: $dark-gray
+    color: $white-text
+    height: $headerHeight
+    padding: 18px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    a.close, a.grip
+      color: $lt-gray
+      font-size: 20px
+      margin-left: 12px
+      &:hover
+        color: #FFF
+    a.grip
+      padding: 0 12px
+      &:hover
+        cursor: grab !important
+      &:active
+        cursor: grabbing !important
+
+
+  .content-wrapper
+    display: grid
+    grid-template-columns: 3fr 1fr
+    height: $maxBodyHeight
+    color: $dark-gray
+
+    .msg-container
+      display: flex
+      flex-direction: column
+      max-height: $maxBodyHeight
+
+    .msg-body
+      +customScroll($scrollbg, $scrollthumb)
+      padding: 18px
+      font-size: 16px
+      flex-grow: 1
+      .msg-item
+        display: flex
+        margin-bottom: 18px
+        .icon-wrap
+          height: 40px
+          width: 40px
+          margin-right: 12px
+          flex-shrink: 0
+          img
+            object-fit: contain
+            height: 100%
+            width: 100%
+        .initial-wrap
+          @extend .icon-wrap
+          display: flex
+          justify-content: center
+          align-items: center
+          color: #FFF
+          background-color: #115293
+          font-weight: bold
+          font-size: 24px
+          line-height: 24px
+          border-radius: 50%
+          overflow: hidden
+        .initial-a, .initial-n
+          background-color: #115293
+        .initial-b, .initial-o
+          background-color: #9a0036
+        .initial-c, .initial-p
+          background-color: #d32f2f
+        .initial-d, .initial-q
+          background-color: #f57c00
+        .initial-e, .initial-r
+          background-color: #1976d2
+        .initial-f, .initial-s
+          background-color: #388e3c
+        .initial-g, .initial-t
+          background-color: #DD2C00
+        .initial-h, .initial-u
+          background-color: #B71C1C
+        .initial-i, .initial-v
+          background-color: #004d40
+        .initial-j, .initial-w
+          background-color: #3e2723
+        .initial-k, .initial-x
+          background-color: #673ab7
+        .initial-l, .initial-y
+          background-color: #263238
+        .initial-m, .initial-z
+          background-color: #000
+        .title
+          color: #666
+          font-weight: bold
+          margin: 6px 0px
+          margin-top: 2px
+          font-size: 16px
+          span
+            color: #999
+            margin-left: 12px
+        &.notice
+          display: block
+          margin-bottom: 6px
+          font-size: 10px
+          color: $lt-gray
+          text-align: center
+
+    .msg-form
+      border-top: 5px solid $dark-gray
+      a
+        color: $dark-gray
+        &:hover
+          color: lighten($dark-gray, 10%)
+      textarea
+        width: 100%
+        outline: none
+        resize: none
+        background-color: #fff
+        font-size: 14px
+        border: 1px solid transparent
+        padding: 8px 6px
+        &:focus
+          border: 1px solid $lt-gray
+      #addMsgBtn
+        background-color: $dark-gray
+        color: $white-text
+        padding: 6px 10px
+        font-size: 16px
+        &:hover
+          background-color: lighten($dark-gray, 10%)
+
+
+    .participants
+      border-left: 2px solid #BBB
+      padding: 18px
+      font-size: 12px
+      max-height: $maxBodyHeight
+      h3
+        font-weight: bold
+        text-align: center
+        font-size: 18px
+        margin-bottom: 12px
+      ul
+        +customScroll($scrollbg, $scrollthumb)
+        height: calc(#{$windowHeight} - 120px)
+        li
+          margin-bottom: 5px
+          &:before
+            font-family: sans-serif
+            content: "\2022"
+            color: $lt-gray
+            font-weight: bold
+            font-size: 18px
+            line-height: 12px
+            display: inline-block
+            width: .8em
+          &.active
+            background-color: transparent
+            &:before
+              color: green
+
+a.disabled
+  pointer-events: none
+
+.emoji-picker
+  color: $dark-gray
+  height: auto !important
+  border-radius: 0px !important
+  border: 2px solid $dark-gray !important
+  .emoji-picker__content
+    height: auto !important
+    margin-bottom: 12px
+  .emoji-picker__tab.active
+    color: #FFF
+    background-color: $dark-gray
+  .emoji-picker__tab-body
+    background-color: #fff
+    max-height: 200px
+    .emoji-picker__emojis
+      border: 1px solid $dark-gray
+      padding: 8px
+      +customScroll($scrollbg, $scrollthumb)
+      max-height: 200px
+  .emoji-picker__preview
+    height: 44px
+  .emoji-picker__variant-overlay
+    height: auto !important
+    top: 240px

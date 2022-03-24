@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Chat Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.1</version>
+
+<!-- release date of THIS version -->
+  <release>March 24,2022</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.4.2</tested>
+
+<!-- What does your plugin do? -->
+  <description>A simple chat addon for UserSpice.  It's pretty flexible on how and where you include it and it hovers over your other windows.  Emoji support added in v1.0.1.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Chat</button>
+</plugin>
