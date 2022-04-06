@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 
 <!-- release date of THIS version -->
-  <release>August 10, 2021</release>
+  <release>April 6, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.5</tested>
+  <tested>5.4.1</tested>
 
 <!-- What does your plugin do? -->
   <description>This is a very basic Content Management System ( CMS ) and blog platform for storing

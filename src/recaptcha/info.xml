@@ -6,13 +6,13 @@
   <website>https://www.github.com/bangingheads/</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>May 16, 2021</release>
+  <release>April 6, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3</tested>
+  <tested>5.4.1</tested>
 
 <!-- What does your plugin do? -->
   <description>Requires UserSpice 5.3+. Adds reCAPTCHA v2 or v3 to UserSpice and your own forms.</description>
