@@ -37,7 +37,7 @@ if(!empty($_POST['resetDatabase'])){
       </div>
 
       <div class="form-group">
-        <label for="">Permissions allowed to download for Mode 3 (Comma Separated List)</label>
+        <label for="">Permissions IDs allowed to download for Mode 3 (Comma Separated List of IDs)</label>
         <input type="text" name="perms" value="<?=$plgSet->perms?>" class="form-control">
       </div>
 
