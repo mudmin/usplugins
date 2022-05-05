@@ -9,3 +9,8 @@
 if(!pluginActive("alerts",true)){
 include $abs_us_root.$us_url_root."users/includes/system_messages_footer.php";
 } ?>
+<style media="screen">
+.d-none {
+  display: none!important;
+}
+</style>
