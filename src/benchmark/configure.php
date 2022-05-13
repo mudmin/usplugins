@@ -118,23 +118,20 @@ if($go == 1){
 
   $db->query("TRUNCATE TABLE plg_benchmark");
 
-$count = 50000;
-  //math functions
-  $run = -microtime(true);
-  $mathFunctions = array("abs", "acos", "asin", "atan", "bindec", "floor", "exp", "sin", "tan", "pi", "is_finite", "is_nan", "sqrt");
-  for ($i = 0; $i < $count; $i++) {
-      foreach ($mathFunctions as $function) {
-          if($function == "pi"){
-            call_user_func_array($function, []);
-          }else{
-            call_user_func_array($function, array($i));
-          }
-      }
-  }
-  $run += microtime(true);
-  //dump("Math functions");
-  //dump(sprintf('%f', $run));
-  $data['math'] = sprintf('%f', $run);
+  $count = 50000;
+    //math functions
+    $run = -microtime(true);
+    $mathFunctions = array("abs", "acos", "asin", "atan", "bindec", "floor", "exp", "sin", "tan", "pi", "is_finite", "is_nan", "sqrt");
+    for ($i = 0; $i < $count; $i++) {
+        foreach ($mathFunctions as $function) {
+          $args = ($function == "pi")?null:array($i);
+            call_user_func_array($function, $args);
+        }
+    }
+    $run += microtime(true);
+    //dump("Math functions");
+    //dump(sprintf('%f', $run));
+    $data['math'] = sprintf('%f', $run);
 
   //string functions
   $run = -microtime(true);
