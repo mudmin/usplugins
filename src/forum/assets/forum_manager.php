@@ -195,7 +195,7 @@ $mods = explode(",",$settings->forum_mod_perms);
           Rename it whatever you want.<br>
           Delete all the divs in that file <br>
           add the following line inside the //php goes here section<br>
-          require_once $abs_us_root.$us_url_root.'usersc/plugins/forum/forum.php';<br>
+          <b>require_once $abs_us_root.$us_url_root.'usersc/plugins/forum/forum.php';</b><br>
           The first time you visit that page when logged in as admin, you will be redirected to the page manager. If you want your forum to be publicly viewable, make sure NOT to mark the page as private. If you want
           only logged in users to be able to access the forum, mark it private and choose which users can use the forum itself. Side note. This plugin also works with the profile_pic plugin if you have that enabled.<br>
         </p>

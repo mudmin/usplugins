@@ -60,11 +60,3 @@ if(!empty($_POST)){
 
   </div>
 </div>
-<script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
-<script>
-$(document).ready(function(){
-  tinymce.init({
-    selector: '.tiny'
-  });
-});
-</script>

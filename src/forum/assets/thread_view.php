@@ -193,13 +193,14 @@ if(!empty($_POST) && $write){
               </div>
             </div>
             <hr>
-            <?=htmlspecialchars_decode(stripslashes($m->message)); ?>
+            <?=$m->message; ?>
 
             <?php
             $repliesQ = $db->query("SELECT * FROM forum_messages WHERE board = ? AND thread = ? AND disabled = 0 AND replying_to = ?",[$board,$thread,$m->id]);
             $repliesC = $repliesQ->count();
             if($repliesC > 0){
               $replies = $repliesQ->results();
+
               ?>
               <strong class="text-primary">Replies</strong><br>
                   <?php foreach($replies as $m){?>
@@ -253,7 +254,7 @@ if(!empty($_POST) && $write){
               <br>
               <div class="row">
                   <div class="col-8 offset-4">
-                    <?=htmlspecialchars_decode(stripslashes($m->message)); ?>
+                    <?=$m->message; ?>
                   </div>
               </div>
                   <?php } //end foreach replies ?>
@@ -278,20 +279,12 @@ if(!empty($_POST) && $write){
               <form class="" action="" method="post">
                 <h3>Leave a General Reply</h3>
                 <input type="hidden" name="csrf" value="<?=Token::generate();?>">
-                <textarea name="message" rows="8" class="tiny"></textarea>
+                <textarea name="message" rows="8" class="form-control"></textarea>
                 <input type="submit" name="submitReply" value="Post" class="btn btn-primary btn-block">
               </form>
             </div>
           </div>
-          <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
-          <script>
-          $(document).ready(function(){
-            tinymce.init({
-              selector: '.tiny'
-            });
-          $(".mce-branding").hide();
-          });
-        </script>
+
       <?php } ?>
       </td>
     </tr>
@@ -317,7 +310,7 @@ if(!empty($_POST) && $write){
           <span id="replyToModal"></span>
           <input type="hidden" name="csrf" value="<?=Token::generate();?>">
           <input type="hidden" name="replyTo" value="0" id="replyTo">
-          <textarea name="message" rows="8" class="tiny"></textarea>
+          <textarea name="message" rows="8" class="form-control"></textarea>
           <input type="submit" name="submitReply" value="Post" class="btn btn-primary btn-block">
         </form>
       </div>

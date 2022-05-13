@@ -44,7 +44,12 @@ if(!function_exists('forumCount')) {
   function forumCount($id,$type){
     $db = DB::getInstance();
     $type = "forum_".$type;
-    $count = $db->query("SELECT id FROM $type WHERE board = ?",[$id])->count();
+    if($type == "threads"){
+        $count = $db->query("SELECT id FROM $type WHERE board = ? AND deleted = 0",[$id])->count();
+    }else{
+        $count = $db->query("SELECT id FROM $type WHERE board = ? AND disabled = 0",[$id])->count();
+    }
+
     return $count;
 }
 }
