@@ -76,7 +76,8 @@ if(!Token::check($token)){
             </div>
 
             <input type="hidden" name="csrf" value="<?=$token?>" />
-            <input type="submit" name="updateGlobal" value="Update Global Settings" class="btn btn-primary">
+            <input type="submit" name="updateGlobal" value="Update Global Settings" class="btn btn-primary" style="margin-bottom: 1.25em;">
+
           </form>
           <?php foreach ($dirs as $d) {
             if(file_exists($d.'/configure.php')){
@@ -97,3 +98,6 @@ if(!Token::check($token)){
     ?>
   </div>
 </div>
+<p>
+  If appreciate this work and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
+</p>
