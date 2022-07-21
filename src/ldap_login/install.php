@@ -35,6 +35,8 @@ $db->query("ALTER TABLE settings ADD COLUMN ldap_admin_pw varchar(255)");
 $db->query("ALTER TABLE settings ADD COLUMN ldap_tree varchar(255)");
 $db->query("ALTER TABLE settings ADD COLUMN ldap_port varchar(255)");
 $db->query("ALTER TABLE settings ADD COLUMN ldap_version varchar(255)");
+$db->query("ALTER TABLE settings ADD COLUMN ldap_only_perms TINYINT NOT NULL DEFAULT '0';");
+$db->query("CREATE TABLE `us_ldap_matches` ( `id` INT NOT NULL AUTO_INCREMENT , `permission` INT NOT NULL , `ldap` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
 $check = $db->query("SELECT ldap_server FROM settings")->first();
 
 if($check->ldap_server == ''){ //nothing in the settings so put demo data
