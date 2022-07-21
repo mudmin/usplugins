@@ -144,7 +144,7 @@ if(!empty($_POST)){
         </select>
         <p>
           <br>
-          <input type="submit" name="save" value="Save Settings" class="btn btn-primary">
+          <input type="submit" name="save" value="Save Settings" class="btn btn-outline-primary">
         </p>
       </form>
     </div>

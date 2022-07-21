@@ -78,7 +78,7 @@ if(!empty($_POST['deleteThisForm'])){
         <div class="form-group">
           <form autocomplete="off" class="inline-form" action="" method="POST" id="newFormForm">
             <input size="50" type="text" name="name" value="" class="form-control" placeholder="Lowercase letters and numbers only"><br />
-            <div class="btn-group pull-right"><input class='btn btn-primary' type='submit' name="create_form" value='Create Form' class='submit' /></div><br />
+            <div class="btn-group pull-right"><input class='btn btn-outline-primary' type='submit' name="create_form" value='Create Form' class='submit' /></div><br />
           </form>
         </div>
       </div>
@@ -110,7 +110,7 @@ if(!empty($_POST['deleteThisForm'])){
               <?php } ?>
             </select>
             <br />
-            <div class="btn-group pull-right"><input class='btn btn-primary' type='submit' name="create_form_from_db" value='Create Form' class='submit' /></div><br />
+            <div class="btn-group pull-right"><input class='btn btn-outline-primary' type='submit' name="create_form_from_db" value='Create Form' class='submit' /></div><br />
           </form>
         </div>
       </div>
@@ -145,7 +145,7 @@ if(!empty($_POST['deleteThisForm'])){
             New Form Name
             <input type="text" class="form-control" name="new" value="" placeholder="lowercase only, no symbols" required>
             <br />
-            <div class="btn-group pull-right"><input class='btn btn-primary' type='submit' name="duplicate" value='Duplicate Form' class='submit' /></div><br />
+            <div class="btn-group pull-right"><input class='btn btn-outline-primary' type='submit' name="duplicate" value='Duplicate Form' class='submit' /></div><br />
           </form>
         </div>
       </div>
@@ -175,10 +175,14 @@ if(!empty($_POST['deleteThisForm'])){
       <div class="modal-body">
         <p>Please choose a form to delete:</p>
         <div class="form-group">
-          <form autocomplete="off" class="inline-form" action="" method="POST" id="deleteForm" required>
+          <form autocomplete="off" class="inline-form" action="" method="POST" id="deleteForm" required
+          onsubmit="return confirm('Please understand what you are doing. If you choose to delete a form, you will not be able to create a new one with the same name unless you choose the Create Form from an Existing Table option.  If you choose to delete the Form and Related Table, YOU WILL LOSE ALL THE DATA THAT WAS SUBMITTED FROM YOUR FORM and all data entirely if you created the form from an existing table. Use this feature carefully.  You cannot delete the users form.');"
+          >
             <select class="form-control" name="deleteThisForm">
               <option disabled selected="selected">--choose a form--</option>
-              <?php foreach($forms as $f){ ?>
+              <?php foreach($forms as $f){
+                if($f->form == "users"){ continue; }
+                ?>
                 <option value="<?=$f->form?>"><?=$f->form?>
                   <?php
                   if(in_array($f->form,$tables)){
@@ -193,7 +197,7 @@ if(!empty($_POST['deleteThisForm'])){
             <br />
             <strong>This action <font color="red">cannot</font> be undone!<br>
               <br />
-              <div class="btn-group pull-left"><input class='btn btn-danger' type='submit' name="deleteTable" value='Delete the Form AND related DB Table' class='submit' /></div>
+              <div class="btn-group pull-left"><input class='btn btn-outline-danger' type='submit' name="deleteTable" value='Delete the Form AND related DB Table' class='submit' /></div>
               <div class="btn-group pull-right"><input class='btn btn-success' type='submit' name="delete" value='Delete the Form!' class='submit' /></div><br />
             </form><br>
             <?php

@@ -26,7 +26,7 @@ if($previewsC > 0){
           <td>
             <form autocomplete="off" class="" action="" method="post">
               <input type="hidden" name="delete_view" value="<?=$v->id?>">
-              <input type="submit" name="submit" value="Delete" class="btn btn-danger">
+              <input type="submit" name="submit" value="Delete" class="btn btn-outline-danger">
             </form>
           </td>
         </tr>

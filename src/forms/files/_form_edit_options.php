@@ -22,12 +22,12 @@ if($fieldC > 0){
 	<?php if(isset($current->usformquery)){ ?>
 		You are using the <span style="color:red;">database</span> to create options<br>
 		<input type="hidden" name="switchto" value="manually">
-		<input type="submit" name="submit" value="Switch to Manual Options" class="btn-primary">
+		<input type="submit" name="submit" value="Switch to Manual Options" class="btn-outline-primary">
 
 	<?php }else{ ?>
 		You are <span style="color:red;">manually</span> creating options<br>
 		<input type="hidden" name="switchto" value="database">
-		<input type="submit" name="submit" value="Switch to Database Options" class="btn-primary">
+		<input type="submit" name="submit" value="Switch to Database Options" class="btn-outline-primary">
 	<?php } ?>
 
 </form>
@@ -116,7 +116,7 @@ if($fieldC > 0){
 				?>
 			</tbody>
 		</table>
-		<input type="submit" name="edit_this_field_options" value="Save Field Settings" class="btn btn-primary">
+		<input type="submit" name="edit_this_field_options" value="Save Field Settings" class="btn btn-outline-primary">
 	</form>
 <?php }else{ ?>
 	<form autocomplete="off" class="" name="createForm" action="" method="post">
@@ -142,7 +142,7 @@ if($fieldC > 0){
 				<?php } ?>
 			</tbody>
 		</table>
-		<input type="submit" name="edit_this_field_options" value="Save Field Settings" class="btn btn-primary">
+		<input type="submit" name="edit_this_field_options" value="Save Field Settings" class="btn btn-outline-primary">
 	</form>
 <?php } ?>
 

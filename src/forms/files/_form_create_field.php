@@ -69,7 +69,7 @@
     <input  class="form-control" type="number" min="0" step ="1" name="ord" value="<?=$lastOrder?>" >
   </div>
 
-  <input type="submit" name="create_field" value="Create Field" class="btn btn-primary">
+  <input type="submit" name="create_field" value="Create Field" class="btn btn-outline-primary">
 </form>
 <script>
 $(document).ready(function () {

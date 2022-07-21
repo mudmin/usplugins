@@ -10,7 +10,7 @@
 		Redirect::to($us_url_root."admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=".$edit."&err=Field+not+found.");
 	}
 	if($f->field_type == "dropdown" || $f->field_type == "radio" || $f->field_type == "checkbox"){ ?>
-		<a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>&field=<?=$field?>&editOpts=<?=$field?>" class="btn btn-primary">Click here to edit your <?=$f->field_type?> options</a>
+		<a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit=<?=$edit?>&field=<?=$field?>&editOpts=<?=$field?>" class="btn btn-outline-primary">Click here to edit your <?=$f->field_type?> options</a>
 	<?php } ?>
 	<form autocomplete="off" class="" name="createForm" action="" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">
@@ -48,7 +48,7 @@
 			<textarea class="form-control"  name="input_html" rows="4" cols="120"><?=$f->input_html?></textarea>
 		</div>
 		<?php require_once($abs_us_root.$us_url_root."usersc/plugins/forms/files/_form_validation_options.php");?>
-		<input type="submit" name="edit_this_field" value="Save Field Settings" class="btn btn-primary">
+		<input type="submit" name="edit_this_field" value="Save Field Settings" class="btn btn-outline-primary">
 	</form>
 	<div class="form-group">
 		<?php
