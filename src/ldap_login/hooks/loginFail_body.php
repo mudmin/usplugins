@@ -3,7 +3,7 @@ if(count(get_included_files()) == 1) die(); //Direct Access Not Permitted
 
 global $settings;
 $username = Input::get('username');
-$password = Input::get('password');
+$password = html_entity_decode(Input::get('password')); //Decoding due to issues with special characters not matching
 $sessionName = Config::get('session/session_name');
 
 $ldapserver = $settings->ldap_server;          // from LDAP configuration page inside US
@@ -61,6 +61,33 @@ if($ldapconn) {
             );
             $db->update('users',$lookup->id,$fields);
             $db->update('users',$lookup->id, ['logins'=>$lookup->logins+1]);
+            $groups = $data[0]['memberof'];
+            $groupsQ = $db->query("SELECT * FROM us_ldap_matches")->results();
+            $allGroups = [1];
+            foreach ($groups as $group) {
+                foreach ($groupsQ as $ldapGroup) {
+                    if ($group === $ldapGroup->ldap) {
+                        $allGroups[] = $ldapGroup->permission;
+                        $matchC = $db->query("SELECT * FROM user_permission_matches WHERE user_id = ? and permission_id = ?", [$lookup->id, $ldapGroup->permission])->count();
+                        if ($matchC === 0) {
+                            $db->insert("user_permission_matches", ["user_id"=>$lookup->id, "permission_id"=>$ldapGroup->permission]);
+                        }
+                    }
+                }
+            }
+
+            if ($settings->ldap_only_perms) {
+                $groupsString = "";
+                foreach ($allGroups as $group) {
+                    $groupsString .= $group . ",";
+                }
+                $groupsString = substr($groupsString, 0, -1);
+
+                $db->query("DELETE FROM user_permission_matches WHERE user_id = ? AND permission_id NOT IN ($groupsString)", [$lookup->id]);
+
+            }
+            
+
             $_SESSION['ldaplogin'] = 1;
             $hooks = getMyHooks(['page'=>'loginSuccess']);
             includeHook($hooks,'body'); //Allow for other hooks like 2 Factor Authentication
@@ -103,6 +130,18 @@ if($ldapconn) {
             'permission_id'=>1,
             );
             $db->insert('user_permission_matches',$fields);
+            $groups = $data[0]['memberof'];
+            $groupsQ = $db->query("SELECT * FROM us_ldap_matches")->results();
+            foreach ($groups as $group) {
+                foreach ($groupsQ as $ldapGroup) {
+                    if ($group === $ldapGroup->ldap) {
+                        $matchC = $db->query("SELECT * FROM user_permission_matches WHERE user_id = ? and permission_id = ?", [$lookup->id, $ldapGroup->permission])->count();
+                        if ($matchC === 0) {
+                            $db->insert("user_permission_matches", ["user_id"=>$lookup->id, "permission_id"=>$ldapGroup->permission]);
+                        }
+                    }
+                }
+            }
             include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
             if (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
             require_once $abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php';

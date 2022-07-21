@@ -1,4 +1,4 @@
-  <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
+<?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
 
 <?php
 include "plugin_info.php";
@@ -9,6 +9,39 @@ if(!Token::check($token)){
   include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
 }
    // Redirect::to('admin.php?err=I+agree!!!');
+ }
+ if (isset($_GET['action'])) {
+   switch($_GET['action']) {
+     case "edit":
+        include "files/edit_match.php";
+        break;
+      case "add":
+        include "files/add_match.php";
+        break;
+      case "save":
+        if(!Token::check(Input::get('csrf'))){
+          include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+        }
+        switch($_GET['type']) {
+          case "add":
+            $db->insert("us_ldap_matches", ["ldap"=>Input::get('ldap'), "permission"=>Input::get('permission')]);
+            break;
+          
+          case "edit":
+            $db->query("UPDATE us_ldap_matches SET ldap = ?, permission = ? WHERE id = ?", [Input::get('ldap'), Input::get('permission'), Input::get('id')]);
+            break;
+        }
+        Redirect::to("admin.php?view=plugins_config&plugin=ldap_login");
+
+        break;
+      case "delete":
+        if(!Token::check(Input::get('token'))){
+          include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+        }
+        $db->query("DELETE FROM us_ldap_matches WHERE id = ?", [Input::get('id')]);
+        Redirect::to("admin.php?view=plugins_config&plugin=ldap_login");
+   }
+   die();
  }
  $token = Token::generate();
  ?>
@@ -59,4 +92,45 @@ if(!Token::check($token)){
    to test.  You will want to update your real server configuration below before going live.<br><br>
    4.  We need your feedback.  If we need additional configuration options for LDAP, please let us know at <a href="https://userspice.com/bugs">https://userspice.com/bugs</a> or over on our <a href="https://discord.gg/j25FeHu">Discord channel</a>.
  </div>
- </div>
+   </div>
+ <div class="row">
+   <div class="col-6">
+   <?php
+$groupsQ = $db->query('SELECT a.id, a.ldap, p.name FROM us_ldap_matches a LEFT JOIN permissions p ON a.permission = p.id')->results();
+?>
+<br>
+<h2>LDAP Permission Group Matches</h2><br>
+<label class="switch switch-text switch-success">
+      <input id="ldap_only_perms" type="checkbox" class="switch-input toggle" data-desc="LDAP Only Permissions" <?php if ($settings->ldap_only_perms==1) {
+       echo 'checked="true"';
+      } ?>>
+      <span data-on="Yes" data-off="No" class="switch-label"></span>
+      <span class="switch-handle"></span>
+</label> Only Use LDAP Permissions<br>
+<table id="forms" class='table table-hover table-list-search'>
+	<thead>
+		<th>Permission Name</th><th>LDAP Group</th><th>Manage</th>
+	</thead>
+	<tbody>
+		<?php
+		foreach($groupsQ as $g){?>
+			<tr>
+				<td><?=$g->name?></td>
+				<td><?=$g->ldap?></td>
+				<td><a href="admin.php?view=plugins_config&plugin=ldap_login&action=edit&id=<?=$g->id?>" class="btn btn-outline-primary">Manage</a></td>
+			</tr>
+		<?php } ?>
+	</tbody>
+</table>
+<br>
+<a href="admin.php?view=plugins_config&plugin=ldap_login&action=add" class="btn btn-primary">Add</a>
+   </div>
+<div class="col-6">
+  <h2>Permissions</h2><br>
+  LDAP Only Permissions will sync all LDAP permissions and remove any permissions that the user does not hold from LDAP groups upon login. This is recommended but could break your setup if you manually configured permissions<br><br>
+  Matches that you add here will automatically add to users upon logging in if they are part of that group<br><br>
+  You can use your full container name to match to your permission. For example: CN=Example,OU=User Accounts,DC=example,DC=userspice,DC=com<br><br>
+  Permissions will not be removed upon leaving the LDAP group unless the LDAP Only Permissions is checked.
+</div>
+</div>
+</div>
