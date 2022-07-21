@@ -33,9 +33,11 @@ if(!Token::check($token)){
                     $( document ).ready(function() {
                     	$("form").each(function() {
                     		var method = $(this).attr('method');
-                    		if(method.toUpperCase() === 'POST'){ //case insensitive
-                    			$(this).attr("action","");
-                    		}
+                        if(typeof method !== "undefined"){ //make sure the form actually has a method attribute
+                      		if(method.toUpperCase() === 'POST'){ //case insensitive
+                      			$(this).attr("action","");
+                      		}
+                        }
                     	});
                     });
                     </script>

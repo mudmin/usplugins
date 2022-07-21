@@ -9,6 +9,11 @@ if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,tr
 $count = 0;
 $db = DB::getInstance();
 
+if(!file_exists($abs_us_root.$us_url_root.".htaccess")){
+  $fp = fopen($abs_us_root.$us_url_root.'.htaccess', 'w');
+  fwrite($fp," ");
+  fclose($fp);
+}
 //Make sure the plugin is installed and get the existing updates
 $checkQ = $db->query("SELECT id,updates FROM us_plugins WHERE plugin = ?",array($plugin_name));
 $checkC = $checkQ->count();
