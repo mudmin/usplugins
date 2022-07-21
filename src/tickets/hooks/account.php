@@ -17,7 +17,7 @@ if($ticSettings->agents_act == 1 && is_numeric($user->data()->id)){
 }
 
 
-$q = $db->query("SELECT * FROM plg_tickets WHERE id > 0 $us $ag ORDER BY id DESC LIMIT 5",);
+$q = $db->query("SELECT * FROM plg_tickets WHERE id > 0 $us $ag ORDER BY id DESC LIMIT 5");
 $c = $q->count();
 if($c > 0 && $showTable){
   $tickets = $q->results();
