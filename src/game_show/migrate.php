@@ -7,7 +7,7 @@
 include "plugin_info.php";
 if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,true)){
 //all actions should be performed here.
-
+require_once $abs_us_root . $us_url_root . "usersc/plugins/game_show/functions.php";
 //check which updates have been installed
 $count = 0;
 $db = DB::getInstance();
@@ -36,7 +36,9 @@ if($checkC > 0){
   $count++;
   }
 
-writeGameBannedFile();
+  if (function_exists('writeGameBannedFile')) {
+    writeGameBannedFile();
+  }
 
 
 
