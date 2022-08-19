@@ -3,6 +3,9 @@ if(!function_exists('forumAccess')) {
   function forumAccess($board,$type,$uid){
     $db = DB::getInstance();
     $access = false;
+    if($type != "write" && $type != "read"){
+      return false;
+    }
     if($type == "write" && $uid == 0){
       return false;
     }
@@ -46,8 +49,10 @@ if(!function_exists('forumCount')) {
     $type = "forum_".$type;
     if($type == "threads"){
         $count = $db->query("SELECT id FROM $type WHERE board = ? AND deleted = 0",[$id])->count();
-    }else{
+    }elseif($type == "messages"){
         $count = $db->query("SELECT id FROM $type WHERE board = ? AND disabled = 0",[$id])->count();
+    }else{
+      $count = 0;
     }
 
     return $count;

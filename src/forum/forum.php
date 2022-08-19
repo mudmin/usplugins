@@ -25,7 +25,7 @@ $read = false;
 
 $is_mod = false;
 $can_ban = false;
-if(hasPerm([2],$user->data()->id)){
+if(isset($user) && $user->isLoggedIn() && hasPerm([2],$user->data()->id)){
   $is_mod = true;
   $can_ban = true;
 }elseif($settings->forum_mod_perms != ""){

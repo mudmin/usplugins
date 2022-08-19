@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>May 13, 2022</release>
+  <release>August 19, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.4.4</tested>
+  <tested>5.4.5</tested>
 
 <!-- What does your plugin do? -->
   <description>This is a very simple forum software. Works with UserSpice permission levels.  It's made to either work as a standalone forum or as a code example for you to fork (copy usersc/plugins/forum to usersc/plugins/yourname) so you can make your own more advanced forum.</description>
