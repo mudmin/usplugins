@@ -464,6 +464,12 @@ function formField($o, $v = []){
           $validation = new Validate();
           $db = DB::getInstance();
           $name = Input::sanitize($formData['form_name']);
+          $fetchFormQ = $db->query("SELECT * FROM us_forms WHERE form = ?",[$name]);
+          $fetchFormC = $fetchFormQ->count();
+          if($fetchFormC < 1){
+            $response['errors'] = "The requested form does not exist";
+            return $response; die;
+          }
           $form = $name.'_form';
           $fields = [];
 
@@ -474,6 +480,7 @@ function formField($o, $v = []){
           $errors = [];
           $successes = [];
           $errorArray = [];
+
           $s = $db->query("SELECT * FROM $form")->results(true);
           foreach($s as $r){
             if($r['required'] == 1 && !isset($formData[$r['col']])){

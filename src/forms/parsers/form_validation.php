@@ -3,6 +3,13 @@ require_once '../../../../users/init.php';
 $db = DB::getInstance();
 if(hasPerm([2],$user->data()->id)){
 $formName = Input::get('formname');
+$fetchFormQ = $db->query("SELECT * FROM us_forms WHERE form = ?",[$formName]);
+$fetchFormC = $fetchFormQ->count();
+if($fetchFormC < 1){
+  $response = ['success'=>false,'option'=>"",'value'=>""];
+  echo json_encode($response);die;
+}
+
 $id = Input::get('row');
 $requested = $_POST['validation'];
 if(!isValidValidation($requested)){
