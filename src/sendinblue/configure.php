@@ -72,7 +72,39 @@
       The plugin automatically logs errors, but you can also do something like <strong>$send = sendinblue($to,$subject,$body);</strong> to have those messages returned to you immediately.
     </p>
     <p>Simply call the function just like the built in UserSpice email function and you are good to go.  If you would like to override the built in UserSpice email function and use Sendinblue instead, simply rename the file called override.rename.php to override.php</p>
+    <p>
+      As of October, 2022, the plugin also supports templates, dynamic sender, and dynamic data inside your template.  You can also do a foreach loop in your sendinblue templates.  On the UserSpice side, use it like:
+    </p>
+    <p><strong>
+      <code>
+        $options = [ <br>
+          'from'=>'bob@aol.com',
+          'from_name'=>'Bob Smith',
+          'template'=>1,<br>
+          'params' => [<br>
+            'fname' => $user->data()->fname,<br>
+            'lname' => $user->data()->lname,<br>
+            'items'=> [<br>
+              ['name'=>'Chair','price'=>'12.99'],<br>
+              ['name'=>'Table','price'=>'24.99'],<br>
+            ],<br>
+          ],<br>
+         ];<br>
+         $send = sendinblue("to@gmail.com","Sendinblue Test","This is the message","Joe User",$options);
+      </code>
 
+     </strong>
+    </p>
+    <p>In sendinblue, use <strong>{{params.fname}}</strong> to pass in your fname variable. You can loop through the items array on your template with something tlike this : <br>
+      <strong>
+        <code>
+          {% for item in params.items %}<br>
+          {{ item.name }} - {{ item.price }}<br>
+          {% endfor %}<br>
+        </code>
+
+      </strong>
+    </p>
     <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <strong><a href="https://UserSpice.com/donate">https://UserSpice.com/donate</a></strong>. Either way, thanks for using UserSpice!</p>
   </div>
 </div>

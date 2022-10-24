@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.3</version>
+  <version>1.0.6</version>
 
 <!-- release date of THIS version -->
-  <release>July 22, 2022</release>
+  <release>October 24, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.4.1</tested>
+  <tested>5.5.0</tested>
 
 <!-- What does your plugin do? -->
   <description>Sendinblue replaces phpmailer and allows you to send emails via an API to avoid a lot of the headaches of traditional SMTP. Sendinblue lets you send 300 emails per day, free of charge (no credit card required), which is perfect for password resets etc for most UserSpice projects.</description>
