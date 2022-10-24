@@ -35,7 +35,7 @@ $db->query("CREATE TABLE `plg_refer_settings` (
   `show_acct` tinyint(1) DEFAULT 1,
 	`allow_un` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+			
 
 $db->query("ALTER TABLE users ADD column plg_ref varchar(255)");
 $db->query("ALTER TABLE users ADD column plg_ref_by int(11)");
@@ -65,6 +65,7 @@ $hooks = [];
 $hooks['join.php']['form'] = 'hooks/joinform.php';
 // $hooks['login.php']['bottom'] = 'hooks/loginbottom.php';
 $hooks['join.php']['post'] = 'hooks/joinpost.php';
+$hooks['join.php']['pre'] = 'hooks/joinpre.php';
 $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
 registerHooks($hooks,$plugin_name);
 

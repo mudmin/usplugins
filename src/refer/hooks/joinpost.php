@@ -29,6 +29,7 @@ if($check_referC > 0){
     //mark them as their own referral
     $db->update('users',$theNewId,['plg_ref_by'=>$theNewId]);
   }else{
+    //you should not make it here since we're now checking in pre
     $db->query("DELETE FROM users WHERE id = ?",[$theNewId]);
     $db->query("DELETE FROM user_permission_matches WHERE user_id = ?",[$theNewId]);
     logger(1,"bad_refer", "$username attempted refer with code of $refCode");

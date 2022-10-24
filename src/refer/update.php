@@ -36,6 +36,14 @@ $existing[] = $update; //add the update you just did to the existing update arra
 $count++;
 }
 
+//here is an example
+$update = '00002';
+if(!in_array($update,$existing)){
+$hooks['join.php']['pre'] = 'hooks/joinpre.php';
+$existing[] = $update; //add the update you just did to the existing update array
+$count++;
+}
+
 
 //after all updates are done. Keep this at the bottom.
 $new = json_encode($existing);

@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.5</version>
+  <version>1.0.6</version>
 
 <!-- release date of THIS version -->
-  <release>December 6, 2021</release>
+  <release>October 24, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.9</tested>
+  <tested>5.5.0</tested>
 
 <!-- What does your plugin do? -->
   <description>This is the refer-a-friend style plugin for UserSpice. It can also be used to restrict people from registering without a code.</description>
