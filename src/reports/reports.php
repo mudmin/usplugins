@@ -14,6 +14,9 @@ use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Ods;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 $spreadsheet = new Spreadsheet();
 
 $report = Input::get('report');
@@ -30,7 +33,26 @@ if(file_exists($abs_us_root.$us_url_root."usersc/plugins/reports/reportfiles/".$
   die("This report does not exist");
 }
 
-
+switch($format)
+{
+    case 'Cvs':
+        $fileext = 'csv';
+        $writerclass = 'Csv';
+        break;
+    case 'Pdf':
+        $fileext = 'pdf';
+        $writerclass = 'Dompdf';
+        break;
+    case 'Ods':
+        $fileext = 'ods';
+        $writerclass = 'Ods';
+        break;
+    default:
+    case 'Xlsx':
+        $fileext = 'xlsx';
+        $writerclass = 'Xlsx';
+        break;
+}
 
 function createExcelHeading($data){
   $headings = [];
@@ -86,9 +108,9 @@ $spreadsheet->setActiveSheetIndex(0);
 
 // Redirect output to a client’s web browser (xlsx)
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
+header('Content-Disposition: attachment;filename="'.$title.'.'.$fileext.'"');
 header('Cache-Control: max-age=0');
 ob_clean();
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+$writer = IOFactory::createWriter($spreadsheet, $writerclass);
 $writer->save('php://output');
 exit;
