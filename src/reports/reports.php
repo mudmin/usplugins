@@ -33,22 +33,23 @@ if(file_exists($abs_us_root.$us_url_root."usersc/plugins/reports/reportfiles/".$
   die("This report does not exist");
 }
 
+// format variable uses the same string as the PHPDocument writer class. 
 switch($format)
-{
-    case 'Cvs':
+{   
+    case 'Csv':  // Comma-separated-values
         $fileext = 'csv';
         $writerclass = 'Csv';
         break;
-    case 'Pdf':
+    case 'Pdf':  // Adobe portable document
         $fileext = 'pdf';
         $writerclass = 'Dompdf';
         break;
-    case 'Ods':
+    case 'Ods':  // Open Document
         $fileext = 'ods';
         $writerclass = 'Ods';
         break;
     default:
-    case 'Xlsx':
+    case 'Xlsx': // Microsoft
         $fileext = 'xlsx';
         $writerclass = 'Xlsx';
         break;

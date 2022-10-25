@@ -8,7 +8,7 @@ if(isset($user) && $user->isLoggedIn() && hasPerm([2],$user->data()->id)){
 
 if($access){ //wrap your whole report in the if($access)
   $title = "Users Report";
-  $format = 'Xlsx';
+  $format = 'Xlsx';  // Select an alternative format if desired: Ods, Pdf, Cvs (limited to one worksheet)
   
   // Create new Spreadsheet object
   // You can leave all this stuff default, but you're free to change it
