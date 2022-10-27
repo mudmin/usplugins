@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>November 21, 2021</release>
+  <release>October 27, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.8</tested>
+  <tested>5.5.0</tested>
 
 <!-- What does your plugin do? -->
   <description>A plugin for generating Excel XLSX reports from UserSpice database queries.</description>
