@@ -4,9 +4,33 @@
 include "plugin_info.php";
 pluginActive($plugin_name);
 $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hooker/hooks');
-$events = ['hitBanned','forgotPassword','loginFail','loginSuccess','logout','noAccess','joinAttempt','joinFail','verifySuccess','verifyFail','verifyResend'];
+$events = [
+'hitBanned',
+'forgotPassword',
+'forgotPasswordResponse',
+'joinAttempt',
+'joinAttemptApi',
+'joinFail',
+'joinFailApi',
+'joinSuccessApi',
+'loginFail',
+'loginFailApi',
+'loginSuccess',
+'loginSuccessApi',
+'logout',
+'noAccess',
+'passwordResetFail',
+'passwordResetSuccess',
+'verifyEmailAttempt',
+'verifyEmailAttemptPassed',
+'verifySuccess',
+'verifyFail',
+'verifyResend',
+'verifyResendSubmit',
+];
+
 if(!empty($_POST['addHook'])){
-  $pages = ['account.php','admin.php?view=general','admin.php?view=user','admin.php?view=users','forgot_password.php','join.php','login.php','user_settings.php',];
+  $pages = ['account.php','admin.php?view=general','admin.php?view=user','admin.php?view=users','forgot_password.php','join.php','login.php','user_settings.php','verify.php'];
   $positions = ['pre','post','body','form','bottom'];
   $combined = array_merge($pages,$events);
   $valid = false;
@@ -68,6 +92,7 @@ if(!empty($_POST['deleteHook'])){
                   <option class="pg" value="join.php">join.php (all positions available)</option>
                   <option class="pg" value="login.php">login.php (all positions available)</option>
                   <option class="pg" value="user_settings.php">user_settings.php (all positions available)</option>
+                  <option class="pg" value="verify.php">verify.php (all positions available)(v5.3.8+)</option>
                   <?php foreach($events as $e){?>
                     <option value="<?=$e?>" class="event"><?=$e?> Event</option>
                   <?php } ?>
