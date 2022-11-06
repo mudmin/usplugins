@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>March 26,2021</release>
+  <release>November 6, 2022</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.0</tested>
+  <tested>5.5.0</tested>
 
 <!-- What does your plugin do? -->
   <description>This is a plugin for receiving webhooks and either storing that information or for performing actions as they come in.</description>
