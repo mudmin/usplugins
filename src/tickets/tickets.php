@@ -88,7 +88,7 @@ if(!empty($_POST)){
         $fetchC = $fetchQ->count();
         if($fetchC > 0){
           $fetch = $fetchQ->first();
-          email($fetch->email,"One of your tickets has a new comment",$comment);
+          email($fetch->email,"You have been assigned a ticket.","You have been assigned ticket #".Input::get('changeThis'));
         }
       }
 
