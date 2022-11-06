@@ -52,7 +52,14 @@ if($c > 0 && $showTable){
       <?php } ?>
     </tbody>
   </table>
+
+  <?php
+  if(hasPerm([$ticSettings->perm_to_assign]) || hasPerm([$ticSettings->perm]) || hasPerm([2])){ ?>
   <p><a href="<?=$us_url_root.$ticSettings->ticket_view?>">View all tickets</a></p>
 
+<?php
+}  //end link  to all tickets
 
-<?php } ?>
+} //end table
+
+?>
