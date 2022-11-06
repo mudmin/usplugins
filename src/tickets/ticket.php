@@ -23,11 +23,12 @@ if(!isset($user) || !$user->isLoggedIn()){ ?>
 $ticSettings = $db->query("SELECT * FROM plg_tickets_settings")->first();
 $notes = $db->query("SELECT * FROM plg_tickets_notes WHERE ticket = ? ORDER BY id DESC",[$id])->results();
 
-if(!hasPerm([$ticSettings->perm],$user->data()->id) && !hasPerm([$ticSettings->perm_to_assign],$user->data()->id) && !hasPerm([2],$user->data()->id)){
-  logger($user->data()->id,"Ticket Error","Tried to access ticket without permission");
-  die("This is not your ticket");
+if (($ticket->user != $user->data()->id)) {
+  if(!hasPerm([$ticSettings->perm],$user->data()->id) && !hasPerm([$ticSettings->perm_to_assign],$user->data()->id) && !hasPerm([2],$user->data()->id)){
+    logger($user->data()->id,"Ticket Error","Tried to access ticket without permission");
+    die("This is not your ticket");
+  }
 }
-
 $isOwner = false;
 if($ticket->user == $user->data()->id){
   $isOwner = true;

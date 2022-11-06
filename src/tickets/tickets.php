@@ -79,8 +79,20 @@ if(!empty($_POST)){
 
 
   if(!empty($_POST['change_agent'])){
+    $newAgent = Input::get('new_agent');
     if(hasPerm([$ticSettings->perm_to_assign],$user->data()->id) || $hasPerm([2],$user->data()->id)){
-      $db->update("plg_tickets",Input::get('changeThis'),['agent'=>Input::get('new_agent'),"last_updated"=>date("Y-m-d H:i:s")]);
+      $db->update("plg_tickets",Input::get('changeThis'),['agent'=>$newAgent,"last_updated"=>date("Y-m-d H:i:s")]);
+
+      if($user->data()->id != $newAgent && $ticSettings->email_agent == 1){
+        $fetchQ = $db->query("SELECT id,email FROM users WHERE id = ?",[$newAgent]);
+        $fetchC = $fetchQ->count();
+        if($fetchC > 0){
+          $fetch = $fetchQ->first();
+          email($fetch->email,"One of your tickets has a new comment",$comment);
+        }
+      }
+
+
       Redirect::to("tickets.php?err=Agent+changed&closed=$closed&filter=$filter&limit=$limit");
     }else{
       logger($user->data()->id,"Ticket Error","Tried to illegally change agent on ticket");
