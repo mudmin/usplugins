@@ -1,9 +1,12 @@
 <?php
 require_once '../../../../users/init.php';
 $db = DB::getInstance();
+
 if(hasPerm([2],$user->data()->id)){
 $formName = Input::get('formname');
-$fetchFormQ = $db->query("SELECT * FROM us_forms WHERE form = ?",[$formName]);
+$check = str_replace("_form","",$formName);
+$fetchFormQ = $db->query("SELECT * FROM us_forms WHERE form = ?",[$check]);
+
 $fetchFormC = $fetchFormQ->count();
 if($fetchFormC < 1){
   $response = ['success'=>false,'option'=>"",'value'=>""];
@@ -16,6 +19,7 @@ if(!isValidValidation($requested)){
   //Check to make sure unsanitized validation option is legit
   die("This is not a valid validation type. Something is fishy");
 }
+
 $valID = Input::get('valID');
 // dnd($_POST);
 // dump($_POST);
