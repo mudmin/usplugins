@@ -49,11 +49,11 @@ if(!empty($_POST['deleteThisForm'])){
   <div class="col-12">
     <h2>Forms Manager
       <a href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms" class="show-tooltip" title="Form manager home"><i class="fa fa-home"></i></a>
-      <a href="#" data-toggle="modal" data-target="#newForm" class="show-tooltip" title="Create new form"><i class="fa fa-plus"></i></a>
-      <a href="#" data-toggle="modal" data-target="#duplicate" class="show-tooltip" title="Duplicate an existing form"><i class="fa fa-clone"></i></a>
-      <a href="#" data-toggle="modal" data-target="#fromDB" class="show-tooltip" title="Create form from existing db table"><i class="fa fa-tasks"></i></a>
+      <a href="#" data-bs-toggle="modal" data-toggle="modal" data-bs-target="#newForm" data-target="#newForm" class="show-tooltip" title="Create new form"><i class="fa fa-plus"></i></a>
+      <a href="#" data-bs-toggle="modal" data-toggle="modal" data-bs-target="#duplicate" data-target="#duplicate" class="show-tooltip" title="Duplicate an existing form"><i class="fa fa-clone"></i></a>
+      <a href="#" data-bs-toggle="modal" data-toggle="modal" data-bs-target="#fromDB" data-target="#fromDB" class="show-tooltip" title="Create form from existing db table"><i class="fa fa-tasks"></i></a>
       <a href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_views" class="show-tooltip" title="Manage form views"><i class="fa fa-eye"></i></a>
-      <a href="#" data-toggle="modal" data-target="#deleteForm" class="show-tooltip" title="Delete a form"><i class="fa fa-times-circle"></i></a>
+      <a href="#" data-bs-toggle="modal" data-toggle="modal" data-bs-target="#deleteForm" data-target="#deleteForm" class="show-tooltip" title="Delete a form"><i class="fa fa-times-circle"></i></a>
       <a href="#" onclick=" window.open('https://userspice.com/using-the-form-manager/','_blank')" class="show-tooltip" title="Help with forms"><i class="fa fa-question-circle"></i></a>
     </h2>
     Please note: While the forms are designed to be filled out by the end user, the forms manager is not designed to be accessable to the public. Please keep it as master account only.
@@ -70,7 +70,7 @@ if(!empty($_POST['deleteThisForm'])){
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create a New Form</h4>
       </div>
       <div class="modal-body">
@@ -83,7 +83,7 @@ if(!empty($_POST['deleteThisForm'])){
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -97,7 +97,7 @@ if(!empty($_POST['deleteThisForm'])){
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create a form from an existing DB table</h4>
       </div>
       <div class="modal-body">
@@ -115,7 +115,7 @@ if(!empty($_POST['deleteThisForm'])){
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -129,7 +129,7 @@ if(!empty($_POST['deleteThisForm'])){
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Duplicate an existing form</h4>
       </div>
       <div class="modal-body">
@@ -150,7 +150,7 @@ if(!empty($_POST['deleteThisForm'])){
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -169,7 +169,7 @@ if(!empty($_POST['deleteThisForm'])){
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Delete an existing form</h4>
       </div>
       <div class="modal-body">
@@ -207,7 +207,7 @@ if(!empty($_POST['deleteThisForm'])){
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
         </div>
       </div>
 
