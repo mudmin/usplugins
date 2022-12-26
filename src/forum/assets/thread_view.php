@@ -262,7 +262,7 @@ if(!empty($_POST) && $write){
             <?php
             if($write){ ?>
             <div class="text-right">
-            <button type="button" class="btn btn-primary replyButton" data-toggle="modal" data-target="#replyModal" data-reply="<?=$parentid?>">
+            <button type="button" class="btn btn-primary replyButton" data-toggle="modal" data-bs-toggle="modal" data-target="#replyModal" data-bs-target="#replyModal" data-reply="<?=$parentid?>">
               Reply To This Message
             </button>
           </div>
@@ -317,7 +317,7 @@ if(!empty($_POST) && $write){
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" data-bs-dismiss="modal">Close</button>
       </div>
 
     </div>
