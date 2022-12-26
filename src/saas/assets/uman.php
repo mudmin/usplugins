@@ -161,7 +161,7 @@ if(saasMgr()){
       <div class="card-header">Your Users</div>
       <div class="card-body">
         <?php if ($usersLeft) { ?>
-          <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser">
+          <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser" data-bs-toggle="modal" data-bs-target="#adduser">
             <font color="blue"><i class="fa fa-plus"></i> Manually Add User</a></font>
           <?php } ?>
           <table class="table table-striped paginate">
@@ -213,7 +213,7 @@ if(saasMgr()){
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal">&times;</button>
               <h4 class="modal-title">User Addition</h4>
             </div>
             <div class="modal-body">

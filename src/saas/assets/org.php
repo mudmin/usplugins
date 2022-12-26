@@ -188,7 +188,7 @@ foreach($plans as $p){
 <div class="row">
   <div class="col-12 col-sm-6">
     <h3>New Org</h3>
-    <p>You must already have a user account to be the "owner" of the org.  <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser"><font color="blue"><i class="fa fa-plus"></i> Manually Add User</a></font></p>
+    <p>You must already have a user account to be the "owner" of the org.  <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser" data-bs-toggle="modal" data-bs-target="#adduser"><font color="blue"><i class="fa fa-plus"></i> Manually Add User</a></font></p>
     <form class="" action="" method="post">
       <div class="form-group">
         <label>Owner</label>
@@ -247,7 +247,7 @@ foreach($plans as $p){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal">&times;</button>
         <h4 class="modal-title">User Addition</h4>
       </div>
       <div class="modal-body">
