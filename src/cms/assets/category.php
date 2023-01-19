@@ -85,6 +85,7 @@ if($action == "new" || $e){
           <option value="<?=$exist->subcat_of?>"><?php echoCMSCat($exist->subcat_of);?></option>
         <?php }
         cmsCatTree();?>
+        <option value="0">-- No Subcategory--</option>
       </select>
     </div>
     <div class="form-group">
@@ -106,9 +107,9 @@ if($action == "new" || $e){
       <?php } ?>
     </div>
     <?php if($e){ ?>
-      <input type="submit" name="createCat" value="Edit Category">
+      <input type="submit" name="createCat" value="Save Changes to Category" class="btn btn-primary">
     <?php }else{ ?>
-      <input type="submit" name="createCat" value="Create Category">
+      <input type="submit" name="createCat" value="Create Category class="btn btn-primary"">
     <?php } ?>
 
   </form>

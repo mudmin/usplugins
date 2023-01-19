@@ -11,14 +11,14 @@ width: 96%;
 background-color:#FFFF00;
 height: 1px;
 }
-.dropdown-menu{margin-top:2.2em !important;}
+/* .dropdown-menu{margin-top:2.2em !important;} */
 </style>
 
 <div class="row">
   <div class="col-12 btn-group">
 
     <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="contentdropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="contentdropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"" aria-haspopup="true" aria-expanded="false">
         Content
       </button>
       <div class="dropdown-menu" aria-labelledby="contentdropdownMenuButton">
@@ -29,7 +29,7 @@ height: 1px;
     </div>
 
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="layoutdropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="layoutdropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"" aria-haspopup="true" aria-expanded="false">
         Layouts
       </button>
       <div class="dropdown-menu" aria-labelledby="layoutdropdownMenuButton">
@@ -39,7 +39,7 @@ height: 1px;
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-warning dropdown-toggle" type="button" id="widgetdropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-warning dropdown-toggle" type="button" id="widgetdropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"" aria-haspopup="true" aria-expanded="false">
         Widgets
       </button>
       <div class="dropdown-menu" aria-labelledby="widgetdropdownMenuButton">
@@ -49,7 +49,7 @@ height: 1px;
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-success dropdown-toggle" type="button" id="categorydropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-success dropdown-toggle" type="button" id="categorydropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"" aria-haspopup="true" aria-expanded="false">
         Categories
       </button>
       <div class="dropdown-menu" aria-labelledby="categorydropdownMenuButton">
@@ -57,7 +57,7 @@ height: 1px;
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-info dropdown-toggle" type="button" id="settingsdropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-info dropdown-toggle" type="button" id="settingsdropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"" aria-haspopup="true" aria-expanded="false">
         Settings
       </button>
       <div class="dropdown-menu" aria-labelledby="settingsdropdownMenuButton">
