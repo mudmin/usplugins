@@ -37,6 +37,7 @@ if(!file_exists($abs_us_root.$us_url_root.$plgSet->parser."index.php")){
     if(file_exists($abs_us_root.$us_url_root."usersc/plugins/downloads/assets/".$view.".php")){
     include($abs_us_root.$us_url_root."usersc/plugins/downloads/assets/".$view.".php");
    }
+if(!isset($chartsLoaded) || $chartsLoaded != true){
 ?>
 <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
 <script>
@@ -44,6 +45,9 @@ $(document).ready(function () {
    $('.paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
 
 });
+<?php
+}  //end duplicate loading protection
+?>
 function copyStringToClipboard (textToCopy) {
   console.log(textToCopy);
   navigator.clipboard.writeText(textToCopy);
