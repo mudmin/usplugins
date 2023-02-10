@@ -317,6 +317,7 @@ function formField($o, $v = []){
               }
             }
             ?>
+            <input type="hidden" name="form_view" value="<?=$view?>">
             <input type="hidden" name="form_name" value="<?=$getView->form_name?>">
             <?php
             if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forms/hooks/after_last_input/".$getView->form_name.".php")){
@@ -480,9 +481,30 @@ function formField($o, $v = []){
           $errors = [];
           $successes = [];
           $errorArray = [];
+          $formView = Input::get('form_view');
 
+          if(is_numeric($formView)){
+
+            $checkQ = $db->query("SELECT * FROM us_form_views WHERE id = ? AND form_name = ?",[$formView,$name]);
+            $checkC = $checkQ->count();
+            if($checkC < 1){
+              if($response['validation'] == true && $response['token'] == true){
+                $response['form_valid'] = true;
+              }
+              $response['form_valid'] = true;
+              $response['errors'][] = "This form view is invalid";
+              return $response;
+            }else{
+              $check = $checkQ->first();
+              $viewFields = json_decode($check->fields);
+            }
+          }
           $s = $db->query("SELECT * FROM $form")->results(true);
           foreach($s as $r){
+
+            if(isset($viewFields) && !in_array($r['id'],$viewFields)){
+              continue;
+            }
             if($r['required'] == 1 && !isset($formData[$r['col']])){
               $errorArray[] = $r['table_descrip']." ".lang("GEN_REQ");
             }
@@ -614,6 +636,7 @@ function formField($o, $v = []){
           $db = DB::getInstance();
           $form = $name.'_form';
           $check = checkFormName($name,$opts);
+
           if($check['success']==true){
             // echo 'Good to go';
             $columns = "id INT( 11 ) AUTO_INCREMENT PRIMARY KEY";
@@ -865,6 +888,13 @@ function formField($o, $v = []){
           $db = DB::getInstance();
           $msg = [];
           $msg['success'] = false;
+          $check = $db->query("SELECT id FROM us_forms WHERE form = ?",[$name])->count();
+          if($check > 0){
+            $msg['msg'] = "Sorry. A form with that name already exists";
+            return $msg;
+            exit;
+          }
+
           if (!preg_match("#^[a-z0-9_-]+$#", $name)) {
             $msg['msg'] = "Sorry! You can only use lowercase letters and numbers in your form name!";
             return $msg;
@@ -873,12 +903,12 @@ function formField($o, $v = []){
 
           //if you are building a form from an existing db table, you want to skip this
           //check because you NEED an existing table here.
+
           if(!in_array('existing',$opts)){
             $test = $db->query("SELECT * FROM $name")->first();
-            $e = $db->errorString();
 
-            if (strpos($e, 'ERROR #0 ') !== false && strpos($e, 'ERROR #0') !== false){
-
+            $e = $db->error();
+            if ($e == false){
               $msg['msg'] = "Sorry! A table with that name exists in your database!";
               return $msg;
               exit;

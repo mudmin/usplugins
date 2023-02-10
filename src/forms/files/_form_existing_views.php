@@ -25,6 +25,7 @@ if($previewsC > 0){
           <td><a class="btn btn-default" href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_preview&demo=<?=$v->id?>">Preview</a></td>
           <td>
             <form autocomplete="off" class="" action="" method="post">
+              <?=tokenHere();?>
               <input type="hidden" name="delete_view" value="<?=$v->id?>">
               <input type="submit" name="submit" value="Delete" class="btn btn-outline-danger">
             </form>
