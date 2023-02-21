@@ -93,9 +93,12 @@ function formField($o, $v = []){
               if($value == ''){ ?>
                 <option disabled selected value>--Select One--</option>
               <?php }else{
-                $option = get_object_vars($options);?>
+                if (!is_object($options)) {
+                    $option = $options;
+                } else {
+                    $option = get_object_vars($options);
+                }
 
-              <?php
               }
               }
               foreach($options as $k=>$v){
