@@ -167,14 +167,24 @@ $lsettings = $db->query("SELECT * FROM plg_links_settings WHERE id = 1")->first(
         </table>
       </div>
     </div>
-    <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-    <script>
+    <?php
+    if (!isset($chartsLoaded) || $chartsLoaded !== true && $chartsLoaded !== "true") { ?>
+      <script type="text/javascript" src="<?= $us_url_root ?>users/js/pagination/datatables.min.js"></script>
 
-    $(document).ready(function () {
-       $('.paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
-      });
 
-    </script>
+      <script>
+        $(document).ready(function() {
+          $('.paginate').DataTable({
+            "pageLength": 25,
+            "aLengthMenu": [
+              [25, 50, 100, -1],
+              [25, 50, 100, 250, 500]
+            ],
+            "aaSorting": []
+          });
+        });
+      </script>
+    <?php } ?>
     <script type="text/javascript">
     function copyStringToClipboard (textToCopy) {
       navigator.clipboard.writeText(textToCopy)
