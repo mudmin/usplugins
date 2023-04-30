@@ -29,7 +29,7 @@ if($check > 0){
  }
 }
 
-$db->query("ALTER TABLE settings ADD COLUMN alerts varchar(30) default 'default'");
+$db->query("ALTER TABLE settings ADD COLUMN alerts varchar(30) default 'shoelace'");
 //do you want to inject your plugin in the middle of core UserSpice pages?
 $hooks = [];
 
