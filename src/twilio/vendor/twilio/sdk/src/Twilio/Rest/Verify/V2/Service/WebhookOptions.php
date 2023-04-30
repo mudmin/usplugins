@@ -12,16 +12,14 @@ namespace Twilio\Rest\Verify\V2\Service;
 use Twilio\Options;
 use Twilio\Values;
 
-/**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- */
 abstract class WebhookOptions {
     /**
      * @param string $status The webhook status
+     * @param string $version The webhook version
      * @return CreateWebhookOptions Options builder
      */
-    public static function create(string $status = Values::NONE): CreateWebhookOptions {
-        return new CreateWebhookOptions($status);
+    public static function create(string $status = Values::NONE, string $version = Values::NONE): CreateWebhookOptions {
+        return new CreateWebhookOptions($status, $version);
     }
 
     /**
@@ -31,19 +29,22 @@ abstract class WebhookOptions {
      *                             subscribed to.
      * @param string $webhookUrl The URL associated with this Webhook.
      * @param string $status The webhook status
+     * @param string $version The webhook version
      * @return UpdateWebhookOptions Options builder
      */
-    public static function update(string $friendlyName = Values::NONE, array $eventTypes = Values::ARRAY_NONE, string $webhookUrl = Values::NONE, string $status = Values::NONE): UpdateWebhookOptions {
-        return new UpdateWebhookOptions($friendlyName, $eventTypes, $webhookUrl, $status);
+    public static function update(string $friendlyName = Values::NONE, array $eventTypes = Values::ARRAY_NONE, string $webhookUrl = Values::NONE, string $status = Values::NONE, string $version = Values::NONE): UpdateWebhookOptions {
+        return new UpdateWebhookOptions($friendlyName, $eventTypes, $webhookUrl, $status, $version);
     }
 }
 
 class CreateWebhookOptions extends Options {
     /**
      * @param string $status The webhook status
+     * @param string $version The webhook version
      */
-    public function __construct(string $status = Values::NONE) {
+    public function __construct(string $status = Values::NONE, string $version = Values::NONE) {
         $this->options['status'] = $status;
+        $this->options['version'] = $version;
     }
 
     /**
@@ -54,6 +55,17 @@ class CreateWebhookOptions extends Options {
      */
     public function setStatus(string $status): self {
         $this->options['status'] = $status;
+        return $this;
+    }
+
+    /**
+     * The webhook version. Default value is `v2` which includes all the latest fields. Version `v1` is legacy and may be removed in the future.
+     *
+     * @param string $version The webhook version
+     * @return $this Fluent Builder
+     */
+    public function setVersion(string $version): self {
+        $this->options['version'] = $version;
         return $this;
     }
 
@@ -76,12 +88,14 @@ class UpdateWebhookOptions extends Options {
      *                             subscribed to.
      * @param string $webhookUrl The URL associated with this Webhook.
      * @param string $status The webhook status
+     * @param string $version The webhook version
      */
-    public function __construct(string $friendlyName = Values::NONE, array $eventTypes = Values::ARRAY_NONE, string $webhookUrl = Values::NONE, string $status = Values::NONE) {
+    public function __construct(string $friendlyName = Values::NONE, array $eventTypes = Values::ARRAY_NONE, string $webhookUrl = Values::NONE, string $status = Values::NONE, string $version = Values::NONE) {
         $this->options['friendlyName'] = $friendlyName;
         $this->options['eventTypes'] = $eventTypes;
         $this->options['webhookUrl'] = $webhookUrl;
         $this->options['status'] = $status;
+        $this->options['version'] = $version;
     }
 
     /**
@@ -127,6 +141,17 @@ class UpdateWebhookOptions extends Options {
      */
     public function setStatus(string $status): self {
         $this->options['status'] = $status;
+        return $this;
+    }
+
+    /**
+     * The webhook version. Default value is `v2` which includes all the latest fields. Version `v1` is legacy and may be removed in the future.
+     *
+     * @param string $version The webhook version
+     * @return $this Fluent Builder
+     */
+    public function setVersion(string $version): self {
+        $this->options['version'] = $version;
         return $this;
     }
 

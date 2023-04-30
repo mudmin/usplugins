@@ -16,9 +16,6 @@ use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
-/**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- */
 class WebhookContext extends InstanceContext {
     /**
      * Initialize the WebhookContext
@@ -51,6 +48,7 @@ class WebhookContext extends InstanceContext {
             'EventTypes' => Serialize::map($options['eventTypes'], function($e) { return $e; }),
             'WebhookUrl' => $options['webhookUrl'],
             'Status' => $options['status'],
+            'Version' => $options['version'],
         ]);
 
         $payload = $this->version->update('POST', $this->uri, [], $data);

@@ -13,22 +13,32 @@ use Twilio\Domain;
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
 use Twilio\Rest\Verify\V2\FormList;
+use Twilio\Rest\Verify\V2\SafelistList;
 use Twilio\Rest\Verify\V2\ServiceList;
+use Twilio\Rest\Verify\V2\TemplateList;
 use Twilio\Rest\Verify\V2\VerificationAttemptList;
+use Twilio\Rest\Verify\V2\VerificationAttemptsSummaryList;
 use Twilio\Version;
 
 /**
  * @property FormList $forms
+ * @property SafelistList $safelist
  * @property ServiceList $services
  * @property VerificationAttemptList $verificationAttempts
+ * @property VerificationAttemptsSummaryList $verificationAttemptsSummary
+ * @property TemplateList $templates
  * @method \Twilio\Rest\Verify\V2\FormContext forms(string $formType)
+ * @method \Twilio\Rest\Verify\V2\SafelistContext safelist(string $phoneNumber)
  * @method \Twilio\Rest\Verify\V2\ServiceContext services(string $sid)
  * @method \Twilio\Rest\Verify\V2\VerificationAttemptContext verificationAttempts(string $sid)
  */
 class V2 extends Version {
     protected $_forms;
+    protected $_safelist;
     protected $_services;
     protected $_verificationAttempts;
+    protected $_verificationAttemptsSummary;
+    protected $_templates;
 
     /**
      * Construct the V2 version of Verify
@@ -47,6 +57,13 @@ class V2 extends Version {
         return $this->_forms;
     }
 
+    protected function getSafelist(): SafelistList {
+        if (!$this->_safelist) {
+            $this->_safelist = new SafelistList($this);
+        }
+        return $this->_safelist;
+    }
+
     protected function getServices(): ServiceList {
         if (!$this->_services) {
             $this->_services = new ServiceList($this);
@@ -59,6 +76,20 @@ class V2 extends Version {
             $this->_verificationAttempts = new VerificationAttemptList($this);
         }
         return $this->_verificationAttempts;
+    }
+
+    protected function getVerificationAttemptsSummary(): VerificationAttemptsSummaryList {
+        if (!$this->_verificationAttemptsSummary) {
+            $this->_verificationAttemptsSummary = new VerificationAttemptsSummaryList($this);
+        }
+        return $this->_verificationAttemptsSummary;
+    }
+
+    protected function getTemplates(): TemplateList {
+        if (!$this->_templates) {
+            $this->_templates = new TemplateList($this);
+        }
+        return $this->_templates;
     }
 
     /**

@@ -18,8 +18,6 @@ use Twilio\Values;
 use Twilio\Version;
 
 /**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- *
  * @property string $sid
  * @property string $accountSid
  * @property string $serviceSid
@@ -34,6 +32,7 @@ use Twilio\Version;
  * @property string $respondedReason
  * @property array $details
  * @property array $hiddenDetails
+ * @property array $metadata
  * @property string $factorType
  * @property string $url
  * @property array $links
@@ -69,6 +68,7 @@ class ChallengeInstance extends InstanceResource {
             'respondedReason' => Values::array_get($payload, 'responded_reason'),
             'details' => Values::array_get($payload, 'details'),
             'hiddenDetails' => Values::array_get($payload, 'hidden_details'),
+            'metadata' => Values::array_get($payload, 'metadata'),
             'factorType' => Values::array_get($payload, 'factor_type'),
             'url' => Values::array_get($payload, 'url'),
             'links' => Values::array_get($payload, 'links'),

@@ -17,9 +17,6 @@ use Twilio\Stream;
 use Twilio\Values;
 use Twilio\Version;
 
-/**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- */
 class ChallengeList extends ListResource {
     /**
      * Construct the ChallengeList
@@ -130,6 +127,7 @@ class ChallengeList extends ListResource {
         $params = Values::of([
             'FactorSid' => $options['factorSid'],
             'Status' => $options['status'],
+            'Order' => $options['order'],
             'PageToken' => $pageToken,
             'Page' => $pageNumber,
             'PageSize' => $pageSize,

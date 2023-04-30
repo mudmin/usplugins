@@ -87,6 +87,14 @@ class ParticipantList extends ListResource {
             'CallerId' => $options['callerId'],
             'CallReason' => $options['callReason'],
             'RecordingTrack' => $options['recordingTrack'],
+            'TimeLimit' => $options['timeLimit'],
+            'MachineDetection' => $options['machineDetection'],
+            'MachineDetectionTimeout' => $options['machineDetectionTimeout'],
+            'MachineDetectionSpeechThreshold' => $options['machineDetectionSpeechThreshold'],
+            'MachineDetectionSpeechEndThreshold' => $options['machineDetectionSpeechEndThreshold'],
+            'MachineDetectionSilenceTimeout' => $options['machineDetectionSilenceTimeout'],
+            'AmdStatusCallback' => $options['amdStatusCallback'],
+            'AmdStatusCallbackMethod' => $options['amdStatusCallbackMethod'],
         ]);
 
         $payload = $this->version->create('POST', $this->uri, [], $data);

@@ -40,10 +40,16 @@ class RequestValidator {
         // sort the array by keys
         \ksort($data);
 
-        // append them to the data string in order
-        // with no delimiters
         foreach ($data as $key => $value) {
-            $url .= $key . $value;
+            // convert a single value to an array or remove any duplicates
+            $valueArray = \is_array($value) ? \array_unique($value) : array($value);
+            // also sort all the values
+            \sort($valueArray);
+
+            // append them to the data string with no delimiters
+            foreach ($valueArray as $item) {
+                $url .= $key . $item;
+            }
         }
 
         // sha1 then base64 the url to the auth token and return the base64-ed string
@@ -90,12 +96,12 @@ class RequestValidator {
          *  since sig generation on the back end is inconsistent.
          */
         $validSignatureWithPort = self::compare(
-            $this->computeSignature($urlWithPort, $data),
-            $expectedSignature
+            $expectedSignature,
+            $this->computeSignature($urlWithPort, $data)
         );
         $validSignatureWithoutPort = self::compare(
-            $this->computeSignature($urlWithoutPort, $data),
-            $expectedSignature
+            $expectedSignature,
+            $this->computeSignature($urlWithoutPort, $data)
         );
 
         return $validBodyHash && ($validSignatureWithPort || $validSignatureWithoutPort);
@@ -110,26 +116,11 @@ class RequestValidator {
      * @return bool True if $a === $b, false otherwise.
      */
     public static function compare(?string $a, ?string $b): bool {
-        // if the strings are different lengths, obviously they're invalid
-        if (\strlen($a) !== \strlen($b)) {
-            return false;
+        if ($a && $b) {
+            return hash_equals($a, $b);
         }
 
-        if (!$a && !$b) {
-            return true;
-        }
-
-        $limit = \strlen($a);
-
-        // checking every character for an exact difference, if you find one, return false
-        for ($i = 0; $i < $limit; ++$i) {
-            if ($a[$i] !== $b[$i]) {
-                return false;
-            }
-        }
-
-        // there have been no differences found
-        return true;
+        return false;
     }
 
     /**
@@ -179,4 +170,3 @@ class RequestValidator {
         return \implode('', $parts);
     }
 }
-

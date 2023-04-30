@@ -25,10 +25,11 @@ abstract class WorkerOptions {
      *                              Workers to read are eligible for
      * @param string $taskQueueSid The SID of the TaskQueue that the Workers to
      *                             read are eligible for
+     * @param string $ordering Sorting parameter for Workers
      * @return ReadWorkerOptions Options builder
      */
-    public static function read(string $activityName = Values::NONE, string $activitySid = Values::NONE, string $available = Values::NONE, string $friendlyName = Values::NONE, string $targetWorkersExpression = Values::NONE, string $taskQueueName = Values::NONE, string $taskQueueSid = Values::NONE): ReadWorkerOptions {
-        return new ReadWorkerOptions($activityName, $activitySid, $available, $friendlyName, $targetWorkersExpression, $taskQueueName, $taskQueueSid);
+    public static function read(string $activityName = Values::NONE, string $activitySid = Values::NONE, string $available = Values::NONE, string $friendlyName = Values::NONE, string $targetWorkersExpression = Values::NONE, string $taskQueueName = Values::NONE, string $taskQueueSid = Values::NONE, string $ordering = Values::NONE): ReadWorkerOptions {
+        return new ReadWorkerOptions($activityName, $activitySid, $available, $friendlyName, $targetWorkersExpression, $taskQueueName, $taskQueueSid, $ordering);
     }
 
     /**
@@ -46,11 +47,21 @@ abstract class WorkerOptions {
      *                            Worker's initial state
      * @param string $attributes The JSON string that describes the Worker
      * @param string $friendlyName A string to describe the Worker
-     * @param bool $rejectPendingReservations Whether to reject pending reservations
+     * @param bool $rejectPendingReservations Whether to reject the Worker's
+     *                                        pending reservations
+     * @param string $ifMatch The If-Match HTTP request header
      * @return UpdateWorkerOptions Options builder
      */
-    public static function update(string $activitySid = Values::NONE, string $attributes = Values::NONE, string $friendlyName = Values::NONE, bool $rejectPendingReservations = Values::NONE): UpdateWorkerOptions {
-        return new UpdateWorkerOptions($activitySid, $attributes, $friendlyName, $rejectPendingReservations);
+    public static function update(string $activitySid = Values::NONE, string $attributes = Values::NONE, string $friendlyName = Values::NONE, bool $rejectPendingReservations = Values::NONE, string $ifMatch = Values::NONE): UpdateWorkerOptions {
+        return new UpdateWorkerOptions($activitySid, $attributes, $friendlyName, $rejectPendingReservations, $ifMatch);
+    }
+
+    /**
+     * @param string $ifMatch The If-Match HTTP request header
+     * @return DeleteWorkerOptions Options builder
+     */
+    public static function delete(string $ifMatch = Values::NONE): DeleteWorkerOptions {
+        return new DeleteWorkerOptions($ifMatch);
     }
 }
 
@@ -67,8 +78,9 @@ class ReadWorkerOptions extends Options {
      *                              Workers to read are eligible for
      * @param string $taskQueueSid The SID of the TaskQueue that the Workers to
      *                             read are eligible for
+     * @param string $ordering Sorting parameter for Workers
      */
-    public function __construct(string $activityName = Values::NONE, string $activitySid = Values::NONE, string $available = Values::NONE, string $friendlyName = Values::NONE, string $targetWorkersExpression = Values::NONE, string $taskQueueName = Values::NONE, string $taskQueueSid = Values::NONE) {
+    public function __construct(string $activityName = Values::NONE, string $activitySid = Values::NONE, string $available = Values::NONE, string $friendlyName = Values::NONE, string $targetWorkersExpression = Values::NONE, string $taskQueueName = Values::NONE, string $taskQueueSid = Values::NONE, string $ordering = Values::NONE) {
         $this->options['activityName'] = $activityName;
         $this->options['activitySid'] = $activitySid;
         $this->options['available'] = $available;
@@ -76,6 +88,7 @@ class ReadWorkerOptions extends Options {
         $this->options['targetWorkersExpression'] = $targetWorkersExpression;
         $this->options['taskQueueName'] = $taskQueueName;
         $this->options['taskQueueSid'] = $taskQueueSid;
+        $this->options['ordering'] = $ordering;
     }
 
     /**
@@ -160,6 +173,17 @@ class ReadWorkerOptions extends Options {
     }
 
     /**
+     * Sorting parameter for Workers
+     *
+     * @param string $ordering Sorting parameter for Workers
+     * @return $this Fluent Builder
+     */
+    public function setOrdering(string $ordering): self {
+        $this->options['ordering'] = $ordering;
+        return $this;
+    }
+
+    /**
      * Provide a friendly representation
      *
      * @return string Machine friendly representation
@@ -221,13 +245,16 @@ class UpdateWorkerOptions extends Options {
      *                            Worker's initial state
      * @param string $attributes The JSON string that describes the Worker
      * @param string $friendlyName A string to describe the Worker
-     * @param bool $rejectPendingReservations Whether to reject pending reservations
+     * @param bool $rejectPendingReservations Whether to reject the Worker's
+     *                                        pending reservations
+     * @param string $ifMatch The If-Match HTTP request header
      */
-    public function __construct(string $activitySid = Values::NONE, string $attributes = Values::NONE, string $friendlyName = Values::NONE, bool $rejectPendingReservations = Values::NONE) {
+    public function __construct(string $activitySid = Values::NONE, string $attributes = Values::NONE, string $friendlyName = Values::NONE, bool $rejectPendingReservations = Values::NONE, string $ifMatch = Values::NONE) {
         $this->options['activitySid'] = $activitySid;
         $this->options['attributes'] = $attributes;
         $this->options['friendlyName'] = $friendlyName;
         $this->options['rejectPendingReservations'] = $rejectPendingReservations;
+        $this->options['ifMatch'] = $ifMatch;
     }
 
     /**
@@ -265,13 +292,25 @@ class UpdateWorkerOptions extends Options {
     }
 
     /**
-     * Whether to reject pending reservations.
+     * Whether to reject the Worker's pending reservations. This option is only valid if the Worker's new [Activity](https://www.twilio.com/docs/taskrouter/api/activity) resource has its `availability` property set to `False`.
      *
-     * @param bool $rejectPendingReservations Whether to reject pending reservations
+     * @param bool $rejectPendingReservations Whether to reject the Worker's
+     *                                        pending reservations
      * @return $this Fluent Builder
      */
     public function setRejectPendingReservations(bool $rejectPendingReservations): self {
         $this->options['rejectPendingReservations'] = $rejectPendingReservations;
+        return $this;
+    }
+
+    /**
+     * The If-Match HTTP request header
+     *
+     * @param string $ifMatch The If-Match HTTP request header
+     * @return $this Fluent Builder
+     */
+    public function setIfMatch(string $ifMatch): self {
+        $this->options['ifMatch'] = $ifMatch;
         return $this;
     }
 
@@ -283,5 +322,35 @@ class UpdateWorkerOptions extends Options {
     public function __toString(): string {
         $options = \http_build_query(Values::of($this->options), '', ' ');
         return '[Twilio.Taskrouter.V1.UpdateWorkerOptions ' . $options . ']';
+    }
+}
+
+class DeleteWorkerOptions extends Options {
+    /**
+     * @param string $ifMatch The If-Match HTTP request header
+     */
+    public function __construct(string $ifMatch = Values::NONE) {
+        $this->options['ifMatch'] = $ifMatch;
+    }
+
+    /**
+     * The If-Match HTTP request header
+     *
+     * @param string $ifMatch The If-Match HTTP request header
+     * @return $this Fluent Builder
+     */
+    public function setIfMatch(string $ifMatch): self {
+        $this->options['ifMatch'] = $ifMatch;
+        return $this;
+    }
+
+    /**
+     * Provide a friendly representation
+     *
+     * @return string Machine friendly representation
+     */
+    public function __toString(): string {
+        $options = \http_build_query(Values::of($this->options), '', ' ');
+        return '[Twilio.Taskrouter.V1.DeleteWorkerOptions ' . $options . ']';
     }
 }

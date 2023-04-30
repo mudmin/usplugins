@@ -22,12 +22,17 @@ abstract class MessageOptions {
      * @param string $attributes A string metadata field you can use to store any
      *                           data you wish.
      * @param string $mediaSid The Media SID to be attached to the new Message.
+     * @param string $contentSid The unique ID of the multi-channel Rich Content
+     *                           template.
+     * @param string $contentVariables A structurally valid JSON string that
+     *                                 contains values to resolve Rich Content
+     *                                 template variables.
      * @param string $xTwilioWebhookEnabled The X-Twilio-Webhook-Enabled HTTP
      *                                      request header
      * @return CreateMessageOptions Options builder
      */
-    public static function create(string $author = Values::NONE, string $body = Values::NONE, \DateTime $dateCreated = Values::NONE, \DateTime $dateUpdated = Values::NONE, string $attributes = Values::NONE, string $mediaSid = Values::NONE, string $xTwilioWebhookEnabled = Values::NONE): CreateMessageOptions {
-        return new CreateMessageOptions($author, $body, $dateCreated, $dateUpdated, $attributes, $mediaSid, $xTwilioWebhookEnabled);
+    public static function create(string $author = Values::NONE, string $body = Values::NONE, \DateTime $dateCreated = Values::NONE, \DateTime $dateUpdated = Values::NONE, string $attributes = Values::NONE, string $mediaSid = Values::NONE, string $contentSid = Values::NONE, string $contentVariables = Values::NONE, string $xTwilioWebhookEnabled = Values::NONE): CreateMessageOptions {
+        return new CreateMessageOptions($author, $body, $dateCreated, $dateUpdated, $attributes, $mediaSid, $contentSid, $contentVariables, $xTwilioWebhookEnabled);
     }
 
     /**
@@ -54,6 +59,14 @@ abstract class MessageOptions {
     public static function delete(string $xTwilioWebhookEnabled = Values::NONE): DeleteMessageOptions {
         return new DeleteMessageOptions($xTwilioWebhookEnabled);
     }
+
+    /**
+     * @param string $order The sort order of the returned messages
+     * @return ReadMessageOptions Options builder
+     */
+    public static function read(string $order = Values::NONE): ReadMessageOptions {
+        return new ReadMessageOptions($order);
+    }
 }
 
 class CreateMessageOptions extends Options {
@@ -66,16 +79,23 @@ class CreateMessageOptions extends Options {
      * @param string $attributes A string metadata field you can use to store any
      *                           data you wish.
      * @param string $mediaSid The Media SID to be attached to the new Message.
+     * @param string $contentSid The unique ID of the multi-channel Rich Content
+     *                           template.
+     * @param string $contentVariables A structurally valid JSON string that
+     *                                 contains values to resolve Rich Content
+     *                                 template variables.
      * @param string $xTwilioWebhookEnabled The X-Twilio-Webhook-Enabled HTTP
      *                                      request header
      */
-    public function __construct(string $author = Values::NONE, string $body = Values::NONE, \DateTime $dateCreated = Values::NONE, \DateTime $dateUpdated = Values::NONE, string $attributes = Values::NONE, string $mediaSid = Values::NONE, string $xTwilioWebhookEnabled = Values::NONE) {
+    public function __construct(string $author = Values::NONE, string $body = Values::NONE, \DateTime $dateCreated = Values::NONE, \DateTime $dateUpdated = Values::NONE, string $attributes = Values::NONE, string $mediaSid = Values::NONE, string $contentSid = Values::NONE, string $contentVariables = Values::NONE, string $xTwilioWebhookEnabled = Values::NONE) {
         $this->options['author'] = $author;
         $this->options['body'] = $body;
         $this->options['dateCreated'] = $dateCreated;
         $this->options['dateUpdated'] = $dateUpdated;
         $this->options['attributes'] = $attributes;
         $this->options['mediaSid'] = $mediaSid;
+        $this->options['contentSid'] = $contentSid;
+        $this->options['contentVariables'] = $contentVariables;
         $this->options['xTwilioWebhookEnabled'] = $xTwilioWebhookEnabled;
     }
 
@@ -144,6 +164,31 @@ class CreateMessageOptions extends Options {
      */
     public function setMediaSid(string $mediaSid): self {
         $this->options['mediaSid'] = $mediaSid;
+        return $this;
+    }
+
+    /**
+     * The unique ID of the multi-channel [Rich Content](https://www.twilio.com/docs/content-api) template, required for template-generated messages.  **Note** that if this field is set, `Body` and `MediaSid` parameters are ignored.
+     *
+     * @param string $contentSid The unique ID of the multi-channel Rich Content
+     *                           template.
+     * @return $this Fluent Builder
+     */
+    public function setContentSid(string $contentSid): self {
+        $this->options['contentSid'] = $contentSid;
+        return $this;
+    }
+
+    /**
+     * A structurally valid JSON string that contains values to resolve Rich Content template variables.
+     *
+     * @param string $contentVariables A structurally valid JSON string that
+     *                                 contains values to resolve Rich Content
+     *                                 template variables.
+     * @return $this Fluent Builder
+     */
+    public function setContentVariables(string $contentVariables): self {
+        $this->options['contentVariables'] = $contentVariables;
         return $this;
     }
 
@@ -300,5 +345,35 @@ class DeleteMessageOptions extends Options {
     public function __toString(): string {
         $options = \http_build_query(Values::of($this->options), '', ' ');
         return '[Twilio.Conversations.V1.DeleteMessageOptions ' . $options . ']';
+    }
+}
+
+class ReadMessageOptions extends Options {
+    /**
+     * @param string $order The sort order of the returned messages
+     */
+    public function __construct(string $order = Values::NONE) {
+        $this->options['order'] = $order;
+    }
+
+    /**
+     * The sort order of the returned messages. Can be: `asc` (ascending) or `desc` (descending), with `asc` as the default.
+     *
+     * @param string $order The sort order of the returned messages
+     * @return $this Fluent Builder
+     */
+    public function setOrder(string $order): self {
+        $this->options['order'] = $order;
+        return $this;
+    }
+
+    /**
+     * Provide a friendly representation
+     *
+     * @return string Machine friendly representation
+     */
+    public function __toString(): string {
+        $options = \http_build_query(Values::of($this->options), '', ' ');
+        return '[Twilio.Conversations.V1.ReadMessageOptions ' . $options . ']';
     }
 }

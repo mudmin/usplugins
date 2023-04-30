@@ -12,6 +12,7 @@ namespace Twilio\Rest\Api\V2010\Account;
 use Twilio\Deserialize;
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceResource;
+use Twilio\Options;
 use Twilio\Rest\Api\V2010\Account\Recording\AddOnResultList;
 use Twilio\Rest\Api\V2010\Account\Recording\TranscriptionList;
 use Twilio\Values;
@@ -36,6 +37,7 @@ use Twilio\Version;
  * @property string $uri
  * @property array $encryptionDetails
  * @property array $subresourceUris
+ * @property string $mediaUrl
  */
 class RecordingInstance extends InstanceResource {
     protected $_transcriptions;
@@ -72,6 +74,7 @@ class RecordingInstance extends InstanceResource {
             'uri' => Values::array_get($payload, 'uri'),
             'encryptionDetails' => Values::array_get($payload, 'encryption_details'),
             'subresourceUris' => Values::array_get($payload, 'subresource_uris'),
+            'mediaUrl' => Values::array_get($payload, 'media_url'),
         ];
 
         $this->solution = ['accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid'], ];
@@ -98,11 +101,12 @@ class RecordingInstance extends InstanceResource {
     /**
      * Fetch the RecordingInstance
      *
+     * @param array|Options $options Optional Arguments
      * @return RecordingInstance Fetched RecordingInstance
      * @throws TwilioException When an HTTP error occurs.
      */
-    public function fetch(): RecordingInstance {
-        return $this->proxy()->fetch();
+    public function fetch(array $options = []): RecordingInstance {
+        return $this->proxy()->fetch($options);
     }
 
     /**

@@ -12,12 +12,10 @@ namespace Twilio\Rest\Verify\V2\Service\Entity;
 use Twilio\Exceptions\TwilioException;
 use Twilio\ListResource;
 use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
-/**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- */
 class NewFactorList extends ListResource {
     /**
      * Construct the NewFactorList
@@ -61,6 +59,7 @@ class NewFactorList extends ListResource {
             'Config.Skew' => $options['configSkew'],
             'Config.CodeLength' => $options['configCodeLength'],
             'Config.Alg' => $options['configAlg'],
+            'Metadata' => Serialize::jsonObject($options['metadata']),
         ]);
 
         $payload = $this->version->create('POST', $this->uri, [], $data);
