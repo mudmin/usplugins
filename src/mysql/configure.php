@@ -143,9 +143,9 @@ if (!function_exists('tableFromQueryPlugin')) {
           <?= tokenHere(); ?>
           <font color="black"><strong>Enter your query here...</strong></font><br>
 
-          <textarea autofocus class="form-control" rows="4" name="query" id="query"><?php if (!empty($_POST['query'])) {
-                                                                                      echo $_POST['query'];
-                                                                                    } ?></textarea>
+          <textarea autofocus class="form-control autoresize" rows="4" name="query" id="query"><?php if (!empty($_POST['query'])) {
+                                                                                                  echo $_POST['query'];
+                                                                                                } ?></textarea>
           <input type="submit" name="executeQuery" value="Execute" class="btn btn-danger">
         </form>
       </div>
@@ -158,9 +158,9 @@ if (!function_exists('tableFromQueryPlugin')) {
 
 
           <label for="">Enter your query here</label>
-          <textarea autofocus class="form-control" rows="4" name="query" id="query"><?php if (!empty($_POST['query'])) {
-                                                                                      echo $_POST['query'];
-                                                                                    } ?></textarea>
+          <textarea autofocus class="form-control autoresize" rows="4" name="query" id="query"><?php if (!empty($_POST['query'])) {
+                                                                                                  echo $_POST['query'];
+                                                                                                } ?></textarea>
 
           <div class="input-group mt-3">
 
@@ -291,4 +291,19 @@ if (!function_exists('tableFromQueryPlugin')) {
               form.submit();
             }
           });
+          $(document).ready(function() {
+  $('.autoresize').on('input', function() {
+    resizeTextbox(this);
+  });
+
+  function resizeTextbox(textbox) {
+    $(textbox).css('height', 'auto');
+    $(textbox).css('height', textbox.scrollHeight + 'px');
+  }
+
+  // Resize all textboxes initially
+  $('.autoresize').each(function() {
+    resizeTextbox(this);
+  });
+});
         </script>
