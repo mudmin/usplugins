@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>0.7 Alpha</version>
+  <version>1.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>December 13,2019</release>
+  <release>May 19, 2023</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0</tested>
+  <tested>5.5.8</tested>
 
 <!-- What does your plugin do? -->
-  <description>This is the store plugin for UserSpice. </description>
+  <description>This is the store plugin for UserSpice. It's very basic and primarily designed to be a starting point for your own store design.  </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Store</button>

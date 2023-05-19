@@ -1,62 +1,46 @@
 <?php
-/*
-UserSpice 4
-An Open Source PHP User Management System
-by the UserSpice Team at http://UserSpice.com
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-?>
-<?php
 require '../../../../users/init.php';
-require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
-//require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-if (!securePage($_SERVER['PHP_SELF'])){die();}  $db=DB::getInstance(); if(!pluginActive("store")){die();}
+require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';
+if (!securePage($_SERVER['PHP_SELF'])) {
+	die();
+}
+if (!pluginActive("store", true)) {
+	die();
+}
 $abanQ = $db->query("SELECT * FROM store_orders WHERE paid < 1");
 $abanC = $abanQ->count();
-if($abanC > 0){
+if ($abanC > 0) {
 	$aban = $abanQ->results();
 }
-if(!empty($_POST)){
+if (!empty($_POST)) {
 
-if(!empty($_POST['viewOrder'])){
-$order = Input::get('order');
-$_SESSION['orderno'] = $order;
-$link = str_replace('view_order.php','cart.php',$settings->order_link);
-Redirect::to($link);
-}
-
-if(!empty($_POST['deleteOrder'])){
-$order = Input::get('orderno');
-
-//double check to make sure order is not paid;
-$paid = $db->query("SELECT * FROM store_orders WHERE id = ?",array($order))->first();
-if($paid->paid == 1){
-	Redirect::to('abandoned.php?err=Sorry+order+has+been+paid+and+cannot+be+deleted');
-}
-
-$itemsQ = $db->query("SELECT id FROM store_order_items WHERE orderno = ?",array($orderno));
-$itemsC = $itemsQ->count();
-if($itemsC > 0){
-	$items = $itemsQ->results();
-	foreach($items as $i){
-		$db->query("DELETE FROM store_order_items WHERE id = ?",array($i->id));
+	if (!empty($_POST['viewOrder'])) {
+		$order = Input::get('order');
+		$_SESSION['orderno'] = $order;
+		$link = str_replace('view_order.php', 'cart.php', $settings->order_link);
+		Redirect::to($link);
 	}
-}
-$db->query("DELETE FROM store_orders WHERE id = ?",array($order));
-Redirect::to('abandoned.php?err=Order+deleted');
-}
+
+	if (!empty($_POST['deleteOrder'])) {
+		$order = Input::get('orderno');
+
+		//double check to make sure order is not paid;
+		$paid = $db->query("SELECT * FROM store_orders WHERE id = ?", array($order))->first();
+		if ($paid->paid == 1) {
+			Redirect::to('abandoned.php?err=Sorry+order+has+been+paid+and+cannot+be+deleted');
+		}
+
+		$itemsQ = $db->query("SELECT id FROM store_order_items WHERE orderno = ?", array($orderno));
+		$itemsC = $itemsQ->count();
+		if ($itemsC > 0) {
+			$items = $itemsQ->results();
+			foreach ($items as $i) {
+				$db->query("DELETE FROM store_order_items WHERE id = ?", array($i->id));
+			}
+		}
+		$db->query("DELETE FROM store_orders WHERE id = ?", array($order));
+		Redirect::to('abandoned.php?err=Order+deleted');
+	}
 }
 ?>
 
@@ -74,59 +58,66 @@ Redirect::to('abandoned.php?err=Order+deleted');
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
-				<?php if($abanC > 0){?>
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Order Number</th><th>Name</th><th>Contact<th>Last Update</th><th>Order</th><th>Delete Order</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						foreach($aban as $a){
-							?>
+				<?php if ($abanC > 0) { ?>
+					<table class="table">
+						<thead>
 							<tr>
-								<td>
-									<form class="" action="" method="post">
-										<input type="hidden" name="order" value="<?=$a->id?>">
-										<input type="submit" name="viewOrder" value="View Order #<?=$a->id?>" class="btn btn-primary">
-									</form>
-									</td>
-								<td><?=$a->fullname?></td>
-								<td><?=$a->phone?> <?=$a->email?></td>
-								<td><?=$a->last_update?></td>
-								<td>
-									<?php
-									$items = $db->query("SELECT * FROM store_order_items WHERE orderno = ?",array($a->id))->results();
-									$total = 0;
-									foreach($items as $i){
-										if($i->qty == 0){continue;}
-										echoItem($i->item);
-										echo " x <font color='red'>".$i->qty."</font> = ";
-										echo money($i->price_tot);
-										echo "<br>";
-										$total = $total + $i->price_tot;
-									}
-									echo "<strong><font color='blue'>";
-									echo money($total);
-									echo "</font></strong>";
-									?>
-								</td>
-								<td>
-									<form class="" action="" method="post">
-											<input type="hidden" name="orderno" value="<?=$a->id?>">
-											<input type="submit" name="deleteOrder" value="Delete Order" class="btn btn-danger">
-									</form>
-
-								</td>
+								<th>Order Number</th>
+								<th>Name</th>
+								<th>Contact
+								<th>Last Update</th>
+								<th>Order</th>
+								<th>Delete Order</th>
 							</tr>
+						</thead>
+						<tbody>
+							<?php
+							foreach ($aban as $a) {
+							?>
+								<tr>
+									<td>
+										<form class="" action="" method="post">
+											<input type="hidden" name="order" value="<?= $a->id ?>">
+											<input type="submit" name="viewOrder" value="View Order #<?= $a->id ?>" class="btn btn-primary">
+										</form>
+									</td>
+									<td><?= $a->fullname ?></td>
+									<td><?= $a->phone ?> <?= $a->email ?></td>
+									<td><?= $a->last_update ?></td>
+									<td>
+										<?php
+										$items = $db->query("SELECT * FROM store_order_items WHERE orderno = ?", array($a->id))->results();
+										$total = 0;
+										foreach ($items as $i) {
+											if ($i->qty == 0) {
+												continue;
+											}
+											echoItem($i->item);
+											echo " x <font color='red'>" . $i->qty . "</font> = ";
+											echo money($i->price_tot);
+											echo "<br>";
+											$total = $total + $i->price_tot;
+										}
+										echo "<strong><font color='blue'>";
+										echo money($total);
+										echo "</font></strong>";
+										?>
+									</td>
+									<td>
+										<form class="" action="" method="post">
+											<input type="hidden" name="orderno" value="<?= $a->id ?>">
+											<input type="submit" name="deleteOrder" value="Delete Order" class="btn btn-danger">
+										</form>
+
+									</td>
+								</tr>
 							<?php	} ?>
-					</tbody>
-				</table>
-			<?php } //End abandoned check
-			else{
-				echo "<h2 align='center'>You do not have any abandoned orders. Yay!</h2>";
-			}?>
+						</tbody>
+					</table>
+				<?php } //End abandoned check
+				else {
+					echo "<h2 align='center'>You do not have any abandoned orders. Yay!</h2>";
+				} ?>
 			</div>
 
 		</div>
@@ -135,6 +126,8 @@ Redirect::to('abandoned.php?err=Order+deleted');
 </div> <!-- /.wrapper -->
 
 
-<?php //require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
+<?php //require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls 
+?>
 
-<?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>
+<?php require_once $abs_us_root . $us_url_root . 'users/includes/html_footer.php'; // currently just the closing /body and /html 
+?>
