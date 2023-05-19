@@ -35,7 +35,7 @@ if(!empty($_POST['createOrg'])){
     }
     Redirect::to('admin.php?view=plugins_config&plugin=saas&v=org');
   }
-}
+
 
 if(!empty($_POST['deact'])){
   $users = $db->query("SELECT * FROM users WHERE account_owner = ?",[$org->id])->results();
