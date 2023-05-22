@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>April 12,2019</release>
+  <release>May 22, 2023</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.5.9</tested>
 
 <!-- What does your plugin do? -->
   <description>Helps find bottlenecks in your code by checking the performance of each page.</description>
