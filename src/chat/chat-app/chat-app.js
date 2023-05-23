@@ -204,6 +204,7 @@ window.addEventListener('load',function(){
   chatPoll();
   document.getElementById('addMsgBtn').addEventListener('click', submitChatMsg);
   document.getElementById('toggleChatWindowBtn').addEventListener('click', (evt) => {
+    console.log("click");
     evt.preventDefault();
     if(document.getElementById('chatWindow').classList.contains("show")){
       closeChat();

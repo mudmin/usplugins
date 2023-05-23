@@ -1,10 +1,13 @@
 <?php
-global $user, $cb;
+global $user, $cb, $us_url_root;
 if(isset($user) && $user->isLoggedIn()){
 ?>
 <style media="screen">
   .hide{
     display:none;
+  }
+  #chatWindow{
+    z-index:9999 !important;
   }
 </style>
 <!-- load additional resources  -->
@@ -14,14 +17,14 @@ if(isset($user) && $user->isLoggedIn()){
     var styles = document.createElement('link');
     styles.id = 'chat-styles-link';
     styles.rel = 'stylesheet';
-    styles.href = '<?=$us_url_root?>/usersc/plugins/chat/chat-app/styles/chat-app.css?cb=<?=$cb?>';
+    styles.href = '<?=$us_url_root?>usersc/plugins/chat/chat-app/styles/chat-app.css?cb=<?=$cb?>';
     document.head.appendChild(styles);
   }
 
   if(!document.getElementById('chat-app-js-src')) {
     var script = document.createElement('script');
     script.id = 'chat-app-js-src';
-    script.src = '<?=$us_url_root?>/usersc/plugins/chat/chat-app/chat-app.js?cb=<?=$cb?>';
+    script.src = '<?=$us_url_root?>usersc/plugins/chat/chat-app/chat-app.js?cb=<?=$cb?>';
     // script.defer = true;
     document.head.appendChild(script);
   }
@@ -30,7 +33,7 @@ if(isset($user) && $user->isLoggedIn()){
 
   var script = document.createElement('script');
   script.id = 'emoji-button-src'
-  script.src = '<?=$us_url_root?>/usersc/plugins/chat/chat-app/emoji-button.min.js?cb=<?=$cb?>';
+  script.src = '<?=$us_url_root?>usersc/plugins/chat/chat-app/emoji-button.min.js?cb=<?=$cb?>';
   document.head.appendChild(script);
 
 </script>
