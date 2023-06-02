@@ -83,12 +83,51 @@ if($go == 1){
   $run = -microtime(true);
   $x = 1000;
   for ($i=0; $i < $x ; $i++) {
-    $db->insert('plg_benchmark',['total'=>9,'benchdata'=>'UserSpice Rulez']);
+    $rando = randomstring(255);
+    $db->insert('plg_benchmark',['total'=>9,'benchdata'=>'UserSpice Rulez','randostring'=>$rando]);
+    $db->insert('plg_benchmark_join',['total'=>9,'benchdata'=>'UserSpice Rulez','randostring'=>$rando]);
   }
   $run += microtime(true);
   //dump("Insert 1000 DB Rows");
   //dump(sprintf('%f', $run));
   $data['insert'] = sprintf('%f', $run);
+
+  //Join 1000 db Rows
+    //insert 1000 rows into the db
+    $run = -microtime(true);
+    $x = 1000;
+    for ($i=0; $i < $x ; $i++) {
+      $rando = randomstring(255);
+     $test =  $db->query("SELECT a.*, b.* FROM plg_benchmark a 
+      LEFT OUTER JOIN plg_benchmark_join b ON a.randostring = b.randostring WHERE a.id = ?" ,[$i+1])->results();
+ 
+     $test =  $db->query("SELECT 
+          b.*, 
+          a.*, 
+          s.*, 
+          a2.*, 
+          e.*, 
+          (b.id + a.id) AS sum,
+          CONCAT(s.recap_public, ' - ', a.randostring) AS combined_info
+      FROM 
+          plg_benchmark a 
+      JOIN 
+          plg_benchmark_join b ON b.randostring = a.randostring 
+      LEFT OUTER JOIN 
+          settings s ON s.id = 1
+      LEFT JOIN 
+          `audit` a2 ON a2.id = 1
+      LEFT OUTER JOIN 
+          email e ON e.id = 1
+      WHERE 
+          a.id = ?
+  ", [$i+1])->results();
+
+    }
+    $run += microtime(true);
+    //dump("Insert 1000 DB Rows");
+    //dump(sprintf('%f', $run));
+    $data['join'] = sprintf('%f', $run);
 
   //Sum 1000 db Rows
   $run = -microtime(true);
@@ -118,20 +157,32 @@ if($go == 1){
 
   $db->query("TRUNCATE TABLE plg_benchmark");
 
-  $count = 50000;
+  $db->query("TRUNCATE TABLE plg_benchmark_join");
+  $count = 25;
     //math functions
     $run = -microtime(true);
+    $time_start = microtime(true);
     $mathFunctions = array("abs", "acos", "asin", "atan", "bindec", "floor", "exp", "sin", "tan", "pi", "is_finite", "is_nan", "sqrt");
+    foreach ($mathFunctions as $key => $function) {
+        if (!function_exists($function)) unset($mathFunctions[$key]);
+    }
     for ($i = 0; $i < $count; $i++) {
         foreach ($mathFunctions as $function) {
-          $args = ($function == "pi")?null:array($i);
-            call_user_func_array($function, $args);
+       
+           if($function == "pi"){
+              $r = call_user_func_array($function, array());
+            }elseif($function == "bindec"){
+              $binaryString = decbin($i);
+              $r = call_user_func_array($function, array($binaryString));
+             }else{
+              $r = call_user_func_array($function, array($i));
+             } 
+            
         }
     }
     $run += microtime(true);
-    //dump("Math functions");
-    //dump(sprintf('%f', $run));
     $data['math'] = sprintf('%f', $run);
+    
 
   //string functions
   $run = -microtime(true);
@@ -183,7 +234,7 @@ if($results){ ?>
       <h4 align="center">US Ver: <?=$user_spice_ver?> - PHP Ver: <?=PHP_VERSION?> - OS: <?=PHP_OS?></h4>
       <h3 align="center">Your Time: <?=$data['time'];?></h3>
       <h3 align="center">Official Score: <font color="red"> <?=$data['score'];?></font></h3>
-      <p align="center">Plugin Version 1.0.0</p>
+      <p align="center">Benchmark Version 2.0.0</p>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -208,8 +259,13 @@ if($results){ ?>
           </tr>
 
           <tr>
-            <td>Insert 1000 DB Rows</td>
+            <td>Insert 2000 DB Rows</td>
             <td><?=$data['insert'];?></td>
+          </tr>
+
+          <tr>
+            <td>Join 2000 DB Rows</td>
+            <td><?=$data['join'];?></td>
           </tr>
 
           <tr>

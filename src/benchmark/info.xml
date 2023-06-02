@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>2.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>May 13,2022</release>
+  <release>June 2, 2023</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.4.4</tested>
+  <tested>5.6.0</tested>
 
 <!-- What does your plugin do? -->
-  <description>A synthetic benchmark tool to check server performance.  Share your results on the UserSpice Discord channel for feedback and fun.</description>
+  <description>A synthetic benchmark tool to check server performance.  Share your results on the UserSpice Discord channel for feedback and fun. Results are incompatible with results from v1.0</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Benchmark</button>
