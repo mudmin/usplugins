@@ -34,7 +34,7 @@ if($fieldC > 0){
 <br>
 <?php if(isset($current->usformquery)){ ?>
 	This option allows you to do a database query to generate options for your form field.  It requires 3 things.
-	<li>A database query to graba all of the raw data in the database</li>
+	<li>A database query  all of the raw data in the database</li>
 	<li>A key, which is a column of the database.  Most of the time this is the id column, but you may want to store some text value in there, so it can be any column.  This is what will actually be stored in the database when this option is selected in the form</li>
 	<li>1 or more values to be shown on the front end of the form.  This can be text or one or more colunmns of the database.  A perfect example would be if you want to show last name, first name. That would actually require 3 values:</li>
 	<div style="margin-left:35px;">
@@ -44,6 +44,7 @@ if($fieldC > 0){
 			- db column fname
 		</ul>
 	</div>
+	You can now pass <span class="text-danger">{{{user_id}}}</span> in your query to restrict your db query to only data for a given user.  For example.<br><b><i>SELECT * FROM logs where user_id = {{{user_id}}}</i></b>
 
 	<form autocomplete="off" class="" name="createForm" action="" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">
@@ -63,7 +64,8 @@ if($fieldC > 0){
 					<td>Enter your raw DB query without quotes such as <span style="color:blue;">SELECT * FROM users</span></td>
 					<td>
 						<input type="hidden" name="key[]" value="usformquery">
-						<input type="text" name="val[]" value="<?=$current->usformquery?>"></td>
+						<textarea name="val[]" class="form-control"><?=$current->usformquery?></textarea>
+			
 
 				</tr>
 				<tr>

@@ -1,7 +1,8 @@
 <?php
-function formField($o, $v = []){
+function formField($o, $v = new StdClass()){
   global $abs_us_root, $us_url_root;
   $db = DB::getInstance();
+
   $u = 0;
   $value = "";
   if(isset($v->update)){
@@ -14,10 +15,10 @@ function formField($o, $v = []){
     }
   }
   //note that formField expects an entire object, not an id
-  if($o->field_type != "hidden"){
+
     ?>
     <div class="form-group">
-      <?php if($o->field_type != 'timestamp'){ ?>
+      <?php if($o->field_type != 'timestamp' && $o->field_type != "hidden"){ ?>
         <label class="<?=$o->label_class?>" for="<?=$o->col?>">
           <?php
           if(str_starts_with($o->form_descrip,'(LANG)')) {
@@ -30,13 +31,26 @@ function formField($o, $v = []){
         </label>
       <?php }
 
+      $standard_types = [
+        'text','password','passwordE','color','hidden'
+      ];
+      if(in_array($o->field_type,$standard_types)){
 
-      if($o->field_type == "text" || $o->field_type == "password" || $o->field_type == "passwordE"|| $o->field_type == "color"){
         $type = $o->field_type;
         if($o->field_type == 'passwordE'){$type = "password";}
         ?>
-        <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
+        <input type='<?=$type?>'
+                name='<?=$o->col?>'
+                id='<?=$o->col?>'
+                class='<?=$o->field_class?>'
+                value="<?php
+                  if($u == 1){
+                    echo $value;
+                  }elseif(!empty($_POST)){
+                    if(isset($_POST[$o->col])){
+                      echo $_POST[$o->col];
+                      }
+                      }?>"
         <?php if($o->required == 1){echo "required";}?>
         <?=html_entity_decode($o->input_html)?>
         >
@@ -83,6 +97,7 @@ function formField($o, $v = []){
 
         <?php if($o->field_type == "dropdown") {
           $options = parseFormPluginInputOptions($o->select_opts);
+
           ?>
           <select <?=html_entity_decode($o->input_html)?> name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
             <?php if($o->required == 1){echo "required";}?>>
@@ -124,24 +139,13 @@ function formField($o, $v = []){
           if($o->field_type == "date"){?>
             <input type="date" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>" value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>">
             <?php
-            //set your custom datepicker options in this file in usersc
-            // if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php')){
-            //   include($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php');
-            // }else{
-            //   include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datepicker.php');
-            // }
+
           }
           if($o->field_type == "datetime"){?>
             <input type="datetime-local" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>"
             value="<?php if($u == 1){echo date("Y-m-d\TH:i:s", strtotime($value));;}elseif(!empty($_POST)){echo
               date("Y-m-d\TH:i:s", strtotime($_POST[$o->col]));}?>">
             <?php
-            //set your custom datetimepicker options in this file in usersc
-            // if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php')){
-            //   include($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php');
-            // }else{
-            //   include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/datetimepicker.php');
-            // }
           }
 
           if($o->field_type == "checkbox"){
@@ -194,7 +198,7 @@ function formField($o, $v = []){
             <!-- final div -->
           </div>
           <?php
-        } //end of if field not hidden
+
       } //end of function
 
       function displayForm($name, $opts = []){
@@ -678,7 +682,8 @@ function formField($o, $v = []){
           $check = checkFormName($name,['existing']);
 
           if($check['success']==true){
-            $test = $db->query("SHOW TABLES LIKE '$name' ")->count();
+            $test = $db->query("SHOW TABLES LIKE ?",[$name])->count();
+
             //we want to make sure the requested table is really there
             if ($test < 1){
               bold("<br>Sorry! The table you're requesting does not exist!");
@@ -703,7 +708,8 @@ function formField($o, $v = []){
                 `input_html` text NOT NULL,
                 `select_opts` text NOT NULL";
                 $db->query("CREATE TABLE IF NOT EXISTS $form ( $columns2 )");
-                $schema = $db->query("SHOW COLUMNS FROM $name")->results(true);
+                $schema = $db->query("SHOW COLUMNS FROM `?`",[$name])->results(true);
+
                 foreach($schema as $s){
 
                   $type = '';
@@ -898,7 +904,7 @@ function formField($o, $v = []){
             exit;
           }
 
-          if (!preg_match("#^[a-z0-9_-]+$#", $name)) {
+          if (!preg_match("#^[a-z0-9_]+$#", $name)) {
             $msg['msg'] = "Sorry! You can only use lowercase letters and numbers in your form name!";
             return $msg;
             exit;
@@ -961,29 +967,49 @@ function formField($o, $v = []){
         }
 
         function parseFormPluginInputOptions($options){
-          $db = DB::getInstance();
+          global $db, $user;
+
           $options = json_decode($options);
+
           //if this is set, we're grabbing opts from a db query
-          if(isset($options->usformquery)){
+          if(isset($options->usformquery) && $options->usformquery != ""){
             $dbOptions = new stdClass();
             //run the raw query and loop it
+            $options->usformquery = str_replace("{{{user_id}}}", $user->data()->id, $options->usformquery);
+
             $q = $db->query($options->usformquery)->results();
+
             foreach($q as $v){
               //since the key is stored as a string, we need to get the actual key which
               //will be the 'value' on the form input. We need the data, not the string.
               //This should be refactored, but it's functional.
               $key = $options->key;
-              $key = $v->$key;
+                      $key = $v->$key;
+
+
               //create a blank string to be the form input visible value
               $value = "";
+
               foreach($options->values as $primary){
+
                 //visible values can be either strings or db columns.  Build the string accordingly
                 foreach($primary as $vkey=>$vvalue)
-                if($vkey == "col"){
-                  $value .= " ".$v->$vvalue;
+
+                if($vkey == "col" || $vkey == "DB Column"){
+                  if($value == ""){
+                    $value .= $v->$vvalue;
+                  }else{
+                    $value .= " ".$v->$vvalue;
+                  }
+
                 }elseif($vkey == "str"){
-                  $value .= " ".$vvalue;
+                  if($value == ""){
+                    $value .= $vvalue;
+                  }else{
+                    $value .= " ".$vvalue;
+                  }
                 }
+
                 //assign this key value pair to the temporary $dbOptions variable
                 $dbOptions->$key = $value;
               }
@@ -991,6 +1017,7 @@ function formField($o, $v = []){
             //replace the original $options variable with the db generated one
             $options = $dbOptions;
           }
+
           if($options == ""){
             return $options = new stdClass();
           }

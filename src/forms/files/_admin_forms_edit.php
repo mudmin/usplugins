@@ -230,6 +230,7 @@ if(!empty($_POST['edit_this_field_options'])){
 
   $keys = Input::get('key');
   $vals = Input::get('val');
+
   $opts = array_combine($keys, $vals);
 
   if(isset($keys[0]) && $keys[0] == "usformquery"){
