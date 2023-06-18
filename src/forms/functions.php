@@ -81,12 +81,7 @@ function formField($o, $v = new StdClass()){
         <?php if($o->required == 1){echo "required";}?>
         <?=html_entity_decode($o->input_html)?>
         ><?php
-        //set your custom datetimepicker options in this file in usersc
-        // if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php')){
-        //   include($abs_us_root.$us_url_root.'usersc/scripts/timepicker.php');
-        // }else{
-        //   include($abs_us_root.$us_url_root.'usersc/plugins/forms/assets/timepicker.php');
-        // }
+
       } //end if int
 
       if($o->field_type == "textarea") { ?>
