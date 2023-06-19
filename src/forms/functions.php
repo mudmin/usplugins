@@ -1,8 +1,8 @@
 <?php
-function formField($o, $v = new StdClass()){
+function formField($o, $v = []){
   global $abs_us_root, $us_url_root;
   $db = DB::getInstance();
-
+  $v = (object) $v;
   $u = 0;
   $value = "";
   if(isset($v->update)){
