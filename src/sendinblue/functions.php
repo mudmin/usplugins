@@ -16,7 +16,7 @@ function sendinblue($to,$subject,$body,$to_name = "", $options = []){
     logger($user->data()->id,"sendinblue","FAILED: Attempted to send without all required fields");
     return "All fields are required";
   }
-
+  $to = rawurldecode($to);
   $db = DB::getInstance();
   $send = $db->query("SELECT * FROM plg_sendinblue")->first();
   if($to_name == ""){ $to_name = $to; }
