@@ -16,7 +16,7 @@
 
 <!-- What does your plugin do? -->
   <description>This plugin allows you to flag or tag a user with as many tags as you would like.
-    These can be used for times that you don't want to create an entire permission for a user. Management is much more limited than the user management system, but it's quick and handy.  Includes functions to check if someone has a particular tag or not.  
+    These can be used for times that you don't want to create an entire permission for a user. Management is much more limited than the user management system, but it's quick and handy.  Includes functions to check if someone has a particular tag or not.   
   </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
