@@ -1,24 +1,30 @@
 <?php
-if(!function_exists('displayBadges')){
-  function displayBadges($user_id,$size="25px"){
-    global $abs_us_root,$us_url_root;
-    $db = DB::getInstance();
+if (!function_exists('displayBadges')) {
+  function displayBadges($user_id, $size = "25px")
+  {
+      global $abs_us_root, $us_url_root, $db;
+      $q = $db->query("SELECT * FROM plg_badges_match WHERE user_id = ?", [$user_id]);
+      $c = $q->count();
 
-    $q = $db->query("SELECT * FROM plg_badges_match WHERE user_id = ?",[$user_id]);
-    $c = $q->count();
-    if($c > 0){
-      $badges = $q->results();
-      $badgeids = implode("', '", array_column($badges, 'badge_id'));
-      $q_badges = $db->query("SELECT * FROM plg_badges WHERE id = ('".$badgeids."')");
-      $badges = $q_badges->results();
-      foreach($badges as $b){
-        if(file_exists($abs_us_root.$us_url_root."usersc/plugins/badges/files/".$b->id.".png")){ ?>
-          <img src="<?=$us_url_root."usersc/plugins/badges/files/".$b->id.".png"?>" title="<?=$b->badge?>" alt="<?=$b->badge?>" height="<?=$size?>">
-        <?php }
+      if ($c > 0) {
+          $badges = $q->results();
+          $badgeids = array_column($badges, 'badge_id');
+          $placeholders = implode(',', array_fill(0, $c, '?'));
+          $badges = $db->query("SELECT * FROM plg_badges WHERE id IN ($placeholders)",$badgeids)->results();
+      
+          foreach ($badges as $b) {
+              $badgeImagePath = $abs_us_root . $us_url_root . "usersc/plugins/badges/files/" . $b->id . ".png";
+              if (file_exists($badgeImagePath)) {
+                  ?>
+                  <img src="<?= $us_url_root . "usersc/plugins/badges/files/" . $b->id . ".png" ?>"
+                       title="<?= $b->badge ?>" alt="<?= $b->badge ?>" height="<?= $size ?>">
+                  <?php
+              }
+          }
       }
-    }
   }
 }
+
 
 if(!function_exists("manageBadge")){
   function manageBadge($user_id,$badge,$action="give"){
