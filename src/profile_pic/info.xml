@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.5</version>
+  <version>1.0.6</version>
 
 <!-- release date of THIS version -->
-  <release>June 30, 2020</release>
+  <release>November 17, 2023</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.1.4</tested>
+  <tested>5.6.6</tested>
 
 <!-- What does your plugin do? -->
   <description>When enabled, your users can change their profile pics with photos they upload.</description>

@@ -19,7 +19,7 @@ if(!Token::check($token)){
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  					<h1>Profile Pic Changer</h1>
-          <p>There's nothing to configure, so here are (up to) 12 random profile pictures from your collection!</p>
+          <p>There's nothing to configure!</p>
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
     <div class="row">
