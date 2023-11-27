@@ -85,12 +85,7 @@ if(!function_exists('quickCrud')) {
         </div>
       </div>
       <script src="<?=$us_url_root?>usersc/plugins/quickcrud/assets/editable.js"></script>
-      <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-      <script>
-      $(document).ready(function () {
-         $('.editable').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
-        });
-      </script>
+
       <script type="text/javascript">
         $('.editable').editableTableWidget();
         $('#editable td.uneditable').on('change', function(evt, newValue) {
@@ -98,7 +93,7 @@ if(!function_exists('quickCrud')) {
           });
           $('.editable td').on('change', function(evt, newValue) {
 
-        	$.post( "<?=$us_url_root?>usersc/plugins/quickcrud/assets/parser.php", {
+        	$.post( "<?=$us_url_root?>usersc/plugins/quickcrud/parsers/parser.php", {
             value: newValue,
             key: $(this).attr("data-key"),
             row: $(this).attr("data-row"),
@@ -120,7 +115,7 @@ if(!function_exists('quickCrud')) {
           };
           $.ajax({
             type 		: 'POST',
-            url 		: "<?=$us_url_root?>usersc/plugins/quickcrud/assets/parser.php",
+            url 		: "<?=$us_url_root?>usersc/plugins/quickcrud/parsers/parser.php",
             data 		: formData,
             dataType 	: 'json',
             encode 		: true
@@ -143,7 +138,7 @@ if(!function_exists('quickCrud')) {
           };
           $.ajax({
             type 		: 'POST',
-            url 		: "<?=$us_url_root?>usersc/plugins/quickcrud/assets/parser.php",
+            url 		: "<?=$us_url_root?>usersc/plugins/quickcrud/parsers/parser.php",
             data 		: formData,
             dataType 	: 'json',
             encode 		: true
