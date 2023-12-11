@@ -19,14 +19,14 @@ if(!Token::check($token)){
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  					<h1>Profile Pic Changer</h1>
-          <p>There's nothing to configure!</p>
+          <p>There's nothing to configure!  Here are some random profile pics of your users.</p>
  			</div> <!-- /.col -->
  		</div> <!-- /.row -->
     <div class="row">
       <?php foreach($pics as $p){?>
       <div class="col-6 col-3">
       <a href="<?=$us_url_root?>users/admin.php?view=user&id=<?=$p->id?>">
-      <img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$p->profile_pic?>" alt="">
+      <img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$p->profile_pic?>" alt="" class="img-fluid" style="max-height:20rem">
       </a>
       </div>
       <?php } ?>

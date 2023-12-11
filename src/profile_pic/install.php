@@ -37,7 +37,7 @@ $hooks = [];
 //postion options are post,body,form,bottom
 //See documentation for more information
 $hooks['account.php']['body'] = 'hooks/accountbody.php';
-$hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
+// $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
 $hooks['user_settings.php']['bottom'] = 'hooks/generic.php';
 $hooks['admin.php?view=user']['bottom'] = 'hooks/umanager.php';
 registerHooks($hooks,$plugin_name);
