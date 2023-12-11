@@ -114,14 +114,14 @@ $mods = explode(",",$settings->forum_mod_perms);
             <label for="">Board Description</label><br>
             <input type="text" name="descrip" value="" class="form-control">
             <label for="">Permission levels allowed to read this board</label><br>
-            <input type="checkbox" name="read[]" value="-1"> Public
+            <input type="checkbox" name="read[]" value="-1"> Public<br>
             <?php foreach($permissions as $p){ ?>
-              <input type="checkbox" name="read[]" value="<?=$p->id?>"> <?=$p->name?>(<?=$p->id?>)
+              <input type="checkbox" name="read[]" value="<?=$p->id?>"> <?=$p->name?>(<?=$p->id?>)<br>
             <?php } ?>
             <br><br>
             <label for="">Permission levels allowed to post to board</label><br>
             <?php foreach($permissions as $p){ ?>
-              <input type="checkbox" name="write[]" value="<?=$p->id?>"> <?=$p->name?>(<?=$p->id?>)
+              <input type="checkbox" name="write[]" value="<?=$p->id?>"> <?=$p->name?>(<?=$p->id?>)<br>
             <?php } ?>
             <br>
             <input type="submit" name="createBoard" value="Create Board" class="btn btn-primary">

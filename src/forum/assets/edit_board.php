@@ -74,15 +74,15 @@ if(!empty($_POST)){
       </div>
       <div class="form-group">
         <label for="">Permission levels allowed to read this board</label><br>
-        <input type="checkbox" name="read[]" value="-1" <?php if(in_array(0,$readable)){echo "checked";}?>> Public
+        <input type="checkbox" name="read[]" value="-1" <?php if(in_array(0,$readable)){echo "checked";}?>> Public<br>
         <?php foreach($permissions as $p){ ?>
-          <input type="checkbox" name="read[]" value="<?=$p->id?>" <?php if(in_array($p->id,$readable)){echo "checked";}?>> <?=$p->name?>(<?=$p->id?>)
+          <input type="checkbox" name="read[]" value="<?=$p->id?>" <?php if(in_array($p->id,$readable)){echo "checked";}?>> <?=$p->name?>(<?=$p->id?>) <br>
         <?php } ?>
       </div>
       <div class="form-group">
         <label for="">Permission levels allowed to post to board</label><br>
         <?php foreach($permissions as $p){ ?>
-          <input type="checkbox" name="write[]" value="<?=$p->id?>" <?php if(in_array($p->id,$writeable)){echo "checked";}?>> <?=$p->name?>(<?=$p->id?>)
+          <input type="checkbox" name="write[]" value="<?=$p->id?>" <?php if(in_array($p->id,$writeable)){echo "checked";}?>> <?=$p->name?>(<?=$p->id?>)<br>
         <?php } ?>
       </div>
       <div class="form-group">

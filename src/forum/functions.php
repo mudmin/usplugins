@@ -47,14 +47,14 @@ if(!function_exists('forumCount')) {
   function forumCount($id,$type){
     $db = DB::getInstance();
     $type = "forum_".$type;
-    if($type == "threads"){
+    if($type == "forum_threads"){
         $count = $db->query("SELECT id FROM $type WHERE board = ? AND deleted = 0",[$id])->count();
-    }elseif($type == "messages"){
-        $count = $db->query("SELECT id FROM $type WHERE board = ? AND disabled = 0",[$id])->count();
+    }elseif($type == "forum_messages"){
+        $count = $db->query("SELECT id FROM $type WHERE board = ? AND `disabled` = 0",[$id])->count();
     }else{
       $count = 0;
     }
-
+  
     return $count;
 }
 }
@@ -63,12 +63,24 @@ if(!function_exists('forumLastPost')) {
   function forumLastPost($id,$type){
     $db = DB::getInstance();
     $msg = [];
+    
     if($type == "boards"){
-        $checkQ = $db->query("SELECT id,thread,title,created_on FROM forum_messages WHERE board = ? ORDER BY id DESC LIMIT 1",[$id]);
+      $term = " m.board ";
     }elseif($type == "threads"){
-        $checkQ = $db->query("SELECT id,thread,title,created_on FROM forum_messages WHERE thread = ? ORDER BY id DESC LIMIT 1",[$id]);
+      $term = " m.thread ";  
     }
 
+    
+    $checkQ = $db->query("SELECT 
+    m.id,
+    m.thread,
+    m.created_on, 
+    t.title as title
+    FROM forum_messages m
+    LEFT OUTER JOIN forum_threads t ON m.thread = t.id
+    WHERE $term = ? 
+    ORDER BY id DESC LIMIT 1",[$id]);
+    
     $checkC = $checkQ->count();
     if($checkC > 0){
       $check = $checkQ->first();

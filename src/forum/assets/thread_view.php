@@ -102,224 +102,209 @@ if(!empty($_POST) && $write){
   }
  }
 ?>
-<div class="row">
-  <div class="col-6 text-left">
-      <button type="button" onclick="window.location.href = '<?=$currentPage?>?board=<?=$board?>';" name="button" class="btn btn-primary">Return to Topics</button>
+<div class="row my-2">
+  <div class="col-md-6 text-start">
+    <a href="<?=$currentPage?>?board=<?=$board?>" class="btn btn-outline-primary">Return to Topics</a>
   </div>
-  <?php
-  if($write){
+  <?php if($write): 
     $link = $currentPage."?board=".$board."&view=new";
     ?>
-    <div class="col-6 text-right">
-      <button type="button" onclick="window.location.href = '<?=$link?>';" name="button" class="btn btn-primary">Post New Topic</button>
+    <div class="col-md-6 text-end">
+    <a href="<?=$link?>" class="btn btn-outline-primary">Post New Topic</a>
     </div>
-  <?php } ?>
+  <?php endif; ?>
 </div>
 
-<h3 align="center"><?=$b->board?> - <?=$t->title?></h3>
-<div class="">
-  <table class="table">
+<h3 class="text-center"><?=$b->board?> - <?=$t->title?></h3>
+<div class="table-responsive">
+  <table class="table table-hover">
     <thead>
       <th style="width:20%"></th>
       <th style="width:80%"></th>
     </thead>
     <tbody>
-      <?php foreach($msg as $m){
-        $parentid = $m->id;
-        ?>
-        <tr>
-          <!-- left column -->
-          <td class="text-center">
-            <?php if(pluginActive("profile_pic",true)){
-
-              if(isset($images[$m->user_id])){
-                $img = $images[$m->user_id];
-              }else{
-                $uQ = $db->query("SELECT profile_pic FROM users WHERE id = ?",[$m->user_id]);
-                $uC = $uQ->count();
-                $u = $uQ->results();
-                if($uC < 1 || $u[0]->profile_pic == ""){
-                  if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forum/custom/av.jpg")){
-
-                    $img = $us_url_root."usersc/plugins/forum/custom/av.jpg";
-                  }else{
-                    $img = $us_url_root."usersc/plugins/forum/assets/av.jpg";
-                  }
-                }else{
-
-                  $img = $us_url_root."usersc/plugins/profile_pic/files/".$u[0]->profile_pic;
-
-                }
-                $images[$m->user_id] = $img;
+  <?php foreach($msg as $m) {
+    $parentid = $m->id;
+    ?>
+    <tr>
+      <!-- Left column for user info and profile pic -->
+      <td class="align-middle text-center">
+        <?php if(pluginActive("profile_pic", true)) {
+          if(isset($images[$m->user_id])) {
+            $img = $images[$m->user_id];
+          } else {
+            $uQ = $db->query("SELECT profile_pic FROM users WHERE id = ?", [$m->user_id]);
+            $uC = $uQ->count();
+            $u = $uQ->results();
+            if($uC < 1 || $u[0]->profile_pic == "") {
+              if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forum/custom/av.jpg")) {
+                $img = $us_url_root."usersc/plugins/forum/custom/av.jpg";
+              } else {
+                $img = $us_url_root."usersc/plugins/forum/assets/av.jpg";
               }
+            } else {
+              $img = $us_url_root."usersc/plugins/profile_pic/files/".$u[0]->profile_pic;
+            }
+            $images[$m->user_id] = $img;
+          }
+        ?>
+          <img src="<?=$img?>" alt="" class="img-fluid rounded-circle" style="max-width: 60px;">
+        <?php } ?>
+        <div class="mt-2">
+          <span class="fw-bold text-primary"><?= echouser($m->user_id); ?></span><br>
+          <?php 
+          $count = $db->query("SELECT COUNT(*) AS c FROM forum_messages WHERE user_id = ? AND disabled = 0", [$m->user_id])->first();
+          echo $count->c; 
+          echo ($count->c == 1) ? " post" : " posts";
+          ?>
+        </div>
+      </td>
 
-              ?>
+      <!-- Right column for message and reply -->
+      <td>
+        <div class="d-flex flex-column">
+          <div>
+            <span class="badge bg-primary">#<?=$counter?></span>
+            <span class="ms-2 text-muted">Re: <?=$t->title?></span>
+          </div>
+          <small class="text-muted"><?= $m->created_on ?></small>
 
-              <img src="<?=$img?>" alt="" class="img-fluid" style="max-width:20%;">
-            <?php } ?>
-            <div class="text-primary">
-              <?=echouser($m->user_id);?><br>
-            </div>
-            <?php $count = $db->query("SELECT COUNT(*) AS c FROM forum_messages WHERE user_id = ? AND disabled = 0 ",[$m->user_id])->first();
-            echo $count->c;
-            if($count->c == 1){echo " post";}else{echo " posts";}
-            ?>
-          </td>
-          <td>
-            <!-- right column -->
-            <div class="row">
-              <div class="col-12">
-                <?="#".$counter?> -
-                <font color="text-primary">Re: <?=$t->title?></font><br>
-                <?php
-                echo $m->created_on;
-                $counter++;
-
-                if($is_mod){ ?>
-                  <form class="" action="" method="post">
-                    <input type="hidden" name="csrf" value="<?=Token::generate();?>">
-                    <input type="hidden" name="modHook" value="1">
-                    <input type="hidden" name="msg" value="<?=$m->id?>">
-                    <input type="submit" name="deletePost" value="Delete Post">
-                    <input type="submit" name="deleteThread" value="Delete Thread">
-                    <?php if($can_ban && !hasPerm([2],$m->user_id)){?>
-                    <input type="hidden" name="banhammer" value="<?=$m->user_id?>">
-                    <input type="submit" name="banUser" value="Ban <?php echouser($m->user_id);?>">
-                    <input type="submit" name="purgeUser" value="Ban & Purge <?php echouser($m->user_id);?>">
-                  <?php } ?>
-                  </form>
+          <?php if($is_mod) { ?>
+            <div class="mt-2">
+              <form class="d-inline" action="" method="post">
+                <input type="hidden" name="csrf" value="<?=Token::generate();?>">
+                <input type="hidden" name="modHook" value="1">
+                <input type="hidden" name="msg" value="<?=$m->id?>">
+                <button type="submit" name="deletePost" class="btn btn-outline-danger btn-sm">Delete Post</button>
+                <button type="submit" name="deleteThread" class="btn btn-danger btn-sm">Delete Thread</button>
+                <?php if($can_ban && !hasPerm([2], $m->user_id)) { ?>
+                  <input type="hidden" name="banhammer" value="<?=$m->user_id?>">
+                  <input type="submit" name="banUser" class="btn btn-warning btn-sm" value="Ban <?= echouser($m->user_id); ?>">
+                  <input type="submit" name="purgeUser" class="btn btn-warning btn-sm" value="Ban & Purge <?= echouser($m->user_id); ?>">
                 <?php } ?>
-
-              </div>
+              </form>
             </div>
-            <hr>
-            <?=$m->message; ?>
+          <?php } ?>
 
-            <?php
-            $repliesQ = $db->query("SELECT * FROM forum_messages WHERE board = ? AND thread = ? AND disabled = 0 AND replying_to = ?",[$board,$thread,$m->id]);
-            $repliesC = $repliesQ->count();
-            if($repliesC > 0){
-              $replies = $repliesQ->results();
-
-              ?>
-              <strong class="text-primary">Replies</strong><br>
-                  <?php foreach($replies as $m){?>
-                    <div class="row">
-                      <div class="col-3 offset-1">
-                    <?php if(pluginActive("profile_pic",true)){
-
-                      if(isset($images[$m->user_id])){
-                        $img = $images[$m->user_id];
-                      }else{
-                        $uQ = $db->query("SELECT profile_pic FROM users WHERE id = ?",[$m->user_id]);
-                        $uC = $uQ->count();
-                        $u = $uQ->results();
-                        if($uC < 1 || $u[0]->profile_pic == ""){
-                          if(file_exists($abs_us_root.$us_url_root."usersc/plugins/forum/custom/av.jpg")){
-
-                            $img = $us_url_root."usersc/plugins/forum/custom/av.jpg";
-                          }else{
-                            $img = $us_url_root."usersc/plugins/forum/assets/av.jpg";
-                          }
-                        }else{
-
-                          $img = $us_url_root."usersc/plugins/profile_pic/files/".$u[0]->profile_pic;
-
-                        }
-                        $images[$m->user_id] = $img;
-                      }
-
-                      ?>
-
-                      <img src="<?=$img?>" alt="" class="img-fluid" style="max-width:20%;">
-                    <?php } ?>
-                    <div class="text-primary">
-                      <?=echouser($m->user_id);?><br>
-                    </div>
-                    <?php $count = $db->query("SELECT COUNT(*) AS c FROM forum_messages WHERE user_id = ? AND disabled = 0",[$m->user_id])->first();
-                    echo $count->c;
-                    if($count->c == 1){echo " post";}else{echo " posts";}
-                    ?>
-                  </div>
-                  <div class="col-8">
-                    <?="#".$counter?> -
-                    <font color="text-primary">Re: <?=$t->title?></font><br>
-                    <?php
-                    echo $m->created_on;
-                    $counter++;
-                    ?>
-                  </div>
-                <hr>
-              </div>
-              <br>
-              <div class="row">
-                  <div class="col-8 offset-4">
-                    <?=$m->message; ?>
-                  </div>
-              </div>
-                  <?php } //end foreach replies ?>
-            <?php } ?>
-            <?php
-            if($write){ ?>
-            <div class="text-right">
+          <hr>
+          <p><?= $m->message; ?></p>
+          <?php
+          if($write){ ?>
+            <div class="text-right text-end">
             <button type="button" class="btn btn-primary replyButton" data-toggle="modal" data-bs-toggle="modal" data-target="#replyModal" data-bs-target="#replyModal" data-reply="<?=$parentid?>">
               Reply To This Message
             </button>
           </div>
           <?php } ?>
+
+          <?php
+          // Replies logic
+          $repliesQ = $db->query("SELECT * FROM forum_messages WHERE board = ? AND thread = ? AND disabled = 0 AND replying_to = ?", [$board, $thread, $m->id]);
+          $repliesC = $repliesQ->count();
+          if($repliesC > 0) {
+            $replies = $repliesQ->results();
+            echo "<strong class='text-primary'>Replies</strong><br>";
+            foreach($replies as $r) { ?>
+              <div class="row mb-2">
+                <!-- Left column for user info and profile pic -->
+                <div class="col-md-3 offset-md-1">
+                  <?php 
+                  if(pluginActive("profile_pic", true)) {
+                    if(isset($images[$r->user_id])) {
+                      $img = $images[$r->user_id];
+                    } else {
+                      $uQ = $db->query("SELECT profile_pic FROM users WHERE id = ?", [$r->user_id]);
+                      $uC = $uQ->count();
+                      if($uC < 1 || empty($uQ->results()[0]->profile_pic)) {
+                        $img = file_exists($abs_us_root.$us_url_root."usersc/plugins/forum/custom/av.jpg") ? 
+                               $us_url_root."usersc/plugins/forum/custom/av.jpg" :
+                               $us_url_root."usersc/plugins/forum/assets/av.jpg";
+                      } else {
+                        $img = $us_url_root."usersc/plugins/profile_pic/files/".$uQ->results()[0]->profile_pic;
+                      }
+                      $images[$r->user_id] = $img;
+                    }
+                  ?>
+                    <img src="<?=$img?>" alt="" class="img-fluid rounded-circle" style="max-width: 60px;">
+                  <?php } ?>
+                  <div class="mt-2">
+                    <span class="fw-bold text-primary"><?= echouser($r->user_id); ?></span><br>
+                    <?php 
+                    $count = $db->query("SELECT COUNT(*) AS c FROM forum_messages WHERE user_id = ? AND disabled = 0", [$r->user_id])->first();
+                    echo $count->c . " " . ($count->c == 1 ? "post" : "posts");
+                    ?>
+                  </div>
+                </div>
+            
+                <!-- Right column for reply content -->
+                <div class="col-md-8">
+                  <div>
+                    <span class="badge bg-secondary">#<?=$counter?></span>
+                    <span class="ms-2 text-muted">Re: <?=$t->title?></span>
+                  </div>
+                  <small class="text-muted"><?=$r->created_on?></small>
+            
+                  <hr>
+                  <p><?=$r->message?></p>
+                </div>
+              </div>
+            <?php $counter++; } ?>
+            
+            <?php } ?>
+
           </td>
         </tr>
       <?php } ?>
-      <tr>
-        <td></td>
-        <td>
-        <?php if($write){?>
-          <div class="row">
-            <div class="col-12 card bg-light" style="padding: 1em;">
-              <form class="" action="" method="post">
-                <h3>Leave a General Reply</h3>
-                <input type="hidden" name="csrf" value="<?=Token::generate();?>">
-                <textarea name="message" rows="8" class="form-control"></textarea>
-                <input type="submit" name="submitReply" value="Post" class="btn btn-primary btn-block">
-              </form>
-            </div>
-          </div>
+    <?php $counter++;  ?>
 
+  <!-- General Reply form row -->
+  <tr>
+    <td></td>
+    <td>
+      <?php if($write) { ?>
+        <div class="card bg-light mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Leave a General Reply</h5>
+            <form action="" method="post">
+              <input type="hidden" name="csrf" value="<?=Token::generate();?>">
+              <textarea name="message" rows="4" class="form-control"></textarea>
+              <button type="submit" name="submitReply" class="btn btn-primary mt-2">Post</button>
+            </form>
+          </div>
+        </div>
       <?php } ?>
-      </td>
-    </tr>
-  </tbody>
+    </td>
+  </tr>
+</tbody>
 </table>
 </div>
 
 <?php if($write){?>
-<!-- The Modal -->
-<div class="modal" id="replyModal">
+<!-- Reply Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-
-      <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Reply</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title" id="replyModalLabel">Reply</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-
-      <!-- Modal body -->
       <div class="modal-body">
         <form class="" action="" method="post">
           <span id="replyToModal"></span>
           <input type="hidden" name="csrf" value="<?=Token::generate();?>">
           <input type="hidden" name="replyTo" value="0" id="replyTo">
-          <textarea name="message" rows="8" class="form-control"></textarea>
-          <input type="submit" name="submitReply" value="Post" class="btn btn-primary btn-block">
-        </form>
+          <textarea name="message" id="replyToMessage" rows="8" class="form-control"></textarea>
+          <!--  -->
+      
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" name="submitReply" value="Post Reply" class="btn btn-primary">
+  
       </div>
-
+      </form>
     </div>
   </div>
 </div>
@@ -331,6 +316,12 @@ $(".replyButton").on('click', function () {
   console.log(reply);
   $("#replyTo").val(reply);
   // $("#replyToModal").html(reply);
+});
+
+$(document).ready(function() {
+    $('#replyModal').on('shown.bs.modal', function() {
+        $('#replyToMessage').focus();
+    });
 });
 
 

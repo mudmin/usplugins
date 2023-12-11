@@ -112,8 +112,7 @@ if ($change == 'pic') {
 <?php if($user->data()->profile_pic != ''){ ?>
 <script type="text/javascript">
   $(document).ready(function() {
-    // $(".img-thumbnail, .profile-replacer").attr("src", "<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$user->data()->profile_pic?>");
-    $(".img-thumbnail, .profile-replacer").attr("src", "<?=$us_url_root?>users/images/plugin.png");
+    $(".img-thumbnail, .profile-replacer").attr("src", "<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$user->data()->profile_pic?>");
  });
 </script>
 <?php } ?>

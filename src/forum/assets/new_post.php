@@ -44,7 +44,15 @@ if(!empty($_POST)){
 <div class="row">
   <div class="col-12 card bg-light" style="padding: 1em; padding-left:3em">
       <form class="" action="" method="post">
-        <h3>Start New Topic in <?=$b->board?></h3>
+        <div class="row">
+          <div class="col-12 col-sm-9">
+          <h3>Start New Topic in <?=$b->board?></h3>
+          </div>
+          <div class="col-12 col-sm-3 text-end">
+            <a href="<?=$currentPage?>?board=<?=$board?>" class="btn btn-primary">Back</a>
+          </div>
+        </div>
+        
       </div>
     </div>
     <div class="row">
@@ -55,7 +63,7 @@ if(!empty($_POST)){
           <br>
           <label for="">Message </label>
           <textarea name="message" rows="8" class="tiny"></textarea>
-          <input type="submit" name="submitPost" value="Post" class="btn btn-primary">
+          <input type="submit" name="submitPost" value="Post" class="btn btn-primary mt-3">
       </form>
 
   </div>

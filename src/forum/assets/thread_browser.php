@@ -10,16 +10,16 @@ $threadsC = $threadsQ->count();
 $threads = $threadsQ->results();
 ?>
 
-<div class="row">
-  <div class="col-6 text-left">
-      <button type="button" onclick="window.location.href = '<?=$currentPage?>';" name="button" class="btn btn-primary">Return to Categories</button>
+<div class="row my-3">
+  <div class="col-6 text-start">
+    <a href="<?=$currentPage?>" class="btn btn-outline-primary">Return to Categories</a>
   </div>
   <?php
   if($write){
     $link = $currentPage."?board=".$board."&view=new";
     ?>
-    <div class="col-6 text-right">
-      <button type="button" onclick="window.location.href = '<?=$link?>';" name="button" class="btn btn-primary">Post New Topic</button>
+    <div class="col-6 text-right text-end">
+    <a href="<?=$link?>" class="btn btn-outline-primary">Post New Topic</a>
     </div>
   <?php } ?>
 </div>
