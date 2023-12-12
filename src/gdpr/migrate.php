@@ -34,6 +34,15 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $hooks['account.php']['body']='hooks/accountbody.php';
+  registerHooks($hooks,$plugin_name);
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
 
 
   //after all updates are done. Keep this at the bottom.

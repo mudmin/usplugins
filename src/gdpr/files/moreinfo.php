@@ -1,7 +1,8 @@
 <?php
 require_once '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
-if(isset($user) && $user->isLoggedIn()){
+if(!isset($last)){
+	$last = $db->query("SELECT * FROM us_gdpr ORDER BY id DESC LIMIT 1")->first();
 }
 ?>
 <div id="page-wrapper">
