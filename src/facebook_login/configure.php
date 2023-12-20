@@ -21,7 +21,7 @@ $token = Token::generate();
 
 <!-- left -->
 <div class="form-group">
-  <label for="glogin">Enable Facebook Login</label>
+  <label for="fblogin">Enable Facebook Login</label>
   <span style="float:right;">
     <label class="switch switch-text switch-success">
                 <input id="fblogin" type="checkbox" class="switch-input toggle" data-desc="Facebook Login" <?php if($settings->fblogin==1) echo 'checked="true"'; ?>>
