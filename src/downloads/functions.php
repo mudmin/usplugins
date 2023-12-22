@@ -206,7 +206,7 @@ function generatePluginDownloadLink($fileid,$uid = "",$perms = "", $max = "", $e
   $fileC = $fileQ->count();
   if($fileC < 1){
     $resp['success'] = false;
-    $resp['msg'] = "File $file not found in db";
+    $resp['msg'] = "File not found in db";
     return $resp;
   }else{
     $file = $fileQ->first();

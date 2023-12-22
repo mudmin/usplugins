@@ -37,15 +37,22 @@ if(!empty($_POST['createOrg'])){
   }
 
 
-if(!empty($_POST['deact'])){
-  $users = $db->query("SELECT * FROM users WHERE account_owner = ?",[$org->id])->results();
-  $db->query("DELETE FROM us_saas_mrg WHERE org = ?",[$org->id]);
-  foreach($users as $u){$db->update('users',$u->id,['permissions'=>0]);}
-  if($u->id != 1 && $u->id != $org->owner){
-  $db->update('us_saas_orgs',$org->id,['active'=>0]);
-  }
+  if (!empty($_POST['deact'])) {
+    $users = $db->query("SELECT * FROM users WHERE account_owner = ?", [$org->id])->results();
+    $db->query("DELETE FROM us_saas_mrg WHERE org = ?", [$org->id]);
+    foreach ($users as $u) {
+      if ($u->id != 1 && $u->id != $org->owner) {
+        $db->update('users', $u->id, ['permissions' => 0]);
+      }
+      if ($u->id != 1 && $u->id == $org->owner) {
+        $db->update('users', $u->id, ['permissions' => 1]);
+        $db->update('users', $u->id, ['account_owner' => 1]);
+  
+      }
+    }
+    $db->update('us_saas_orgs', $org->id, ['active' => 0]);
     Redirect::to('admin.php?view=plugins_config&plugin=saas&v=org');
-}
+  }
 
 if(!empty($_POST['transfer'])){
   $transfer_to = Input::get('transfer_to');

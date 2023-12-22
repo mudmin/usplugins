@@ -6,13 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.8</version>
+  <version>1.0.9</version>
 
 <!-- release date of THIS version -->
-  <release>January 1,2022</release>
+  <release>January 1,2024</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.9</tested>
+  <tested>5.6.7</tested>
+
+<!-- you can specify your icon in the userspice menu, but note wider icons look weird  -->
+  <fa_icon>fa fa-plug</fa_icon>
 
 <!-- What does your plugin do? -->
   <description>Demo description here.</description>

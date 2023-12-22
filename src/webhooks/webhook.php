@@ -5,7 +5,7 @@ ipCheckBan();
 $ip = ipCheck();
 $json = file_get_contents('php://input');
 $json = json_decode($json, "true");
-http_response_code ( 503 ); //Service Unavailable
+
 //combine all data
 $data = [];
 $data["datatypes_received"] = [];

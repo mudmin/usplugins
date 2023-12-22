@@ -89,6 +89,8 @@ if(count(get_included_files()) ==1) die();
     <p>If IP filtering is not enough security for your needs, you can pass a second secret to the webhook. It needs to be a Key/Value pair.  It can be anywhere in GET, POST or JSON. Declare the 'key' in the first input box and the 'value' in the second.</p>
     <p>For example, if you want to require a special code of 'ThisIsTheSecret' and you want to use the key of 'secret' and you want to pass this via GET for some reason, the url would look like <br><b>webhook.php?webhook_id=7&secret=ThisIsTheSecret</b>.</p>
     <br>
+    <p>By default, webhook.php sits in your plugin directory, so the link would look like <b><i>https://yourdomain.com/usersc/plugins/webhooks/webhook.php?webhook_id=7&secret=ThisIsTheSecret</i></b>, however you can copy webhook.php to anywhere inside your userspice project, but you will need to update the link to users/init.php at the top of the file.</p>
+    <br>
 
     <b>3 - Setup Your Actions</b><br>
     <p>This plugin accepts 3 types of "actions" a webhook can perform. It can do a raw database query, execute a php script, or run commands/scripts directly on the server. </p>

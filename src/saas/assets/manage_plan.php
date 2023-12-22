@@ -53,7 +53,7 @@ $perms = $db->query("SELECT * FROM permissions WHERE id > 2")->results();
         foreach($perms as $p){
           ?>
           <div class="col-4">
-            <input type="checkbox" name="perms[]" value="<?=$p->id?>" <?php if(in_array($p->id,$explode)){echo "checked";}?>><?=$p->name?>
+            <input type="checkbox" name="perms[]" value="<?=$p->id?>" <?php if(in_array($p->id,$explode)){echo "checked";}?>> <?=$p->name?>
           </div>
         <?php } ?>
       </div>

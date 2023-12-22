@@ -1,7 +1,9 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+global $lang;
 if(saasMgr()){
   //Manually Add User
   if(!empty($_POST['addUser'])) {
+    
     if(!$usersLeft){Redirect::to('account.php?err=You+are+out+of+user+space.');}
     $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry hours",strtotime(date("Y-m-d H:i:s"))));
     $join_date = date("Y-m-d H:i:s");
@@ -97,6 +99,7 @@ if(saasMgr()){
           ),
         ));
       }
+    
       if($validation->passed()) {
         $form_valid=TRUE;
         try {
@@ -119,11 +122,13 @@ if(saasMgr()){
             'oauth_tos_accepted' => true
           );
           $db->insert('users',$fields);
+      
           $theNewId=$db->lastId();
           // bold($theNewId);
           $perm = Input::get('perm');
           $addNewPermission = array('user_id' => $theNewId, 'permission_id' => 1);
           $db->insert('user_permission_matches',$addNewPermission);
+
           include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
           if(isset($_POST['sendEmail'])) {
             $userDetails = fetchUserDetails(NULL, NULL, $theNewId);
@@ -143,11 +148,14 @@ if(saasMgr()){
             email($to,$subject,$body);
           }
           logger($user->data()->id,"SAAS Manager","Added user $username.");
-          Redirect::to('account.php?err=User+added');
+          usSuccess("User Added");
+          Redirect::to('account.php');
         } catch (Exception $e) {
           die($e->getMessage());
         }
 
+      }else{
+        display_errors($validation->errors());
       }
     }
     $planinfo = saasPlanInfo($user->data()->account_owner);

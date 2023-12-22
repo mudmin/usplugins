@@ -338,9 +338,11 @@ if($userdetails->account_owner != $user->data()->account_owner){
                               <option value="<?=$userId?>"  <?php if (!checkMenu(2,$user->data()->id) && !in_array($user->data()->id,$master_account)){  echo "disabled";} ?>>Yes - Cannot be undone!</option>
                             </select>
                           </div>
+                          <?php if($z && count($perms) > 0){ ?>
                           <label>Permissions</label>
                           <br>
                           <?php
+                          }
                           if($z){
                           foreach($perms as $p){
                             $check = $db->query("SELECT * FROM user_permission_matches WHERE permission_id = ? AND user_id = ?",[$p,$userdetails->id])->count();
@@ -355,7 +357,7 @@ if($userdetails->account_owner != $user->data()->account_owner){
                             ?>
 
                           <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-                          <div class="pull-right">
+                          <div class="pull-right mt-3">
                             <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>
                             <div class="btn-group"><a class='btn btn-warning' href="<?=$us_url_root?>users/account.php">Cancel</a></div><br /><Br />
                           </div>
