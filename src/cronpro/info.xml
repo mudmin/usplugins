@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>December 6,2021</release>
+  <release>December 19, 2023</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.9</tested>
+  <tested>5.6.7</tested>
 
 <!-- What does your plugin do? -->
   <description>CronPro is a Cron receiver for UserSpice primarily designed for scheduling and maintenance-related tasks. The gist of how it works is that you set your servers's cron manager to hit this plugin at a regular interval. When hit, the plugin looks in the database to see if there are any scheduled tasks. If there are, it runs them and marks them complete. Requires PHP 7.2 or later. </description>

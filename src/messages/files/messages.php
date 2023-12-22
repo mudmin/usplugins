@@ -261,8 +261,8 @@ if (!empty($_POST)) {
             <script src="<?=$us_url_root?>users/js/jwerty.js"></script>
             <script src="<?=$us_url_root?>users/js/combobox.js"></script>
             <!-- include summernote css/js -->
-            <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-            <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+            <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.19/dist/summernote.min.css" rel="stylesheet">
+            <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.19/dist/summernote.min.js"></script>
             <script>
             $(document).ready(function(){
               $('.combobox').combobox();

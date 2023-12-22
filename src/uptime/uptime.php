@@ -74,6 +74,7 @@ foreach($sites as $s){
         $ch = curl_init($remoteFile);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
         $result = curl_exec($ch);
         curl_close($ch);
 
@@ -108,6 +109,7 @@ foreach($sites as $s){
         $ch = curl_init($remoteFile);
     		curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
     		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
     		$result = curl_exec($ch);
     		curl_close($ch);
 

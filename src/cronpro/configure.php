@@ -294,6 +294,8 @@
 
             <p>Note that the first time you hit this, IT WILL MOST LIKELY FAIL! The reason for this is that you do not want any random individual to trigger your cron jobs.  So after the task was supposed to run, visit <a href="admin.php?view=logs"><b>the system logs</b></a> and look for a message that says Cron was denied from a certain IP.  Copy that IP address and paste it in the "Only allow cron jobs from the following IP" on <a href="admin.php?view=general"><b>this screen</b></a>. Everything should work fine after that. In order to not flood the logs, the parser will not log every successful hit of the target.php file. If you want that to happen for testing purposes, fire your curl off to target.php?diag=true .
             </p>
+
+            <p>If you use a self-signed cert, you may need to call curl -k to make your cron job work.</p>
             <p>If you want to just play with this without setting up the cron manager on your server, just use your browser to navigate to https://yourdomain.com/usersc/plugins/cronpro/target.php and follow the same procedure for capturing that IP as in the paragraph above.</p>
           </div>
         </div>

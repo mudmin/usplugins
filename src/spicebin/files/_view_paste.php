@@ -19,7 +19,7 @@ if(file_exists($abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_custom_
 }else{
   include $abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_includes.php";
 }
-if($paste->user == $user->data()->id || hasPerm([2])) {
+if(isset($user) && $user->isLoggedIn() && $paste->user == $user->data()->id || hasPerm([2])) {
   if(!empty($_POST)){
     $token = $_POST['csrf'];
     if(!Token::check($token)){

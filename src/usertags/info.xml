@@ -6,17 +6,21 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>August 8,2023</release>
+  <release>December 21, 2023</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.6.4</tested>
+  <tested>5.6.7</tested>
 
 <!-- What does your plugin do? -->
   <description>This plugin allows you to flag or tag a user with as many tags as you would like.
-    These can be used for times that you don't want to create an entire permission for a user. Management is much more limited than the user management system, but it's quick and handy.  Includes functions to check if someone has a particular tag or not.   
+    These can be used for times that you don't want to create an entire permission for a user. Management is much more limited than the user management system, but it's quick and handy. 
+
+    This feature is also great for "lesser" permissions where you want to allow managers (as opposed to admins) to add and remove tags from your users at will. This removes any possibility of a manager being able to elevate someone to admin.
+
+    There are various functions that can be used to manage tags, which are documented the plugin config page.
   </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->

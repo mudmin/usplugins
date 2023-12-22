@@ -1,9 +1,7 @@
   <?php if (!in_array($user->data()->id, $master_account)) {
     Redirect::to($us_url_root . 'users/admin.php');
   } //only allow master accounts to manage plugins! 
-  ?>
 
-  <?php
   include "plugin_info.php";
   pluginActive($plugin_name);
   if (!empty($_POST)) {
@@ -120,11 +118,21 @@
       </div>
       <div class="col-12 col-sm-6">
         <h3>Documentation</h3>
-        This plugin adds an extra section on the individual user manager that lets you add and remove tags for that user. Tags are just another way of grouping your users together, except they don't have any implicit permissions. There are two functions that will help with using these tags.
+        This plugin adds an extra section on the individual user manager that lets you add and remove tags for that user. Tags are just another way of grouping your users together, except they don't have any implicit permissions. There are a few functions that will help with using these tags.
         <br><br>
         <b>usersWithTag($tag)</b>: Returns an array of users with a tag. You can pass the id of the tag such as <b><em>usersWithTag(1)</em></b> or the case-sensitive name of the tag <b><em>usersWithTag("Manager")</em></b>.
         <br><br>
         <b>hasTag($tag,$user_id)</b>: Returns true or false depending on whether or not the specified user has that tag. Tag can be an id or the case-sensitive tag name.
+
+        <br><br>
+        <b>hasOneTag($tags, $user_id = "")</b>: Returns true if the user has one tag from an array of tags. If you specify the user id as the second parameter, it will use that id, otherwise, it will use the id of the loggded in user.
+
+        <br><br>
+        <b>hasAllTags($tags, $user_id = "")</b>: Returns true if the user has all tags in an array of tags. If you specify the user id as the second parameter, it will use that id, otherwise, it will use the id of the loggded in user.
+
+        <br><br>
+        <b>usersWithTag($tag)</b>: Returns an array of user ids with a given tag.  The tag specified can either be the tag id or the tag name.
+ 
       </div>
     </div>
     <?php if (!isset($chartsLoaded)) { ?>
