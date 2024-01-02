@@ -52,13 +52,10 @@ if(!empty($_POST && $membershipChange == "membership" && $opt == "checkout")){
   ];
   $pass = true;
 }
-
 ?>
 
 Membership Status: <?=$status?><br>
-<?php 
-
-if($status == "Active"){ ?>
+<?php if($status == "Active"){ ?>
 Membership Plan:  <?=echoPlanName($user->data()->plg_mem_level);?> <br>
 <form class="" action="account.php?change=membership&opt=checkout" method="post">
 Membership Expires: <?=$user->data()->plg_mem_exp; ?><br>
@@ -83,24 +80,20 @@ Membership Expires: <?=$user->data()->plg_mem_exp; ?><br>
 <?php }
 }elseif($membershipChange == "membership" && !$pass){ ?>
   <br>
-  <form class=""   method="post">
-    <input type="hidden" name="change" value="membership">
-    <input type="hidden" name="opt" value="checkout">
-  <div class="row">
-    <div class="col-12">
-   
+  <form class="" action="account.php?change=membership&opt=checkout" method="post">
+    <div class="form-group">
       <label for="">Please choose a membership level</label><br>
-        <select class="form-select" name="plan" id="plan">
+        <select class="" name="plan" id="plan">
         <option value="0" disabled selected="selected">---Please Choose a Level---</option>
         <?php foreach($plans as $p){ ?>
           <option value="<?=$p->id?>"><?=$p->plan_name?></option>
         <?php 	} ?>
       </select>
- 
     </div>
-    <div class="col-12">
-    <label for="">Please choose a membership plan </label><br>
-      <select class="form-select" name="plan_cst" required id="plan_cst">
+
+    <div class="form-group">
+      <label for="">Please choose a membership plan </label><br>
+      <select class="" name="plan_cst" required id="plan_cst">
         <option value="" disabled selected="selected">---Please Choose an Option---</option>
         <?php
         $costs = $db->query("SELECT * FROM plg_mem_cost WHERE disabled = 0 ORDER BY days")->results();
@@ -108,17 +101,9 @@ Membership Expires: <?=$user->data()->plg_mem_exp; ?><br>
           <option class="planOption" data-plan="<?=$p->plan?>" value="<?=$p->id?>"><?=$p->descrip?> - <?=$p->days?> days - <?=$memset->sym?><?=$p->cost?></option>
         <?php 	} ?>
       </select>
-      </div>
-      <div class="col-12">
-      <?php
-      $opts['class'] = "form-select";
-      showPaymentOptions($opts);?>
+    </div>
+    <?php showPaymentOptions();?>
     <input type="submit" name="newPlan" value="Select Plan" id="subBtn" class="btn btn-primary">
-      </div>
-
-  </div>
-
-
   </form>
 <?php }
 if($pass){ //checkout
@@ -150,7 +135,6 @@ if($formInfo['processed'] == true && $formInfo['processed'] == false && $members
   Redirect::to('account.php?change=membership&err=Something+went+wrong+with+your+payment');
 }
 }
-
 ?>
 
 <script type="text/javascript">
@@ -173,5 +157,6 @@ $( document ).ready(function() {
 	});
   });
 
-  
+
+
 </script>

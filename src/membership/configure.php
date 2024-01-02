@@ -28,16 +28,11 @@ if(is_numeric($edit)){
  }
 
  if(!empty($_POST['memset'])){
-  $sym = $_POST['sym'];
  $fields = array(
    'cur'=>Input::get('cur'),
+   'sym'=>Input::get('sym'),
    'payments'=>Input::get('payments'),
  );
- if(strlen($sym) == 1){
-  $fields['sym'] = $sym;
- }else{
-  usError("Currency symbol must be exactly one character");
- }
 $db->update('plg_mem_settings',1,$fields);
  Redirect::to('admin.php?view=plugins_config&plugin=membership&err=Saved');
 }
@@ -127,7 +122,7 @@ $db->update('plg_mem_settings',1,$fields);
           </select>
         </div><br>
         <div class="col-2 form-group">
-          <input type="submit" name="memset" value="Save Global Settings" class="btn btn-success">
+          <input type="submit" name="memset" value="Save Global Settings" class="btn-primary">
         </div>
       </div>
     </form>
