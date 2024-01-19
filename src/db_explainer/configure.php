@@ -174,9 +174,9 @@ $all_tables_cols = [];
                     <h4>Export for AI and LLMs</h4>
                   </div>
                   <div class="card-body">
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/download_columns?export_type=db&db_id=<?= $db_id ?>">Export Column Definitions</a>
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/download_columns.php?export_type=db&db_id=<?= $db_id ?>">Export Column Definitions</a>
 
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/download_tables?export_type=db&db_id=<?= $db_id ?>">Export Table Definitions</a>
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/download_tables.php?export_type=db&db_id=<?= $db_id ?>">Export Table Definitions</a>
                   </div>
                 </div>
 
@@ -188,9 +188,9 @@ $all_tables_cols = [];
                   </div>
                   <div class="card-body">
 
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/export_explainer?db_id=<?= $db_id ?>">Export Full Explainer</a>
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/export_explainer.php?db_id=<?= $db_id ?>">Export Full Explainer</a>
 
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/import_explainer?db_id=<?= $db_id ?>">Import Explainer</a>
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/import_explainer.php?db_id=<?= $db_id ?>">Import Explainer</a>
                   </div>
                 </div>
 
@@ -203,7 +203,7 @@ $all_tables_cols = [];
                     </div>
                     <div class="card-body">
 
-                      <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/download?export_type=table&table_id=<?= $table_id ?>">Export Table Schema</a>
+                      <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/download.php?export_type=table&table_id=<?= $table_id ?>">Export Table Schema</a>
 
                       <a target="_blank" href="<?= $us_url_root ?>users/admin.php?view=plugins_config&plugin=db_explainer&db_id=<?= $db_id ?>" class="btn btn-sm btn-secondary">View Full Database</a>
                     </div>
@@ -224,7 +224,7 @@ $all_tables_cols = [];
                             echo " - " . $database->db_description;
                           } ?>
                           <a target="" class="btn btn-sm btn-primary" href="<?= $us_url_root ?>users/admin.php?view=plugins_config&plugin=db_explainer" class="btn btn-sm btn-primary ms-3">Home</a>
-                          <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/diagram?db_id=<?= $db_id ?>">Visualize Database</a>
+                          <a target="_blank" class="btn btn-sm btn-outline-primary" href="<?= $us_url_root ?>usersc/plugins/db_explainer/diagram.php?db_id=<?= $db_id ?>">Visualize Database</a>
                         </h4>
                       </div>
                       <div class="col-12 col-md-6 text-end text-right pull-right">

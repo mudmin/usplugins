@@ -146,7 +146,9 @@ function importDatabase($db, $jsonData, $targetDbId) {
 
 
 ?>
-    <h1>Import Database Explainer</h1>
+    <h3>Import Database Explainer
+    <a target="" class="btn btn-sm btn-primary" href="<?= $us_url_root ?>users/admin.php?view=plugins_config&plugin=db_explainer&db_id=<?=$db_id?>" class="btn btn-sm btn-primary ms-3">Back</a>
+    </h3>
     <p>This page is for importing a database explainer into your existing database explainer. A perfect use case for this is to import the core UserSpice table and column definitions into your existing database scan so you don't have to keep document them. This WILL overwrite any columns that match your existing columns. It will leave everything else alone.</p>
     <form action="" method="post" enctype="multipart/form-data">
         <input type="file" name="json_file" accept=".json" class="btn btn-outline-primary">
