@@ -346,7 +346,7 @@ $all_tables_cols = [];
 
   <?php
   if (isset($db_id) && $db_id > 0) {
-    $tables = $db->query("SELECT * FROM plg_db_explainer_tables WHERE db_id = ?", [$db_id])->results();
+    $tables = $db->query("SELECT * FROM plg_db_explainer_tables WHERE db_id = ? ORDER BY table_name", [$db_id])->results();
 
   ?>
     <div class="row mt-3">

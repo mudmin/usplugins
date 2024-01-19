@@ -61,7 +61,7 @@ if (is_numeric($db_id)) {
         }
     }
 
-    $tables = $db->query("SELECT * FROM plg_db_explainer_tables WHERE db_id = ?", [$db_id])->results();
+    $tables = $db->query("SELECT * FROM plg_db_explainer_tables WHERE db_id = ? ORDER BY table_name", [$db_id])->results();
 }
 ?>
 <div class="container-fluid">
@@ -103,6 +103,7 @@ if (is_numeric($db_id)) {
             LEFT OUTER JOIN plg_db_explainer_tables t2 ON c.related_to_table = t2.id
             LEFT OUTER JOIN plg_db_explainer_columns c2 ON c.related_to_column = c2.id
             $where
+
             ", $binds)->results();
 
                         foreach ($cols as $col) {
