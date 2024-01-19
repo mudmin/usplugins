@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>DB Explainer</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.3</version>
+
+<!-- release date of THIS version -->
+  <release>January 18,2024</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.6.7</tested>
+
+<!-- you can specify your icon in the userspice menu, but note wider icons look weird  -->
+  <fa_icon>fa fa-database</fa_icon>
+
+<!-- What does your plugin do? -->
+  <description>
+  
+  Introducing a fundamental component of the UserSpice.ai toolkit: an indispensable tool designed to analyze and document the structure of any database. This tool plays a pivotal role in unraveling the intricacies of a database and its underlying data. It provides users with a visual representation of the database schema and the intricate relationships between its tables, rendering complex data structures more accessible and comprehensible.
+
+  This data can then be shared with other developers to facilitate collaboration, your client for documentation purposes, or even exported into a format which is understandable to Large Language Models (LLMs) such as ChatGPT or even your own Private GPTs.  When it comes to AI, it's garbage in, garbage out.  This tool helps you get important data into the model so the model can get relevant code and queries back to you. 
+
+</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>DB Explainer</button>
+</plugin>
