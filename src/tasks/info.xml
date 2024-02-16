@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Tasks Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>January 31,2024</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.6.7</tested>
+
+<!-- you can specify your icon in the userspice menu, but note wider icons look weird  -->
+  <fa_icon>fa fa-check-square-o</fa_icon>
+
+<!-- What does your plugin do? -->
+  <description>The ultimate plugin for tasks and workorders.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>Tasks Plugin</button>
+</plugin>
