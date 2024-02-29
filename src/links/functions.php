@@ -30,6 +30,7 @@ if(!function_exists('generatePluginLink')) {
       }else{
         $parser = $lsettings->parser_location;
       }
+   
       $url = $lsettings->base_url."/".$parser."?".$f->link_name;
       return $url;
     }else{
