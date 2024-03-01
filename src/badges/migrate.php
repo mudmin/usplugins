@@ -20,10 +20,6 @@ if($checkC > 0){
   $existing = json_decode($check->updates);
   }
 
-
-
-
-
   //list your updates here from oldest at the top to newest at the bottom.
   //Give your update a unique update number/code.
 
@@ -35,6 +31,52 @@ if($checkC > 0){
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
   }
+
+  $update = '00002';
+  if(!in_array($update,$existing)){
+    $db->query("CREATE TABLE plg_badges_cats (
+      id int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      cat varchar(255) NOT NULL
+    )");
+
+    $badgeCheck = $db->query("SELECT * FROM plg_badges_cats WHERE cat = ?",array('User Badges'))->count();
+    if($badgeCheck == 0){
+      $db->insert('plg_badges_cats',['cat'=>'User Badges']);
+    }
+    
+    $db->query("ALTER TABLE plg_badges ADD COLUMN cat_id int(11) NOT NULL DEFAULT 1");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
+  $update = '00004';
+  if(!in_array($update,$existing)){
+    $db->query("CREATE TABLE plg_badges_settings (
+      id int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      badge_location varchar(255) NOT NULL default 'usersc/plugins/badges/files/'
+    )");
+
+    $badgeCheck = $db->query("SELECT * FROM plg_badges_settings")->count();
+    if($badgeCheck == 0){
+      $db->query("TRUNCATE TABLE plg_badges_settings");
+      $db->insert('plg_badges_settings',['id'=>1]);
+    }
+    
+    $db->query("ALTER TABLE plg_badges ADD COLUMN cat_id int(11) NOT NULL DEFAULT 1");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
+  $update = '00006';
+  if(!in_array($update,$existing)){
+    $db->query("ALTER TABLE plg_badges_match ADD COLUMN cat_id int(11) DEFAULT 1");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
 
 
 
