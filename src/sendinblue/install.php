@@ -5,7 +5,7 @@ require_once("init.php");
 if (in_array($user->data()->id, $master_account)){
 
 
-$db = DB::getInstance();
+global $db;
 include "plugin_info.php";
 
 

@@ -8,7 +8,7 @@ require_once("init.php");
 //For security purposes, it is MANDATORY that this page be wrapped in the following
 //if statement. This prevents remote execution of this code.
 if (in_array($user->data()->id, $master_account)){
-$db = DB::getInstance();
+global $db;
 include "plugin_info.php";
 
 

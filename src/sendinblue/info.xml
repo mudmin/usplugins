@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-  <name>Sendinblue Plugin</name>
+  <name>Brevo Sendinblue Plugin</name>
   <author>Dan Hoover</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.7</version>
+  <version>1.0.9</version>
 
 <!-- release date of THIS version -->
-  <release>June 29, 2023</release>
+  <release>February 7, 2024</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.6.3</tested>
+  <tested>5.6.8</tested>
 
 <!-- What does your plugin do? -->
-  <description>Sendinblue replaces phpmailer and allows you to send emails via an API to avoid a lot of the headaches of traditional SMTP. Sendinblue lets you send 300 emails per day, free of charge (no credit card required), which is perfect for password resets etc for most UserSpice projects.</description>
+  <description>Brevo (formerly Sendinblue) replaces phpmailer and allows you to send emails via an API to avoid a lot of the headaches of traditional SMTP. Sendinblue lets you send 300 emails per day, free of charge (no credit card required), which is perfect for password resets etc for most UserSpice projects.  Now accepts attachments. </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Sendinblue</button>
+    <button>Brevo Sendinblue</button>
 </plugin>

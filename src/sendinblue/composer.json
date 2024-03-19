@@ -1,5 +1,5 @@
 {
     "require": {
-        "sendinblue/api-v3-sdk": "7.x.x"
+        "getbrevo/brevo-php": "^1.0"
     }
 }

@@ -4,20 +4,15 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44
+class ComposerStaticInit1c4ca9eb5efb1c5c3338c8c9220a5ce5
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
-        array (
-            'SendinBlue\\Client\\' => 18,
-        ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
@@ -29,17 +24,17 @@ class ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
+        'B' => 
+        array (
+            'Brevo\\Client\\' => 13,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'SendinBlue\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sendinblue/api-v3-sdk/lib',
-        ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -57,6 +52,10 @@ class ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Brevo\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/getbrevo/brevo-php/lib',
+        ),
     );
 
     public static $classMap = array (
@@ -66,9 +65,9 @@ class ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf61a6dcdb13ec14e6c91c2e7a2c90b44::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1c4ca9eb5efb1c5c3338c8c9220a5ce5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1c4ca9eb5efb1c5c3338c8c9220a5ce5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1c4ca9eb5efb1c5c3338c8c9220a5ce5::$classMap;
 
         }, null, ClassLoader::class);
     }
