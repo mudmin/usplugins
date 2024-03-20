@@ -1,4 +1,5 @@
 <?php
+global $user;
 if (canMakePlgLinks()) {
   $edit = Input::get('edit');
   $p = currentPage();
