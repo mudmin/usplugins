@@ -39,6 +39,7 @@ if (canMakePlgLinks()) {
       }
       $link_name = strtolower(Input::get('link_name'));
       $link_name = fixPluginLinkName($link_name);
+      $link_title = Input::get('link_title');
       $link = Input::get('link');
       $check = $db->query("SELECT id FROM plg_links WHERE link_name = ? AND id != ?", [$link_name, $edit])->count();
       $seven = strtolower(substr($link, 0, 7));
@@ -47,6 +48,7 @@ if (canMakePlgLinks()) {
         Redirect::to($p . "?err=Invalid Link");
       } else {
         $fields = array(
+          'link_title' => $link_title,
           'link_name' => $link_name,
           'link' => $link,
 
@@ -82,6 +84,7 @@ if (canMakePlgLinks()) {
 
     $link_name = strtolower(Input::get('link_name'));
     $link_name = fixPluginLinkName($link_name);
+    $link_title = Input::get('link_title');
 
     $link = Input::get('link');
     $check = $db->query("SELECT id FROM plg_links WHERE link_name = ?", [$link_name])->count();
@@ -92,6 +95,7 @@ if (canMakePlgLinks()) {
       Redirect::to($p . "?err=Invalid Link");
     } else {
       $fields = array(
+        'link_title' => $link_title,
         'link_name' => $link_name,
         'link' => $link,
         'user' => $user->data()->id,
@@ -124,7 +128,9 @@ if (canMakePlgLinks()) {
 
     <form class="" action="" method="post">
       <input type="hidden" name="csrf" value="<?= Token::generate(); ?>">
-      Please give the link a name <span id="avail"></span><br>
+      Please give the link a title<br>
+      <input type="text" name="link_title" value="" id="link_title" class="form-control mt-2">
+      Please give the link a unique name (key) <span id="avail"></span><br>
       <input type="text" name="link_name" value="" id="link_name" class="form-control">
       <br>
       The final destination of the link (https://google.com) <span id="url"></span><br>
@@ -147,7 +153,10 @@ if (canMakePlgLinks()) {
     <form class="" action="" method="post">
       <input type="hidden" name="csrf" value="<?= Token::generate(); ?>">
       <input type="hidden" name="edit" value="<?= $edit ?>">
-      Please give the link a name <span id="avail"></span><br>
+      Please give the link a title<br>
+      <input type="text" name="link_title" value="<?= $link->link_title ?>" id="link_title" class="form-control">
+
+      Please give the link a unique name (key) <span id="avail"></span><br>
       <input type="text" name="link_name" value="<?= $link->link_name ?>" id="link_name" class="form-control">
       <br>
       The final destination of the link (https://google.com) <span id="url"></span><br>
@@ -168,11 +177,12 @@ if (canMakePlgLinks()) {
       <br>
       <input type="submit" name="subNewLink" value="Edit Link" id="sub" class="btn btn-primary">
     <?php } ?>
-    <h4>Your Links</h4>
+    <h4 class="mt-4">Your Links</h4>
     <table class="table table-striped paginate">
       <thead>
         <tr class="text-left">
           <th>Link</th>
+          <th>Link Title</th>
           <th>Link Name</th>
           <th>Link</th>
           <th>Must be logged in?</th>
@@ -189,6 +199,8 @@ if (canMakePlgLinks()) {
             <td>
               <button type="button" class=" btn btn-primary me-3" onclick="copyStringToClipboard('<?= $string ?>');">Copy</button><?= $string ?>
             </td>
+            
+            <td><?= $l->link_title ?></td>
             <td><?= $l->link_name ?></td>
             <td><?= $l->link ?></td>
             <td><?php bin($l->logged_in); ?></td>

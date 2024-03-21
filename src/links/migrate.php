@@ -36,7 +36,14 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE plg_links ADD COLUMN link_title varchar(255) AFTER link_name");
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
 
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
 
