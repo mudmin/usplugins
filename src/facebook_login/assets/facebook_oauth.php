@@ -17,48 +17,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-?>
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '256684718065631',
-      xfbml      : true,
-      version    : 'v2.7'
-    });
-  };
+$fbSettings = $db->query("SELECT * FROM plg_facebook_login")->first();
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
-
-<?php
-$db=DB::getInstance();
-
-$settingsQ=$db->query("SELECT * FROM settings");
-$settings=$settingsQ->first();
-
-$appID=$settings->fbid;
-$secret=$settings->fbsecret;
-$version=$settings->graph_ver;
-$callback=$settings->fbcallback;
+$appID=$fbSettings->fbid;
+$secret=$fbSettings->fbsecret;
+$version=$fbSettings->graph_ver;
+$callback=$fbSettings->fbcallback;
 
 if(!isset($_SESSION)){session_start();}
-require_once($abs_us_root.$us_url_root."usersc/plugins/facebook_login/assets/Facebook/autoload.php");
-$fb = new Facebook\Facebook([
-  'app_id' => $appID,
-  'app_secret' => $secret,
-  'default_graph_version' => $version,
-  ]);
+require_once $abs_us_root.$us_url_root."usersc/plugins/facebook_login/assets/vendor/autoload.php";
 
-$helper = $fb->getRedirectLoginHelper();
+$provider = new \League\OAuth2\Client\Provider\Facebook([
+    'clientId'          => $appID,
+    'clientSecret'      => $secret,
+    'redirectUri'       => $callback,
+    'graphApiVersion'   => $version,
+]);
 
-$permissions = ['email']; // Optional permissions
-$loginUrl = $helper->getLoginUrl($callback, $permissions);
+$link = $provider->getAuthorizationUrl([
+  'scope' => ['email'],
+]);
+
+$_SESSION['facebook_state'] = $provider->getState();
+
 ?>
-<a href="<?=htmlspecialchars($loginUrl)?>">
-  <img class="img-responsive" align=right src="<?=$us_url_root?>usersc/plugins/facebook_login/assets/facebook.png" alt=""/></a>

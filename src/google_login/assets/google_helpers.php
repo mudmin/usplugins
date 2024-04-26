@@ -17,28 +17,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted 
-require_once $abs_us_root.$us_url_root.'usersc/plugins/google_login/assets/Google/Google_Client.php';
-require_once $abs_us_root.$us_url_root.'usersc/plugins/google_login/assets/Google/contrib/Google_Oauth2Service.php';
-if(!isset($settings)){
-$settings = $db->query('SELECT * FROM settings')->first();
-}
+if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+require_once __DIR__ . '/vendor/autoload.php';
+use League\OAuth2\Client\Provider\Google;
+
+
+$googleSettings = $db->query('SELECT * FROM plg_google_login')->first();
+
 if ($settings->glogin==0){
-  die();
+  die("Google Login is not enabled. Please enable it in the admin panel. Something fishy is going on.");
 }
-$gurl = $abs_us_root.$us_url_root;
 
 //Getting the Google Info from the DB
-$clientId = $settings->gid; //Google CLIENT ID
-$clientSecret = $settings->gsecret; //Google CLIENT SECRET
-$redirectUrl = $settings->gredirect;  //return url (url to script)
-$homeUrl = $settings->ghome;  //return to home
+$clientId = $googleSettings->gid; //Google CLIENT ID
+$clientSecret = $googleSettings->gsecret; //Google CLIENT SECRET
+$redirectUrl = $googleSettings->gredirect;  //return url (url to script)
 
-$gClient = new Google_Client();
-$gClient->setApplicationName('Login to '.$settings->site_name);
-$gClient->setClientId($clientId);
-$gClient->setClientSecret($clientSecret);
-$gClient->setRedirectUri($redirectUrl);
+$provider = new Google([
+  'clientId'     => $clientId,
+  'clientSecret' => $clientSecret,
+  'redirectUri'  => $redirectUrl,
+  'accessType'   => 'online'
+]);
 
-$google_oauthV2 = new Google_Oauth2Service($gClient);
 ?>

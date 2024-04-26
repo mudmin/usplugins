@@ -15,6 +15,10 @@ deRegisterHooks($plugin_name);
 if(!$db->error()) {
     err($plugin_name.' uninstalled');
     logger($user->data()->id,"USPlugins", $plugin_name. " uninstalled");
+
+    $db->query("DELETE FROM plg_social_logins WHERE plugin = ?", [$plugin_name]);
+    $db->query("UPDATE settings SET fblogin = 0;");
+    
 } else {
     err($plugin_name.' was not uninstalled');
     logger($user->data()->id,"USPlugins","Failed to uninstall Plugin, Error: ".$db->errorString());

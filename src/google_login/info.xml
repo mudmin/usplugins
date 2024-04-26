@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
   <name>Google Login Plugin</name>
-  <author>Dan Hoover</author>
+  <author>Dan Hoover and BangingHeads</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>2.0.0</version>
 
 <!-- release date of THIS version -->
-  <release>December 28, 2020</release>
+  <release>March 17, 2024</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.2.3</tested>
+  <tested>5.7.0</tested>
 
 <!-- What does your plugin do? -->
-  <description>This Google login plugin replaces the feature that was built into UserSpice 4.4 and below.</description>
+  <description>Requires UserSpice v5.7+. For older versions, download Google Login Legacy.  </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Google Login Plugin</button>

@@ -11,10 +11,15 @@ include "plugin_info.php";
 //you will probably be doing more than removing the item from the db
 
 $db->query("DELETE FROM us_plugins WHERE plugin = ?",array($plugin_name));
+
 deRegisterHooks($plugin_name);
 if(!$db->error()) {
     err($plugin_name.' uninstalled');
     logger($user->data()->id,"USPlugins", $plugin_name. " uninstalled");
+
+    $db->query("DELETE FROM plg_social_logins WHERE plugin = ?", [$plugin_name]);
+    $db->query("UPDATE settings SET glogin = 0;");
+    
 } else {
     err($plugin_name.' was not uninstalled');
     logger($user->data()->id,"USPlugins","Failed to uninstall Plugin, Error: ".$db->errorString());
