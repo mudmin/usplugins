@@ -466,10 +466,15 @@ function formField($o, $v = []){
           }
           $validation = new Validate();
           $db = DB::getInstance();
-          $name = Input::sanitize($formData['form_name']);
+          if(isset($formData['form_name'])){
+            $name = Input::sanitize($formData['form_name']);
+          }else{
+            $name = false;
+          }
+          
           $fetchFormQ = $db->query("SELECT * FROM us_forms WHERE form = ?",[$name]);
           $fetchFormC = $fetchFormQ->count();
-          if($fetchFormC < 1){
+          if($fetchFormC < 1 || $name == false){
             $response['errors'] = "The requested form does not exist";
             return $response; die;
           }
@@ -660,9 +665,11 @@ function formField($o, $v = []){
             $db->query("CREATE TABLE IF NOT EXISTS $form ( $columns2 )");
             $db->insert('us_forms',['form'=>$name]);
             $id = $db->lastId();
-            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$id.'&err=Form+created!');
+            usSuccess("Form created!");
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$id);
           }else{ //failed name check
-            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$check['msg']);
+            usError($check['msg']);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms');
             exit;
           }
         }
@@ -672,20 +679,25 @@ function formField($o, $v = []){
         function buildFormFromTable($name){
           $db = DB::getInstance();
           global $us_url_root;
+
+          $pattern = '/[^a-zA-Z0-9-_]/';
+          $name = preg_replace($pattern, '', $name);
+ 
           $order = 10;
           $form = $name.'_form';
           $check = checkFormName($name,['existing']);
-
+         
           if($check['success']==true){
             $test = $db->query("SHOW TABLES LIKE ?",[$name])->count();
 
             //we want to make sure the requested table is really there
             if ($test < 1){
-              bold("<br>Sorry! The table you're requesting does not exist!");
+              usError("Sorry! The table you're requesting does not exist!");
+
               exit;
             }else{
               $count = $db->query("SELECT form FROM us_forms WHERE form = ?",array($name))->count();
-
+         
               if($count < 1){
                 $db->insert('us_forms',['form'=>$name]);
                 $id = $db->lastId();
@@ -703,8 +715,9 @@ function formField($o, $v = []){
                 `input_html` text NOT NULL,
                 `select_opts` text NOT NULL";
                 $db->query("CREATE TABLE IF NOT EXISTS $form ( $columns2 )");
-                $schema = $db->query("SHOW COLUMNS FROM `?`",[$name])->results(true);
-
+            
+                $schema = $db->query("SHOW COLUMNS FROM $name")->results(true);
+             
                 foreach($schema as $s){
 
                   $type = '';
@@ -744,6 +757,7 @@ function formField($o, $v = []){
                     'field_class'=>'form-control',
                   );
                   $order = $order + 10;
+                
                   $db->insert($form,$fields);
                 }
 
@@ -754,7 +768,8 @@ function formField($o, $v = []){
             }
             Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&autogen=1&edit='.$id);
           }else{ //name check failed
-            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$check['msg']);
+            usError($check['msg']);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms');
             exit;
           }
 
@@ -850,9 +865,11 @@ function formField($o, $v = []){
             foreach($copy as $c){
               $db->insert($new,$c);
             }
-            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$id.'&err=Form+duplicated!');
+            usSuccess("Form duplicated!");
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_edit&edit='.$id);
           }else{//name check failed
-            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms&err='.$check['msg']);
+            usError($check['msg']);
+            Redirect::to($us_url_root.'users/admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms');
             exit;
           }
         }
