@@ -88,4 +88,12 @@ $hooks['admin.php?view=user']['bottom'] = 'hooks/accountbottom.php';
 // $hooks['login.php']['post'] = 'hooks/loginpost.php';
 registerHooks($hooks,$plugin_name);
 
+//duplicated on purpose
+$db->query("DELETE FROM us_plugin_hooks WHERE folder = ? AND page = ? AND hook = ?",['userinfo','user_settings.php','hooks/joinform.php']);
+$checkQ = $db->query("SELECT * FROM us_plugin_hooks WHERE folder = ? AND page = ? AND hook = ?",['userinfo','user_settings.php','hooks/user_settings_bottom.php']);
+$checkC = $checkQ->count();
+if($checkC > 0){
+	$check = $checkQ->first();
+	$db->update("us_plugin_hooks",$check->id,['position'=>'form']);
+}
 } //do not perform actions outside of this statement
