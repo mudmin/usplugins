@@ -5,7 +5,7 @@ include "plugin_info.php";
 pluginActive($plugin_name);
 $xml = getCommunityAssets();
 $v = Input::get('v');
-$enabled = json_decode($settings->fun);
+$enabled = json_decode($settings->fun ?? "");
 if($enabled == ''){$enabled = [];}
  if(!empty($_POST)){
    $token = $_POST['csrf'];

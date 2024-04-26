@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <name>Handy Dandy Functions</name>
+  <author>Dan Hoover</author>
+  <updated>April 26, 2024</updated> 
+  <description>A collection of useful and versatile functions. </description>
+  <documentation>
+
+    <function>
+      <name>comLiDump</name>
+      <description>Dumps data to the output if a user is logged in.</description>
+      <usage>comLiDump($data);</usage>
+    </function>
+
+    <function>
+      <name>comFormatSizeUnits</name>
+      <description>Converts bytes into human-readable file size units (e.g., KB, MB, GB).</description>
+      <usage> $formattedSize = comFormatSizeUnits($bytes);</usage>
+    </function>
+
+    <function>
+      <name>comDelTree</name>
+      <description>Recursively deletes a directory along with all its contents.</description>
+      <usage>comDelTree($directoryPath);</usage>
+    </function>
+
+    <function>
+      <name>comFormatDate</name>
+      <description>Formats a date string with optional full day name display.</description>
+      <usage>comFormatDate($date, $fullDay = false);</usage>
+    </function>
+
+    <function>
+      <name>comFormatUsaDate</name>
+      <description>Formats a datetime string into the USA date format (n/j/Y).</description>
+      <usage>comFormatUsaDate($datetimeString);</usage>
+    </function>
+
+    <function>
+      <name>comFormatTime</name>
+      <description>Formats a time string with an optional display of seconds. </description>
+      <usage>comFormatTime($time, $seconds = false);</usage>
+    </function>
+
+    <function>
+      <name>comFormatDt</name>
+      <description>Formats a datetime string (including time) into a standard format.</description>
+      <usage>comFormatDt($datetime);</usage>
+    </function>
+
+    <function>
+      <name>comFormatEt</name>
+      <description>Formats elapsed time into a human-readable string (e.g., hours, minutes, seconds).</description>
+      <usage>comFormatEt($time, $neverSeconds = false);</usage>
+    </function>
+
+    <function>
+      <name>comIntToTime</name>
+      <description>Converts an integer representing seconds into a formatted time string (HH:MM:SS).</description>
+      <usage>comIntToTime($seconds);</usage>
+    </function>
+
+    <function>
+      <name>comParseCamelCase</name>
+      <description>Converts a camelCase string into a spaced sentence.</description>
+      <usage>comParseCamelCase($string);</usage>
+    </function>
+
+    <function>
+      <name>comCompressImage</name>
+      <description>Compresses an image to a specified quality and saves it to a destination.</description>
+      <usage>comCompressImage($source, $destination, $quality);</usage>
+    </function>
+
+    <function>
+      <name>comNumberToVersion</name>
+      <description>Converts a numerical string into a formatted version string with three components (e.g., 1.23.45).</description>
+      <usage>comNumberToVersion($version);</usage>
+    </function>
+
+  </documentation>
+</package>
