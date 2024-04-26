@@ -72,11 +72,7 @@ if($check > 0){
 
 //do you want to inject your plugin in the middle of core UserSpice pages?
 $hooks = [];
-
-//The format is $hooks['userspicepage.php']['position'] = path to filename to include
-//Note you can include the same filename on multiple pages if that makes sense;
-//postion options are post,body,form,bottom
-//See documentation for more information
+$hooks['join.php']['post'] = 'hooks/joinpost.php';
 $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
 registerHooks($hooks,$plugin_name);
 

@@ -74,6 +74,32 @@ if($checkC > 0){
 
 
 
+$update = '00006';
+if(!in_array($update,$existing)){
+  $hooks = [];
+  $hooks['join.php']['post'] = 'hooks/joinpost.php';
+  $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
+  registerHooks($hooks,$plugin_name);
+$existing[] = $update; //add the update you just did to the existing update array
+$count++;
+}
+
+
+$update = '00007';
+if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE plg_api_settings ADD COLUMN key_on_acct tinyint(1) default '01'");
+$existing[] = $update; //add the update you just did to the existing update array
+$count++;
+}
+
+$update = '00008';
+if(!in_array($update,$existing)){
+  $db->query("ALTER TABLE plg_api_settings ADD COLUMN new_user_key tinyint(1) default '0'");
+$existing[] = $update; //add the update you just did to the existing update array
+$count++;
+}
+
+
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
