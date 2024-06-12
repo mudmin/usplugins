@@ -141,15 +141,16 @@ if(!Token::check($token)){
         <table class="table table-striped" id="paginate">
           <thead>
             <tr>
-              <th>User</th><th>Page</th><th>IP</th><th>GET</th><th>POST</th>
+              <th>User</th><th>Page</th><th>IP</th><th>Time</th><th>GET</th><th>POST</th>
             </tr>
           </thead>
           <tbody>
             <?php foreach($data as $d){ ?>
               <tr>
-                <td><?php echouser($d->user_id);?></td>
+                <td><?php echouser($d->user_id);?> (<?php echo $d->user_id;?>)</td>
                 <td><?=$d->page?></td>
                 <td><?=$d->ip?></td>
+                <td><?=$d->ts?></td>
                 <td><?=$d->get_data?></td>
                 <td><?=$d->post_data?></td>
               </tr>
