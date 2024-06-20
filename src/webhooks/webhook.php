@@ -142,7 +142,12 @@ if($webhook->disabled > 0){
 }
 
 $action = performWebhookAction($webhook->id,$webhook->action_type,$webhook->action,$data);
-$msg['msg'] = $action;
+if (is_string($action)) {
+  $msg['msg'] = $action;
+} else {
+  $msg=$action;
+  $action=json_encode($msg);
+}
 $fields = [
   'hook'=>$webhook->id,
   'ip'=>$ip,
@@ -175,7 +180,8 @@ function performWebhookAction($id,$action_type,$action,$data){
   }elseif($action_type == "php"){
     if(file_exists($abs_us_root.$us_url_root."usersc/plugins/webhooks/assets/".$action)){
       require_once($abs_us_root.$us_url_root."usersc/plugins/webhooks/assets/".$action);
-      return "success";
+      if(empty($return_object)) return "success";
+      else return $return_object;
     }else{
       return "File not found";
     }
