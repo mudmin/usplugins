@@ -1,3 +1,5 @@
+<script src="<?=$us_url_root?>usersc/plugins/chat/chat-app/emoji-button.min.js?cb=<?=$cb?>"></script>
+<script>
 var chatTimer;
 
 function ajax(url, data, callback, methodType){
@@ -30,14 +32,14 @@ function addParticipants(resp){
     resp.participants.forEach(part => {
       const item = document.createElement('li');
       item.className = part.session_active == 1? 'active' : '';
-      item.innerText = `${part.fname} ${part.lname} ${part.id}`;
+      item.innerText = `${part.fname} ${part.lname}`;
       partList.appendChild(item);
     });
   }
 }
 
 function retrieveChatMessages(){
-  ajax('usersc/plugins/chat/chat-app/parsers/getChatMessages.php',{},(resp)=>{
+  ajax('<?=$us_url_root?>usersc/plugins/chat/chat-app/parsers/getChatMessages.php',{},(resp)=>{
     if(resp.success){
       addParticipants(resp);
       if(resp.lastId !== ''){
@@ -72,11 +74,14 @@ function retrieveChatMessages(){
               const msgBody = document.createElement('div');
               const title = document.createElement('div');
               title.className = "title";
-              title.innerText = `${msg.user_fname} ${msg.user_lname} ${msg.user_id}`;
+              title.innerText = `${msg.user_fname} ${msg.user_lname}`;
+
+
               const time = document.createElement('span');
-              const formattedDate = Intl.DateTimeFormat('en', {hour:"numeric",month:'short',day:"numeric",minute:"numeric","timeZone":"GMT"}).format(new Date(msg.created_at));
-              time.innerText = formattedDate;
+              time.innerText = formatChatDate(msg.created_at);
               title.appendChild(time);
+
+
               const msgDiv = document.createElement('div');
               msgDiv.className = "msg";
               msgDiv.innerText = msg.msg;
@@ -86,15 +91,14 @@ function retrieveChatMessages(){
               item.appendChild(msgBody);
               document.getElementById('chat-app-msg-body').appendChild(item);
             }
-
           });
-          const scrollBody = document.getElementById('chat-app-msg-body');
-          scrollBody.scrollTop = scrollBody.scrollHeight;
         }
       }
     }
   });
 }
+
+
 
 function chatPoll(){
   chatTimer = setInterval(function(){
@@ -110,7 +114,7 @@ function submitChatMsg(evt){
   const msg = document.getElementById('chat-msg-value').value;
   if(!evt.target.classList.contains('disabled') && msg){
     evt.target.classList.add('disabled');
-    ajax('usersc/plugins/chat/chat-app/parsers/createChatMessage.php',{msg:msg},(resp) => {
+    ajax('<?=$us_url_root?>usersc/plugins/chat/chat-app/parsers/createChatMessage.php',{msg:msg},(resp) => {
       evt.target.classList.remove('disabled');
       if(resp.success){
         document.getElementById('chat-msg-value').value = "";
@@ -129,14 +133,14 @@ function initChat(){
 }
 
 function closeChat(){
-  ajax('usersc/plugins/chat/chat-app/parsers/save_session.php',{type:"close"}, (resp)=>{
+  ajax('<?=$us_url_root?>usersc/plugins/chat/chat-app/parsers/save_session.php',{type:"close"}, (resp)=>{
     document.getElementById('chatWindow').classList.remove('show');
   },'POST');
 }
 
 function openChat(){
   initChat();
-  ajax('usersc/plugins/chat/chat-app/parsers/save_session.php',{type:"open"}, (resp) => {
+  ajax('<?=$us_url_root?>usersc/plugins/chat/chat-app/parsers/save_session.php',{type:"open"}, (resp) => {
     document.getElementById('chatWindow').classList.add('show');
   }, "POST");
 }
@@ -223,3 +227,29 @@ window.addEventListener('load',function(){
   const dragHandle = document.getElementById('chat-window-drag-handle');
   dragHandle.addEventListener('mousedown', dragHandleClicked);
 });
+
+function formatChatDate(isoDateString) {
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  // Parse the ISO date string
+  const date = new Date(isoDateString);
+
+  // Extract components
+  const dayOfWeek = days[date.getDay()];
+  const month = months[date.getMonth()];
+  const dayOfMonth = date.getDate();
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minute = date.getMinutes().toString().padStart(2, '0');
+
+  // Format the hour and am/pm
+  const hourFormatted = hour % 12 || 12; // Convert 24h to 12h format
+  const amPm = hour < 12 ? 'am' : 'pm';
+
+  // Construct the formatted date string
+  return `${dayOfWeek} ${month} ${dayOfMonth}, ${year} at ${hourFormatted}:${minute}${amPm}`;
+}
+
+
+</script>

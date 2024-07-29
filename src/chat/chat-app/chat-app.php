@@ -1,6 +1,8 @@
 <?php
 global $user, $cb, $us_url_root;
-if(isset($user) && $user->isLoggedIn()){
+if(isset($user) && $user->isLoggedIn() && pluginActive("chat",true)){
+require_once $abs_us_root.$us_url_root."usersc/plugins/chat/chat-app/chat-app-js.php";
+require_once $abs_us_root.$us_url_root."usersc/plugins/chat/chat-app/styles/chat-app-style.php";
 ?>
 <style media="screen">
   .hide{
@@ -12,36 +14,12 @@ if(isset($user) && $user->isLoggedIn()){
 </style>
 <!-- load additional resources  -->
 <script src="https://kit.fontawesome.com/03bdbd7088.js" crossorigin="anonymous"></script>
-<script>
-  if(!document.getElementById('chat-styles-link')){
-    var styles = document.createElement('link');
-    styles.id = 'chat-styles-link';
-    styles.rel = 'stylesheet';
-    styles.href = '<?=$us_url_root?>usersc/plugins/chat/chat-app/styles/chat-app.css?cb=<?=$cb?>';
-    document.head.appendChild(styles);
-  }
 
-  if(!document.getElementById('chat-app-js-src')) {
-    var script = document.createElement('script');
-    script.id = 'chat-app-js-src';
-    script.src = '<?=$us_url_root?>usersc/plugins/chat/chat-app/chat-app.js?cb=<?=$cb?>';
-    // script.defer = true;
-    document.head.appendChild(script);
-  }
-
-
-
-  var script = document.createElement('script');
-  script.id = 'emoji-button-src'
-  script.src = '<?=$us_url_root?>usersc/plugins/chat/chat-app/emoji-button.min.js?cb=<?=$cb?>';
-  document.head.appendChild(script);
-
-</script>
 
 <section id="chatWindow" class="hide">
   <div class="control-hidden">
     <header>
-      <div>Chat as <?= $user->data()->fname?> <?= $user->data()->lname?> <?= $user->data()->id?></div>
+      <div>Chat as <?= $user->data()->fname?> <?= $user->data()->lname?></div>
       <div>
         <a href="#" id="chat-window-drag-handle" class="grip"><i class="fas fa-grip-vertical"></i></a>
         <a href="#" onclick="closeChat();" class="close"><i class="fas fa-times"></i></a>
@@ -67,7 +45,14 @@ if(isset($user) && $user->isLoggedIn()){
 
 
       <aside class="participants">
-        <h3>Participants</h3>
+
+        <h3>
+          <?php if(isset($custom_chat_title)){
+                echo $custom_chat_title;
+              }
+             ?>
+             Participants
+          </h3>
         <ul id="chat-app-participants-list" >
 
         </ul>

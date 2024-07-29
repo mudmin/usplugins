@@ -1,17 +1,33 @@
 <?php
 require_once ('../../../../../users/init.php');
 require_once ($abs_us_root.$us_url_root."usersc/plugins/chat/chat-app/helpers.php");
-$event_override = $event_id = 1; //compatibility
+if(isset($custom_chat_room) && is_numeric($custom_chat_room)){
+  $event_override = $event_id = $custom_chat_room;
+}else{
+  $event_override = $event_id = 1;
+}
 
-$db = DB::getInstance();
-
-$sql = "
-  SELECT msg.*, users.id as user_id, users.fname as user_fname, users.lname as user_lname, users.picture as user_picture
-  FROM plg_chat_messages as msg
-  JOIN users ON msg.user_id = users.id
-  WHERE event_id = ?
-  ORDER BY msg.id DESC
-  LIMIT 500
+$sql = "SELECT 
+msg.*, 
+users.id as user_id, 
+users.fname as user_fname, 
+CASE 
+  WHEN upm.permission_id = 2 THEN CONCAT(users.lname, ' (Admin)')
+  ELSE users.lname 
+END as user_lname, 
+users.picture as user_picture
+FROM 
+plg_chat_messages as msg
+JOIN 
+users ON msg.user_id = users.id
+LEFT JOIN 
+user_permission_matches as upm ON users.id = upm.user_id
+WHERE 
+msg.event_id = ?
+ORDER BY 
+msg.id DESC
+LIMIT 
+500
 ";
 
 $msgs = $db->query($sql,[$event_override])->results();
@@ -40,15 +56,30 @@ if(!empty($user_ids)){
   $userIdString = "'" . implode("', '", $user_ids) . "'";
 
 
-  $sql = "
-    SELECT users.fname, users.lname, users.id, sessions.id as session_id, IF(sessions.id IS NOT NULL, 1, 0) as session_active
-    FROM users
-    LEFT JOIN plg_chat_sessions as sessions ON sessions.user_id = users.id
-    WHERE users.id IN({$userIdString})
-    GROUP BY users.id
-    ORDER BY session_active DESC, users.lname, users.fname
-  ";
-  $participants = $db->query($sql)->results();
+  $sql = "SELECT 
+    users.fname, 
+    CASE 
+      WHEN MAX(upm.permission_id) = 2 THEN CONCAT(users.lname, ' (Admin)')
+      ELSE users.lname 
+    END as lname, 
+    users.id, 
+    sessions.id as session_id, 
+    IF(MAX(sessions.id) IS NOT NULL, 1, 0) as session_active
+  FROM 
+    users
+  LEFT JOIN 
+    plg_chat_sessions as sessions ON sessions.user_id = users.id
+  LEFT JOIN 
+    user_permission_matches as upm ON users.id = upm.user_id
+  WHERE 
+    users.id IN({$userIdString})
+  GROUP BY 
+    users.id, users.fname, users.lname
+  ORDER BY 
+    session_active DESC, lname, users.fname
+";
+$participants = $db->query($sql)->results();
+
 }
 
 $currentActiveChatters = 0;
