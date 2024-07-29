@@ -35,7 +35,7 @@
       Redirect::to("admin.php?view=plugins_config&plugin=uptime&msg=Downtime data cleared");
     }
     if (!empty($_POST['addTarget'])) {
-      $check = $db->query("SELECT * FROM plg_uptime WHERE site = ?"[Input::get('site')])->count();
+      $check = $db->query("SELECT * FROM plg_uptime WHERE `site` = ?",[Input::get('site')])->count();
       if ($check > 0) {
         Redirect::to("admin.php?view=plugins_config&plugin=uptime&msg=Error. A site with that name already exists");
       }
