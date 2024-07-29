@@ -39,7 +39,7 @@ if(!empty($_POST['widget_type'])){
     If this is an HTML widget, put whatever you want in the box.
   <textarea name="content" id="editor"></textarea>
   </div>
-  <p><input type="submit" value="Save"></p>
+  <p><input type="submit" value="Save" class="btn btn-outline-primary btn-sm"></p>
 </form>
 <?php
 if(file_exists($abs_us_root.$us_url_root."usersc/includes/cmseditor.php")){

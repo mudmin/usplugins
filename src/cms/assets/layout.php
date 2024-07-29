@@ -90,7 +90,7 @@ if($action == "new" || $action == "" || ($action == "edit" && $id > 0)){
     </div>
 
     <textarea name="layout" id="" rows="12" class="form-control" required><?php if($action == 'edit'){echo $l->layout;}?></textarea>
-    <p><input type="submit" value="Save"></p>
+    <p><input type="submit" value="Save" class="btn btn-outline-primary btn-sm"></p>
 </form>
 <?php }
 ?>

@@ -29,7 +29,7 @@ if(!empty($_POST)){
  ?>
 <form action="" method="post" name="new_content">
   <input type="hidden" name="csrf" value="<?=$token?>">
-  <p><input type="submit" value="Save"></p>
+  <p><input type="submit" value="Save" class="btn btn-outline-primary btn-sm"></p>
     <div class="form-group">
       <label for="">Content Title</label>
       <input class="form-control" type="text" name="title" value="" required>

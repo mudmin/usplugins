@@ -9,7 +9,7 @@ if($c != "" && $c > 0){
   }
   }
 
-  if(!empty($_POST['content'])){
+  if(!empty($_POST['widget_type'])){
 
     $fields = array(
       'title'=>Input::get('title'),
@@ -18,6 +18,7 @@ if($c != "" && $c > 0){
       'file'=>Input::get('widget_file'),
       );
       $db->update('plg_cms_widgets',$c,$fields);
+
 
       Redirect::to('admin.php?view=plugins_config&plugin=cms&method=widget_edit&msg=Saved&id='.$content->id);
 
@@ -38,6 +39,7 @@ if($c != "" && $c > 0){
         <option <?php if ($content->widget_type == 1){echo "selected";}?> value="1">Widget File</option>
         <option <?php if ($content->widget_type == 2){echo "selected";}?> value="2">HTML Widget</option>
       </select>
+
     </div>
     <div class="form-group">
       <label for="">Widget File</label><br>
@@ -52,7 +54,7 @@ if($c != "" && $c > 0){
       <textarea name="content" id="editor"><?=$content->content?></textarea>
     </div>
 
-      <p><input type="submit" value="Save"></p>
+      <p><input type="submit" value="Save" class="btn btn-outline-primary btn-sm"></p>
   </form>
   <?php
 } //if contnet provided

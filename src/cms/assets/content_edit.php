@@ -47,7 +47,7 @@ if($c != "" && $c > 0){
     </div>
 
       <textarea name="content" id="editor"><?=$content->content?></textarea>
-      <p><input type="submit" value="Save"></p>
+      <p><input type="submit" value="Save" class="btn btn-outline-primary btn-sm"></p>
 
       <div class="form-group">
         <label for="">Category</label>
@@ -95,7 +95,7 @@ if($c != "" && $c > 0){
          ?>
         <input class="form-control" type="text" name="tags" value="<?=$tagstring?>">
       </div>
-      <p><input type="submit" value="Save"></p>
+      <p><input type="submit" value="Save" class="btn btn-outline-primary btn-sm"></p>
   </form>
   <?php
 } //if contnet provided
