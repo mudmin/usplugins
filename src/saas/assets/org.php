@@ -4,7 +4,7 @@ $errors = $successes = [];
 $e = $db->query("SELECT * FROM email")->first();
 $act = $e->email_act;
 $form_valid=TRUE;
-
+$random_password = randomstring(15);
 
 
 // dnd($permOps);
@@ -152,7 +152,7 @@ $validation = new Validate();
             email($to,$subject,$body);
           }
           logger($user->data()->id,"SAAS","Added user $username.");
-            Redirect::to('admin.php?view=plugins_config&plugin=saas&v=org');
+            Redirect::to($us_url_root . 'users/admin.php?view=plugins_config&plugin=saas&v=org');
         } catch (Exception $e) {
           die($e->getMessage());
         }
@@ -172,7 +172,15 @@ if(!empty($_POST['createOrg'])){
   $db->insert('us_saas_orgs',$fields);
   $id = $db->lastId();
   $db->update('users',Input::get('owner'),['account_owner'=>$id]);
-  Redirect::to('admin.php?view=plugins_config&plugin=saas&v=org');
+  $mgr_fields = array(
+    'org'=>$id,
+    'user'=>Input::get('owner'),
+    );
+    $check = $db->query("SELECT * FROM us_saas_mgrs WHERE org = ? AND user = ?",[$id,Input::get('owner')])->count();
+    if($check == 0){
+     $db->insert('us_saas_mgrs',$mgr_fields);
+    }
+  Redirect::to($us_url_root . 'users/admin.php?view=plugins_config&plugin=saas&v=org');
 }
 $orgs = $db->query("SELECT * FROM us_saas_orgs ORDER BY active DESC, org ASC")->results();
 $ones = $db->query("SELECT * FROM users WHERE id > 1 AND account_owner = 1")->results();
@@ -187,8 +195,12 @@ foreach($plans as $p){
 ?>
 <div class="row">
   <div class="col-12 col-sm-6">
-    <h3>New Org</h3>
-    <p>You must already have a user account to be the "owner" of the org.  <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser" data-bs-toggle="modal" data-bs-target="#adduser"><font color="blue"><i class="fa fa-plus"></i> Manually Add User</a></font></p>
+    <div class="card">
+      <div class="card-header">
+      <h4>New Org</h4>
+      </div>
+      <div class="card-body">
+      <p>You must already have a user account to be the "owner" of the org.  <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser" data-bs-toggle="modal" data-bs-target="#adduser"><font color="blue"><i class="fa fa-plus"></i> Manually Add User</a></font></p>
     <form class="" action="" method="post">
       <div class="form-group">
         <label>Owner</label>
@@ -216,12 +228,18 @@ foreach($plans as $p){
         <input type="submit" name="createOrg" value="Create Org" class="btn btn-primary">
 
     </form>
+      </div>
+    </div>
+    
+    
 </div>
   <div class="col-12 col-sm-6">
   </div>
-  <div class="col-12">
-    <h3>Exising Orgs</h3>
-    <table class="table table-striped">
+  <div class="col-12 mt-3">
+    <div class="card">
+      <div class="card-header"><h4>Exising Orgs</h4></div>
+      <div class="card-body">
+      <table class="table table-striped">
       <thead>
         <tr>
           <th>Org</th><th>Owner</th><th>Plan</th><th>Members</th><th>Active?</th><th>Manage</th>
@@ -241,56 +259,90 @@ foreach($plans as $p){
         <?php } ?>
       </tbody>
     </table>
+      </div>
+    </div>
+    
+   
   </div>
 </div>
 <div id="adduser" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal">&times;</button>
-        <h4 class="modal-title">User Addition</h4>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Add New User</h5>
+        <button type="button" class="close btn btn-outline-secondary btn-sm" data-dismiss="modal" data-bs-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
         <form class="form-signup" action="" method="POST">
-          <div class="panel-body">
-            <?php if($settings->auto_assign_un==0) {?><label>Username: </label>&nbsp;&nbsp;<span id="usernameCheck" class="small"></span><input type="text" class="form-control" id="username" name="username" placeholder="Username" autocomplete="new-password" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required><?php } ?>
-              <label>First Name: </label><input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="<?php if (!$form_valid && !empty($_POST)){ echo $fname;} ?>" required autocomplete="new-password">
-              <label>Last Name: </label><input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" value="<?php if (!$form_valid && !empty($_POST)){ echo $lname;} ?>" required autocomplete="new-password">
-              <label>Email: </label><input  class="form-control" type="text" name="email" id="email" placeholder="Email Address" value="<?php if (!$form_valid && !empty($_POST)){ echo $email;} ?>" required autocomplete="new-password">
-              <label>Password: </label>
-              <div class="input-group" data-container="body">
-                <span class="input-group-addon password_view_control" id="addon1"><span class="fa fa-eye"></span></span>
-                <input  class="form-control" type="password" name="password" id="password" <?php if($settings->force_pr==1) { ?>value="<?=$random_password?>" readonly<?php } ?> placeholder="Password" required autocomplete="new-password" aria-describedby="passwordhelp">
-                <?php if($settings->force_pr==1) { ?>
-                  <span class="input-group-addon" id="addon2"><a class="nounderline pwpopover" data-container="body" data-toggle="popover" data-placement="top" data-content="The Administrator has manual creation password resets enabled. If you choose to send an email to this user, it will supply them with the password reset link and let them know they have an account. If you choose to not, you should manually supply them with this password (discouraged).">Why can't I edit this?</a></span>
-                <?php } ?>
-              </div>
-              <label>Confirm Password: </label>
-              <div class="input-group" data-container="body">
-                <span class="input-group-addon password_view_control" id="addon1"><span class="fa fa-eye"></span></span>
-                <input  type="password" id="confirm" name="confirm" <?php if($settings->force_pr==1) { ?>value="<?=$random_password?>" readonly<?php } ?> class="form-control" autocomplete="new-password" placeholder="Confirm Password" required >
-                <?php if($settings->force_pr==1) { ?>
-                  <span class="input-group-addon" id="addon2"><a class="nounderline pwpopover" data-container="body" data-toggle="popover" data-placement="top" data-content="The Administrator has manual creation password resets enabled. If you choose to send an email to this user, it will supply them with the password reset link and let them know they have an account. If you choose to not, you should manually supply them with this password (discouraged).">Why can't I edit this?</a></span>
-                <?php } ?>
-              </div>
+          <div class="row">
+            <?php if($settings->auto_assign_un==0) { ?>
+            <div class="col-md-6 mb-3">
+              <label for="username">Username</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" autocomplete="new-password" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required>
 
-              <?php include($abs_us_root.$us_url_root.'usersc/scripts/additional_join_form_fields.php'); ?>
-              <?php if($act==1){?>
-              <label><input type="checkbox" name="sendEmail" id="sendEmail" checked /> Send Email?</label>
-            <?php } ?>
-              <br />
-            </div>
-            <div class="modal-footer">
-              <div class="btn-group">
-                <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-                <input class='btn btn-primary' type='submit' id="addUser" name="addUser" value='Add User' class='submit' /></div>
-                <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
               </div>
-            </form>
+            </div>
+            <?php } ?>
+            <div class="col-md-6 mb-3">
+              <label for="fname">First Name</label>
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter first name" value="<?php if (!$form_valid && !empty($_POST)){ echo $fname;} ?>" required autocomplete="new-password">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lname">Last Name</label>
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter last name" value="<?php if (!$form_valid && !empty($_POST)){ echo $lname;} ?>" required autocomplete="new-password">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="email">Email</label>
+              <input class="form-control" type="email" name="email" id="email" placeholder="Enter email address" value="<?php if (!$form_valid && !empty($_POST)){ echo $email;} ?>" required autocomplete="new-password">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="password">Password</label>
+              <div class="input-group">
+                <input class="form-control" type="password" name="password" id="password" <?php if($settings->force_pr==1) { ?>value="<?=$random_password?>" readonly<?php } ?> placeholder="Enter password" required autocomplete="new-password" aria-describedby="passwordhelp">
+                <div class="input-group-append">
+                  <span class="input-group-text password_view_control"><i class="fa fa-eye"></i></span>
+                </div>
+              </div>
+              <?php if($settings->force_pr==1) { ?>
+              <small class="form-text text-muted">
+                <a href="#" class="pwpopover" data-toggle="popover" data-placement="top" data-content="The Administrator has manual creation password resets enabled. If you choose to send an email to this user, it will supply them with the password reset link and let them know they have an account. If you choose not to, you should manually supply them with this password (discouraged).">Why can't I edit this?</a>
+              </small>
+              <?php } ?>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="confirm">Confirm Password</label>
+              <div class="input-group">
+                <input type="password" id="confirm" name="confirm" <?php if($settings->force_pr==1) { ?>value="<?=$random_password?>" readonly<?php } ?> class="form-control" autocomplete="new-password" placeholder="Confirm password" required>
+                <div class="input-group-append">
+                  <span class="input-group-text password_view_control"><i class="fa fa-eye"></i></span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+
+          <?php include($abs_us_root.$us_url_root.'usersc/scripts/additional_join_form_fields.php'); ?>
+          
+          <?php if($act==1){ ?>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="sendEmail" name="sendEmail" checked>
+              <label class="custom-control-label" for="sendEmail">Send Email?</label>
+            </div>
+          </div>
+          <?php } ?>
+          
+          <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+          
+          <div class="text-right">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input class='btn btn-primary' type='submit' id="addUser" name="addUser" value='Add User' />
+          </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
 
 
     <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
@@ -321,34 +373,3 @@ foreach($plans as $p){
       });
     });
     </script>
-
-    <?php if($settings->auto_assign_un==0) { ?>
-      <script type="text/javascript">
-      $(document).ready(function(){
-        var x_timer;
-        $("#username").keyup(function (e){
-          clearTimeout(x_timer);
-          var username = $(this).val();
-          if (username.length > 0) {
-            x_timer = setTimeout(function(){
-              check_username_ajax(username);
-            }, 500);
-          }
-          else $('#usernameCheck').text('');
-        });
-
-        function check_username_ajax(username){
-          $("#usernameCheck").html('Checking...');
-          $.post('parsers/existingUsernameCheck.php', {'username': username}, function(response) {
-            if (response == 'error') $('#usernameCheck').html('There was an error while checking the username.');
-            else if (response == 'taken') { $('#usernameCheck').html('<i class="fa fa-times" style="color: red; font-size: 12px"></i> This username is taken.');
-            $('#addUser').prop('disabled', true); }
-            else if (response == 'valid') { $('#usernameCheck').html('<i class="fa fa-thumbs-o-up" style="color: green; font-size: 12px"></i> This username is not taken.');
-            $('#addUser').prop('disabled', false); }
-            else { $('#usernameCheck').html('');
-            $('#addUser').prop('disabled', false); }
-          });
-        }
-      });
-      </script>
-    <?php } ?>

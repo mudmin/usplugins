@@ -2,7 +2,7 @@
 $id = Input::get('o');
 $planQ = $db->query("SELECT * FROM us_saas_levels WHERE id = ?",[$id]);
 $planC = $planQ->count();
-if($planC < 1){Redirect::to('admin.php?view=plugins_config&plugin=saas&v=plan&err=Plan+not+found');}
+if($planC < 1){Redirect::to($us_url_root . 'users/admin.php?view=plugins_config&plugin=saas&v=plan&err=Plan+not+found');}
 $plan = $planQ->first();
 $explode = explode(',',$plan->perms);
 
@@ -20,12 +20,12 @@ if(!empty($_POST['createPlan'])){
     'perms'=>$pr,
   );
   $db->update('us_saas_levels',$id,$fields);
-  Redirect::to('admin.php?view=plugins_config&plugin=saas&v=plan&err=Saved');
+  Redirect::to($us_url_root . 'users/admin.php?view=plugins_config&plugin=saas&v=plan&err=Saved');
 }
 
 if(!empty($_POST['deact'])){
 
-    Redirect::to('admin.php?view=plugins_config&plugin=saas&v=plan&err=Deleted');
+    Redirect::to($us_url_root . 'users/admin.php?view=plugins_config&plugin=saas&v=plan&err=Deleted');
 }
 $perms = $db->query("SELECT * FROM permissions WHERE id > 2")->results();
 ?>

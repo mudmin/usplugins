@@ -27,11 +27,11 @@ if($userdetails->account_owner != $user->data()->account_owner){
     if(saasOwner()){
       if(!empty($_POST['makeMgr'])){
         $db->insert('us_saas_mgrs',['org'=>$user->data()->account_owner,'user'=>$userdetails->id]);
-        Redirect::to('account.php?v=manage&u='.$userId);
+        Redirect::to($us_url_root.'users/account.php?v=manage&u='.$userId);
       }
       if(!empty($_POST['removeMgr'])){
         $db->query("DELETE FROM us_saas_mgrs WHERE org=? AND user = ?",[$user->data()->account_owner,$userdetails->id]);
-        Redirect::to('account.php?v=manage&u='.$userId);
+        Redirect::to($us_url_root.'users/account.php?v=manage&u='.$userId);
       }
     }
     if($z){
@@ -63,7 +63,7 @@ if($userdetails->account_owner != $user->data()->account_owner){
         $deletions = $_POST['delete'];
         if ($deletion_count = deleteUsers($deletions)){
           logger($user->data()->id,"SAAS Manager","Deleted user named $userdetails->fname.");
-          Redirect::to($us_url_root.'account.php?msg='.lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count)));
+          Redirect::to($us_url_root.'users/account.php?msg='.lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count)));
         }
         else {
           $errors[] = lang("SQL_ERROR");

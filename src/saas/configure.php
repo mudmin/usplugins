@@ -8,7 +8,7 @@ pluginActive($plugin_name);
 if(!Token::check($token)){
   include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
 }
-   // Redirect::to('admin.php?err=I+agree!!!');
+   // Redirect::to($us_url_root . 'users/admin.php?err=I+agree!!!');
  }
  $token = Token::generate();
  $v = Input::get('v');

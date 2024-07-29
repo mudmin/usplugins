@@ -1,10 +1,11 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 global $lang;
+$random_password = randomstring(15);
 if(saasMgr()){
   //Manually Add User
   if(!empty($_POST['addUser'])) {
     
-    if(!$usersLeft){Redirect::to('account.php?err=You+are+out+of+user+space.');}
+    if(!$usersLeft){Redirect::to($us_url_root.'users/account.php?err=You+are+out+of+user+space.');}
     $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry hours",strtotime(date("Y-m-d H:i:s"))));
     $join_date = date("Y-m-d H:i:s");
     $fname = Input::get('fname');
@@ -149,7 +150,7 @@ if(saasMgr()){
           }
           logger($user->data()->id,"SAAS Manager","Added user $username.");
           usSuccess("User Added");
-          Redirect::to('account.php');
+          Redirect::to($us_url_root.'users/account.php');
         } catch (Exception $e) {
           die($e->getMessage());
         }
