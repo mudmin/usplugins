@@ -19,7 +19,7 @@ if ($type == 1) {
 ?>
 
 <div class="modal fade messages-modal" id="messagesModal" tabindex="-1" aria-labelledby="messagesModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="max-width: 90vw;">
+  <div class="modal-dialog" style="max-width: 90vw; min-width:90vw;">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="messagesModalLabel"></h1>

@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>May 27,2024</release>
+  <release>July 29,2024</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.7.1</tested>
+  <tested>5.7.6</tested>
 
 <!-- What does your plugin do? -->
   <description>A unified messaging plugin. It does messaging type things. It supports several notification types such as alerts and notifications.  Has DMs.  Messaging is currently one way, with 2 way messaging coming to DMs soon. Includes UltraMenu integration and notification sounds. </description>
