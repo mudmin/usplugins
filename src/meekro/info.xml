@@ -6,17 +6,19 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.3.0</version>
+  <version>2.3.1</version>
 
 <!-- release date of THIS version -->
-  <release>November 21,2018</release>
+  <release>July 29, 2004</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>4.4</tested>
+  <tested>5.7.7</tested>
 
 <!-- What does your plugin do? -->
   <description>This is the MeekroDB plugin for UserSpice. An advanced database class for your UserSpice project.
-    Free for personal use. Purchase a 1 time or bulk commercial license at <a href="https://meekro.com/">https://meekro.com/</a></description>
+    Free for personal use. Purchase a 1 time or bulk commercial license at <a href="https://meekro.com/">https://meekro.com/</a>. Please note that this is version 2.3 of Meekro. I will not be updating to the latest version.  If you need the latest version, you will need to download and modify the class.
+
+    </description>
 
 <!-- This is the launch button in the plugin manager -->
   <button>Configure Plugin</button>
