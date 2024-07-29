@@ -65,8 +65,8 @@ if($ps){
 			<div class="col-sm-12">
 				<h3>Manage <?=echouser($u->id)?></h3>
 
-				<strong>Current Plan:</strong> <?=echoPlanName($u->plg_mem_level);?><br>
-				<strong>Exp. Date:</strong> <?php if($u->plg_mem_exp < $date){
+				<b>Current Plan:</b> <?=echoPlanName($u->plg_mem_level);?><br>
+				<b>Exp. Date:</b> <?php if($u->plg_mem_exp < $date){
 					$e = true; ?>
 					<font color="red">
 					<?php }else{
@@ -115,7 +115,7 @@ if($ps){
 									echo "<p>Since the existing plan has not expired, you have a credit of <font color='red'>$memset->sym $credit</font> for your $interval unused day(s)<br>at the cost of $oldcpd per day.</p>";
 									if($credit > $costPlan->cost){
 										echo "<p>There is no charge to make this change.</p>";
-										echo "<p><strong>Please note:</strong> Although the credit will be used for this plan change, any balance will NOT automatically be refunded.  Please see the site administrator for any refunds necessary.</p>";
+										echo "<p><b>Please note:</b> Although the credit will be used for this plan change, any balance will NOT automatically be refunded.  Please see the site administrator for any refunds necessary.</p>";
 									}else{
 										echo "Since the new plan is more expensive than the old plan, there is a cost to update the existing billing cycle.<br>";
 										echo "The billable amount for the current period is: <font color='red'>$memset->sym ";
@@ -124,14 +124,14 @@ if($ps){
 										echo number_format($billed,2,".","");
 										echo "</font><br>";
 										$billed = $billed + $costPlan->cost;
-										echo "In other words, the plan will be <strong>upgraded</strong> for the strong current period and <strong>extended</strong> to the new billing date.<br>";
+										echo "In other words, the plan will be <b>upgraded</b> for the <b>current period</b> and <b>extended</b> to the new billing date.<br>";
 										$credit = 0.00;
 									}
 
 								} ?>
 
-								<strong>New Plan:</strong> <?=echoPlanName($pl);?><br>
-								<strong>New Expiration Date:</strong>
+								<b>New Plan:</b> <?=echoPlanName($pl);?><br>
+								<b>New Expiration Date:</b>
 								<?php
 								if($e){
 									$newdate = new DateTime($date);
@@ -142,13 +142,13 @@ if($ps){
 								?>
 								<input type="date" name="expiration" value="<?=$newdate->format('Y-m-d')?>">
 								<br>
-								<strong>To Be Collected:<font color="red"></strong> <?=$memset->sym?>
+								<b>To Be Collected:<font color="red"></b> <?=$memset->sym?>
 									<input type="number" name="billed" min="0" step=".01" value="<?=number_format($billed,2,".","");?>">
 									</font><br>
-								<strong>The user should get a credit of <font color="red"><?=$memset->sym?></font><input type="number" min="0" step=".01" name="cred" value="<?=number_format($credit,2,".","");?>"> back to their original payment method.
-									(This is for you to deal with outside of this system).</strong> <br>
+								<b>The user should get a credit of <font color="red"><?=$memset->sym?></font><input type="number" min="0" step=".01" name="cred" value="<?=number_format($credit,2,".","");?>"> back to their original payment method.
+									(This is for you to deal with outside of this system).</b> <br>
 								<br>
-								<strong>This is your system and you can do whatever you want<strong><br>
+								<b>This is your system and you can do whatever you want</b><br>
 									If you change the numbers above, your values will be used instead of the ones we calculated.<br>
 								<input type="submit" name="submitFinal" value="Finalize Changes" class="btn btn-primary">
 							</form>
@@ -158,7 +158,7 @@ if($ps){
 								$billed = Input::get('billed');
 								$cred = Input::get('cred');
 								$fields = array(
-									'plg_mem_expired'=>0,
+									'plg_mem_expired'=>0, 
 									'plg_mem_exp'=> $nd,
 									'plg_mem_level'=>$pl,
 									'plg_mem_cred'=>$cred,

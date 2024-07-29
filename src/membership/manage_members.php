@@ -27,10 +27,14 @@ $date = date("Y-m-d");
 ?>
 
 <div id="page-wrapper">
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12">
-				<table class="table table-striped">
+			<div class="col-sm-12 mt-4">
+				<h1 class="page-header">Manage Members</h1>
+				<h5>
+					<a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=membership">Back</a>
+				</h5>
+				<table class="table table-striped paginate">
 					<thead>
 						<tr>
 							<th>User</th><th>Email</th><th>Plan</th><th>Expires</th><th>Change</th>
@@ -52,7 +56,7 @@ $date = date("Y-m-d");
 								<td>
 									<form class="" action="manage_members_plan.php" method="get">
 										<input type="hidden" name="userid" value="<?=$u->id?>">
-										<input type="submit" name="method" value="Change">
+										<input type="submit" name="method" value="Manage Plan" class="btn btn-sm btn-outline-primary">
 									</form>
 								</td>
 							</tr>

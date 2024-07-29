@@ -6,17 +6,17 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 
 <!-- release date of THIS version -->
-  <release>May 5, 2020</release>
+  <release>July 29, 2024</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.1</tested>
+  <tested>5.7.7</tested>
 
 <!-- What does your plugin do? -->
   <description>Allows you to add membership options to your UserSpice project. Each membership option is one of your existing
-  permission levels, except that it is automatically added when the person pays and remove when the time expires.</description>
+  permission levels, except that it is automatically added when the person pays and remove when the time expires. Note: While this is a functional plugin, it is designed to be a starting point to developing your own custom membership system. You may have to add code and custom script to do some of the things that you want to do. </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Membership</button>
