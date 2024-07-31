@@ -24,7 +24,7 @@
                             <tr>
                                 <td><?=$m->id?></td>
                                 <td>
-                                <a href="message_audit.php?id=<?=$m->id?>" target="_blank">
+                                <a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=messaging&mode=message_audit&id=<?=$m->id?>" target="_blank">
                                     <?=$m->title?>
                                 </a>
                                 </td>
@@ -39,7 +39,7 @@
                                 "><?=formatMsgDate($m->msg_expires_on,false)?></td>
                                 <td class="text-center"><?=$m->send_method?></td>
                                 <td>
-                                    <a href="message_audit.php?id=<?=$m->id?>" class="btn btn-sm btn-outline-primary" target="_blank">Audit</a>
+                                    <a href="<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=messaging&mode=message_audit&id=<?=$m->id?>" class="btn btn-sm btn-outline-primary" target="_blank">Audit</a>
                                 </td>
                             </tr>
                         
