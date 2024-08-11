@@ -37,8 +37,8 @@ if (!empty($_POST)) {
     include($abs_us_root . $us_url_root . 'usersc/scripts/token_error.php');
   }
 
-  if (is_numeric(Input::get('client'))) {
-    $clientId = Input::get('client');
+  if (is_numeric(Input::get('delete_client'))) {
+    $clientId = Input::get('delete_client');
 
     $db->delete('plg_oauth_server_clients', ['id' => $clientId]);
     if (!$db->error()) {
@@ -92,11 +92,7 @@ function copyToClipboard(text) {
     });
 }
 
-function confirmDelete(clientId, clientName) {
-    if (confirm(`Are you sure you want to delete the client "${clientName}"?`)) {
-        window.location.href = `<?= $us_url_root ?>users/admin.php?view=plugins_config&plugin=oauth_server&action=delete&client=${clientId}`;
-    }
-}
+
 </script>
 
 <style>
