@@ -52,7 +52,7 @@ if (!empty($_POST)) {
                   <span id="oauth-status"><?php echo ($settings->oauth == 1) ? "(Currently Enabled)" : "(Currently Disabled)"; ?></span>
                   <span style="float:right;" class="form-check form-switch">
                     <label class="switch switch-text switch-success">
-                      <input id="oauth" type="checkbox" class="switch-input form-check-input toggle <?= $buttonClass ?>" data-desc="OAuth Login" <?php if ($settings->oauth == 1) echo 'checked="true"'; ?>>
+                      <input id="oauth" type="checkbox" class="switch-input form-check-input toggle" data-desc="OAuth Login" <?php if ($settings->oauth == 1) echo 'checked="true"'; ?>>
                       <span data-on="Yes" data-off="No" class="switch-label"></span>
                       <span class="switch-handle"></span>
                     </label>
@@ -96,8 +96,8 @@ if (!empty($_POST)) {
                 <div class="form-group mt-1">
                   <label for="redirect_uri">Redirect URI</label>
                   <br>
-                  Example: <?= htmlspecialchars($exampleRedirectUri) ?>
-                  <input type="text" class="form-control ajxtxt" data-table="plg_oauth_login" data-desc="Redirect URI" name="redirect_uri" id="redirect_uri" value="<?= htmlspecialchars($oauthSettings->redirect_uri) ?>">
+                  Example: <?= htmlspecialchars($exampleRedirectUri ?? "") ?>
+                  <input type="text" class="form-control ajxtxt" data-table="plg_oauth_login" data-desc="Redirect URI" name="redirect_uri" id="redirect_uri" value="<?= htmlspecialchars($oauthSettings->redirect_uri ?? "") ?>">
                 </div>
 
                 <div class="form-group mt-1">
