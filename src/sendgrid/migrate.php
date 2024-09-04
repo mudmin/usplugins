@@ -37,9 +37,9 @@ if($checkC > 0){
   $count++;
   }
 
-  $update = '00002';
+  $update = '00003';
   if(!in_array($update,$existing)){
-  $db->query("ALTER TABLE plg_sendinblue CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+  $db->query("ALTER TABLE plg_sendgrid CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;

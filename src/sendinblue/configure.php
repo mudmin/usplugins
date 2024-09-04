@@ -77,7 +77,7 @@ $token = Token::generate();
         The plugin automatically logs errors, but you can also do something like <strong>$send = sendinblue($to,$subject,$body);</strong> to have those messages returned to you immediately.
       </p>
       <p class="mb-2">
-        Simply call the function just like the built in UserSpice email function and you are good to go. If you would like to override the built in UserSpice email function and use Sendinblue instead, simply rename the file called override.rename.php to override.php</p>
+        Simply call the function just like the built in UserSpice email function and you are good to go. If you would like to override the built in UserSpice email function and use Sendinblue instead, simply rename the file called override.RENAME.php to override.php</p>
       <p class="mb-2">
         As of October, 2022, the plugin also supports templates, dynamic sender, and dynamic data inside your template. You can also do a foreach loop in your sendinblue templates. On the UserSpice side, use it like:
       </p>

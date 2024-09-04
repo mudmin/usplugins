@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-  <name>Brevo Sendinblue Plugin</name>
+  <name>SendGrid Plugin</name>
   <author>Dan Hoover</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.2.0</version>
+  <version>1.0.0</version>
 
 <!-- release date of THIS version -->
   <release>September 4, 2024</release>
@@ -15,8 +15,8 @@
   <tested>5.7.6</tested>
 
 <!-- What does your plugin do? -->
-  <description>Brevo (formerly Sendinblue) replaces phpmailer and allows you to send emails via an API to avoid a lot of the headaches of traditional SMTP. Sendinblue lets you send 300 emails per day, free of charge (no credit card required), which is perfect for password resets etc for most UserSpice projects.  Now accepts attachments.  </description>
+  <description>SendGrid (by Twilio) replaces phpmailer and allows you to send emails via an API to avoid a lot of the headaches of traditional SMTP. SendGrid lets you send 100 emails per day, free of charge, which is perfect for password resets etc for most UserSpice projects.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Brevo Sendinblue</button>
+    <button>SendGrid</button>
 </plugin>
