@@ -10,10 +10,8 @@ class File
 {
     /**
      * Use Temp or File Upload Temp for temporary files.
-     *
-     * @var bool
      */
-    protected static $useUploadTempDirectory = false;
+    protected static bool $useUploadTempDirectory = false;
 
     /**
      * Set the flag indicating whether the File Upload Temp directory should be used for temporary files.
@@ -56,12 +54,12 @@ class File
         // doing the original file_exists on ZIP archives...
         if (strtolower(substr($filename, 0, 6)) == 'zip://') {
             // Open ZIP file and verify if the file exists
-            $zipFile = substr($filename, 6, strpos($filename, '#') - 6);
-            $archiveFile = substr($filename, strpos($filename, '#') + 1);
+            $zipFile = substr($filename, 6, strrpos($filename, '#') - 6);
+            $archiveFile = substr($filename, strrpos($filename, '#') + 1);
 
             if (self::validateZipFirst4($zipFile)) {
                 $zip = new ZipArchive();
-                $res = $zip->open($zipFile, ZipArchive::CHECKCONS);
+                $res = $zip->open($zipFile);
                 if ($res === true) {
                     $returnValue = ($zip->getFromName($archiveFile) !== false);
                     $zip->close();
@@ -94,9 +92,9 @@ class File
             $pathArray = explode('/', $filename);
             while (in_array('..', $pathArray) && $pathArray[0] != '..') {
                 $iMax = count($pathArray);
-                for ($i = 0; $i < $iMax; ++$i) {
-                    if ($pathArray[$i] == '..' && $i > 0) {
-                        unset($pathArray[$i], $pathArray[$i - 1]);
+                for ($i = 1; $i < $iMax; ++$i) {
+                    if ($pathArray[$i] == '..') {
+                        array_splice($pathArray, $i - 1, 2);
 
                         break;
                     }
@@ -156,7 +154,11 @@ class File
         if ($zipMember !== '') {
             $zipfile = "zip://$filename#$zipMember";
             if (!self::fileExists($zipfile)) {
-                throw new ReaderException("Could not find zip member $zipfile");
+                // Has the file been saved with Windoze directory separators rather than unix?
+                $zipfile = "zip://$filename#" . str_replace('/', '\\', $zipMember);
+                if (!self::fileExists($zipfile)) {
+                    throw new ReaderException("Could not find zip member $zipfile");
+                }
             }
         }
     }
@@ -164,23 +166,30 @@ class File
     /**
      * Same as assertFile, except return true/false and don't throw Exception.
      */
-    public static function testFileNoThrow(string $filename, string $zipMember = ''): bool
+    public static function testFileNoThrow(string $filename, ?string $zipMember = null): bool
     {
         if (!is_file($filename)) {
             return false;
         }
-
         if (!is_readable($filename)) {
             return false;
         }
-
-        if ($zipMember !== '') {
-            $zipfile = "zip://$filename#$zipMember";
-            if (!self::fileExists($zipfile)) {
-                return false;
-            }
+        if ($zipMember === null) {
+            return true;
+        }
+        // validate zip, but don't check specific member
+        if ($zipMember === '') {
+            return self::validateZipFirst4($filename);
         }
 
-        return true;
+        $zipfile = "zip://$filename#$zipMember";
+        if (self::fileExists($zipfile)) {
+            return true;
+        }
+
+        // Has the file been saved with Windoze directory separators rather than unix?
+        $zipfile = "zip://$filename#" . str_replace('/', '\\', $zipMember);
+
+        return self::fileExists($zipfile);
     }
 }
