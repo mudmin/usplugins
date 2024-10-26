@@ -9,12 +9,6 @@ $uwab = Input::get('uwab');
 $search = Input::get('search');
 $cats = $db->query("SELECT * FROM plg_badges_cats")->results();
 
-//find all badges beginning with perm_ in folder
-$perm_badges = glob($abs_us_root . $us_url_root . $plgset->badge_location . "perm_*.png");
-$tag_badges = glob($abs_us_root . $us_url_root . $plgset->badge_location . "tag_*.png");
-
-
-
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if (!Token::check($token)) {
@@ -118,7 +112,7 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
       <h1>Configure the Badges Plugin!</h1>
 
       <div class="row">
-       
+
         <div class="col-12 col-sm-3">
           <div class="card mb-3">
             <div class="card-header">
@@ -193,7 +187,7 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
                 </select>
                 <input type="submit" name="delBadge" value="Delete Badge" class="mt-3 btn btn-danger">
                 <br>
-               <small>This will remove it from any user or entity which has it. Does not delete the actual picture file so you can reuse it in the future.</small>
+                <small>This will remove it from any user or entity which has it. Does not delete the actual picture file so you can reuse it in the future.</small>
               </form>
             </div>
           </div>
@@ -215,13 +209,13 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
           </div>
         </div>
         <div class="col-12 col-md-9">
-          
-        <?php if (is_numeric($uwab)) {
-          $matches = $db->query("SELECT * FROM plg_badges_match WHERE badge_id = ?", [$uwab])->results();
 
-        ?>
+          <?php if (is_numeric($uwab)) {
+            $matches = $db->query("SELECT * FROM plg_badges_match WHERE badge_id = ?", [$uwab])->results();
 
-        
+          ?>
+
+
             <h4>Users with a Badge</h4>
             <table class="table table-striped pagninate mb-4">
               <thead>
@@ -255,14 +249,14 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
                 <?php } ?>
               </tbody>
             </table>
-          <hr>
-        <?php } //end uwab
-        if ($search != "") {
+            <hr>
+          <?php } //end uwab
+          if ($search != "") {
 
-          $searched = $db->query("SELECT id, email, fname, lname, username FROM users WHERE id LIKE ? OR email LIKE ? OR fname LIKE ? OR lname LIKE ? OR username LIKE ?", ["%" . $search . "%", "%" . $search . "%", "%" . $search . "%", "%" . $search . "%", "%" . $search . "%"])->results();
-        ?>
+            $searched = $db->query("SELECT id, email, fname, lname, username FROM users WHERE id LIKE ? OR email LIKE ? OR fname LIKE ? OR lname LIKE ? OR username LIKE ?", ["%" . $search . "%", "%" . $search . "%", "%" . $search . "%", "%" . $search . "%", "%" . $search . "%"])->results();
+          ?>
 
-   
+
             <h4>Search Results
               <small>These results only show badges belonging to the "User," not tag, permission, or category badges.
             </h4>
@@ -296,11 +290,11 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
                         <input type="hidden" name="uid" value="<?= $f->id ?>">
                         <select class="form-control" name="badge">
                           <option value="" selected="selected" disabled>--Choose Badge--</option>
-                          <?php foreach ($badges as $b) { 
-                            if($b->cat_id != 1){
+                          <?php foreach ($badges as $b) {
+                            if ($b->cat_id != 1) {
                               continue;
                             }
-                            ?>
+                          ?>
                             <option value="<?= $b->id ?>"><?= $b->badge ?> (<?= $b->id ?>)</option>
                           <?php } ?>
                         </select>
@@ -320,8 +314,8 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
                 <?php } ?>
               </tbody>
             </table>
-          <hr>
-        <?php }  ?>
+            <hr>
+          <?php }  ?>
 
 
 
@@ -355,65 +349,119 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
                       <?php } ?>
                     </td>
                   </tr>
-                <?php } 
-                foreach($perm_badges as $b){
-                  $id = explode("_",basename($b))[1];
-                  $id = strtolower($id);
-                  $id = str_replace(".png","",$id);
-                  $nameQ = $db->query("SELECT name FROM permissions WHERE id = ?",[$id]);
-                  $nameC = $nameQ->count();
-                  if($nameC < 1){
-                    continue;
-                  }
-                  $name = $nameQ->first()->name;
-                  ?>
-                  <tr>
-                    <td>Permission <?= $id ?></td>
-                    <td>
-                      <input type="text" value="<?= $name ?>" class="form-control" readonly disabled>
-                    </td>
-                    <td>Permission</td>
-                    <td>
-                      <img src="<?= $us_url_root . $plgset->badge_location . basename($b) ?>" alt="" height="35px">
-                    </td>
-                  </tr>
-                  <?php
-                }
-                foreach($tag_badges as $b){
-                  $id = explode("_",basename($b))[1];
-                  $id = strtolower($id);
-                  $id = str_replace(".png","",$id);
-                  $nameQ = $db->query("SELECT tag FROM plg_tags WHERE id = ?",[$id]);
-                  $nameC = $nameQ->count();
-      
-                  if($nameC < 1){
-                    continue;
-                  }
-                  $name = $nameQ->first();
-                  $name = $name->tag;
-                  ?>
-                  <tr>
-                    <td>Tag <?= $id ?></td>
-                    <td>
-                      <input type="text" value="<?= $name ?>" class="form-control" readonly disabled>
-                    </td>
-                    <td>Tag</td>
-                    <td>
-                      <img src="<?= $us_url_root . $plgset->badge_location . basename($b) ?>" alt="" height="35px">
-                    </td>
-                  </tr>
-                  <?php
-                }
-
-
-                ?>
-
-                
+                <?php } ?>
           </form>
           </tbody>
           </table>
 
+          <div class="container">
+  <hr class="mt-4">
+  <h2 class="mb-4">UserSpice Badges Plugin Documentation</h2>
+  
+  <div class="donation-section mb-4">
+    <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate" class="text-primary">UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
+  </div>
 
+  <div class="setup-section mb-4">
+    <h4>Setup</h4>
+    <p>
+      Create badges by giving them a name. Each badge should be a PNG file (ideally with a transparent background) named <code>id#.png</code> (where # is the badge ID) and stored in:
+    </p>
+    <form action="" method="post" class="mb-3">
+      <?= tokenHere(); ?>
+      <div class="input-group">
+        <input type="text" name="badge_location" value="<?= $plgset->badge_location ?>" required class="form-control">
+        <input type="submit" name="changeBadgeLocation" value="Change Path" class="btn btn-primary">
+      </div>
+    </form>
+  </div>
+
+  <div class="core-functions mb-4">
+    <h4>Core Functions</h4>
+    
+    <div class="function-block mb-3">
+      <h5 class="fw-bold">displayBadges()</h5>
+      <pre class="bg-light p-2 rounded"><code>displayBadges($user_id, $size = "25px", $category = 1, $link = false, $blank = false)</code></pre>
+      <p>Displays badges for a specified user. Parameters:</p>
+      <ul>
+        <li><code>$user_id</code>: User ID (typically <code>$user->data()->id</code>)</li>
+        <li><code>$size</code>: Badge height (optional, default "25px")</li>
+        <li><code>$category</code>: Badge category (optional, default 1)</li>
+        <li><code>$link</code>: URL for badge links (optional)</li>
+        <li><code>$blank</code>: Open links in new tab (optional)</li>
+      </ul>
+      <p>Example usage:</p>
+      <pre class="bg-light p-2 rounded"><code>displayBadges($user_id, "35px", 3, $us_url_root . "customers/groups/group_badges");</code></pre>
+    </div>
+
+    <div class="function-block mb-3">
+      <h5 class="fw-bold">manageBadge()</h5>
+      <pre class="bg-light p-2 rounded"><code>manageBadge($user_id, $badge, $action = "give", $category = 1)</code></pre>
+      <p>Assigns or removes badges. Parameters:</p>
+      <ul>
+        <li><code>$user_id</code>: Target user ID</li>
+        <li><code>$badge</code>: Badge name or ID</li>
+        <li><code>$action</code>: "give" or "take" (optional, default "give")</li>
+        <li><code>$category</code>: Badge category (optional)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="new-features mb-4">
+    <h4>New Features (v1.0.5 - March 1, 2024)</h4>
+
+    <div class="automatic-badges mb-3">
+      <h5 class="fw-bold">Automatic Badges</h5>
+      <p>
+        New functions for automatic badge display:
+      </p>
+      <pre class="bg-light p-2 rounded"><code>displayPermBadges($user_id, $size = "25px")
+displayTagBadges($user_id, $size = "25px")</code></pre>
+      <p>
+        Create images named <code>perm_#.png</code> or <code>tag_#.png</code> in your badge directory, where # is the ID from the <code>permissions</code> or <code>plg_tags</code> tables.
+      </p>
+      <div class="alert alert-warning">
+        <strong>Warning:</strong> Badge, permission, and tag names are shown on hover, so choose names carefully.
+      </div>
+    </div>
+
+    <div class="categories mb-3">
+      <h5 class="fw-bold">Badge Categories</h5>
+      <p>
+        Categories add flexibility to badge management. Category 1 ("User Badges") is the default. Example use cases:
+      </p>
+      <ul>
+        <li>Create team badge categories</li>
+        <li>Display team badges: <code>displayBadges($team_id, "25px", 2)</code></li>
+        <li>Manage team badges: <code>manageBadge($team_id, $badge, "give", 2)</code></li>
+      </ul>
+      <p>
+        The category parameter in both functions lets you work with specific badge types. Simply pass the appropriate category ID when calling the functions.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .function-block {
+    border-left: 3px solid #007bff;
+    padding-left: 1rem;
+  }
+  
+  pre code {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  h4 {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  h5 {
+    color: #555;
+  }
+</style>
 
         </div>
 
@@ -421,54 +469,3 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
       </div>
 
 
-      <hr class="mt-4">
-      <h3 class="">Instructions</h3>
-      <p>If you appreciate this plugin and would like to make a donation to the author, you can do so at <a style="color:blue;" href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>
-      <p>This plugin is pretty simple. You create a badge by giving it a name. That inserts it into the database and spits back an id number. Your badge should be a png (ideally with a clear background) with the name being id#.png.
-        <br>So ID 1, should be 1.png located in
-      <form action="" method="post">
-        <?= tokenHere(); ?>
-        <div class="input-group">
-          <input type="text" name="badge_location" value="<?= $plgset->badge_location ?>" required class="form-control">
-          <input type="submit" name="changeBadgeLocation" value="Change Path" class="btn btn-primary">
-        </div>
-      </form>
-      </p>
-      <p>There are two key functions in this plugin that you can use outside the config page. <br>
-        <b>displayBadges($user_id,$size="25px")</b><br>
-        Simply specify the user id whose badges you want to display with the displayBadges function. It only requires a user id (Which is usually $user->data()->id) and you can optionally choose a size. I used pixels but you could use other measurements. This determines the height of the badge.
-      </p>
-
-      <p>
-        <b>manageBadge($user_id,$badge,$action="give", $category = 1)</b><br>
-        Give it a user id, a badge (either the unique name or its id) and by default it will give that person the badge. You can optionally add "take" to that third parameter to take the badge. There is no reason to add the final $category variable if you're not working with categories.
-      </p>
-
-      <h5><b>New in v1.0.5 (March 1, 2024): Automatic Badges and Badge Categories</b></h5>
-      <p>
-        After this update, nothing will change with your existing function calls. However, you can now create categories for your badges. Category 1, "User Badges" has been created by default. This is is the default behavior. You call <code>displayBadges($user_id,$size="25px")</code> and it will display all User Badges for that user. However, there are 2 new functions and some new options for managing your tags.
-      </p>
-
-      <p>
-      <h6><b>Automatic Badges</b></h6>
-      You can implement automatic badges so you do not have to actually add and remove them from the users. You can call the new functions <code>displayPermBadges($user_id, $size="25px")</code> or <code>displayTagBadges($user_id, $size="25px")</code>. To use these badges simply create images in your <?= $plgset->badge_location ?> directory with the name "perm_#".png or "tag_#".png. The # is the id of the permission level or tag from the <b>permissions</b> or <b>plg_tags</b> tables. <span class="bg-warning ps-2 pe-2">Warning. Your badge, permission, and tag names are shown on hover, so be careful what you name them.</span>
-      </p>
-
-      <h6><b>Category Badges</b></h6>
-      <p>
-        Category badges are a way to add some extra flexibility to the badges plugin. Let's say your site has the concept of "teams" made up of many users. You can create a category for "Team Badges" and then call <code></code>displayBadges($team_id,$size="25px", $category = 2)</code> to display all badges in category 2 for that team. It's up to you to pass whatever id (int) for the team and to know that cateogry 2 is your team badges. But if you do that, right, the system will display the badges.
-      </p>
-      <p>
-        The thought is that you will be using the manageBadge function to give and take badges from teams as well. You can also call <code>manageBadge($team_id,$badge,$action="give",2)</code> to give or take a badge from a team in category 2.
-      </p>
-      <p>
-        A new function <code>displayAllBadges($user_id, $size="25px");</code> wraps up all three functions (displayBadges, displayPermBadges, and displayTagBadges) into one function. 
-    </p>
-    </div> <!-- /.col -->
-  </div> <!-- /.row -->
-
-  <style>
-    p {
-      margin-bottom: 1rem;
-    }
-  </style>

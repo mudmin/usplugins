@@ -9,13 +9,13 @@
   <version>1.0.6</version>
 
 <!-- release date of THIS version -->
-  <release>March 1, 2024</release>
+  <release>October 26,2024</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.6.8</tested>
+  <tested>5.7.9</tested>
 
 <!-- What does your plugin do? -->
-  <description>A simple plugin to assign badges to your users.  Badges can be added from the plugin config panel or automatically using built-in functions.  You can have an unlimited number of badges and they're relatively easy to manage. New features include badges that automatically work with permission levels and user tags. Also includes new "category" badges which do not need to be tied to a user, but can be tied to other groups such as "teams" or "companies." </description>
+  <description>A simple plugin to assign badges to your users.  Badges can be added from the plugin config panel or automatically using built-in functions.  You can have an unlimited number of badges and they're relatively easy to manage. </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Badges</button>
