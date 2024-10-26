@@ -14,6 +14,7 @@ function showPaymentOptions($opts = []){
   $q = $db->query("SELECT * FROM plg_payments_options WHERE enabled = 1");
   $c = $q->count();
   $r = $q->results();
+
     echo "<label>Please select a Payment Option</label>";
   if($c < 1){
     echo "All payment options are currently disabled. Please contact an administrator<br>";
@@ -81,8 +82,8 @@ function logPayment($u,$amt_paid,$dt,$charge_id,$method,$notes,$failed){
   $db->insert('plg_payments',$fields);
 }
 
-if(!function_exists('tableFromData')){
-function tableFromData($data,$opts = []){
+if(!function_exists('paymentTableFromData')){
+function paymentTableFromData($data,$opts = []){
   global $us_url_root;
 
   if(sizeof($data) == 0){
@@ -134,12 +135,8 @@ function tableFromData($data,$opts = []){
       <?php	} ?>
     </tbody>
   </table>
-  <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-  <script>
-  $(document).ready(function () {
-     $('.paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
-    });
-  </script>
+
+
     <?php
   }
 }

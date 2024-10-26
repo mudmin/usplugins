@@ -92,9 +92,10 @@ if(!Token::check($token)){
 <div class="row">
   <div class="col-12"><br>
     <?php
+    require_once 'functions.php';
     $payments = $db->query("SELECT * FROM plg_payments ORDER BY id DESC")->results();
     $opts['nodata'] = "<p align='center'>You have not received any payments</p>";
-    tableFromData($payments,$opts);
+    paymentTableFromData($payments,$opts);
     ?>
   </div>
 </div>
