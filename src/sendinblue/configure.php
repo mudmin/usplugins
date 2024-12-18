@@ -79,6 +79,14 @@ $token = Token::generate();
       <p class="mb-2">
         Simply call the function just like the built in UserSpice email function and you are good to go. If you would like to override the built in UserSpice email function and use Sendinblue instead, simply rename the file called override.RENAME.php to override.php</p>
       <p class="mb-2">
+        If you want to use Sendinblue/Brevo for email confirmation then  create a function inside of usersc/includes/custom_functions with the following code:
+        <code>
+        function email($to, $subject, $body, $to_name = "", $options = []){
+        return sendinblue($to, $subject, $body, $to_name, $options);
+        }  
+        </code>
+        The great thing about adding it in usersc/includes/custom_functions is that it automatically takes over all built in things like password resets and all of that
+      <p class="mb-2">
         As of October, 2022, the plugin also supports templates, dynamic sender, and dynamic data inside your template. You can also do a foreach loop in your sendinblue templates. On the UserSpice side, use it like:
       </p>
       <h5>Basic Usage</h5>
