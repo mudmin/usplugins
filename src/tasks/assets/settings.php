@@ -14,6 +14,9 @@ $notifTypes = [
 ];
 
 $plgSet = $db->query("SELECT * FROM plg_tasks_settings")->first();
+if(!empty($_POST)){
+
+}
 if (!empty($_POST['save'])) {
     if (!Token::check($_POST['csrf'])) {
         usError("Token Failed");
@@ -29,8 +32,12 @@ if (!empty($_POST['save'])) {
         'send_notification_type' => Input::get('send_notification_type')
     ];
     $creator_perms = Input::get('creator_perms');
+    if($creator_perms == ""){
+      $creator_perms = [];
+    }
     $creator_perms[2] = "2";
-    $fields['creator_perms'] = implode(",", $creator_perms);
+
+    $fields['creator_perms'] = implode(",", $creator_perms ?? "");
     $fields['creator_perms'] = $fields['creator_perms'] == "" ? "" : $fields['creator_perms'];
 
     $db->update('plg_tasks_settings', 1, $fields);
