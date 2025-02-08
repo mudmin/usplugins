@@ -36,6 +36,25 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  
+    //reinserting this table for updaters
+    $db->query("CREATE TABLE `plg_tasks_lines_general` (
+      `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      `task_id` int(11)
+      ");
+    $db->query("ALTER TABLE plg_tasks_lines_general ADD column `line` text");
+    $db->query("ALTER TABLE plg_tasks_lines_general ADD column `line_required` tinyint(1) default 0");
+    $db->query("ALTER TABLE plg_tasks_lines_general ADD column `completed` tinyint(1) default 0");
+    $db->query("ALTER TABLE plg_tasks_lines_general ADD column `completed_on` datetime");
+    $db->query("ALTER TABLE plg_tasks_lines_general ADD column `completed_by` int(11)");
+    
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
 
 
 
