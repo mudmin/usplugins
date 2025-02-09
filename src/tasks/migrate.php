@@ -169,8 +169,8 @@ if($checkC > 0){
     $db->query("ALTER TABLE plg_tasks ADD COLUMN `marked_complete_on` datetime");
     $db->query("ALTER TABLE plg_tasks ADD COLUMN `completed` tinyint(1) DEFAULT 0");
     $db->query("ALTER TABLE plg_tasks_comments ADD COLUMN `photos` text");
-    $check = $db->query("SELECT * FROM plg_tasks_categories WHERE color = 'firstRun'")->count();
-    if ($check > 0) {
+    $check2 = $db->query("SELECT * FROM plg_tasks_categories WHERE color = 'firstRun'")->count();
+    if ($check2 > 0) {
       //set initials
       $db->update("plg_tasks_categories", 1, ['color' => 'blue', 'icon' => 'fa fa-tasks']);
       $db->update("plg_tasks_categories", 2, ['color' => 'green', 'icon' => 'fa fa-wrench']);
@@ -194,8 +194,8 @@ if($checkC > 0){
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
   
-    $check = $db->query("SELECT * FROM plg_tasks_child_tables WHERE table_name = 'plg_tasks_lines_general'")->count();
-    if ($check < 1) {
+    $check2 = $db->query("SELECT * FROM plg_tasks_child_tables WHERE table_name = 'plg_tasks_lines_general'")->count();
+    if ($check2 < 1) {
       $db->insert("plg_tasks_child_tables", ['table_name' => 'plg_tasks_lines_general']);
     }
   
