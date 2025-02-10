@@ -1,24 +1,4 @@
 <?php
-/*
-UserSpice 4
-An Open Source PHP User Management System
-by the UserSpice Team at http://UserSpice.com
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-?>
-<?php
 if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted 
 $value=null;
 $gender=null;
@@ -55,7 +35,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 				$feusc = $findExistingUS->count();
 				if($feusc>0){$feusr = $findExistingUS->first();}
 				if($feusc == 1){
-					$fields=array('gpluslink'=>'https://plus.google.com/'.$userProfile['id'],'picture'=>$userProfile['picture'],'locale'=>$userProfile['locale'],'oauth_provider'=>"google",'oauth_uid'=>$userProfile['id']);
+					$fields=array('gpluslink'=>'https://plus.google.com/'.$userProfile['id'],'picture'=>$userProfile['picture'],'locale'=>"",'oauth_provider'=>"google",'oauth_uid'=>$userProfile['id']);
 					$db->update('users',$feusr->id,$fields);
 					$date = date("Y-m-d H:i:s");
 					$db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$feusr->id]);
@@ -77,7 +57,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 						));
 					}
 				}
-				$feusr=$gUser->checkUser('google',$userProfile['id'],$userProfile['given_name'],$userProfile['family_name'],$userProfile['email'],$gender,$userProfile['locale'],$link,$userProfile['picture']);
+				$feusr=$gUser->checkUser('google',$userProfile['id'],$userProfile['given_name'],"",$userProfile['email'],$gender,"",$link,$userProfile['picture']);
 				//dnd($feusr);
 				if(isset($feusr->isNewAccount) && $feusr->isNewAccount) {
 					echo 1;
