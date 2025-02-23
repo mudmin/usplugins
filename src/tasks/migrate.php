@@ -214,6 +214,22 @@ if($checkC > 0){
     $count++;
     }
   
+    $update = '00004';
+    if(!in_array($update,$existing)){
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+    $check2 = $db->query("SELECT * FROM plg_tasks_categories WHERE child_table = ''")->results();
+    foreach ($check2 as $cat) {
+      $db->update("plg_tasks_categories", $cat->id, ['child_table' => 'plg_tasks_lines_general']);
+    }
+  
+    $existing[] = $update; //add the update you just did to the existing update array
+    $count++;
+    }
+
+
+
+
 
 
   //after all updates are done. Keep this at the bottom.

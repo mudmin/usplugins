@@ -172,7 +172,7 @@ if (!empty($_POST['updateTask'])) {
     }
     if ($mark_incomplete != "") {
         foreach ($mark_incomplete as $k => $v) {
-            $db->update($task->child_table, $k, ['completed' => 0, 'completed_by' => 0, 'completed_on' => ""]);
+            $db->update($task->child_table, $k, ['completed' => 0, 'completed_by' => null, 'completed_on' => null]); //updated to set null values rather than 0 and ""
         }
         notifyTask($task, "incomplete", $user->data()->id, $message = "");
     }
@@ -206,7 +206,6 @@ if ($assignmentsC < 1 && $task->closed == 0) { ?>
     </div>
 <?php }
 if ($subsC > 0 && $task->closed == 0 && $subsOpen == false) { ?>
-
 
     <div class="alert alert-success">
         <h4 class="alert-heading">All <?= $plg_settings->plural_term ?> complete</h4>

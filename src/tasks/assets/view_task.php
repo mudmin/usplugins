@@ -80,7 +80,7 @@ if ($action == "complete_sub") {
         usError("Sub " . $plg_settings->single_term . " Already Marked Complete");
         Redirect::to($basePage . "method=view_task&id=" . $id);
     } else {
-        $db->update($child_table, $sub_id, ['completed' => 1]);
+        $db->update($child_table, $sub_id, ['completed' => 1,'completed_by' => $user->data()->id, 'completed_on' => date("Y-m-d H:i:s")]); //updated to include completed_by and completed_on info
         usSuccess("Sub " . $plg_settings->single_term . " Marked Complete");
         notifyTask($task, "sub_complete", $user->data()->id, $message = "");
         Redirect::to($basePage . "method=view_task&id=" . $id);
@@ -100,6 +100,13 @@ if (Input::get('mark_complete') == "true" && ($subsC < 1 || $requiredSubsComplet
     usSuccess("Task Marked Complete");
     $_SESSION['launchTaskConfetti'] = true;
     notifyTask($task, "complete", $user->data()->id, $message = "");
+    Redirect::to($basePage . "method=view_task&id=" . $id);
+}
+
+if (Input::get('mark_complete') == "false") {
+    markTaskIncomplete($id);
+    usSuccess("Task Marked Incomplete");
+    notifyTask($task, "incomplete", $user->data()->id, $message = "");
     Redirect::to($basePage . "method=view_task&id=" . $id);
 }
 
@@ -145,6 +152,8 @@ if ($is_task_admin && Input::get('mark_closed') == "true") {
                     <p class="text-end">
                         <?php if ($task->completed == 0 && ($subsC < 1 || $requiredSubsComplete)) { ?>
                             <a href="<?= $basePage ?>method=view_task&mark_complete=true&id=<?= $id ?>" class="btn btn-outline-success btn-sm">Mark <?= $plg_settings->single_term ?> Complete</a>
+                        <?php } elseif ($task->completed == 1 && ($subsC < 1 || $requiredSubsComplete)) { ?>
+                            <a href="<?= $basePage ?>method=view_task&mark_complete=false&id=<?= $id ?>" class="btn btn-outline-danger btn-sm">Mark <?= $plg_settings->single_term ?> Incomplete</a>
                         <?php } ?>
 
                         <?php if ($task->closed == 0 && $is_task_admin) { ?>

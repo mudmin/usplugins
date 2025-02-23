@@ -128,8 +128,8 @@ if (in_array($user->data()->id, $master_account)) {
 	if ($check2 < 1) {
 		$db->insert("plg_tasks_categories", ['category_name' => 'General Task', 'child_table' => 'plg_tasks_lines_general']);
 		$db->insert("plg_tasks_categories", ['category_name' => 'Maintenance', 'child_table' => 'plg_tasks_lines_general']);
-		$db->insert("plg_tasks_categories", ['category_name' => 'Errand', 'child_table' => '']);
-		$db->insert("plg_tasks_categories", ['category_name' => 'Meeting', 'child_table' => '']);
+		$db->insert("plg_tasks_categories", ['category_name' => 'Errand', 'child_table' => 'plg_tasks_lines_general']);
+		$db->insert("plg_tasks_categories", ['category_name' => 'Meeting', 'child_table' => 'plg_tasks_lines_general']);
 	}
 	$db->query("ALTER TABLE plg_tasks ADD COLUMN `category_id` int(11) default 0 after `description`");
 	$db->query("ALTER TABLE plg_tasks_categories ADD COLUMN `has_subitems` tinyint(1) DEFAULT 0");

@@ -245,6 +245,18 @@ function markTaskComplete($id)
     $db->update("plg_tasks", $id, ["completed" => 1, "marked_complete_by" => $user->data()->id, "marked_complete_on" => date("Y-m-d H:i:s")]);
 }
 
+function markTaskIncomplete($id) // updated to enable toggling of task completion at the main task level by the user
+{
+    global $db, $user;
+    $check = $db->query("SELECT id FROM plg_tasks_assignments WHERE task_id = ? ", [$id]);
+
+    foreach ($check->results() as $a) {
+        $db->update("plg_tasks_assignments", $a->id, ["completed" => 0]);
+    }
+
+    $db->update("plg_tasks", $id, ["completed" => 0, "marked_complete_by" => null, "marked_complete_on" => null]);
+}
+
 function markTaskClosed($id)
 {
     global $db, $user;
@@ -255,10 +267,10 @@ function markTaskClosed($id)
     ];
 
     $db->update("plg_tasks", $id, $fields);
-    dump($db->errorString());
+    //dump($db->errorString());
     $check = $db->query("SELECT id FROM plg_tasks_assignments WHERE task_id = ? ", [$id]);
     foreach ($check->results() as $a) {
         $db->update("plg_tasks_assignments", $a->id, ["closed" => 1]);
-        dump($db->errorString());
+        //dump($db->errorString());
     }
 }

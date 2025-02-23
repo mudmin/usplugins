@@ -11,7 +11,7 @@ if (!hasPerm(2)) {
             This plugin is designed to be flexible and grow with your needs. Although the tasks plugin is called "tasks", you can set your own singular and plural terms (ie "workorder" and "workorders") and the plugin will adjust accordingly.
         </p>
         <p>
-            This plugin uses a new "alternate location" feature that is built into some of the newer plugins. This allows you to put management pages outside of the UserSpice dashboard and they will still work as intented. For instance, if you set the alternate location to "workorders", you can access the management pages at yoursite.com/workorders. This is a great way to keep your dashboard clean and organized. To do this, simply create a folder called "workorders" off your root and drop in the index.php file that is located in: <span style="background-color:black;  color:lightgreen; padding-left:10px;padding-right:10px;">usersc/plugins/tasks/assets/index.php</span>
+            This plugin uses a new "alternate location" feature that is built into some of the newer plugins. This allows you to put management pages outside of the UserSpice dashboard and they will still work as intended. For instance, if you set the alternate location to "workorders", you can access the management pages at yoursite.com/workorders. This is a great way to keep your dashboard clean and organized. To do this, simply create a folder called "workorders" off your root and drop in the index.php file that is located in: <span style="background-color:black;  color:lightgreen; padding-left:10px;padding-right:10px;">usersc/plugins/tasks/assets/index.php</span>
 
         </p>
 
