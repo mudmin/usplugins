@@ -18,3 +18,6 @@ dump($json);
 
 $db->insert("logs",["logtype"=>"script test","lognote"=>"Did it work?"]);
 dnd($data);
+
+//If you set $return_object as an object or string then this will be returned
+//instead of {msg:"success"}
