@@ -7,21 +7,84 @@
 include "plugin_info.php";
 pluginActive($plugin_name);
 $send = $db->query("SELECT * FROM plg_sendinblue")->first();
+
+// Check for override file status
+$overrideRenamePath = $abs_us_root . $us_url_root . 'usersc/plugins/sendinblue/override.RENAME.php';
+$overridePath = $abs_us_root . $us_url_root . 'usersc/plugins/sendinblue/override.php';
+$overrideRenameExists = file_exists($overrideRenamePath);
+$overrideExists = file_exists($overridePath);
+
+// Check email settings for forgot password warning
+$emailSet = $db->query("SELECT * FROM email")->first();
+$settings = $db->query("SELECT * FROM settings")->first();
+if (!isset($settings->no_passwords)) {
+  $settings->no_passwords = 0;
+}
+$showEmailWarning = false;
+if ($overrideExists && ($emailSet->email_login == "yourEmail@gmail.com" || $emailSet->email_login == "" || $emailSet->email_pass == "1234")) {
+  $showEmailWarning = true;
+}
+
+// Handle form submissions
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if (!Token::check($token)) {
     include($abs_us_root . $us_url_root . 'usersc/scripts/token_error.php');
   }
 
-  $fields = [
-    'from' => Input::get('from'),
-    'from_name' => Input::get('from_name'),
-    'reply' => Input::get('reply'),
-    'override' => Input::get('override'),
-    'key' => Input::get('key'),
-  ];
-  $db->update("plg_sendinblue", 1, $fields);
-  Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&msg=Settings saved');
+  // Handle settings save
+  if (isset($_POST['save'])) {
+    $fields = [
+      'from' => Input::get('from'),
+      'from_name' => Input::get('from_name'),
+      'reply' => Input::get('reply'),
+      'override' => Input::get('override'),
+      'key' => Input::get('key'),
+    ];
+    $db->update("plg_sendinblue", 1, $fields);
+    Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&msg=Settings saved');
+  }
+
+  // Handle override file activation
+  if (isset($_POST['activate_override'])) {
+    if ($overrideExists) {
+      unlink($overridePath);
+    }
+    if (rename($overrideRenamePath, $overridePath)) {
+      Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&msg=Override activated successfully');
+    } else {
+      Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&err=Failed to activate override');
+    }
+  }
+
+  // Handle override file deactivation
+  if (isset($_POST['deactivate_override'])) {
+    if (rename($overridePath, $overrideRenamePath)) {
+      Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&msg=Override deactivated successfully');
+    } else {
+      Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&err=Failed to deactivate override');
+    }
+  }
+
+  // Handle test email
+  if (isset($_POST['send_test'])) {
+    $testEmail = Input::get('test_email');
+    $testSubject = Input::get('test_subject') ?: 'Brevo Test Email';
+    $testBody = Input::get('test_body') ?: 'This is a test email from your SendinBlue plugin configuration.';
+    
+    if (filter_var($testEmail, FILTER_VALIDATE_EMAIL)) {
+
+      $result = sendinblue($testEmail, $testSubject, $testBody, 'Test User');
+
+      if ($result === true) {
+        Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&msg=Test email sent successfully');
+      } else {
+        Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&err=Test email failed: ' . $result);
+      }
+    } else {
+      Redirect::to('admin.php?view=plugins_config&plugin=sendinblue&err=Invalid email address');
+    }
+  }
 }
 $token = Token::generate();
 ?>
@@ -29,6 +92,64 @@ $token = Token::generate();
 
   <a href="<?= $us_url_root ?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
   <h1>Configure the Brevo (Formerly SendinBlue) Plugin!</h1>
+
+  <?php if (isset($_GET['msg'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <?= htmlspecialchars($_GET['msg']) ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <?php if (isset($_GET['err'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <?= htmlspecialchars($_GET['err']) ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <!-- Override Status Banner -->
+  <?php if ($overrideRenameExists && !$overrideExists): ?>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <h5><i class="fas fa-info-circle"></i> Plugin Running Separately</h5>
+      <p class="mb-3">This plugin is currently running separately from the UserSpice built-in email system. You can integrate it by activating the override feature.</p>
+      <form method="post" class="d-inline">
+        <input type="hidden" name="csrf" value="<?= $token ?>">
+        <button type="submit" name="activate_override" class="btn btn-success btn-sm">
+          <i class="fas fa-toggle-on"></i> Activate Override (Use SendinBlue for all emails)
+        </button>
+      </form>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <!-- Override Active Warning -->
+  <?php if ($overrideExists): ?>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <h5><i class="fas fa-exclamation-triangle"></i> Override Active</h5>
+      <p class="mb-3">SendinBlue is currently overriding the UserSpice email system. All emails are being sent through SendinBlue.</p>
+      <form method="post" class="d-inline">
+        <input type="hidden" name="csrf" value="<?= $token ?>">
+        <button type="submit" name="deactivate_override" class="btn btn-warning btn-sm">
+          <i class="fas fa-toggle-off"></i> Deactivate Override (Having email problems?)
+        </button>
+      </form>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <!-- Email Settings Warning -->
+  <?php if ($showEmailWarning): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <h5><i class="fas fa-exclamation-circle"></i> Forgot Password Link Hidden</h5>
+      <p class="mb-3">The forgot password link will not be shown on the login form because your email settings are set to default values. Please configure your email settings properly.</p>
+      <a href="<?= $us_url_root ?>users/admin.php?view=email" class="btn btn-danger btn-sm">
+        <i class="fas fa-cog"></i> Edit Email Settings
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <!-- Configuration Form -->
   <form class="" action="" method="post">
     <input type="hidden" name="csrf" value="<?= Token::generate() ?>">
 
@@ -60,6 +181,44 @@ $token = Token::generate();
     </div>
   </form>
 
+  <!-- Test Email Form -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-envelope-open-text"></i> Send Test Email</h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            <input type="hidden" name="csrf" value="<?= $token ?>">
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <label for="test_email">Test Email Address</label>
+                <input type="email" name="test_email" id="test_email" class="form-control" required placeholder="recipient@example.com">
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="test_subject">Subject (Optional)</label>
+                <input type="text" name="test_subject" id="test_subject" class="form-control" placeholder="SendinBlue Test Email">
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12">
+                <label for="test_body">Message (Optional)</label>
+                <textarea name="test_body" id="test_body" class="form-control" rows="3" placeholder="This is a test email from your SendinBlue plugin configuration."></textarea>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12">
+                <button type="submit" name="send_test" class="btn btn-success">
+                  <i class="fas fa-paper-plane"></i> Send Test Email
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="row" style="padding-top:2em;">
     <div class="col-12">
@@ -72,6 +231,11 @@ $token = Token::generate();
       </p>
       <p class="mb-2">
         By default, this plugin gives you a function called <strong>sendinblue($to,$subject,$body,$to_name = "")</strong>
+      </p>
+            <p class="mb-2">
+       Brevo has an IP whitelist that is on by default, so if your emails do not appear to be sending, please check <a href="<?= $us_url_root ?>users/admin.php?view=logs" class="text-primary">
+        <i class="fas fa-cog"></i> the UserSpice Logs
+      </a> </strong> or visit <a href="https://developers.brevo.com/docs/ip-security">Brevo IP Security</a> for more information.
       </p>
       <p class="mb-2">
         The plugin automatically logs errors, but you can also do something like <strong>$send = sendinblue($to,$subject,$body);</strong> to have those messages returned to you immediately.

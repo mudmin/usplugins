@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-  <name>CSV Importer Plugin</name>
+  <name>CSV Importer/Exporter</name>
   <author>Dan Hoover</author>
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.1</version>
+  <version>1.2.0</version>
 
 <!-- release date of THIS version -->
-  <release>February 23,2020</release>
+  <release>June 9, 205</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.0.9</tested>
+  <tested>5.8.5</tested>
 
 <!-- What does your plugin do? -->
-  <description>Flexible plugin for bulk user creation/import from as little as just an email address per user. You can specify plain text or bcrypt encrypted passwords, usernames, and real names. You can also force password reset and even specify a list of permission levels per user on import.</description>
+  <description>Flexible plugin for bulk user creation/import from as little as just an email address per user. You can specify plain text or bcrypt encrypted passwords, usernames, and real names. You can also force password reset and even specify a list of permission levels per user on import. Version 1.2.0 added the ability to export users.  The exporter gives you several options for exporting various fields. See page for documentation. </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>CSV Importer</button>
