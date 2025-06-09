@@ -110,8 +110,8 @@ $token = Token::generate();
   <!-- Override Status Banner -->
   <?php if ($overrideRenameExists && !$overrideExists): ?>
     <div class="alert alert-info alert-dismissible fade show" role="alert">
-      <h5><i class="fas fa-info-circle"></i> Plugin Running Separately</h5>
-      <p class="mb-3">This plugin is currently running separately from the UserSpice built-in email system. You can integrate it by activating the override feature.</p>
+      <h5><i class="fas fa-info-circle"></i> Plugin Running in Standalone Mode</h5>
+      <p class="mb-3">This means that UserSpice's built in email calls (ie passwordless logins and password resets) will still use the built in email($to function.  You can still use the sendinblue($to email function to send emails with Brevo.  To force UserSpice to use Brevo for all emails, activate the override below.   </p>
       <form method="post" class="d-inline">
         <input type="hidden" name="csrf" value="<?= $token ?>">
         <button type="submit" name="activate_override" class="btn btn-success btn-sm">
