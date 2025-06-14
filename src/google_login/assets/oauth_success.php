@@ -56,6 +56,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 		"lname" => $userProfile->getLastName(),
 		"email" => $userProfile->getEmail(),
 	];
-
-	socialLogin($userProfile->getEmail(), null, ["oauth_uid"=>$userProfile->getId()], $fields);
+	
+	//login using userspice's built in social login function and pass the login type for totp
+	socialLogin($userProfile->getEmail(), null, ["oauth_uid"=>$userProfile->getId()], $fields, "google");
 }

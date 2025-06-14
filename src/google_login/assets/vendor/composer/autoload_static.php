@@ -33,8 +33,8 @@ class ComposerStaticInit07585dfcce2f339ab5d4a2795b77e546
     public static $prefixDirsPsr4 = array (
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -42,8 +42,8 @@ class ComposerStaticInit07585dfcce2f339ab5d4a2795b77e546
         ),
         'League\\OAuth2\\Client\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
-            1 => __DIR__ . '/..' . '/league/oauth2-google/src',
+            0 => __DIR__ . '/..' . '/league/oauth2-google/src',
+            1 => __DIR__ . '/..' . '/league/oauth2-client/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

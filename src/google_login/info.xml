@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 
 <!-- release date of THIS version -->
-  <release>March 17, 2024</release>
+  <release>June 14, 2025</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.7.0</tested>
+  <tested>5.8.5</tested>
 
 <!-- What does your plugin do? -->
-  <description>Requires UserSpice v5.7+. For older versions, download Google Login Legacy.  </description>
+  <description>Requires UserSpice v5.7+. Google OAuth plugin has been updated for UserSpice 5.8.5 and now supports TOTP.  For older versions, download Google Login Legacy.  </description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Google Login Plugin</button>

@@ -51,6 +51,7 @@ $fields = [
   "picture" => $user->getPictureUrl(),
 ];
 
-socialLogin($user->getEmail(), null, ["fb_uid"=>$user->getId()], $fields);
+// call userspice's built in social login function and specify the login type for totp
+socialLogin($user->getEmail(), null, ["fb_uid"=>$user->getId()], $fields, "facebook");
 
 ?>
