@@ -76,6 +76,11 @@ if ($existingUser) {
     if(file_exists($abs_us_root . $us_url_root . 'usersc/scripts/custom_login_script.php')){
         require_once $abs_us_root . $us_url_root . 'usersc/scripts/custom_login_script.php';
     }
+
+
+    if(function_exists('setLoginMethod')){
+        setLoginMethod('oauth');
+    }
     Redirect::to($us_url_root . $settings->redirect_uri_after_login);
 
     
