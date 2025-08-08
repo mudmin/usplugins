@@ -17,6 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+$noMaintenanceRedirect = true; 
 require_once '../../../../users/init.php';
 $googleSettings = $db->query('SELECT * FROM plg_google_login')->first();
 if($settings->glogin==1 && !$user->isLoggedIn()){

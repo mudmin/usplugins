@@ -1,4 +1,5 @@
 <?php
+$noMaintenanceRedirect = true; 
 require_once '../../../../users/init.php';
 
 $fbSettings = $db->query("SELECT * FROM plg_facebook_login")->first();

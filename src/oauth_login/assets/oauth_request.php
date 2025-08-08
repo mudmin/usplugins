@@ -1,4 +1,5 @@
 <?php
+$noMaintenanceRedirect = true; 
 require_once '../../../../users/init.php';
 if(!pluginActive('oauth_login',true)){
     die('OAuth is disabled');
