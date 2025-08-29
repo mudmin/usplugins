@@ -1,0 +1,1 @@
+<?php echo '<li><a href="'.$us_url_root.'usersc/plugins/faq/faq.php"><i class="fa fa-fw fa-question-circle"></i> FAQ</a></li>'; ?>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>FAQ</name>
+    <author>mjaj72</author>
+    <version>1.0.1</version>
+    <!-- release date of THIS version -->
+    <release>August 29, 2025</release>
+    <!-- the last version of UserSpice you tested the plugin with -->
+    <tested>5.9.5</tested>
+    <description>A simple FAQ plugin with an admin interface for managing questions and categories.</description>
+    <button>FAQ</button>
+</plugin>
