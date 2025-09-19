@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.0.2</version>
+  <version>2.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>May 19, 2023</release>
+  <release>September 19, 2025</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.5.8</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>This is a very powerful plugin that lets your run (and save!) direct MySQL queries on your database. Also includes a DB Browser.

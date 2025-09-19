@@ -235,7 +235,7 @@ if (!function_exists('tableFromQueryPlugin')) {
         <?php
       }
       if ($show == 'browser') { ?>
-          <h3>Database Broswer:</h3>
+          <h3>Database Browser:</h3>
           <?php
           if (empty($_POST['query']) && Input::get('table') == '' && Input::get('tabledata') == '') {
             $tables = $db->query('SHOW TABLES')->results();
