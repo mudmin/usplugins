@@ -36,6 +36,26 @@ if($checkC > 0){
   $count++;
   }
 
+  // Add global inclusion and badge hiding options
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+  // Add new fields for global inclusion and badge hiding
+  $columns = $db->query("SHOW COLUMNS FROM settings LIKE 'recap_global'")->count();
+  if($columns == 0) {
+      $db->query("ALTER TABLE `settings` ADD `recap_global` TINYINT(1) NOT NULL DEFAULT 1;");
+  }
+
+  $columns = $db->query("SHOW COLUMNS FROM settings LIKE 'recap_hide_badge'")->count();
+  if($columns == 0) {
+      $db->query("ALTER TABLE `settings` ADD `recap_hide_badge` TINYINT(1) NOT NULL DEFAULT 0;");
+  }
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
 
 
 

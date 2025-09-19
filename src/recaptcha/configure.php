@@ -59,7 +59,33 @@ if(!Token::check($token)){
                       <option value="2" <?php if ($settings->recap_type == 2) {echo 'selected';}?>>Invisible</option>
                   </select>
               </div>
+              <div class="form-group">
+                  <label for="recap_global">Include reCAPTCHA v3 on all pages (recommended for better scoring)</label>
+                  <span style="float:right;">
+                      <label class="switch switch-text switch-success">
+                          <input id="recap_global" type="checkbox" class="switch-input toggle" data-desc="Global reCAPTCHA"
+                              <?php if($settings->recap_global==1) echo 'checked="true"'; ?>>
+                          <span data-on="Yes" data-off="No" class="switch-label"></span>
+                          <span class="switch-handle"></span>
+                      </label>
+                  </span>
+              </div>
+              <div class="form-group">
+                  <label for="recap_hide_badge">Hide reCAPTCHA badge (only if you include privacy notice in user flow)</label>
+                  <span style="float:right;">
+                      <label class="switch switch-text switch-success">
+                          <input id="recap_hide_badge" type="checkbox" class="switch-input toggle" data-desc="Hide reCAPTCHA Badge"
+                              <?php if($settings->recap_hide_badge==1) echo 'checked="true"'; ?>>
+                          <span data-on="Yes" data-off="No" class="switch-label"></span>
+                          <span class="switch-handle"></span>
+                      </label>
+                  </span>
+              </div>
               <br><br>
+              <div class="alert alert-info">
+                  <strong>Important:</strong> If you hide the reCAPTCHA badge, you must include the following privacy notice somewhere visible in your user flow (as required by Google):<br>
+                  <code>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</code>
+              </div>
               <div class="form-class">
                   You can add a reCAPTCHA to your own form using the following functions:<br>
                   <b>addCaptcha</b><br>
