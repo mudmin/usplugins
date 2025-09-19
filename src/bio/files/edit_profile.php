@@ -48,8 +48,9 @@ if(!empty($_POST)) {
   <div class="container">
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="well">
-      <div class="row">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
         <div class="col-12 col-md-2">
           <p>
             <?php
@@ -78,6 +79,7 @@ if(!empty($_POST)) {
 
         </form>
 
+        </div>
       </div>
     </div>
   </div>
@@ -87,14 +89,41 @@ if(!empty($_POST)) {
 
 </div> <!-- /#page-wrapper -->
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.19/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.19/dist/summernote.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+<style>
+/* Fix Summernote font loading issues */
+@font-face {
+  font-family: 'summernote';
+  src: url('data:application/font-woff;base64,') format('woff');
+}
+.note-icon-summernote:before {
+  font-family: FontAwesome, sans-serif !important;
+  content: '\f040';
+}
+.note-icon:before {
+  font-family: FontAwesome, sans-serif !important;
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 <script>
 $(document).ready(function(){
-  $('#mytextarea').summernote({ height: 300});
+  $('#mytextarea').summernote({
+    height: 300,
+    minHeight: 200,
+    maxHeight: 500,
+    focus: true,
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['fontname', ['fontname']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['table', ['table']],
+      ['insert', ['link', 'picture', 'video']],
+      ['view', ['fullscreen', 'codeview', 'help']]
+    ]
+  });
 });
-
-
 </script>
 
 <!-- footers -->

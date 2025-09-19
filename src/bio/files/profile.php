@@ -43,9 +43,10 @@ else
 
 		 <div class="container">
 				<!-- Main jumbotron for a primary marketing message or call to action -->
-				<div class="well">
-					<div class="row">
-						<div class="col-xs-12 col-md-2">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+						<div class="col-12 col-md-2">
 							<p>
 							<?php if(pluginActive('profile_pic',true) && $thatUser->profile_pic != ''){ ?>
 								<img src="<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$thatUser->profile_pic?>" class="img-thumbnail">
@@ -56,10 +57,11 @@ else
 							} ?>
 							</p>
 						</div>
-						<div class="col-xs-12 col-md-10">
+						<div class="col-12 col-md-10">
 						<h1><?php echo $ususername;?></h1>
 							<h2><?php echo $usbio.$editbio;?></h2>
 
+						</div>
 					</div>
 					</div>
 				</div>
