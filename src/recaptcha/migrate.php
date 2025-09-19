@@ -36,8 +36,7 @@ if($checkC > 0){
   $count++;
   }
 
-  // Add global inclusion and badge hiding options
-  $update = '00002';
+    $update = '00002';
   if(!in_array($update,$existing)){
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
 
@@ -56,8 +55,32 @@ if($checkC > 0){
   $count++;
   }
 
+  // Add v3 enhanced configuration options
+  $update = '00003';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
 
+  // Add v3 implementation mode field
+  $columns = $db->query("SHOW COLUMNS FROM settings LIKE 'recap_v3_mode'")->count();
+  if($columns == 0) {
+      $db->query("ALTER TABLE `settings` ADD `recap_v3_mode` VARCHAR(20) NOT NULL DEFAULT 'form';");
+  }
 
+  // Add badge hiding option
+  $columns = $db->query("SHOW COLUMNS FROM settings LIKE 'recap_hide_badge'")->count();
+  if($columns == 0) {
+      $db->query("ALTER TABLE `settings` ADD `recap_hide_badge` TINYINT(1) NOT NULL DEFAULT 0;");
+  }
+
+  // Add v3 score threshold field
+  $columns = $db->query("SHOW COLUMNS FROM settings LIKE 'recap_v3_threshold'")->count();
+  if($columns == 0) {
+      $db->query("ALTER TABLE `settings` ADD `recap_v3_threshold` DECIMAL(3,2) NOT NULL DEFAULT 0.50;");
+  }
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
   //after all updates are done. Keep this at the bottom.

@@ -59,33 +59,34 @@ if(!Token::check($token)){
                       <option value="2" <?php if ($settings->recap_type == 2) {echo 'selected';}?>>Invisible</option>
                   </select>
               </div>
-              <div class="form-group">
-                  <label for="recap_global">Include reCAPTCHA v3 on all pages (recommended for better scoring)</label>
-                  <span style="float:right;">
-                      <label class="switch switch-text switch-success">
-                          <input id="recap_global" type="checkbox" class="switch-input toggle" data-desc="Global reCAPTCHA"
-                              <?php if($settings->recap_global==1) echo 'checked="true"'; ?>>
-                          <span data-on="Yes" data-off="No" class="switch-label"></span>
-                          <span class="switch-handle"></span>
-                      </label>
-                  </span>
+              <div class="form-group" id="v3_mode_group" style="display: <?php echo $settings->recap_version == 3 ? 'block' : 'none'; ?>;">
+                  <label>v3 Implementation Mode</label>
+                  <select name="recap_v3_mode" id="recap_v3_mode" class="form-control ajxtxt" data-desc="v3 Implementation Mode">
+                      <option value="form" <?php if (!isset($settings->recap_v3_mode) || $settings->recap_v3_mode == 'form') {echo 'selected';}?>>Form-only (Traditional)</option>
+                      <option value="sitewide" <?php if (isset($settings->recap_v3_mode) && $settings->recap_v3_mode == 'sitewide') {echo 'selected';}?>>Site-wide (Background Scoring)</option>
+                  </select>
+                  <small class="form-text text-muted">Site-wide mode runs reCAPTCHA on every page for better behavioral analysis</small>
               </div>
-              <div class="form-group">
-                  <label for="recap_hide_badge">Hide reCAPTCHA badge (only if you include privacy notice in user flow)</label>
+              <div class="form-group" id="v3_badge_group" style="display: <?php echo $settings->recap_version == 3 ? 'block' : 'none'; ?>;">
+                  <label for="recap_hide_badge">Hide reCAPTCHA v3 Badge</label>
                   <span style="float:right;">
                       <label class="switch switch-text switch-success">
                           <input id="recap_hide_badge" type="checkbox" class="switch-input toggle" data-desc="Hide reCAPTCHA Badge"
-                              <?php if($settings->recap_hide_badge==1) echo 'checked="true"'; ?>>
+                              <?php if(isset($settings->recap_hide_badge) && $settings->recap_hide_badge==1) echo 'checked="true"'; ?>>
                           <span data-on="Yes" data-off="No" class="switch-label"></span>
                           <span class="switch-handle"></span>
                       </label>
                   </span>
+                  <br><small class="form-text text-muted">Only hide if you display reCAPTCHA branding elsewhere per <a href="https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed" target="_blank">Google's policy</a></small>
+              </div>
+              <div class="form-group" id="v3_threshold_group" style="display: <?php echo $settings->recap_version == 3 ? 'block' : 'none'; ?>;">
+                  <label for="recap_v3_threshold">v3 Score Threshold (0.0 - 1.0)</label>
+                  <input type="number" class="form-control ajxnum" data-desc="v3 Score Threshold" name="recap_v3_threshold"
+                      id="recap_v3_threshold" value="<?php echo isset($settings->recap_v3_threshold) ? $settings->recap_v3_threshold : '0.5'; ?>"
+                      min="0" max="1" step="0.1">
+                  <small class="form-text text-muted">Higher values = stricter (0.5 recommended). Scores above this threshold pass validation.</small>
               </div>
               <br><br>
-              <div class="alert alert-info">
-                  <strong>Important:</strong> If you hide the reCAPTCHA badge, you must include the following privacy notice somewhere visible in your user flow (as required by Google):<br>
-                  <code>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</code>
-              </div>
               <div class="form-class">
                   You can add a reCAPTCHA to your own form using the following functions:<br>
                   <b>addCaptcha</b><br>
@@ -136,3 +137,22 @@ if(!Token::check($token)){
           </div>
       </div>
   </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const versionSelect = document.getElementById('recap_version');
+    const v3ModeGroup = document.getElementById('v3_mode_group');
+    const v3BadgeGroup = document.getElementById('v3_badge_group');
+    const v3ThresholdGroup = document.getElementById('v3_threshold_group');
+
+    function toggleV3Options() {
+        const isV3 = versionSelect.value === '3';
+        v3ModeGroup.style.display = isV3 ? 'block' : 'none';
+        v3BadgeGroup.style.display = isV3 ? 'block' : 'none';
+        v3ThresholdGroup.style.display = isV3 ? 'block' : 'none';
+    }
+
+    versionSelect.addEventListener('change', toggleV3Options);
+    toggleV3Options(); // Run on page load
+});
+</script>
