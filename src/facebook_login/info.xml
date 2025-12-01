@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>2.2.0</version>
+  <version>2.2.1</version>
 
 <!-- release date of THIS version -->
-  <release>August 8, 2025</release>
+  <release>December 1, 2025</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.9.3</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>Requires UserSpice v5.7+. For older versions, download Facebook Login Legacy.  Allows users to both register and login with Facebook and will merge accounts if multiple login methods are used from the same email address.

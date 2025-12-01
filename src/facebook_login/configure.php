@@ -6,7 +6,7 @@
 <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
-if (!empty($_POST['plugin_google_login'])) {
+if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if (!Token::check($token)) {
     include($abs_us_root . $us_url_root . 'usersc/scripts/token_error.php');
@@ -40,7 +40,7 @@ $token = Token::generate();
             <span id="fblogin-status"><?php echo ($settings->fblogin == 1) ? "(Currently Enabled)" : "(Currently Disabled)"; ?></span>
             <span style="float:right;" class="form-check form-switch">
               <label class="switch switch-text switch-success">
-                <input id="fblogin" type="checkbox" class="switch-input form-check-input toggle <?= $buttonClass ?>" data-desc="Google Login" <?php if ($settings->fblogin == 1) echo 'checked="true"'; ?>>
+                <input id="fblogin" type="checkbox" class="switch-input form-check-input toggle <?= $buttonClass ?>" data-desc="Facebook Login" <?php if ($settings->fblogin == 1) echo 'checked="true"'; ?>>
                 <span data-on="Yes" data-off="No" data-table="settings" class="switch-label"></span>
                 <span class="switch-handle"></span>
               </label>
@@ -74,7 +74,7 @@ $token = Token::generate();
 
       <p>If you would like to change the text on the login/join pages you can set the following keys in usersc/langs/your_language.php</p><br>
       <p><code>"OR_SIGN_IN_WITH"</code> Default: "Or sign in with:"</p>
-      <p><code>"SOCIAL_PROVIDER_{NAME}"</code> For example <code>"SOCIAL_PROVIDER_GOOGLE"</code> Defaults to provider name.</p>
+      <p><code>"SOCIAL_PROVIDER_{NAME}"</code> For example <code>"SOCIAL_PROVIDER_FACEBOOK"</code> Defaults to provider name.</p>
 
       <br>
       If you appreciate this plugin and would like to make a donation to the author, you can do so at <a href="https://UserSpice.com/donate" style="color:blue;">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!
