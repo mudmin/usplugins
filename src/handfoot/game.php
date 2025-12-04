@@ -4,16 +4,26 @@ if(!isset($ruleset)) {
   $ruleset = null;
 }
 
-// Get ruleset info
-if($ruleset) {
-  $rulesetInfo = $db->query("SELECT * FROM plg_handfoot_rulesets WHERE id = ?", array($ruleset))->first();
+// Get all rulesets for selection
+$allRulesets = $db->query("SELECT * FROM plg_handfoot_rulesets ORDER BY is_default DESC, name ASC")->results();
+
+// Get ruleset info - check POST first for new game creation
+$selectedRulesetId = isset($_POST['ruleset_id']) ? (int)$_POST['ruleset_id'] : $ruleset;
+
+if($selectedRulesetId) {
+  $rulesetInfo = $db->query("SELECT * FROM plg_handfoot_rulesets WHERE id = ?", array($selectedRulesetId))->first();
 } else {
   $rulesetInfo = $db->query("SELECT * FROM plg_handfoot_rulesets WHERE is_default = 1")->first();
 }
 
-if(!$rulesetInfo) {
+if(!$rulesetInfo && empty($allRulesets)) {
   echo '<div class="alert alert-danger">No ruleset found. Please configure rulesets first.</div>';
   return;
+}
+
+// If no default but rulesets exist, use first one
+if(!$rulesetInfo && !empty($allRulesets)) {
+  $rulesetInfo = $allRulesets[0];
 }
 
 // Get current IP
@@ -25,13 +35,14 @@ if(!empty($_POST)) {
     // Create game
     $playerNames = [];
     $numPlayers = (int)$_POST['num_players'];
+    $selectedRuleset = (int)Input::get('ruleset_id');
 
     for($i = 1; $i <= $numPlayers; $i++) {
       $playerNames[] = Input::get("player{$i}");
     }
 
     $fields = array(
-      'ruleset_id' => $rulesetInfo->id,
+      'ruleset_id' => $selectedRuleset ? $selectedRuleset : $rulesetInfo->id,
       'num_players' => count($playerNames),
       'creator_ip' => $ip
     );
@@ -248,6 +259,21 @@ if($editingRound) {
         <form method="post">
           <input type="hidden" name="action" value="create_game">
 
+          <?php if(count($allRulesets) > 1): ?>
+          <div class="mb-3">
+            <label for="rulesetId" class="form-label">Ruleset</label>
+            <select class="form-select" id="rulesetId" name="ruleset_id">
+              <?php foreach($allRulesets as $rs): ?>
+                <option value="<?= $rs->id ?>" <?= $rs->is_default ? 'selected' : '' ?>>
+                  <?= htmlspecialchars($rs->name) ?><?= $rs->is_default ? ' (Default)' : '' ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <?php else: ?>
+          <input type="hidden" name="ruleset_id" value="<?= $rulesetInfo->id ?>">
+          <?php endif; ?>
+
           <div class="mb-3">
             <label for="numPlayers" class="form-label">Number of Players</label>
             <select class="form-select" id="numPlayers" name="num_players" required>
@@ -427,6 +453,9 @@ if($editingRound) {
     </div>
   </div>
 </div>
+
+<!-- Spacer to prevent page jumping -->
+<div style="height: 200px;"></div>
 
 <script>
 const rulesetInfo = <?= json_encode($rulesetInfo) ?>;

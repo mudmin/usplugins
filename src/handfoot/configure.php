@@ -72,6 +72,19 @@ if (!empty($_POST)) {
       $errors[] = "Failed to delete ruleset.";
     }
   }
+
+  if(Input::get('action') == 'set_default') {
+    $ruleset_id = Input::get('ruleset_id');
+    // Unset all defaults first
+    $db->query("UPDATE plg_handfoot_rulesets SET is_default = 0");
+    // Set the new default
+    $db->update('plg_handfoot_rulesets', $ruleset_id, ['is_default' => 1]);
+    if(!$db->error()) {
+      $successes[] = "Default ruleset updated!";
+    } else {
+      $errors[] = "Failed to set default ruleset.";
+    }
+  }
 }
 
 // Get all rulesets
@@ -177,7 +190,7 @@ if(isset($_GET['edit'])) {
                   <?= $editRuleset ? 'Update Ruleset' : 'Add Ruleset' ?>
                 </button>
                 <?php if($editRuleset): ?>
-                  <a href="<?= $us_url_root ?>users/admin.php?view=plugins&plugin=handfoot&err=configure"
+                  <a href="admin.php?view=plugins_config&plugin=handfoot"
                      class="btn btn-secondary">Cancel</a>
                 <?php endif; ?>
               </form>
@@ -199,7 +212,7 @@ if(isset($_GET['edit'])) {
                     <div class="list-group-item">
                       <div class="row">
                         <div class="col">
-                          <strong><?= $ruleset->name ?></strong>
+                          <strong><?= htmlspecialchars($ruleset->name) ?></strong>
                           <?php if($ruleset->is_default): ?>
                             <span class="badge bg-primary">Default</span>
                           <?php endif; ?>
@@ -210,7 +223,15 @@ if(isset($_GET['edit'])) {
                           </small>
                         </div>
                         <div class="col-auto">
-                          <a href="<?= $us_url_root ?>users/admin.php?view=plugins&plugin=handfoot&err=configure&edit=<?= $ruleset->id ?>"
+                          <?php if(!$ruleset->is_default): ?>
+                            <form method="post" style="display: inline;">
+                              <?= tokenHere(); ?>
+                              <input type="hidden" name="action" value="set_default">
+                              <input type="hidden" name="ruleset_id" value="<?= $ruleset->id ?>">
+                              <button type="submit" class="btn btn-sm btn-success">Set Default</button>
+                            </form>
+                          <?php endif; ?>
+                          <a href="admin.php?view=plugins_config&plugin=handfoot&edit=<?= $ruleset->id ?>"
                              class="btn btn-sm btn-primary">Edit</a>
                           <form method="post" style="display: inline;">
                             <?= tokenHere(); ?>

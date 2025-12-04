@@ -5,10 +5,10 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>December 3, 2025</release>
+  <release>December 4, 2025</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
   <tested>6.0.0</tested>
@@ -20,5 +20,5 @@
   <description>A scoring system for the Hand and Foot card game with configurable rulesets.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
-    <button>Configure Rulesets</button>
+    <button>Hand and Foot</button>
 </plugin>
