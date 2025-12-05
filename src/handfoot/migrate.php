@@ -43,7 +43,57 @@ if($checkC > 0){
     $count++;
   }
 
+  // Create settings table for handfoot plugin
+  $update = '00002';
+  if(!in_array($update,$existing)){
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
 
+    $db->query("CREATE TABLE IF NOT EXISTS plg_handfoot_settings (
+      id INT(11) NOT NULL AUTO_INCREMENT,
+      require_login TINYINT(1) DEFAULT 0,
+      allow_user_creation TINYINT(1) DEFAULT 0,
+      PRIMARY KEY (id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+    // Insert default settings row
+    $settingsCheck = $db->query("SELECT id FROM plg_handfoot_settings")->count();
+    if($settingsCheck == 0) {
+      $db->insert('plg_handfoot_settings', ['id' => 1, 'require_login' => 0, 'allow_user_creation' => 0]);
+    }
+
+    $existing[] = $update;
+    $count++;
+  }
+
+  // Add user_id column to players table (nullable for backwards compatibility)
+  $update = '00003';
+  if(!in_array($update,$existing)){
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+    $columnExists = $db->query("SHOW COLUMNS FROM plg_handfoot_players LIKE 'user_id'")->count();
+    if($columnExists == 0) {
+      $db->query("ALTER TABLE plg_handfoot_players ADD COLUMN user_id INT(11) NULL AFTER game_id");
+      $db->query("ALTER TABLE plg_handfoot_players ADD KEY user_id (user_id)");
+    }
+
+    $existing[] = $update;
+    $count++;
+  }
+
+  // Add creator_user_id column to games table (nullable for backwards compatibility)
+  $update = '00004';
+  if(!in_array($update,$existing)){
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+    $columnExists = $db->query("SHOW COLUMNS FROM plg_handfoot_games LIKE 'creator_user_id'")->count();
+    if($columnExists == 0) {
+      $db->query("ALTER TABLE plg_handfoot_games ADD COLUMN creator_user_id INT(11) NULL AFTER creator_ip");
+      $db->query("ALTER TABLE plg_handfoot_games ADD KEY creator_user_id (creator_user_id)");
+    }
+
+    $existing[] = $update;
+    $count++;
+  }
 
 
 

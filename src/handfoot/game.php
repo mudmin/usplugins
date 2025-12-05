@@ -4,6 +4,14 @@ if(!isset($ruleset)) {
   $ruleset = null;
 }
 
+// Get plugin settings
+$hfSettings = $db->query("SELECT * FROM plg_handfoot_settings WHERE id = 1")->first();
+if(!$hfSettings) {
+  // Create default settings if not exists
+  $db->insert('plg_handfoot_settings', ['id' => 1, 'require_login' => 0, 'allow_user_creation' => 0]);
+  $hfSettings = $db->query("SELECT * FROM plg_handfoot_settings WHERE id = 1")->first();
+}
+
 // Get all rulesets for selection
 $allRulesets = $db->query("SELECT * FROM plg_handfoot_rulesets ORDER BY is_default DESC, name ASC")->results();
 
@@ -34,25 +42,44 @@ if(!empty($_POST)) {
   if(isset($_POST['action']) && $_POST['action'] == 'create_game') {
     // Create game
     $playerNames = [];
+    $playerUserIds = [];
     $numPlayers = (int)$_POST['num_players'];
     $selectedRuleset = (int)Input::get('ruleset_id');
 
+    // Collect player data - handle both user mode and text mode
     for($i = 1; $i <= $numPlayers; $i++) {
-      $playerNames[] = Input::get("player{$i}");
+      if($hfSettings->require_login) {
+        // User mode: get user_id and look up username for display
+        $userId = (int)Input::get("player_user_id_{$i}");
+        $playerUserIds[] = $userId;
+        if($userId > 0) {
+          $userData = $db->query("SELECT username, fname, lname FROM users WHERE id = ?", [$userId])->first();
+          $playerNames[] = $userData ? ($userData->fname ?: $userData->username) : "Player $i";
+        } else {
+          $playerNames[] = "Player $i";
+        }
+      } else {
+        // Text mode: just get the name
+        $playerNames[] = Input::get("player{$i}");
+        $playerUserIds[] = null;
+      }
     }
 
-    $fields = array(
+    // Create the game
+    $gameFields = array(
       'ruleset_id' => $selectedRuleset ? $selectedRuleset : $rulesetInfo->id,
       'num_players' => count($playerNames),
-      'creator_ip' => $ip
+      'creator_ip' => $ip,
+      'creator_user_id' => (isset($user) && $user->isLoggedIn()) ? $user->data()->id : null
     );
-    $db->insert('plg_handfoot_games', $fields);
+    $db->insert('plg_handfoot_games', $gameFields);
     $newGameId = $db->lastId();
 
     // Create players
     foreach($playerNames as $index => $name) {
       $fields = array(
         'game_id' => $newGameId,
+        'user_id' => $playerUserIds[$index],
         'player_name' => $name,
         'player_order' => $index
       );
@@ -68,9 +95,9 @@ if(!empty($_POST)) {
     $roundNumber = (int)$_POST['round_number'];
     $wentOutPlayer = Input::get('went_out_player');
 
-    // Verify IP matches game creator
-    $game = $db->query("SELECT creator_ip FROM plg_handfoot_games WHERE id = ?", array($gameId))->first();
-    if($game && $game->creator_ip === $ip) {
+    // Verify game exists
+    $gameCheck = $db->query("SELECT id FROM plg_handfoot_games WHERE id = ?", array($gameId));
+    if($gameCheck->count() > 0) {
       // Get players for this game
       $players = $db->query("SELECT * FROM plg_handfoot_players WHERE game_id = ? ORDER BY player_order", array($gameId))->results();
 
@@ -116,22 +143,24 @@ if(!empty($_POST)) {
   if(isset($_POST['action']) && $_POST['action'] == 'new_game_same_players') {
     $gameId = (int)$_POST['game_id'];
 
-    // Get existing players
-    $existingPlayers = $db->query("SELECT player_name FROM plg_handfoot_players WHERE game_id = ? ORDER BY player_order", array($gameId))->results();
+    // Get existing players (including user_id)
+    $existingPlayersData = $db->query("SELECT player_name, user_id FROM plg_handfoot_players WHERE game_id = ? ORDER BY player_order", array($gameId))->results();
 
     // Create new game
     $fields = array(
       'ruleset_id' => $rulesetInfo->id,
-      'num_players' => count($existingPlayers),
-      'creator_ip' => $ip
+      'num_players' => count($existingPlayersData),
+      'creator_ip' => $ip,
+      'creator_user_id' => (isset($user) && $user->isLoggedIn()) ? $user->data()->id : null
     );
     $db->insert('plg_handfoot_games', $fields);
     $newGameId = $db->lastId();
 
-    // Create players for new game
-    foreach($existingPlayers as $index => $player) {
+    // Create players for new game (preserve user_id)
+    foreach($existingPlayersData as $index => $player) {
       $fields = array(
         'game_id' => $newGameId,
+        'user_id' => $player->user_id,
         'player_name' => $player->player_name,
         'player_order' => $index
       );
@@ -154,10 +183,10 @@ if($gameId) {
   $existingGame = $db->query("SELECT * FROM plg_handfoot_games WHERE id = ?", array($gameId))->first();
   if($existingGame) {
     // Verify IP matches
-    if($existingGame->creator_ip !== $ip) {
-      echo '<div class="alert alert-danger">Access denied. This game was created by a different user.</div>';
-      return;
-    }
+    // if($existingGame->creator_ip !== $ip) {
+    //   echo '<div class="alert alert-danger">Access denied. This game was created by a different user.</div>';
+    //   return;
+    // }
 
     $rulesetInfo = $db->query("SELECT * FROM plg_handfoot_rulesets WHERE id = ?", array($existingGame->ruleset_id))->first();
     $existingPlayers = $db->query("SELECT * FROM plg_handfoot_players WHERE game_id = ? ORDER BY player_order", array($gameId))->results();
@@ -229,6 +258,12 @@ if($editingRound) {
 }
 ?>
 
+<?php if($hfSettings->require_login): ?>
+<!-- Select2 CSS from CDN -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+<?php endif; ?>
+
 <style>
 .hf-winning-player {
   background-color: #28a745 !important;
@@ -243,13 +278,24 @@ if($editingRound) {
 .hf-edit-btn:hover {
   color: #0a58ca;
 }
+.select2-container {
+  width: 100% !important;
+}
+.hf-add-user-btn {
+  margin-top: 5px;
+}
 </style>
 
 <div class="col-12">
   <div class="card">
-    <div class="card-header">
-      <h2 class="h4 mb-0">Hand and Foot Scorekeeper</h2>
-      <small class="text-muted">Ruleset: <?= $rulesetInfo->name ?></small>
+    <div class="card-header d-flex justify-content-between align-items-start">
+      <div>
+        <h2 class="h4 mb-0">Hand and Foot Scorekeeper</h2>
+        <small class="text-muted">Ruleset: <?= $rulesetInfo->name ?></small>
+      </div>
+      <a href="<?= $us_url_root ?>usersc/plugins/handfoot/stats.php" target="_blank" class="btn btn-sm btn-outline-success">
+        <i class="fas fa-chart-bar"></i> View Statistics
+      </a>
     </div>
     <div class="card-body">
 
@@ -457,12 +503,62 @@ if($editingRound) {
 <!-- Spacer to prevent page jumping -->
 <div style="height: 200px;"></div>
 
+<?php if($hfSettings->require_login): ?>
+<!-- Select2 JS from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<?php endif; ?>
+
+<?php if($hfSettings->require_login && $hfSettings->allow_user_creation): ?>
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">Add New Player</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="addUserError" class="alert alert-danger" style="display: none;"></div>
+        <div class="row">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="newFname" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="newFname" required>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="newLname" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="newLname" required>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="newEmail" class="form-label">Email</label>
+          <input type="email" class="form-control" id="newEmail" required>
+         
+        </div>
+        <input type="hidden" id="addUserForPlayer" value="">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="createUserBtn">Create User</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
 <script>
 const rulesetInfo = <?= json_encode($rulesetInfo) ?>;
 const playerData = <?= json_encode(array_values($existingPlayers)) ?>;
 const playerScores = <?= json_encode($playerScores) ?>;
 const currentRound = <?= $currentRound ?>;
 const editingRound = <?= $editingRound ? $editingRound : 'null' ?>;
+const userMode = <?= $hfSettings->require_login ? 'true' : 'false' ?>;
+const allowUserCreation = <?= $hfSettings->allow_user_creation ? 'true' : 'false' ?>;
+const csrfToken = '<?= Token::generate() ?>';
+const parserUrl = '<?= $us_url_root ?>usersc/plugins/handfoot/parsers/users.php';
 
 $(document).ready(function() {
 
@@ -472,18 +568,122 @@ $(document).ready(function() {
     if(numPlayers > 0) {
       let html = '';
       for(let i = 1; i <= numPlayers; i++) {
-        html += `
-          <div class="mb-2">
-            <label for="player${i}" class="form-label">Player ${i} Name</label>
-            <input type="text" class="form-control" id="player${i}" name="player${i}" required>
-          </div>
-        `;
+        if(userMode) {
+          // User mode: Select2 dropdown
+          html += `
+            <div class="mb-3">
+              <label for="player_select_${i}" class="form-label">Player ${i}</label>
+              <select class="form-select player-select" id="player_select_${i}" name="player_user_id_${i}" data-player-num="${i}" required>
+                <option value="">Search for a user...</option>
+              </select>
+              ${allowUserCreation ? `<button type="button" class="btn btn-sm btn-outline-secondary hf-add-user-btn" data-player-num="${i}">+ Add New User</button>` : ''}
+            </div>
+          `;
+        } else {
+          // Text mode: simple text input
+          html += `
+            <div class="mb-2">
+              <label for="player${i}" class="form-label">Player ${i} Name</label>
+              <input type="text" class="form-control" id="player${i}" name="player${i}" required>
+            </div>
+          `;
+        }
       }
       $('#playerNameInputs').html(html);
       $('#playerNames').show();
+
+      // Initialize Select2 for user mode
+      if(userMode) {
+        initSelect2();
+      }
     } else {
       $('#playerNames').hide();
     }
+  });
+
+  // Initialize Select2 dropdowns
+  function initSelect2() {
+    $('.player-select').each(function() {
+      $(this).select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Search for a user...',
+        allowClear: true,
+        minimumInputLength: 1,
+        ajax: {
+          url: parserUrl,
+          dataType: 'json',
+          delay: 250,
+          data: function(params) {
+            return {
+              action: 'search_users',
+              term: params.term,
+              token: csrfToken
+            };
+          },
+          processResults: function(data) {
+            return {
+              results: data.results || []
+            };
+          },
+          cache: true
+        }
+      });
+    });
+  }
+
+  // Handle add user button click
+  $(document).on('click', '.hf-add-user-btn', function() {
+    const playerNum = $(this).data('player-num');
+    $('#addUserForPlayer').val(playerNum);
+    $('#newFname').val('');
+    $('#newLname').val('');
+    $('#newEmail').val('');
+    $('#addUserError').hide();
+    $('#addUserModal').modal('show');
+  });
+
+  // Handle create user button
+  $('#createUserBtn').on('click', function() {
+    const fname = $('#newFname').val().trim();
+    const lname = $('#newLname').val().trim();
+    const email = $('#newEmail').val().trim();
+    const playerNum = $('#addUserForPlayer').val();
+
+    if(!fname || !lname || !email) {
+      $('#addUserError').text('Please fill in all fields').show();
+      return;
+    }
+
+    $(this).prop('disabled', true).text('Creating...');
+
+    $.ajax({
+      url: parserUrl,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        action: 'create_user',
+        fname: fname,
+        lname: lname,
+        email: email,
+        token: csrfToken
+      },
+      success: function(response) {
+        $('#createUserBtn').prop('disabled', false).text('Create User');
+
+        if(response.success) {
+          // Add the new user to the select and select it
+          const newOption = new Option(response.user.text, response.user.id, true, true);
+          $(`#player_select_${playerNum}`).append(newOption).trigger('change');
+          $('#addUserModal').modal('hide');
+        } else {
+          $('#addUserError').text(response.message).show();
+        }
+      },
+      error: function() {
+        $('#createUserBtn').prop('disabled', false).text('Create User');
+        $('#addUserError').text('An error occurred. Please try again.').show();
+      }
+    });
   });
 
   // When someone went out is selected
@@ -522,21 +722,22 @@ $(document).ready(function() {
           </div>
           <div class="card-body">
             <div class="row">
+                         <div class="col-6 col-md-4 mb-2">
+                <label class="form-label">Red Books</label>
+                <input type="number" class="form-control book-input" name="red_books_${player.id}"
+                       data-player="${player.player_name}" value="${redBooks}" min="0" placeholder="0">
+              </div>
               <div class="col-6 col-md-4 mb-2">
                 <label class="form-label">Black Books</label>
                 <input type="number" class="form-control book-input" name="black_books_${player.id}"
                        data-player="${player.player_name}" value="${blackBooks}" min="0" placeholder="0">
               </div>
-              <div class="col-6 col-md-4 mb-2">
-                <label class="form-label">Red Books</label>
-                <input type="number" class="form-control book-input" name="red_books_${player.id}"
-                       data-player="${player.player_name}" value="${redBooks}" min="0" placeholder="0">
-              </div>
+ 
               <div class="col-12 col-md-4 mb-2">
                 <label class="form-label">Card Points</label>
                 <input type="number" class="form-control book-input" name="card_points_${player.id}"
                        data-player="${player.player_name}" value="${cardPoints}" placeholder="0">
-                <small class="text-muted">Can be negative</small>
+                <small class="text-muted">Can be negative (but that would suck)</small>
               </div>
             </div>
             <div class="mt-2">

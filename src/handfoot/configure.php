@@ -6,9 +6,33 @@
 <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
+
+// Get plugin settings
+$hfSettings = $db->query("SELECT * FROM plg_handfoot_settings WHERE id = 1")->first();
+if(!$hfSettings) {
+  // Create default settings if not exists
+  $db->insert('plg_handfoot_settings', ['id' => 1, 'require_login' => 0, 'allow_user_creation' => 0]);
+  $hfSettings = $db->query("SELECT * FROM plg_handfoot_settings WHERE id = 1")->first();
+}
+
 if (!empty($_POST)) {
   if (!Token::check(Input::get('csrf'))) {
     include($abs_us_root . $us_url_root . 'usersc/scripts/token_error.php');
+  }
+
+  // Handle settings update
+  if(Input::get('action') == 'update_settings') {
+    $fields = array(
+      'require_login' => Input::get('require_login') == '1' ? 1 : 0,
+      'allow_user_creation' => Input::get('allow_user_creation') == '1' ? 1 : 0
+    );
+    $db->update('plg_handfoot_settings', 1, $fields);
+    if(!$db->error()) {
+      $successes[] = "Settings updated successfully!";
+      $hfSettings = $db->query("SELECT * FROM plg_handfoot_settings WHERE id = 1")->first();
+    } else {
+      $errors[] = "Failed to update settings.";
+    }
   }
 
   // Handle ruleset add/edit
@@ -117,6 +141,52 @@ if(isset($_GET['edit'])) {
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
+
+      <!-- Plugin Settings -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="h5 mb-0">User Settings</h3>
+            </div>
+            <div class="card-body">
+              <form method="post">
+                <?= tokenHere(); ?>
+                <input type="hidden" name="action" value="update_settings">
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="require_login" name="require_login" value="1"
+                               <?= $hfSettings->require_login ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="require_login">
+                          <strong>Enable User Mode</strong>
+                        </label>
+                      </div>
+                      <small class="text-muted">When enabled, players can be selected from registered users via a searchable dropdown. When disabled, players are just text names.</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="allow_user_creation" name="allow_user_creation" value="1"
+                               <?= $hfSettings->allow_user_creation ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="allow_user_creation">
+                          <strong>Allow User Creation</strong>
+                        </label>
+                      </div>
+                      <small class="text-muted">When enabled (and User Mode is on), users can create new player accounts on the fly by entering a username and email address.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="row mt-4">
         <div class="col-md-6">
