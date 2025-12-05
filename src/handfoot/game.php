@@ -70,7 +70,8 @@ if(!empty($_POST)) {
       'ruleset_id' => $selectedRuleset ? $selectedRuleset : $rulesetInfo->id,
       'num_players' => count($playerNames),
       'creator_ip' => $ip,
-      'creator_user_id' => (isset($user) && $user->isLoggedIn()) ? $user->data()->id : null
+      'creator_user_id' => (isset($user) && $user->isLoggedIn()) ? $user->data()->id : null,
+      'notes' => trim(Input::get('game_notes'))
     );
     $db->insert('plg_handfoot_games', $gameFields);
     $newGameId = $db->lastId();
@@ -341,6 +342,12 @@ if($editingRound) {
           <div id="playerNames" style="display: none;">
             <h4 class="h6">Player Names</h4>
             <div id="playerNameInputs"></div>
+
+            <div class="mb-3 mt-3">
+              <label for="gameNotes" class="form-label">Game Notes (optional)</label>
+              <textarea class="form-control" id="gameNotes" name="game_notes" rows="2" placeholder="e.g., On the train in Finland"></textarea>
+            </div>
+
             <button type="submit" class="btn btn-primary mt-3">Start Game</button>
           </div>
         </form>
@@ -348,6 +355,24 @@ if($editingRound) {
 
       <!-- Game Play -->
       <div id="gamePlay" <?= !$existingGame ? 'style="display: none;"' : '' ?>>
+
+        <!-- Game Notes -->
+        <div class="mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fas fa-sticky-note text-muted"></i>
+            <span id="gameNotesDisplay" class="text-muted fst-italic"><?= $existingGame && $existingGame->notes ? hed($existingGame->notes) : 'No notes' ?></span>
+            <button type="button" class="btn btn-sm btn-link p-0" id="editNotesBtn" title="Edit notes">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+          </div>
+          <div id="gameNotesEdit" style="display: none;">
+            <div class="input-group input-group-sm mt-1">
+              <input type="text" class="form-control" id="gameNotesInput" value="<?= $existingGame && $existingGame->notes ? hed($existingGame->notes) : '' ?>" placeholder="Add a note about this game...">
+              <button class="btn btn-outline-primary" type="button" id="saveNotesBtn">Save</button>
+              <button class="btn btn-outline-secondary" type="button" id="cancelNotesBtn">Cancel</button>
+            </div>
+          </div>
+        </div>
 
         <!-- Current Totals at Top -->
         <div class="mb-4">
@@ -559,6 +584,8 @@ const userMode = <?= $hfSettings->require_login ? 'true' : 'false' ?>;
 const allowUserCreation = <?= $hfSettings->allow_user_creation ? 'true' : 'false' ?>;
 const csrfToken = '<?= Token::generate() ?>';
 const parserUrl = '<?= $us_url_root ?>usersc/plugins/handfoot/parsers/users.php';
+const gameParserUrl = '<?= $us_url_root ?>usersc/plugins/handfoot/parsers/game.php';
+const currentGameId = <?= $gameId ? $gameId : 'null' ?>;
 
 $(document).ready(function() {
 
@@ -823,6 +850,58 @@ $(document).ready(function() {
         this.submit();
       }
       return false;
+    }
+  });
+
+  // Game notes editing
+  $('#editNotesBtn').on('click', function() {
+    $('#gameNotesDisplay').parent().hide();
+    $('#gameNotesEdit').show();
+    $('#gameNotesInput').focus();
+  });
+
+  $('#cancelNotesBtn').on('click', function() {
+    $('#gameNotesEdit').hide();
+    $('#gameNotesDisplay').parent().show();
+  });
+
+  $('#saveNotesBtn').on('click', function() {
+    const notes = $('#gameNotesInput').val().trim();
+    const btn = $(this);
+    btn.prop('disabled', true).text('Saving...');
+
+    $.ajax({
+      url: gameParserUrl,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        action: 'update_notes',
+        game_id: currentGameId,
+        notes: notes,
+        token: csrfToken
+      },
+      success: function(response) {
+        btn.prop('disabled', false).text('Save');
+        if(response.success) {
+          $('#gameNotesDisplay').text(notes || 'No notes').toggleClass('fst-italic', !notes);
+          $('#gameNotesEdit').hide();
+          $('#gameNotesDisplay').parent().show();
+        } else {
+          alert(response.message || 'Error saving notes');
+        }
+      },
+      error: function() {
+        btn.prop('disabled', false).text('Save');
+        alert('Error saving notes. Please try again.');
+      }
+    });
+  });
+
+  // Allow saving notes with Enter key
+  $('#gameNotesInput').on('keypress', function(e) {
+    if(e.which === 13) {
+      e.preventDefault();
+      $('#saveNotesBtn').click();
     }
   });
 

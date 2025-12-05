@@ -140,14 +140,13 @@ if($viewUserId) {
   $recentGames = $db->query("
     SELECT g.id, g.created_at, g.num_players,
       (SELECT SUM(s.total_points) FROM plg_handfoot_scores s WHERE s.player_id = p.id) as my_score,
-      (SELECT MAX(player_total) FROM (
-        SELECT p2.id, SUM(s2.total_points) as player_total
+      (SELECT MAX(s3.player_total) FROM (
+        SELECT p2.game_id as gid, p2.id, SUM(s2.total_points) as player_total
         FROM plg_handfoot_players p2
         JOIN plg_handfoot_scores s2 ON p2.id = s2.player_id
-        WHERE p2.game_id = g.id
-        GROUP BY p2.id
-      ) as scores) as winning_score,
-      (SELECT COUNT(DISTINCT round_number) FROM plg_handfoot_scores WHERE game_id = g.id) as rounds_played
+        GROUP BY p2.game_id, p2.id
+      ) as s3 WHERE s3.gid = g.id) as winning_score,
+      (SELECT COUNT(DISTINCT round_number) FROM plg_handfoot_scores sc JOIN plg_handfoot_players pc ON sc.player_id = pc.id WHERE pc.game_id = g.id) as rounds_played
     FROM plg_handfoot_games g
     JOIN plg_handfoot_players p ON g.id = p.game_id
     WHERE p.user_id = ?
@@ -192,6 +191,38 @@ if($viewUserId) {
   ", [$ip])->results();
 
   $opponents = [];
+}
+
+// Full game history (all games for the user)
+$allGames = [];
+if($viewUserId) {
+  $allGames = $db->query("
+    SELECT g.id, g.created_at, g.num_players, g.notes,
+      (SELECT SUM(s.total_points) FROM plg_handfoot_scores s WHERE s.player_id = p.id) as my_score,
+      (SELECT MAX(s3.player_total) FROM (
+        SELECT p2.game_id as gid, p2.id, SUM(s2.total_points) as player_total
+        FROM plg_handfoot_players p2
+        JOIN plg_handfoot_scores s2 ON p2.id = s2.player_id
+        GROUP BY p2.game_id, p2.id
+      ) as s3 WHERE s3.gid = g.id) as winning_score,
+      (SELECT COUNT(DISTINCT sc.round_number) FROM plg_handfoot_scores sc JOIN plg_handfoot_players pc ON sc.player_id = pc.id WHERE pc.game_id = g.id) as rounds_played,
+      (SELECT GROUP_CONCAT(p3.player_name ORDER BY p3.player_order SEPARATOR ', ')
+       FROM plg_handfoot_players p3 WHERE p3.game_id = g.id) as all_players
+    FROM plg_handfoot_games g
+    JOIN plg_handfoot_players p ON g.id = p.game_id
+    WHERE p.user_id = ?
+    ORDER BY g.created_at DESC
+  ", [$viewUserId])->results();
+} else {
+  $allGames = $db->query("
+    SELECT g.id, g.created_at, g.num_players, g.notes,
+      (SELECT COUNT(DISTINCT sc.round_number) FROM plg_handfoot_scores sc JOIN plg_handfoot_players pc ON sc.player_id = pc.id WHERE pc.game_id = g.id) as rounds_played,
+      (SELECT GROUP_CONCAT(p.player_name ORDER BY p.player_order SEPARATOR ', ')
+       FROM plg_handfoot_players p WHERE p.game_id = g.id) as all_players
+    FROM plg_handfoot_games g
+    WHERE g.creator_ip = ?
+    ORDER BY g.created_at DESC
+  ", [$ip])->results();
 }
 
 // Global leaderboard
@@ -409,9 +440,7 @@ $leaderboard = $db->query("
                     <td class="text-center"><?= $game->num_players ?></td>
                     <td class="text-center">
                       <?= $game->rounds_played ?>/4
-                      <?php if($game->rounds_played == 4): ?>
-                        <span class="badge bg-success">Complete</span>
-                      <?php endif; ?>
+         
                     </td>
                     <?php if($viewUserId): ?>
                     <td class="text-center fw-bold"><?= number_format($game->my_score ?? 0) ?></td>
@@ -507,6 +536,89 @@ $leaderboard = $db->query("
     </div>
   </div>
 
+  <!-- Full Game History -->
+  <?php if(!empty($allGames)): ?>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Game History</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover" id="gameHistoryTable">
+              <thead>
+                <tr>
+                  <th class="text-start">Date</th>
+                  <th>Players</th>
+                  <th>Notes</th>
+                  <th class="text-center">Rounds</th>
+                  <?php if($viewUserId): ?>
+                  <th class="text-center">Score</th>
+                  <th class="text-center">Result</th>
+                  <?php endif; ?>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($allGames as $game): ?>
+                <tr>
+                  <td class="text-start" data-order="<?= strtotime($game->created_at) ?>"><?= date('M j, Y g:ia', strtotime($game->created_at)) ?></td>
+                  <td><?= hed($game->all_players) ?></td>
+                  <td>
+                    <?php if($game->notes): ?>
+                      <small class="text-muted fst-italic"><?= hed($game->notes) ?></small>
+                    <?php else: ?>
+                      <small class="text-muted">-</small>
+                    <?php endif; ?>
+                  </td>
+                  <td class="text-center">
+                    <?= $game->rounds_played ?>/4
+
+                  </td>
+                  <?php if($viewUserId): ?>
+                  <td class="text-center fw-bold" data-order="<?= $game->my_score ?? 0 ?>"><?= number_format($game->my_score ?? 0) ?></td>
+                  <td class="text-center">
+                    <?php if($game->rounds_played == 4): ?>
+                      <?php if($game->my_score == $game->winning_score): ?>
+                        <span class="badge bg-success">Won</span>
+                      <?php else: ?>
+                        <span class="badge bg-secondary">Lost</span>
+                      <?php endif; ?>
+                    <?php else: ?>
+                      <span class="badge bg-warning text-dark">In Progress</span>
+                    <?php endif; ?>
+                  </td>
+                  <?php endif; ?>
+                  <td class="text-center">
+                    <a href="<?= $us_url_root ?>usersc/plugins/handfoot/play_game.php?game_id=<?= $game->id ?>" class="btn btn-sm btn-outline-primary">View</a>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+
 </div>
+<link rel="stylesheet" href="<?= $us_url_root ?>users/js/pagination/datatables.min.css">
+<script src="<?= $us_url_root ?>users/js/pagination/datatables.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#gameHistoryTable').DataTable({
+    "pageLength": 25,
+    "order": [[0, "desc"]],
+    "aLengthMenu": [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"]
+    ]
+  });
+});
+</script>
+
 <?php
 require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; 

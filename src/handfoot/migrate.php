@@ -95,6 +95,20 @@ if($checkC > 0){
     $count++;
   }
 
+  // Add notes column to games table
+  $update = '00005';
+  if(!in_array($update,$existing)){
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+    $columnExists = $db->query("SHOW COLUMNS FROM plg_handfoot_games LIKE 'notes'")->count();
+    if($columnExists == 0) {
+      $db->query("ALTER TABLE plg_handfoot_games ADD COLUMN notes TEXT NULL AFTER creator_user_id");
+    }
+
+    $existing[] = $update;
+    $count++;
+  }
+
 
 
   //after all updates are done. Keep this at the bottom.
