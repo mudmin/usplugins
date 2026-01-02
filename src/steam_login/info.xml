@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>January 20, 2021</release>
+  <release>January 1, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.2.3</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>Join, login, or link your Steam Account to UserSpice</description>

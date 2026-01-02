@@ -174,6 +174,11 @@ class Content extends WriterPart
                         'table:style-name',
                         sprintf('%s_%d_%d', Style::ROW_STYLE_PREFIX, $sheetIndex, $row->getRowIndex())
                     );
+                } elseif ($sheet->getDefaultRowDimension()->getRowHeight() > 0.0 && !$sheet->getRowDimension($row->getRowIndex())->getCustomFormat()) {
+                    $objWriter->writeAttribute(
+                        'table:style-name',
+                        sprintf('%s%d', Style::ROW_STYLE_PREFIX, $sheetIndex)
+                    );
                 }
                 $this->writeCells($objWriter, $cellIterator);
                 $objWriter->endElement();
@@ -200,9 +205,7 @@ class Content extends WriterPart
 
             // Style XF
             $style = $cell->getXfIndex();
-            if ($style !== null) {
-                $objWriter->writeAttribute('table:style-name', Style::CELL_STYLE_PREFIX . $style);
-            }
+            $objWriter->writeAttribute('table:style-name', Style::CELL_STYLE_PREFIX . $style);
 
             switch ($cell->getDataType()) {
                 case DataType::TYPE_BOOL:
@@ -325,6 +328,10 @@ class Content extends WriterPart
         }
         for ($i = 0; $i < $sheetCount; ++$i) {
             $worksheet = $spreadsheet->getSheet($i);
+            $default = $worksheet->getDefaultRowDimension();
+            if ($default->getRowHeight() > 0.0) {
+                $styleWriter->writeDefaultRowStyle($default, $i);
+            }
             foreach ($worksheet->getRowDimensions() as $rowDimension) {
                 if ($rowDimension->getRowHeight() > 0.0) {
                     $styleWriter->writeRowStyles($rowDimension, $i);

@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 require '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 //require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-if (!securePage($_SERVER['PHP_SELF'])){die();} $db=DB::getInstance(); if(!pluginActive("store")){die();}
+if(!pluginActive("store")){die();}
 $checkPayment = $db->query("SELECT * FROM us_plugins WHERE plugin = ? AND status = ?",['payments','active'])->count();
 if($checkPayment < 1){die("Payment plugin required");}
 if(!isset($_SESSION['orderno']) || !is_numeric($_SESSION['orderno'])){

@@ -19,7 +19,7 @@ $formInfo = [
   	'success'		=>false,
   ];
 
-if(!empty($_POST && $membershipChange == "membership" && $opt == "checkout")){
+if(!empty($_POST) && $membershipChange == "membership" && $opt == "checkout"){
   $po = Input::get('paymentOption');
   if(haltPayment($po)){Redirect::to('account.php?change=membership&err=Invalid+payment+method');}
   $plan = Input::get('plan');
@@ -57,10 +57,9 @@ if(!empty($_POST && $membershipChange == "membership" && $opt == "checkout")){
 Membership Status: <?=$status?><br>
 <?php if($status == "Active"){ ?>
 Membership Plan:  <?=echoPlanName($user->data()->plg_mem_level);?> <br>
-<form class="" action="account.php?change=membership&opt=checkout" method="post">
 Membership Expires: <?=$user->data()->plg_mem_exp; ?><br>
 <?php if($memSettings->payments == 1 && $membershipChange == "membership" && !$pass){?>
-  <form class="" action="" method="get">
+  <form class="" action="account.php?change=membership&opt=checkout" method="post">
     <input type="hidden" name="plan" value="<?=$user->data()->plg_mem_level?>">
     Extend your expiration date with the following plan. If you would like to change your membership level, please contact an administrator. <br>
     <select class="" name="plan_cst">
@@ -131,7 +130,7 @@ $formInfo = payment2($formInfo);?>
 <?php
 $formInfo = payment3($formInfo);
 }
-if($formInfo['processed'] == true && $formInfo['processed'] == false && $membershipChange == "membership" && $pass){
+if($formInfo['processed'] == true && $formInfo['success'] == false && $membershipChange == "membership" && $pass){
   Redirect::to('account.php?change=membership&err=Something+went+wrong+with+your+payment');
 }
 }

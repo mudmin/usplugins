@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself -->
-  <version>1.0.5</version>
+  <version>1.0.6</version>
 
 <!-- release date of THIS version -->
-  <release>February 23, 2025</release>
+  <release>January 1, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.8.1</tested>
+  <tested>6.0.0</tested>
 
 <!-- you can specify your icon in the userspice menu, but note wider icons look weird  -->
   <fa_icon>fa fa-check-square-o</fa_icon>

@@ -24,6 +24,9 @@ if (Input::exists()) {
   logger($user,"Localhost Login","Authenticated via Localhost Dropdown");
   Redirect::to('../../../../users/index.php');
 }
+if(!isset($dest)){
+  $dest=$us_url_root;
+}
 ?>
 <div id="page-wrapper">
   <div class="container">

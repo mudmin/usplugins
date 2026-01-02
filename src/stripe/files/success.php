@@ -9,8 +9,10 @@ if(!empty($_GET['session_id'])){
     $session_id = $_GET['session_id'];
 
     // Fetch transaction data from the database if already exists
-    $sql = "SELECT * FROM orders WHERE checkout_session_id = '".$session_id."'";
-    $result = $db->query($sql);
+    $stmt = $db->prepare("SELECT * FROM orders WHERE checkout_session_id = ?");
+    $stmt->bind_param("s", $session_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     if($result->num_rows > 0){
         $orderData = $result->fetch_assoc();
 
@@ -115,17 +117,17 @@ if(!empty($_GET['session_id'])){
 <body>
 <div class="container">
     <div class="status">
-        <h1 class="<?php echo $ordStatus; ?>"><?php echo $statusMsg; ?></h1>
+        <h1 class="<?php echo stripeSafeReturn($ordStatus); ?>"><?php echo stripeSafeReturn($statusMsg); ?></h1>
         <?php if(!empty($paymentID)){ ?>
             <h4>Payment Information</h4>
-            <p><b>Reference Number:</b> <?php echo $paymentID; ?></p>
-            <p><b>Transaction ID:</b> <?php echo $transactionID; ?></p>
-            <p><b>Paid Amount:</b> <?php echo $paidAmount.' '.$paidCurrency; ?></p>
-            <p><b>Payment Status:</b> <?php echo $paymentStatus; ?></p>
+            <p><b>Reference Number:</b> <?php echo stripeSafeReturn($paymentID); ?></p>
+            <p><b>Transaction ID:</b> <?php echo stripeSafeReturn($transactionID); ?></p>
+            <p><b>Paid Amount:</b> <?php echo stripeSafeReturn($paidAmount).' '.stripeSafeReturn($paidCurrency); ?></p>
+            <p><b>Payment Status:</b> <?php echo stripeSafeReturn($paymentStatus); ?></p>
 
             <h4>Product Information</h4>
-            <p><b>Name:</b> <?php echo $productName; ?></p>
-            <p><b>Price:</b> <?php echo $productPrice.' '.$currency; ?></p>
+            <p><b>Name:</b> <?php echo stripeSafeReturn($productName); ?></p>
+            <p><b>Price:</b> <?php echo stripeSafeReturn($productPrice).' '.stripeSafeReturn($currency); ?></p>
         <?php } ?>
     </div>
     <a href="index.php" class="btn-link">Back to Product Page</a>

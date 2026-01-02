@@ -60,52 +60,29 @@ if($checkC > 0){
   $count++;
   }
 
-  //unzip on every update
-  $zip = new ZipArchive;
-  if ($zip->open($abs_us_root.$us_url_root."/usersc/plugins/apibuilder/files/api.zip") === TRUE) {
-
-    // Unzip Path
-    $zip->extractTo($abs_us_root.$us_url_root);
-    $zip->close();
-
-} else {
-    logger($user->data()->id,"APIBuilder","Failed to unzip file");
-}
-
-
-
-$update = '00006';
-if(!in_array($update,$existing)){
-  $hooks = [];
-  $hooks['join.php']['post'] = 'hooks/joinpost.php';
-  $hooks['account.php']['bottom'] = 'hooks/accountbottom.php';
-  registerHooks($hooks,$plugin_name);
-$existing[] = $update; //add the update you just did to the existing update array
-$count++;
-}
-
-
-$update = '00007';
-if(!in_array($update,$existing)){
-  $db->query("ALTER TABLE plg_api_settings ADD COLUMN key_on_acct tinyint(1) default '01'");
-$existing[] = $update; //add the update you just did to the existing update array
-$count++;
-}
-
-$update = '00008';
-if(!in_array($update,$existing)){
-  $db->query("ALTER TABLE plg_api_settings ADD COLUMN new_user_key tinyint(1) default '0'");
-$existing[] = $update; //add the update you just did to the existing update array
-$count++;
-}
-
-
+    $update = '00005';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  //forcing an unzip of the api files to make sure everything is up to date
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
   //after all updates are done. Keep this at the bottom.
+  if($count > 0){
+    //unzip on every update
+    $zip = new ZipArchive;
+    if ($zip->open($abs_us_root.$us_url_root."/usersc/plugins/apibuilder/files/api.zip") === TRUE) {
+      $zip->extractTo($abs_us_root.$us_url_root);
+      $zip->close();
+    } else {
+      logger($user->data()->id,"APIBuilder","Failed to unzip file");
+    }
+  }
   $new = json_encode($existing);
   $db->update('us_plugins',$check->id,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);
   if(!$db->error()) {
-    logger($user->data()->id,"Migrations","$count migration(s) successfully triggered for $plugin_name");
+    logger($user->data()->id,"Migrations","$count migration(s) susccessfully triggered for $plugin_name");
   } else {
    	logger($user->data()->id,"USPlugins","Failed to save updates, Error: ".$db->errorString());
   }

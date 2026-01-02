@@ -5,7 +5,7 @@ if($refSettings->show_acct == 1){
 global $user;
 if($user->data()->plg_ref == '' && $refSettings->allow_un == 1){
   $ref_link = 'http://'.$_SERVER['HTTP_HOST'].$us_url_root.'users/join.php?ref='.$user->data()->username;
-  echo "Your Referral Link: <strong>".$ref_link."</strong>";
+  echo "Your Referral Link: <strong>".htmlspecialchars($ref_link, ENT_QUOTES, 'UTF-8')."</strong>";
 }elseif($user->data()->plg_ref == ''){
   if(!empty($_POST['genNewRef'])){
     $db->update("users",$user->data()->id,['plg_ref'=>uniqid()]);
@@ -18,7 +18,7 @@ if($user->data()->plg_ref == '' && $refSettings->allow_un == 1){
   </form>
 <?php }else{
   $ref_link = 'http://'.$_SERVER['HTTP_HOST'].$us_url_root.'users/join.php?ref='.$user->data()->plg_ref;
-  echo "Your Referral Link: <strong>".$ref_link."</strong>";
+  echo "Your Referral Link: <strong>".htmlspecialchars($ref_link, ENT_QUOTES, 'UTF-8')."</strong>";
 }
 }
 ?>

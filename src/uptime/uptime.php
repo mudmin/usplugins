@@ -3,12 +3,12 @@ require_once '../../../users/init.php';
 $db = DB::getInstance();
 
 $ip = ipCheck();
-$q = $db->query("SELECT * FROM us_ip_whitelist WHERE ip = ?",[$ip])->count();
-if($q < 1){
-  logger(1,"uptimeIP","$ip tried to call the uptime trigger");
+$q = $db->query("SELECT * FROM us_ip_whitelist WHERE ip = ?", [$ip])->count();
+if ($q < 1) {
+  logger(1, "uptimeIP", "$ip tried to call the uptime trigger");
   die;
 }
-if(!pluginActive("uptime",true)){
+if (!pluginActive("uptime", true)) {
   die("Plugin not active");
 }
 $upset = $db->query("SELECT * FROM plg_uptime_settings")->first();
@@ -16,60 +16,67 @@ $upset = $db->query("SELECT * FROM plg_uptime_settings")->first();
 $sites = $db->query("SELECT * FROM plg_uptime WHERE disabled = 0")->results();
 $notifs = [];
 $counter = 0;
-foreach($sites as $s){
-  $db->update("plg_uptime",$s->id,['last_check'=>date("Y-m-d H:i:s")]);
+foreach ($sites as $s) {
+  $db->update("plg_uptime", $s->id, ['last_check' => date("Y-m-d H:i:s")]);
 
   $sendNotif = false;
   $remoteFile = $s->url;
   $diag = Input::get('diag');
-  if($diag == "true" || $upset->debug == 1){
-    logger(1,"Uptime","Attempting ".$s->url);
+
+  if ($diag == "true" || $upset->debug == 1) {
+    logger(1, "Uptime", "Attempting " . $s->url);
   }
 
-  // Open file
-  $handle = @fopen($remoteFile, 'r');
+  // VALIDATION: Ensure the string is a URL and starts with http/https
+  $isValidUrl = filter_var($remoteFile, FILTER_VALIDATE_URL);
+  $isRemote = preg_match('/^https?:\/\//i', $remoteFile);
+
+  if ($isValidUrl && $isRemote) {
+    $handle = @fopen($remoteFile, 'r');
+  } else {
+    $handle = false; // Treat malformed or local paths as "down" or invalid
+  }
   // Check if file exists
-  if(!$handle){
+  if (!$handle) {
 
-       $ct = strtotime(date("Y-m-d H:i:s"));
-      //Site is down!
-      //did we know this already and if so
-      if($s->notified_down == ""){ //we didn't know
-        // dump("Should notify");
-        $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
+    $ct = strtotime(date("Y-m-d H:i:s"));
+    //Site is down!
+    //did we know this already and if so
+    if ($s->notified_down == "") { //we didn't know
+      // dump("Should notify");
+      $db->update("plg_uptime", $s->id, ['notif_down' => date("Y-m-d H:i:s")]);
+      $sendNotif = true;
+      $notifs[$s->site]['msg'] = "Site is DOWN";
+      $counter++;
+      $db->update("plg_uptime", $s->id, ['first_down' => date("Y-m-d H:i:s")]);
+    } else {
+      // dump("already notified");
+      //ok, so we already knew it was down, but is it time to re-notify?
+      $minutes = ((strtotime($s->notified_down) - time()) / 60) * -1;
+      if ($minutes >= $upset->notify_every) {
+        // dump("re-notify");
+        $db->update("plg_uptime", $s->id, ['notif_down' => date("Y-m-d H:i:s")]);
         $sendNotif = true;
-        $notifs[$s->site]['msg'] = "Site is DOWN";
+        $notifs[$s->site]['msg'] = "Site is still DOWN";
         $counter++;
-        $db->update("plg_uptime",$s->id,['first_down'=>date("Y-m-d H:i:s")]);
-      }else{
-        // dump("already notified");
-        //ok, so we already knew it was down, but is it time to re-notify?
-        $minutes = ((strtotime($s->notified_down) - time()) / 60)*-1;
-        if($minutes >= $upset->notify_every){
-          // dump("re-notify");
-          $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
-          $sendNotif = true;
-          $notifs[$s->site]['msg'] = "Site is still DOWN";
-          $counter++;
-        }
       }
-  }else{
-      if($s->first_down != ""){
-        //site was previously down, so we need to check if it's fully back up
+    }
+  } else {
+    if ($s->first_down != "") {
+      //site was previously down, so we need to check if it's fully back up
 
-        if($s->ustarget != 1){
+      if ($s->ustarget != 1) {
         //this is not a userspice site.
         //it's a site that was down and is now back up, so we can send notifications
-        $minutes = round( ( (strtotime($s->first_down) - time()) / 60)*-1);
+        $minutes = round(((strtotime($s->first_down) - time()) / 60) * -1);
         //we're going to store the amount of time the site was down in a log
-        $db->insert("plg_uptime_downtime",['site'=>$s->id,'downtime'=>$minutes]);
-        $db->update('plg_uptime',$s->id,['first_down'=>'','notified_down'=>'']);
+        $db->insert("plg_uptime_downtime", ['site' => $s->id, 'downtime' => $minutes]);
+        $db->update('plg_uptime', $s->id, ['first_down' => '', 'notified_down' => '']);
         $sendNotif = true;
-        $minutes = round($minutes,1);
+        $minutes = round($minutes, 1);
         $notifs[$s->site]['msg'] = "Site is back up after $minutes minutes";
         $counter++;
-
-      }else{
+      } else {
         //userspice site. Let's also check if mysql is up.
         $ch = curl_init($remoteFile);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
@@ -78,24 +85,24 @@ foreach($sites as $s){
         $result = curl_exec($ch);
         curl_close($ch);
 
-      if(strpos($result, "SQLSTATE") !== false || strpos($result, "Error establishing a database") !== false  ){
+        if (strpos($result, "SQLSTATE") !== false || strpos($result, "Error establishing a database") !== false) {
           //sql is still down, but is it time to re-notify?
-          $minutes = round( ( (strtotime($s->notified_down) - time()) / 60)*-1);
+          $minutes = round(((strtotime($s->notified_down) - time()) / 60) * -1);
 
-          if($minutes >= $upset->notify_every){
-            $db->update("plg_uptime",$s->id,['notif_down'=>date("Y-m-d H:i:s")]);
+          if ($minutes >= $upset->notify_every) {
+            $db->update("plg_uptime", $s->id, ['notif_down' => date("Y-m-d H:i:s")]);
             $sendNotif = true;
             $notifs[$s->site]['msg'] = "Your server appears to be up but SQL is still DOWN";
             $counter++;
           }
-        }else{
+        } else {
           //sql is back up!
-          $minutes = ((strtotime($s->first_down) - time()) / 60)*-1;
+          $minutes = ((strtotime($s->first_down) - time()) / 60) * -1;
           //we're going to store the amount of time the site was down in a log
-          $db->insert("plg_uptime_downtime",['site'=>$s->id,'downtime'=>$minutes]);
-          $db->update('plg_uptime',$s->id,['first_down'=>'','notified_down'=>'']);
+          $db->insert("plg_uptime_downtime", ['site' => $s->id, 'downtime' => $minutes]);
+          $db->update('plg_uptime', $s->id, ['first_down' => '', 'notified_down' => '']);
           $sendNotif = true;
-          $minutes = round($minutes,1);
+          $minutes = round($minutes, 1);
           $notifs[$s->site]['msg'] = "Site is back up after $minutes minutes. SQL has also been verified.";
           $counter++;
         }
@@ -104,32 +111,32 @@ foreach($sites as $s){
       //we've also taken care of any sites that were down, but are now up.
       //the only thing we need to do is to handle sites that were up and are still up
       //and check for userspice sites that are up, but have mysql down.
-    }elseif(!isset($notifs[$s->site]) && $s->ustarget == 1){
-        //This is a userspice site that has not triggered another notification
-        $ch = curl_init($remoteFile);
-    		curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
-    		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
-    		$result = curl_exec($ch);
-    		curl_close($ch);
+    } elseif (!isset($notifs[$s->site]) && $s->ustarget == 1) {
+      //This is a userspice site that has not triggered another notification
+      $ch = curl_init($remoteFile);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_FAILONERROR, true);
+      $result = curl_exec($ch);
+      curl_close($ch);
 
-      if(strpos($result, "SQLSTATE") !== false || strpos($result, "Error establishing a database") !== false  ){
-          $sendNotif = true;
-          $notifs[$s->site]['msg'] = "SQL is DOWN";
-          $counter++;
-          $db->update("plg_uptime",$s->id,['first_down'=>date("Y-m-d H:i:s")]);
-    		}else{
-          //let's just save this site data while we have it
-          $result = json_decode($result);
-          if(isset($result->usver) && isset($result->phpver)){
-            $fields = [
-              'usver'=>Input::sanitize($result->usver),
-              'phpver'=>Input::sanitize($result->phpver),
-            ];
-            $db->update('plg_uptime',$s->id,$fields);
-          }
+      if (strpos($result, "SQLSTATE") !== false || strpos($result, "Error establishing a database") !== false) {
+        $sendNotif = true;
+        $notifs[$s->site]['msg'] = "SQL is DOWN";
+        $counter++;
+        $db->update("plg_uptime", $s->id, ['first_down' => date("Y-m-d H:i:s")]);
+      } else {
+        //let's just save this site data while we have it
+        $result = json_decode($result);
+        if (isset($result->usver) && isset($result->phpver)) {
+          $fields = [
+            'usver' => Input::sanitize($result->usver),
+            'phpver' => Input::sanitize($result->phpver),
+          ];
+          $db->update('plg_uptime', $s->id, $fields);
         }
-      } //end special instructions for reachable userspice sites
+      }
+    } //end special instructions for reachable userspice sites
   } //end site is reachable
 } //end foreach sites
 
@@ -138,40 +145,40 @@ foreach($sites as $s){
 $string = "";
 $html = "Uptime has the following important notifications for you.<br>";
 $sms = "";
-foreach($notifs as $k=>$v){
-  $q = $db->query("SELECT * FROM plg_uptime WHERE site = ?",[$k]);
+foreach ($notifs as $k => $v) {
+  $q = $db->query("SELECT * FROM plg_uptime WHERE site = ?", [$k]);
   $c = $q->count();
-  if($c < 1){
-    logger(1,'uptimeError',"Trying to notify a site $k that does not exist");
-  }else{
+  if ($c < 1) {
+    logger(1, 'uptimeError', "Trying to notify a site $k that does not exist");
+  } else {
     $f = $q->first();
-    if($f->first_down != ''){
+    if ($f->first_down != '') {
       //re-up this notification time if the site is not back up.
-      $db->update("plg_uptime",$f->id,['notified_down'=>date("Y-m-d H:i:s")]);
+      $db->update("plg_uptime", $f->id, ['notified_down' => date("Y-m-d H:i:s")]);
     }
 
-    $string .= $f->site."(".$f->url.") - ".$v['msg'];
-    $html .= $f->site."(".$f->url.") - ".$v['msg']."<br>";
-    $sms .= $f->url." ".$v['msg'];
+    $string .= $f->site . "(" . $f->url . ") - " . $v['msg'];
+    $html .= $f->site . "(" . $f->url . ") - " . $v['msg'] . "<br>";
+    $sms .= $f->url . " " . $v['msg'];
   }
 }
 
 $send = $db->query("SELECT * FROM plg_uptime_notifications")->results();
 $settings = $db->query("SELECT * FROM settings")->first();
 $email = $db->query("SELECT * FROM email")->first();
-foreach($send as $s){
-  if($sendNotif){ //make sure there's something to send
+foreach ($send as $s) {
+  if ($sendNotif) { //make sure there's something to send
 
-    if($s->method == "pushover" && pluginActive('pushover',true)){
-      pushoverNotification($settings->plg_po_key,$string);
+    if ($s->method == "pushover" && pluginActive('pushover', true)) {
+      pushoverNotification($settings->plg_po_key, $string);
     }
 
-    if($s->method == "twilio" && pluginActive('twilio',true)){
-      twilsms($sms,twilio($s->target));
+    if ($s->method == "twilio" && pluginActive('twilio', true)) {
+      twilsms($sms, twilio($s->target));
     }
 
-    if($s->method == "email"){
-      email($s->target,"Important Server Uptime Notification",$html);
+    if ($s->method == "email") {
+      email($s->target, "Important Server Uptime Notification", $html);
     }
   }
 }

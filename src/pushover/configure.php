@@ -3,7 +3,15 @@
   <?php
   include "plugin_info.php";
   pluginActive($plugin_name);
-  $hooks = ['A new user registered'=>'join.php','Someone tried to login unsuccessfully'=>'loginFail','Someone tried to access a page without permission'=>'noAccess','A blocked IP tried to access the site'=>'hitBanned','Someone is resetting their password'=>'forgotPassword'];
+  $hooks = [
+  'A new user registered' => 'join.php',
+  'Someone tried to login unsuccessfully' => 'loginFail',
+  'Someone tried to access a page without permission' => 'noAccess',
+  'A blocked IP tried to access the site' => 'hitBanned',
+  'Someone is resetting their password' => 'forgotPassword',
+  'Admin login successful (admins only)' => 'loginSuccess',
+  'Admin password reset completed (admins only)' => 'passwordResetSuccess',
+];
   $myHooks = $db->query("SELECT * FROM us_plugin_hooks WHERE folder = ?",['pushover'])->results();
   $installed = [];
   foreach($myHooks as $m){
@@ -29,14 +37,21 @@
 
     if(!empty($_POST['regHooks'])){
       $db->query("DELETE FROM us_plugin_hooks WHERE folder = ?",['pushover']);
-      $hk = $_POST['hook'];
+      $hk = $_POST['hook'] ?? [];
       foreach($hk as $h){
         $h = Input::sanitize($h);
         if(in_array($h,$hooks)){
+          // Determine position based on hook type
           if($h == "join.php"){
             $position = "post";
             $page = "hooks/join.php";
-          }else{
+          } elseif($h == "loginSuccess"){
+            $position = "body";
+            $page = "hooks/loginSuccess.php";
+          } elseif($h == "passwordResetSuccess"){
+            $position = "body";
+            $page = "hooks/passwordResetSuccess.php";
+          } else {
             $position = "body";
             $page = 'hooks/'.$h.'.php';
           }
@@ -95,18 +110,26 @@
         <h3>Setup Notifications</h3>
         You can send a notification on any page using this format <strong>pushoverNotification($settings->plg_po_key,"This is a test");</strong><br>
         See <strong><a href="https://pushover.net/api#html"><font color="blue">this page</font></a></strong> to learn how to style your messages.<br>
-        You can also trigger notifications when certain events happen.  These can be put in any of our scripts.  For instance, you can put
-        <code>
-          <br>
-          if(hasPerm([2],$user->data()->id)){<br>
-            pushoverNotification($settings->plg_po_key,"There was an admin login");<br>
-          }<br>
-        </code>
-        in <strong>usersc/scripts/custom_login_script.php</strong> to be notified every time an admin logs in.
-        <br><br>
+        You can also use the enhanced helper: <strong>pushoverSecurityAlert('eventName', ['user' => $username, 'extra' => 'details']);</strong><br>
+        This automatically includes the IP address and whitelist status in your notifications.
+
+        <div class="card mt-3 mb-3">
+          <div class="card-header"><strong>Understanding Whitelist Status</strong></div>
+          <div class="card-body">
+            <p>Every notification now shows whether the IP address is on your <a href="<?=$us_url_root?>users/admin.php?view=ip">IP Whitelist</a>.</p>
+            <ul>
+              <li><strong>WHITELISTED</strong> - This IP is on your trusted list (e.g., your office, home, or known safe IPs). Activity from whitelisted IPs is generally expected.</li>
+              <li><strong>Not Whitelisted</strong> - This IP is not on your trusted list. This doesn't mean it's malicious, but it's worth paying attention to, especially for sensitive events like admin logins or password resets.</li>
+            </ul>
+            <p><strong>Why this matters:</strong> If you see a failed login from a whitelisted IP, it's probably just a typo. But a failed login from an unknown IP might be someone trying to break in. Similarly, an admin password reset from an unfamiliar IP warrants immediate attention.</p>
+            <p>You can manage your IP whitelist at <strong>Admin &rarr; Security &rarr; IP Manager</strong>.</p>
+          </div>
+        </div>
+
         <form class="" action="" method="post">
           <h3>Register Hooks</h3>
-          You can register to be notified when any of these events happen. These events are available in 5.1.4 or later.<br><br>
+          You can register to be notified when any of these events happen. These events are available in 5.1.4 or later.<br>
+          <strong>Admin-only hooks:</strong> Only fire for users with permission level 2 (Admin).<br><br>
           <div class="row">
             <?php foreach($hooks as $k=>$v){?>
               <div class="col-4">

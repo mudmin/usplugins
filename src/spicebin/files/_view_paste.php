@@ -13,6 +13,9 @@ $code = Input::get('code');
 if($code == ""){
   $actual_link .= "&code=".$paste->code;
 }
+// Sanitize for safe output in HTML and JavaScript contexts
+$actual_link_safe = htmlspecialchars($actual_link, ENT_QUOTES, 'UTF-8');
+$actual_link_js = htmlspecialchars(addslashes($actual_link), ENT_QUOTES, 'UTF-8');
 
 if(file_exists($abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_custom_includes.php")){
   include $abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_custom_includes.php";
@@ -42,7 +45,7 @@ if(isset($user) && $user->isLoggedIn() && $paste->user == $user->data()->id || h
       <form class="" action="" method="post">
         <h4>
           Manage this <?=$pset->product_single?>
-          <button type="button" class="btn btn-primary" onclick="copyStringToClipboard('<?=$actual_link?>');">Copy Link</button>
+          <button type="button" class="btn btn-primary" onclick="copyStringToClipboard('<?=$actual_link_js?>');">Copy Link</button>
           <span style="display:none; color:blue;" id="copyLink">Link Copied</span>
 
           <input type="hidden" name="csrf" value="<?=Token::generate();?>">
@@ -69,7 +72,7 @@ if(isset($user) && $user->isLoggedIn() && $paste->user == $user->data()->id || h
 
     <?php } ?>
   </div>
-  Public Link (For Sharing): <a href="<?=$actual_link?>"><?=$actual_link?></a>
+  Public Link (For Sharing): <a href="<?=$actual_link_safe?>"><?=$actual_link_safe?></a>
 </div>
 <br>
 <?php }

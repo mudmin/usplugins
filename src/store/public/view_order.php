@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 require '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 //require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-if (!securePage($_SERVER['PHP_SELF'])){die();} $db=DB::getInstance(); if(!pluginActive("store")){die();}
+if(!pluginActive("store")){die();}
 $ord = Input::get('order');
 $code = Input::get('code');
 

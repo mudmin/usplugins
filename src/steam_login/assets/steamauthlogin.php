@@ -18,7 +18,14 @@ if (isset($_GET['login'])){
 
 			if(!$openid->mode) {
 				$openid->identity = 'https://steamcommunity.com/openid';
-				header('Location: ' . $openid->authUrl());
+				$authUrl = $openid->authUrl();
+				// Validate redirect URL to prevent open redirect attacks
+				$parsedUrl = parse_url($authUrl);
+				if (!isset($parsedUrl['host']) || !preg_match('/^(.*\.)?steamcommunity\.com$/i', $parsedUrl['host'])) {
+					echo 'Invalid authentication URL.';
+					exit;
+				}
+				header('Location: ' . $authUrl);
 			} elseif ($openid->mode == 'cancel') {
 				echo 'User has canceled authentication!';
 			} else {
@@ -47,7 +54,9 @@ if (isset($_GET['login'])){
 				}
 			}
 		} catch(ErrorException $e) {
-			echo $e->getMessage();
+			// Log the actual error for debugging but don't expose to users
+			error_log('Steam Login Error: ' . $e->getMessage());
+			echo 'An error occurred during authentication. Please try again.';
 		}
 }
 ?>

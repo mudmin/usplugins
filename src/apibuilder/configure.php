@@ -5,7 +5,6 @@
 <script type="text/javascript" src="<?=$us_url_root?>usersc/plugins/apibuilder/assets/oce.js"></script>
 <?php
 include "plugin_info.php";
-$token = Token::generate();
 pluginActive($plugin_name);
 if(!empty($_POST)){
   if(!empty($_POST['genkeys'])){
@@ -116,34 +115,6 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
           <input type="number" step="1" min="1" max="5" class="form-control apimode" data-desc="API Mode" name="api_auth_type" id="api_auth_type" value="<?=$apisettings->api_auth_type?>">
         </div>
       </div>
-
-      
-      <div class="form-group">
-        <label for="">Create new keys for users when they join</label>
-        <div class="input-group">
-
-        <!-- new_user_key select -->
-        <select class="form-control apimode" data-desc="New User Key on Join" name="new_user_key" id="new_user_key">
-          <option value="0" <?php if($apisettings->new_user_key == 0) echo 'selected'; ?>>No</option>
-          <option value="1" <?php if($apisettings->new_user_key == 1) echo 'selected'; ?>>Yes</option>
-        </select>        
-
-        </div>
-      </div>
-
-
-      <div class="form-group">
-        <label for="">Allow users to see their API key on their account page</label>
-        <div class="input-group">
-
-        <!-- key_on_acct select -->
-        <select class="form-control apimode" data-desc="View Key On Account Page" name="key_on_acct" id="key_on_acct">
-          <option value="0" <?php if($apisettings->key_on_acct == 0) echo 'selected'; ?>>No</option>
-          <option value="1" <?php if($apisettings->key_on_acct == 1) echo 'selected'; ?>>Yes</option>
-        </select>        
-
-        </div>
-</div>
 
 
     </div>
@@ -268,7 +239,6 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
         'field'					: field,
         'desc'					: desc,
         'type'          : 'toggle',
-        'token'         : '<?=$token?>'
       };
 
       $.ajax({
@@ -295,7 +265,6 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
         'field'					: field,
         'desc'					: desc,
         'type'          : 'num',
-        'token'         : '<?=$token?>'
       };
 
       $.ajax({
@@ -320,7 +289,6 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
         'field'					: field,
         'desc'					: desc,
         'type'          : 'apimode',
-        'token'         : '<?=$token?>'
       };
 
       $.ajax({
@@ -351,7 +319,6 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
         'field'					: field,
         'desc'					: desc,
         'type'          : 'txt',
-        'token'         : '<?=$token?>'
       };
 
       $.ajax({

@@ -258,7 +258,7 @@ $csrf = Token::generate();
       <?php
       //dnd($messages);$grav = get_gravatar(strtolower(trim($user->data()->email)));
       foreach ($messages as $m){
-        $findUser = $db->query("SELECT email FROM users WHERE id = $m->msg_from");
+        $findUser = $db->query("SELECT email FROM users WHERE id = ?", [$m->msg_from]);
         if($findUser->count()==1) $foundUser = $findUser->first()->email;
         if($findUser->count()==0) $foundUser = "null@null.com";
         $grav = get_gravatar(strtolower(trim($foundUser)));

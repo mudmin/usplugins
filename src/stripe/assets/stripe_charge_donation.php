@@ -78,10 +78,12 @@ if(!empty($request->checkoutSession)){
             'sessionId' => $session['id']
         );
     }else{
+        // Log the actual error server-side
+        error_log("Stripe Checkout Session Error: " . $api_error);
         $response = array(
             'status' => 0,
             'error' => array(
-                'message' => 'Checkout Session creation failed! '.$api_error
+                'message' => 'Checkout Session creation failed. Please try again.'
             )
         );
     }

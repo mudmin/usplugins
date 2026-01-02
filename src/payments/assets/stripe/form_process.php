@@ -20,9 +20,7 @@ if(!empty($_POST['processPayment'])){
   if ($use_sts && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
       header('Strict-Transport-Security: max-age=31536000');
   } elseif ($use_sts) {
-      header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], true, 301);
-      // we are in cleartext at the moment, prevent further execution and output
-      die();
+      paymentsSafeHttpsRedirect();
   }
   ?>
 
@@ -37,7 +35,7 @@ if(!empty($_POST['processPayment'])){
   }
 
 // if($settings->stripe_test_mode == 1){
-//   \Stripe\Stripe::setApiKey("sk_test_YOUR_KEY_HERE");
+//   \Stripe\Stripe::setApiKey("STRIPE_TEST_KEY_HERE");
 // }else{
    \Stripe\Stripe::setApiKey($keys->stripe_ls);
 // }

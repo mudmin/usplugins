@@ -44,8 +44,19 @@ try {
   die();
 }
 
+//Check to see if the user has granted email permission
+$fbEmail = $user->getEmail();
+if (!$fbEmail) {
+  $helper = $provider->getAuthorizationUrl([
+    'scope' => ['email'],
+  ]);
+  $_SESSION['facebook_state'] = $provider->getState();
+  header("Location: " . $helper);
+  exit;
+}
+
 $fields = [
-  "email" => $user->getEmail(),
+  "email" => $fbEmail,
   "fname" => $user->getFirstName(),
   "lname" => $user->getLastName(),
   "fb_uid" => $user->getId(),

@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 require '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 //require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-if (!securePage($_SERVER['PHP_SELF'])){die();} $db=DB::getInstance(); if(!pluginActive("store")){die();}
+if(!pluginActive("store")){die();}
 
 if(!isset($_SESSION['orderno']) || !is_numeric($_SESSION['orderno'])){
 	$string = uniqid(15);
@@ -80,14 +80,14 @@ if($item->disabled == 1){Redirect::to('store.php?err=This+item+is+no+longer+avai
 			</div> <!-- /.col -->
 		</div> <!-- /.row -->
 
-		<div class="row">
+		<div class="row justify-content-center">
 			<?php
 			$photosQ = $db->query("SELECT * FROM store_inventory_photos WHERE item = ? AND disabled = 0",[$it]);
 			$photosC = $photosQ->count();
 			if($photosC > 0){
 				$photos = $photosQ->results();
 				foreach($photos as $p){?>
-					<div class="col-6 col-sm-4 col-md-3">
+					<div class="col-6 col-sm-4 col-md-3 text-center">
 						<a href="<?=$us_url_root?>usersc/plugins/store/img/<?=$p->photo?>"><img src="<?=$us_url_root?>usersc/plugins/store/img/<?=$p->photo?>" alt="" height="150"></a>
 					</div>
 				<?php }

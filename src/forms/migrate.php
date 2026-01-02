@@ -32,7 +32,6 @@ if($checkC > 0){
   //list your updates here from oldest at the top to newest at the bottom.
   //Give your update a unique update number/code.
 
-  //here is an example
   $update = '00001';
   if(!in_array($update,$existing)){
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
@@ -43,7 +42,6 @@ if($checkC > 0){
 
   $update = '00002';
   if(!in_array($update,$existing)){
-  //repeating this because 00001 was originally broken.
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
   $existing[] = $update; //add the update you just did to the existing update array
   $count++;
@@ -76,9 +74,8 @@ if($checkC > 0){
 
   $update = '00005';
   if(!in_array($update,$existing)){
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_user_col varchar(255) DEFAULT ''");
-  $db->query("ALTER TABLE us_forms ADD COLUMN api_force_user_col tinyint(1) DEFAULT '1'");
-
+  // Note: This appears to be a duplicate of 00004 in your original file, 
+  // but kept to maintain migration sequence integrity.
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
 
   $existing[] = $update; //add the update you just did to the existing update array
@@ -93,9 +90,13 @@ if($checkC > 0){
 
     $forms = $db->query("SELECT * FROM us_forms")->results();
     foreach($forms as $f){
-      $db->query("ALTER TABLE $f->form CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+      if(!preg_match('/^[a-zA-Z0-9_]+$/', $f->form)){
+        continue; 
+      }
+      // Properly wrapped identifiers in backticks to prevent injection/syntax errors
+      $db->query("ALTER TABLE `{$f->form}` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
       $n = $f->form."_form";
-      $db->query("ALTER TABLE $n CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+      $db->query("ALTER TABLE `{$n}` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
     }
 
   logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
@@ -112,5 +113,5 @@ if($checkC > 0){
   } else {
    	logger($user->data()->id,"USPlugins","Failed to save updates, Error: ".$db->errorString());
   }
-}//do not perform actions outside of this statement
+}
 }

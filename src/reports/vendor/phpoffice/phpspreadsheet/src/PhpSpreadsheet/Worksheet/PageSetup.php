@@ -208,14 +208,14 @@ class PageSetup
     /**
      * Columns to repeat at left.
      *
-     * @var array Containing start column and end column, empty array if option unset
+     * @var array{string, string} Containing start column and end column, empty array if option unset
      */
     private array $columnsToRepeatAtLeft = ['', ''];
 
     /**
      * Rows to repeat at top.
      *
-     * @var array Containing start row number and end row number, empty array if option unset
+     * @var int[] Containing start row number and end row number, empty array if option unset
      */
     private array $rowsToRepeatAtTop = [0, 0];
 
@@ -443,7 +443,7 @@ class PageSetup
     /**
      * Get Columns to repeat at left.
      *
-     * @return array Containing start column and end column, empty array if option unset
+     * @return array{string, string} Containing start column and end column, empty array if option unset
      */
     public function getColumnsToRepeatAtLeft(): array
     {
@@ -453,7 +453,7 @@ class PageSetup
     /**
      * Set Columns to repeat at left.
      *
-     * @param array $columnsToRepeatAtLeft Containing start column and end column, empty array if option unset
+     * @param array{string, string} $columnsToRepeatAtLeft Containing start column and end column, empty array if option unset
      *
      * @return $this
      */
@@ -496,7 +496,7 @@ class PageSetup
     /**
      * Get Rows to repeat at top.
      *
-     * @return array Containing start column and end column, empty array if option unset
+     * @return int[] Containing start column and end column, empty array if option unset
      */
     public function getRowsToRepeatAtTop(): array
     {
@@ -506,7 +506,7 @@ class PageSetup
     /**
      * Set Rows to repeat at top.
      *
-     * @param array $rowsToRepeatAtTop Containing start column and end column, empty array if option unset
+     * @param int[] $rowsToRepeatAtTop Containing start column and end column, empty array if option unset
      *
      * @return $this
      */
@@ -576,7 +576,7 @@ class PageSetup
      * Get print area.
      *
      * @param int $index Identifier for a specific print area range if several ranges have been set
-     *                            Default behaviour, or a index value of 0, will return all ranges as a comma-separated string
+     *                            Default behaviour, or an index value of 0, will return all ranges as a comma-separated string
      *                            Otherwise, the specific range identified by the value of $index will be returned
      *                            Print areas are numbered from 1
      */
@@ -642,7 +642,7 @@ class PageSetup
      * @param int $index Identifier for a specific print area range allowing several ranges to be set
      *                            When the method is "O"verwrite, then a positive integer index will overwrite that indexed
      *                                entry in the print areas list; a negative index value will identify which entry to
-     *                                overwrite working bacward through the print area to the list, with the last entry as -1.
+     *                                overwrite working backward through the print area to the list, with the last entry as -1.
      *                                Specifying an index value of 0, will overwrite <b>all</b> existing print ranges.
      *                            When the method is "I"nsert, then a positive index will insert after that indexed entry in
      *                                the print areas list, while a negative index will insert before the indexed entry.

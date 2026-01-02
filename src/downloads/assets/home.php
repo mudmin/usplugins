@@ -57,14 +57,18 @@ if(!empty($_POST['resetDatabase'])){
       </div>
     </form>
 
-    <h3>Reset Database</h3>
+   
     <form class="" action="" method="post" onsubmit="return confirm('Do you really want to clear your links and logs? THIS CANNOT BE UNDONE and all links that have been shared will no longer work.');">
+    <h3>Reset Database
+    <input type="submit" name="resetDatabase" value="Reset Now" class="btn btn-danger btn-sm">
+
+    </h3>
       <input type="hidden" name="csrf" value="<?=$token?>">
       <p>If you have been messing around creating links and want to reset your database, click the button below.  Please note, this will delete the info in your database referring
       to this plugin, but it will NOT delete your plugin settings or your files that you have in your /files folder.  This will truncate...</p>
       <p>plg_download_logs</p>
       <p>plg_download_files</p>
       <p>plg_download_links</p>
-      <input type="submit" name="resetDatabase" value="Reset the Database" class="btn btn-danger">
+
     </form>
 </div> <!-- /.row -->

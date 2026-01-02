@@ -1,8 +1,8 @@
 <?php
 require '../../../../users/init.php';
 require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';
-if (!securePage($_SERVER['PHP_SELF'])) {
-	die();
+if (!hasPerm(2)) {
+	die("You do not have permission to access this page.");
 }
 if (!pluginActive("store", true)) {
 	die();
@@ -16,31 +16,31 @@ $cats = fetchStoreCats();
 $edit = Input::get("edit");
 $last = Input::get("last");
 if (!empty($_FILES)) {
-	$date = date('Y-m-d');
-	$prid = $edit;
-	$ds          = '/';  //1
+    $prid = $edit;
+    $targetPath = $abs_us_root . $us_url_root . 'usersc/plugins/store/img/';
+    $tempFile = $_FILES['file']['tmp_name'];
 
-	$targetPath = $abs_us_root . $us_url_root . 'usersc/plugins/store/img/';   //2
+    $mimeMap = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif'];
+    $fileType = mime_content_type($tempFile);
 
-	$name = $_FILES["file"]["name"];
-	$ext = end((explode(".", $name)));
-	$uniq_name = "item-" . $prid . '-' . uniqid() . '.' . $ext;
+    if (array_key_exists($fileType, $mimeMap)) {
+        $ext = $mimeMap[$fileType];
+        $uniq_name = "item-" . $prid . '-' . uniqid() . '.' . $ext;
+        $targetFile = $targetPath . $uniq_name;
 
-	$tempFile = $_FILES['file']['tmp_name'];          //3
-
-	$targetFile =  $targetPath . $uniq_name;  //5
-	//$targetFile =  $targetPath. $_FILES['file']['name'];  //5
-
-	if (move_uploaded_file($tempFile, $targetFile)) { //6
-
-		$fields = array(
-			'item'    => $prid,
-			'photo'   => $uniq_name,
-		);
-		$db->insert('store_inventory_photos', $fields);
-	} else {
-		logger(1, "photos", "Failed to move photo, $ferror");
+        if (move_uploaded_file($tempFile, $targetFile)) {
+            $fields = [
+                'item'  => $prid,
+                'photo' => $uniq_name,
+            ];
+            $db->insert('store_inventory_photos', $fields);
+        } else {
+            logger(1, "photos", "Failed to move photo");
+        }
+    } else {
+		logger(1, "photos", "Invalid file type uploaded");
 	}
+	
 }
 if ($edit != '') {
 	$itemQ = $db->query("SELECT * FROM store_inventory WHERE id = ?", array($edit));
@@ -78,7 +78,8 @@ if (is_numeric($delphoto)) {
 	if ($c > 0) {
 		$f = $q->first();
 		$db->query("DELETE FROM store_inventory_photos WHERE id = ? AND item = ?", [$delphoto, $edit]);
-		unlink($abs_us_root . $us_url_root . 'usersc/plugins/store/img/' . $f->photo);
+		$safe_photo = basename($f->photo);
+		unlink($abs_us_root . $us_url_root . 'usersc/plugins/store/img/' . $safe_photo);
 		Redirect::to('manage_inventory.php?edit=' . $edit);
 	}
 }

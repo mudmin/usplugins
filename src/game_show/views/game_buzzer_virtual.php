@@ -96,7 +96,7 @@ if (!empty($_POST)) {
       <?=$buzzer->buzzer_name?>
       <br>
       <span id="response">
-        <?php if(isset($content->msg)){ echo ucfirst($content->msg); }else { echo "<br>";} ?>
+        <?php if(isset($content->msg)){ echo htmlspecialchars(ucfirst($content->msg), ENT_QUOTES, 'UTF-8'); }else { echo "<br>";} ?>
       </span>
     </button>
   </div>

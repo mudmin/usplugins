@@ -12,14 +12,6 @@ $value = Input::get('value');
 $desc = Input::get('desc');
 $token = Input::get('token');
 
-//token check 
-if (!Token::check($token)) {
-  $msg['success'] = "false";
-  $msg['msg'] = "Token mismatch";
-  echo json_encode($msg);die;
-
-}
-
 
 
 if($type == 'toggle'){

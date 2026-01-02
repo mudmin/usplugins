@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Safe redirect to HTTPS - prevents open redirect via Host header injection
+ */
+function paymentsSafeHttpsRedirect()
+{
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    $host = preg_replace('/[\x00-\x1F\x7F\/\\\\ ]/', '', $host);
+    if (($pos = strpos($host, ':')) !== false && strpos($host, ']') === false) {
+        $host = substr($host, 0, $pos);
+    }
+    if (!preg_match('/^[a-zA-Z0-9.-]+$/', $host) || $host === '') {
+        die("Invalid host");
+    }
+
+    $uri = $_SERVER['REQUEST_URI'] ?? '/';
+    $uri = preg_replace('/[\x00-\x1F\x7F]/', '', $uri);
+    if ($uri === '' || $uri[0] !== '/') {
+        $uri = '/' . ltrim($uri, '/');
+    }
+    $uri = str_replace(["\r", "\n", "\\"], '', $uri);
+
+    header('Location: https://' . $host . $uri, true, 301);
+    die("Your connection is not secure.");
+}
+
 function haltPayment($option){
   $db = DB::getInstance();
   $check = $db->query("SELECT * FROM plg_payments_options WHERE `option` = ? AND enabled = 1",[$option])->count();
@@ -36,36 +62,58 @@ function showPaymentOptions($opts = []){
 
 function displayPayment($formInfo){
   global $user,$db,$abs_us_root,$us_url_root;
-  $method = $formInfo['method'];
-  	require $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_process.php';
-    require $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_required.php';
-    if(isset($formInfo['submit']) && $formInfo['submit'] != ""){
-      echo $formInfo['submit'];
-    }else{
-      echo "<button class='btn btn-primary payment-form' type='submit'>Submit Payment</button><br>";
-    }
-    require $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_bottom.php';
+  
+  // Hardening: Sanitize the method to prevent directory traversal
+  $method = basename($formInfo['method']);
+  $assetPath = $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/';
+
+  if($method != '' && is_dir($assetPath)){
+      $files = ['form_process.php', 'form_required.php', 'form_bottom.php'];
+      foreach($files as $f){
+          if(file_exists($assetPath . $f)){
+              require $assetPath . $f;
+          }
+      }
+  }
+
+  if(isset($formInfo['submit']) && $formInfo['submit'] != ""){
+    echo $formInfo['submit'];
+  }else{
+    echo "<button class='btn btn-primary payment-form' type='submit'>Submit Payment</button><br>";
+  }
 }
 
 function payment1($formInfo){
   global $user,$db,$abs_us_root,$us_url_root;
-  $method = $formInfo['method'];
-  	require $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_process.php';
-    return $formInfo;
+  $method = basename($formInfo['method']);
+  $path = $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_process.php';
+  
+  if($method != '' && file_exists($path)){
+      require $path;
+  }
+  return $formInfo;
 }
 
 function payment2($formInfo){
   global $user,$db,$abs_us_root,$us_url_root;
-  $method = $formInfo['method'];
-  	require $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_required.php';
-    return $formInfo;
+  $method = basename($formInfo['method']);
+  $path = $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_required.php';
+  
+  if($method != '' && file_exists($path)){
+      require $path;
+  }
+  return $formInfo;
 }
 
 function payment3($formInfo){
   global $user,$db,$abs_us_root,$us_url_root;
-  $method = $formInfo['method'];
-  	require $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_bottom.php';
-    return $formInfo;
+  $method = basename($formInfo['method']);
+  $path = $abs_us_root.$us_url_root.'usersc/plugins/payments/assets/'.$method.'/form_bottom.php';
+  
+  if($method != '' && file_exists($path)){
+      require $path;
+  }
+  return $formInfo;
 }
 
 function logPayment($u,$amt_paid,$dt,$charge_id,$method,$notes,$failed){
@@ -94,7 +142,7 @@ function paymentTableFromData($data,$opts = []){
     }
     return false;
   }
-  //Pass id as 1 to show the id column
+  
   if(!isset($opts['class'])){
     $opts['class'] = 'table table-striped paginate';
   }
@@ -104,7 +152,6 @@ function paymentTableFromData($data,$opts = []){
   }
 
   ?>
-  <!-- optional table class? -->
   <table class='<?=$opts['class']?>'>
     <thead>
       <?php
@@ -126,17 +173,14 @@ function paymentTableFromData($data,$opts = []){
       <?php foreach($data as $k=>$v){ ?>
         <tr>
           <?php
-          // dump($v);
           foreach($v as $cell=>$contents){
-            echo "<td>$contents</td>";
+            echo "<td>" . htmlspecialchars($contents, ENT_QUOTES, 'UTF-8') . "</td>";
             }
             ?>
         </tr>
       <?php	} ?>
     </tbody>
   </table>
-
-
     <?php
   }
 }

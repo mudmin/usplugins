@@ -36,6 +36,15 @@ if($checkC > 0){
   $count++;
   }
 
+  // Add created_at column to users_session table for cleanup purposes
+  $update = '00002';
+  if(!in_array($update,$existing)){
+    $db->query("ALTER TABLE users_session ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - added created_at column to users_session");
+    $existing[] = $update;
+    $count++;
+  }
+
 
 
 

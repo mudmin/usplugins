@@ -25,7 +25,8 @@ if(!function_exists("apibuilderAuth")){
     }
 
     if ($settings->force_ssl==1 && $ip != "127.0.0.1"){
-      if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) {
+      $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : '';
+      if (!$https || $https === 'off') {
         return false;
       }
     }
@@ -153,7 +154,8 @@ if(!function_exists("apibuilderLogin")){
     }
 
     if ($settings->force_ssl==1 && $ip != "127.0.0.1"){
-      if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) {
+      $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : '';
+      if (!$https || $https === 'off') {
         return false;
       }
     }
@@ -208,43 +210,6 @@ if(!function_exists("apibuilderLogin")){
         }
       }
     }
-
-
-    if($settings->api_auth_type == 4){ //keys linked to users
-      $keycheckQ = $db->query("SELECT * FROM users WHERE apibld_key = ? AND apibld_blocked = 0 AND permissions = 1",[$key]);
-      $keycheckC = $keycheckQ->count();
-      if($keycheckC > 0){
-        $usercheck = $keycheckQ->first();
-        $user_id = $usercheck->id;
-        $descrip = $usercheck->username;
-        $passed = 1;
-        $valtype = "userkey";
-      }else{
-        apibuilderBan($ip);
-      }
-    }elseif($settings->api_auth_type == 5){ //keys linked to users with ip check
-      $keycheckQ = $db->query("SELECT * FROM users WHERE apibld_key = ? AND apibld_blocked = 0 AND permissions = 1",[$key]);
-      $keycheckC = $keycheckQ->count();
-      if($keycheckC > 0){
-        $keycheck = new stdClass();
-        $usercheck = $keycheckQ->first();
-
-        if($ip != '' && $usercheck->apibld_ip != '' && ($ip == $usercheck->apibld_ip || $ip == gethostbyname($usercheck->apibld_ip))){
-          $user_id = $usercheck->id;
-          $descrip = $usercheck->username;
-          $passed = 1;
-          $valtype = "userwithip";
-        }else{
-          apibuilderBan($ip);
-        }
-      }else{
-        apibuilderBan($ip);
-      }
-    }else{
-
-      return false;
-    }
-
   }
 }
 
@@ -288,7 +253,7 @@ if(!function_exists("apibuilderBan")){
 
 if(!function_exists("ipCheckApi")){
   function ipCheckApi() {
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = Server::get('REMOTE_ADDR');
     if($ip == "::1"){
       $ip = "127.0.0.1";
     }

@@ -17,6 +17,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xml\Style;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\File;
+use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\SheetView;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -32,6 +33,8 @@ class Xml extends BaseReader
 
     /**
      * Formats.
+     *
+     * @var mixed[]
      */
     protected array $styles = [];
 
@@ -60,6 +63,7 @@ class Xml extends BaseReader
 
     private string $xmlFailMessage = '';
 
+    /** @return mixed[] */
     public static function xmlMappings(): array
     {
         return array_merge(
@@ -145,6 +149,8 @@ class Xml extends BaseReader
 
     /**
      * Reads names of the worksheets from a file, without parsing the whole file to a Spreadsheet object.
+     *
+     * @return string[]
      */
     public function listWorksheetNames(string $filename): array
     {
@@ -171,6 +177,8 @@ class Xml extends BaseReader
 
     /**
      * Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns).
+     *
+     * @return array<int, array{worksheetName: string, lastColumnLetter: string, lastColumnIndex: int, totalRows: int, totalColumns: int, sheetState: string}>
      */
     public function listWorksheetInfo(string $filename): array
     {
@@ -229,6 +237,7 @@ class Xml extends BaseReader
 
             $tmpInfo['lastColumnLetter'] = Coordinate::stringFromColumnIndex($tmpInfo['lastColumnIndex'] + 1);
             $tmpInfo['totalColumns'] = $tmpInfo['lastColumnIndex'] + 1;
+            $tmpInfo['sheetState'] = Worksheet::SHEETSTATE_VISIBLE;
 
             $worksheetInfo[] = $tmpInfo;
             ++$worksheetID;
@@ -242,8 +251,7 @@ class Xml extends BaseReader
      */
     public function loadSpreadsheetFromString(string $contents): Spreadsheet
     {
-        // Create new Spreadsheet
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = $this->newSpreadsheet();
         $spreadsheet->setValueBinder($this->valueBinder);
         $spreadsheet->removeSheetByIndex(0);
 
@@ -256,8 +264,7 @@ class Xml extends BaseReader
      */
     protected function loadSpreadsheetFromFile(string $filename): Spreadsheet
     {
-        // Create new Spreadsheet
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = $this->newSpreadsheet();
         $spreadsheet->setValueBinder($this->valueBinder);
         $spreadsheet->removeSheetByIndex(0);
 
@@ -293,13 +300,14 @@ class Xml extends BaseReader
         (new Properties($spreadsheet))->readProperties($xml, $namespaces);
 
         $this->styles = (new Style())->parseStyles($xml, $namespaces);
-        if (isset($this->styles['Default'])) {
+        if (isset($this->styles['Default']) && is_array($this->styles['Default'])) {
             $spreadsheet->getCellXfCollection()[0]->applyFromArray($this->styles['Default']);
         }
 
         $worksheetID = 0;
         $xml_ss = $xml->children(self::NAMESPACES_SS);
 
+        $sheetCreated = false;
         /** @var null|SimpleXMLElement $worksheetx */
         foreach ($xml_ss->Worksheet as $worksheetx) {
             $worksheet = $worksheetx ?? new SimpleXMLElement('<xml></xml>');
@@ -314,6 +322,7 @@ class Xml extends BaseReader
 
             // Create new Worksheet
             $spreadsheet->createSheet();
+            $sheetCreated = true;
             $spreadsheet->setActiveSheetIndex($worksheetID);
             $worksheetName = '';
             if (isset($worksheet_ss['Name'])) {
@@ -365,13 +374,14 @@ class Xml extends BaseReader
                         $columnVisible = ((string) $columnData_ss['Hidden']) !== '1';
                     }
                     while ($colspan >= 0) {
+                        /** @var string $columnID */
                         if (isset($columnWidth)) {
                             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setWidth($columnWidth / 5.4);
                         }
                         if (isset($columnVisible)) {
                             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setVisible($columnVisible);
                         }
-                        ++$columnID;
+                        StringHelper::stringIncrement($columnID);
                         --$colspan;
                     }
                 }
@@ -404,12 +414,10 @@ class Xml extends BaseReader
                             $arrayRef = AddressHelper::convertFormulaToA1($arrayRange, $rowID, Coordinate::columnIndexFromString($columnID));
                         }
 
-                        if ($this->getReadFilter() !== null) {
-                            if (!$this->getReadFilter()->readCell($columnID, $rowID, $worksheetName)) {
-                                ++$columnID;
+                        if (!$this->getReadFilter()->readCell($columnID, $rowID, $worksheetName)) {
+                            StringHelper::stringIncrement($columnID);
 
-                                continue;
-                            }
+                            continue;
                         }
 
                         if (isset($cell_ss['HRef'])) {
@@ -515,14 +523,14 @@ class Xml extends BaseReader
 
                         if (isset($cell_ss['StyleID'])) {
                             $style = (string) $cell_ss['StyleID'];
-                            if ((isset($this->styles[$style])) && (!empty($this->styles[$style]))) {
+                            if ((isset($this->styles[$style])) && is_array($this->styles[$style]) && (!empty($this->styles[$style]))) {
                                 $spreadsheet->getActiveSheet()->getStyle($cellRange)
                                     ->applyFromArray($this->styles[$style]);
                             }
                         }
-                        ++$columnID;
+                        StringHelper::stringIncrement($columnID);
                         while ($additionalMergedCells > 0) {
-                            ++$columnID;
+                            StringHelper::stringIncrement($columnID);
                             --$additionalMergedCells;
                         }
                     }
@@ -661,6 +669,9 @@ class Xml extends BaseReader
                 }
             }
             ++$worksheetID;
+        }
+        if ($this->createBlankSheetIfNoneRead && !$sheetCreated) {
+            $spreadsheet->createSheet();
         }
 
         // Globally scoped defined names

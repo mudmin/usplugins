@@ -1,5 +1,4 @@
 <?php
-
 $usSessionMessages = parseSessionMessages();
 // $usSessionMessages['valErr'] = "Something went wrong!@!!!";
 // $usSessionMessages['valSuc'] = "Every little thing....is gonna be alright";
@@ -8,10 +7,10 @@ $usSessionMessages = parseSessionMessages();
 $settings->err_time = $settings->err_time * 1000;
 ?>
 <div class="alert-toast-wrapper"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.3.0/dist/themes/light.css" />
-<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.3.0/dist/shoelace.js"></script>
-<!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
-<script type="text/javascript">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"></script>
+
+<script type="module">
 // Always escape HTML for text arguments!
 function escapeHtml(html) {
   const div = document.createElement('div');
@@ -44,49 +43,54 @@ function processListTags(html) {
 
 function notify(message, variant = 'primary', icon = 'info-circle', duration = 5000) {
   const processedMessage = processListTags(escapeHtml(message));
-  const alert = Object.assign(document.createElement('sl-alert'), {
-    variant,
-    closable: true,
-    duration: duration,
-    innerHTML: `
-      <sl-icon name="${icon}" slot="icon"></sl-icon>
-      ${processedMessage}
-    `
-  });
+  
+  // Create alert element
+  const alert = document.createElement('sl-alert');
+  alert.variant = variant;
+  alert.closable = true;
+  alert.duration = duration;
+  
+  // Set inner HTML with icon
+  alert.innerHTML = `
+    <sl-icon name="${icon}" slot="icon"></sl-icon>
+    ${processedMessage}
+  `;
 
   document.body.append(alert);
-  return alert.toast();
+  
+  // Wait for the custom element to be defined before calling toast()
+  return customElements.whenDefined('sl-alert').then(() => {
+    return alert.toast();
+  });
 }
 
-
-
-$( document ).ready(function() {
-
+// Wrap the PHP generated JavaScript in a module-compatible function
+document.addEventListener('DOMContentLoaded', function() {
   <?php
   //this handles err= in the URL
   if(Input::get('err') != ""){
   ?>
-  notify("<?=htmlspecialchars_decode(Input::get('err'))?>", variant = 'primary', icon = 'question-circle', duration = "<?=$settings->err_time?>");
+  notify("<?=htmlspecialchars_decode(Input::get('err'))?>", 'primary', 'question-circle', <?=$settings->err_time?>);
 
   <?php }
 
   //this handles msg= in the URL
   if(Input::get('msg') != ""){
   ?>
-  notify("<?=htmlspecialchars_decode(Input::get('msg'))?>", variant = 'neutral', icon = 'chat-left-dots', duration = "<?=$settings->err_time?>");
+  notify("<?=htmlspecialchars_decode(Input::get('msg'))?>", 'neutral', 'chat-left-dots', <?=$settings->err_time?>);
 
   <?php }
 
   //this handles session based error message
   if($usSessionMessages['valErr'] != ""){
   ?>
-  notify("<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>", variant = 'danger', icon = 'exclamation-circle', duration = "<?=$settings->err_time?>");
+  notify("<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>", 'danger', 'exclamation-circle', <?=$settings->err_time?>);
 
   <?php }
   //this handles session based success message
   if($usSessionMessages['valSuc'] != ""){
   ?>
-    notify("<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>", variant = 'success', icon = 'check', duration = "<?=$settings->err_time?>");
+  notify("<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>", 'success', 'check', <?=$settings->err_time?>);
 
   <?php } ?>
 
@@ -94,10 +98,7 @@ $( document ).ready(function() {
   //this handles session based success message
   if($usSessionMessages['genMsg'] != ""){
   ?>
-  notify("<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>", variant = 'primary', icon = 'info-square', duration = "<?=$settings->err_time?>");
-  <?php
-
-} ?>
-
+  notify("<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>", 'primary', 'info-square', <?=$settings->err_time?>);
+  <?php } ?>
 });
 </script>

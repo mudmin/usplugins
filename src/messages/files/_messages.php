@@ -206,11 +206,11 @@ if (!empty($_POST)) {
                   <?php if($count > 0) {?>
                     <?php foreach($messages as $m){
                       if($m->msg_from == $user->data()->id) { $toId = $m->msg_to; $fromId = $m->msg_from; } else { $toId = $m->msg_from; $fromId = $m->msg_to; }
-                      $fromQ = $db->query("SELECT picture,email FROM users WHERE id = $fromId");
+                      $fromQ = $db->query("SELECT picture,email FROM users WHERE id = ?", [$fromId]);
                       if($fromQ->count()==1) $fromUser = $fromQ->first()->email;
                       if($fromQ->count()==0) $fromUser = "null@null.com";
                       $fromGrav = get_gravatar(strtolower(trim($fromUser)));
-                      $toQ = $db->query("SELECT picture,email FROM users WHERE id = $toId");
+                      $toQ = $db->query("SELECT picture,email FROM users WHERE id = ?", [$toId]);
                       if($toQ->count()==1) $toUser = $toQ->first()->email;
                       if($toQ->count()==0) $toUser = "null@null.com";
                       $toGrav = get_gravatar(strtolower(trim($toUser)));

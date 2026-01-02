@@ -6,7 +6,6 @@ $ip = ipCheck();
 $json = file_get_contents('php://input');
 $json = json_decode($json, "true");
 
-//combine all data
 $data = [];
 $data["datatypes_received"] = [];
 foreach($_GET as $k=>$v){
@@ -26,7 +25,6 @@ if($json != ""){
   }
 }
 
-//did not specify webhook_id
 if(!isset($data['webhook_id'])){
   $fields = [
     'hook'=>0,
@@ -37,10 +35,10 @@ if(!isset($data['webhook_id'])){
   $db->insert("plg_webhook_activity_logs",$fields);
   die;
 }
+
 $q = $db->query("SELECT * FROM plg_webhooks WHERE id = ?",[$data['webhook_id']]);
 $c = $q->count();
 
-//specified a webhook_id that doesn't exist
 if($c < 1){
   $fields = [
     'hook'=>0,
@@ -51,14 +49,12 @@ if($c < 1){
   $db->insert("plg_webhook_activity_logs",$fields);
   die;
 }else{
-  //webhook found and retreived
   $webhook = $q->first();
   if($webhook->auth == "*"){
     //just keep going
   }elseif($webhook->auth == "w"){
     $c = $db->query("SELECT * FROM us_ip_whitelist WHERE ip = ?",[$webhook->auth])->count();
     if($c < 1){
-      //not found in the whitelist
       $fields = [
         'hook'=>$webhook->id,
         'ip'=>$ip,
@@ -68,7 +64,6 @@ if($c < 1){
       $db->insert("plg_webhook_activity_logs",$fields);
     }else{
       if($ip != $webhook->auth){
-        //ip did not match
         $fields = [
           'hook'=>$webhook->id,
           'ip'=>$ip,
@@ -82,9 +77,7 @@ if($c < 1){
   }
 }
 
-//look for a special second factor key that should be provided in the data itself
 if($webhook->twofa_key != "" || $webhook->twofa_value != ""){
-
   if(!isset($data[$webhook->twofa_key])){
     $fields = [
       'hook'=>$webhook->id,
@@ -96,28 +89,21 @@ if($webhook->twofa_key != "" || $webhook->twofa_value != ""){
     die;
   }
 
-
   if($data[$webhook->twofa_key] != $webhook->twofa_value){
     $fields = [
       'hook'=>$webhook->id,
       'ip'=>$ip,
       'subject'=>"2FA Key Invalid",
-      'log'=>"Provided an invalid Key Value Pair. Key-".$webhook->twofa_key." value-".$webhook->twofa_value,
+      'log'=>"Provided an invalid Key Value Pair.",
     ];
     $db->insert("plg_webhook_activity_logs",$fields);
     die;
   }
 }
 
-
-
-//At this point, we've confirmed that a valid webhook_id has been passed
-//and that it came from a valid ip. We have also verified the 2fa pair,
-//if configured.  So now the webhook can stop playng dumb and at least respond
-http_response_code ( 200 ); //ok
+http_response_code ( 200 );
 $msg = [];
 
-//if the webhook setup requests the data to be logged, let's do that now
 if($webhook->log == 1){
   $fields = [
     'hook'=>$webhook->id,
@@ -127,7 +113,6 @@ if($webhook->log == 1){
   $db->insert("plg_webhook_data_logs",$fields);
 }
 
-//check if webhook has been disabled
 if($webhook->disabled > 0){
   $msg['msg'] = "Webhook has been disabled";
   $fields = [
@@ -153,39 +138,50 @@ $db->insert("plg_webhook_activity_logs",$fields);
 echo json_encode($msg);
 die;
 
-//end of script
-
 function performWebhookAction($id,$action_type,$action,$data){
   global $db,$abs_us_root,$us_url_root;
   if($action_type == "db"){
+    $trimmedAction = trim($action);
+    if (!preg_match('/^\s*SELECT\s/i', $trimmedAction)) {
+      return "Only SELECT queries are allowed";
+    }
+    
+    $dangerous = ['INSERT', 'UPDATE', 'DELETE', 'DROP', 'TRUNCATE', 'ALTER', 'CREATE', 'REPLACE', 'UNION', '--', ';', 'EXEC', 'EXECUTE'];
+    $upperAction = strtoupper($trimmedAction);
+    foreach ($dangerous as $keyword) {
+      if (strpos($upperAction, $keyword) !== false) {
+        return "Query contains blocked keywords";
+      }
+    }
+
     $db->query($action);
     if(!$db->error()){
       return "success";
     }else{
-      $es = $db->errorString();
-      $fields = [
-        'hook'=>$id,
-        'ip'=>ipCheck(),
-        'subject'=>"Bad DB Query",
-        'log'=>$db->errorString(),
-      ];
-      $db->insert("plg_webhook_activity_logs",$fields);
-      return $es;
+      return $db->errorString();
     }
   }elseif($action_type == "php"){
-    if(file_exists($abs_us_root.$us_url_root."usersc/plugins/webhooks/assets/".$action)){
-      require_once($abs_us_root.$us_url_root."usersc/plugins/webhooks/assets/".$action);
-      return "success";
-    }else{
-      return "File not found";
+    // HARDENING: Only allow inclusion of files that actually exist in the assets folder
+    $assetPath = $abs_us_root . $us_url_root . "usersc/plugins/webhooks/assets/";
+    $requestedFile = basename($action);
+    
+    // Get list of all .php files in the assets directory
+    $allowedFiles = glob($assetPath . "*.php");
+    $whiteList = [];
+    foreach($allowedFiles as $file) {
+        $whiteList[] = basename($file);
     }
+
+    // Verify the requested file is exactly one of the files in the directory
+    if (in_array($requestedFile, $whiteList)) {
+        $fullPath = $assetPath . $requestedFile;
+        require_once($fullPath);
+        return "success";
+    } else {
+        return "File not found or access denied";
+    }
+
   }elseif($action_type == "exec"){
-    $output=null;
-    $retval=null;
-    $try = exec($action, $output, $retval);
-    $output = json_encode($output);
-    return "Val: ".$retval." Data: ".$output;
-
+    return "Command execution is disabled for security reasons";
   }
-
 }

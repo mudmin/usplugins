@@ -65,9 +65,32 @@ if($check < 1){
 	$db->insert("plg_download_settings",['dlmode'=>1,'parser'=>"dl/"]);
 }
 $plgSet = $db->query("SELECT * FROM plg_download_settings")->first();
-mkdir($abs_us_root.$us_url_root.$plgSet->parser);
-unlink($abs_us_root.$us_url_root.$plgSet->parser."index.php");
-copy($abs_us_root.$us_url_root."usersc/plugins/downloads/assets/dl/index.php", $abs_us_root.$us_url_root.$plgSet->parser."index.php");
+
+// Validate parser path to prevent path traversal
+$parserPath = $plgSet->parser;
+// Only allow alphanumeric, underscores, hyphens, and forward slashes
+if (!preg_match('/^[a-zA-Z0-9_\-\/]+$/', $parserPath) || strpos($parserPath, '..') !== false) {
+	err('Invalid parser path configuration');
+} else {
+	$targetDir = $abs_us_root.$us_url_root.$parserPath;
+	$baseDir = realpath($abs_us_root.$us_url_root);
+
+	// Ensure target is within allowed directory (check after mkdir since dir may not exist yet)
+	if (!file_exists($targetDir)) {
+		mkdir($targetDir, 0755, true);
+	}
+
+	$realTargetDir = realpath($targetDir);
+	if ($realTargetDir && strpos($realTargetDir, $baseDir) === 0) {
+		$targetFile = $realTargetDir."/index.php";
+		if (file_exists($targetFile)) {
+			unlink($targetFile);
+		}
+		copy($abs_us_root.$us_url_root."usersc/plugins/downloads/assets/dl/index.php", $targetFile);
+	} else {
+		err('Invalid parser path - path traversal detected');
+	}
+}
 $check = $db->query("SELECT * FROM us_plugins WHERE plugin = ?",array($plugin_name))->count();
 if($check > 0){
 	err($plugin_name.' has already been installed!');

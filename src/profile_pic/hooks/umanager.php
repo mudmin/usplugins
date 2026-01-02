@@ -21,16 +21,33 @@ if (!empty($_FILES)) {
 
   $name = $_FILES["file"]["name"];
   $ext = end((explode(".", $name)));
-  $uniq_name = $prid.'-'.$date. '-' . uniqid() . '.' .$ext;
+  $ext = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $ext)); // sanitize extension
+
+  // Validate extension
+  $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+  if (!in_array($ext, $validExtensions)) {
+    die("Invalid file extension");
+  }
 
   $tempFile = $_FILES['file']['tmp_name'];          //3
+
+  // Validate MIME type
+  $imageInfo = getimagesize($tempFile);
+  if ($imageInfo === FALSE) {
+    die("Uploaded file is not a valid image");
+  }
+
+  $uniq_name = $prid.'-'.$date. '-' . uniqid() . '.' .$ext;
   $targetPath = dirname( __FILE__ ) . $ds. $storeFolder . $ds;  //4
 
   $targetFile =  $targetPath. $uniq_name;  //5
   //$targetFile =  $targetPath. $_FILES['file']['name'];  //5
 
   if(move_uploaded_file($tempFile,$targetFile)){ //6
-    if($userdetails->profile_pic != ''){unlink($abs_us_root.$us_url_root."usersc/plugins/profile_pic/files/".$userdetails->profile_pic);}
+    if($userdetails->profile_pic != ''){
+      $safe_pic = basename($userdetails->profile_pic);
+      unlink($abs_us_root.$us_url_root."usersc/plugins/profile_pic/files/".$safe_pic);
+    }
     $fields = array(
       'profile_pic'   => $uniq_name,
     );

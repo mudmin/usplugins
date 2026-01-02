@@ -72,13 +72,32 @@ if($checkC > 0){
   $update = '00007';
   if(!in_array($update,$existing)){
   $plgSet = $db->query("SELECT * FROM plg_download_settings")->first();
-  mkdir($abs_us_root.$us_url_root.$plgSet->parser);
-  unlink($abs_us_root.$us_url_root.$plgSet->parser."index.php");
-  copy($abs_us_root.$us_url_root."usersc/plugins/downloads/assets/dl/index.php", $abs_us_root.$us_url_root.$plgSet->parser."index.php");
-  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $parserPath = $plgSet->parser;
+  // Only allow alphanumeric, underscores, hyphens, and forward slashes
+  if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $parserPath) && strpos($parserPath, '..') === false) {
+    $targetDir = $abs_us_root.$us_url_root.$parserPath;
+    $baseDir = realpath($abs_us_root.$us_url_root);
 
-  $existing[] = $update; //add the update you just did to the existing update array
-  $count++;
+    if (!file_exists($targetDir)) {
+      mkdir($targetDir, 0755, true);
+    }
+
+    $realTargetDir = realpath($targetDir);
+    if ($realTargetDir && strpos($realTargetDir, $baseDir) === 0) {
+      $targetFile = $realTargetDir."/index.php";
+      if (file_exists($targetFile)) {
+        unlink($targetFile);
+      }
+      copy($abs_us_root.$us_url_root."usersc/plugins/downloads/assets/dl/index.php", $targetFile);
+      logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+      $existing[] = $update;
+      $count++;
+    } else {
+      logger($user->data()->id,"Migrations","$update migration failed - invalid parser path");
+    }
+  } else {
+    logger($user->data()->id,"Migrations","$update migration failed - invalid parser path configuration");
+  }
   }
 
   $update = '00008';

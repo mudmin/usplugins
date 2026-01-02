@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>December 21,2023</release>
+  <release>January 1, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.6.7</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>SpiceBin is a Pastebin-style tool for UserSpice that allows public and private pastes as well as special non-public link sharing. Includes code-formatting for 120+ coding languages and 65 code styling themes.

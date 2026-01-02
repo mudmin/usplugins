@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 
 <!-- release date of THIS version -->
-  <release>February 11, 2021</release>
+  <release>January 1, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.2.5</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>Use Facebook oAuth in your project. Allows users to both register and login with Facebook

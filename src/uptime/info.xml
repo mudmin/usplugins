@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.1.6</version>
+  <version>1.1.7</version>
 
 <!-- release date of THIS version -->
-  <release>July 29, 2024</release>
+  <release>January 1, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.7.6</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>The Uptime plugin allows you to check all your sites to see if they're online and get an alert (sms, push notification or email) to alert you that there is a problem. You will also get a follow up notification when the site comes back online. Sites do not have to be based on UserSpice to do a simple check, but a special UserSpice and Wordpress target files give you some extra info like php version and UserSpice/Wordpress version. Requires a CRON job. Documentation on plugin config page.</description>

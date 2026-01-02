@@ -31,9 +31,7 @@ $use_sts = true;
 if ($use_sts && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
   header('Strict-Transport-Security: max-age=31536000');
 } elseif ($use_sts) {
-  header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], true, 301);
-  // we are in cleartext at the moment, prevent further execution and output
-  die("Your connection is not secure.");
+  stripeSafeHttpsRedirect();
 }
 
 //end stripe-specific security statements
@@ -117,26 +115,33 @@ require_once $abs_us_root.$us_url_root.'usersc/plugins/stripe/assets/stripe-php/
         // Since it's a decline, \Stripe\Error\Card will be caught
         $body = $e->getJsonBody();
         $err  = $body['error'];
-        print('Status is:' . $e->getHttpStatus() . "\n");
-        print('Type is:' . $err['type'] . "\n");
-        print('Code is:' . $err['code'] . "\n");
-        // param is '' in this case
-        print('Param is:' . $err['param'] . "\n");
-        print('Message is:' . $err['message'] . "\n");
+        // Log details server-side, show generic message to user
+        logger($user->data()->id, "Stripe Card Error", "Code: " . ($err['code'] ?? '') . " Message: " . ($err['message'] ?? ''));
+        bold("Your card was declined. Please check your card details and try again.");
       } catch (\Stripe\Error\RateLimit $e) {
         // Too many requests made to the API too quickly
+        logger($user->data()->id, "Stripe Error", "Rate limit exceeded");
+        bold("Too many requests. Please wait a moment and try again.");
       } catch (\Stripe\Error\InvalidRequest $e) {
         // Invalid parameters were supplied to Stripe's API
+        logger($user->data()->id, "Stripe Error", "Invalid request: " . $e->getMessage());
+        bold("There was an error processing your request. Please try again.");
       } catch (\Stripe\Error\Authentication $e) {
         // Authentication with Stripe's API failed
-        // (maybe you changed API keys recently)
+        logger($user->data()->id, "Stripe Error", "Authentication failed");
+        bold("Payment system configuration error. Please contact support.");
       } catch (\Stripe\Error\ApiConnection $e) {
         // Network communication with Stripe failed
+        logger($user->data()->id, "Stripe Error", "API connection failed");
+        bold("Unable to connect to payment processor. Please try again later.");
       } catch (\Stripe\Error\Base $e) {
-        // Display a very generic error to the user, and maybe send
-        // yourself an email
+        // Display a very generic error to the user
+        logger($user->data()->id, "Stripe Error", $e->getMessage());
+        bold("A payment error occurred. Please try again.");
       } catch (Exception $e) {
         // Something else happened, completely unrelated to Stripe
+        logger($user->data()->id, "Stripe Error", "General exception: " . $e->getMessage());
+        bold("An unexpected error occurred. Please try again.");
       }
     }
     $csrf = Token::generate();

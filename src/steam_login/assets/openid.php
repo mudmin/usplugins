@@ -1,7 +1,7 @@
 <?php
 /**
  * This class provides a simple interface for OpenID 1.1/2.0 authentication.
- * 
+ *
  * It requires PHP >= 5.1.2 with cURL or HTTP/HTTPS stream wrappers enabled.
  *
  * @version     v1.3.1 (2016-03-04)
@@ -11,6 +11,51 @@
  * @copyright   Copyright (c) 2013 Mewp
  * @license     http://opensource.org/licenses/mit-license.php  MIT License
  */
+
+/**
+ * Sanitizes a URL to prevent path traversal attacks.
+ * Ensures the URL uses only http or https schemes and contains no path traversal sequences.
+ *
+ * @param string $url The URL to sanitize
+ * @return string|false The sanitized URL, or false if invalid
+ */
+function steamPathSanitize($url) {
+    if (empty($url) || !is_string($url)) {
+        return false;
+    }
+
+    // Parse the URL to validate its components
+    $parsed = parse_url($url);
+
+    // Ensure scheme is http or https only (blocks file://, phar://, etc.)
+    if (!isset($parsed['scheme']) || !in_array(strtolower($parsed['scheme']), array('http', 'https'), true)) {
+        return false;
+    }
+
+    // Ensure a host is present
+    if (empty($parsed['host'])) {
+        return false;
+    }
+
+    // Check for path traversal sequences in the entire URL
+    if (preg_match('/\.\.[\/\\\\]|[\/\\\\]\.\./', $url)) {
+        return false;
+    }
+
+    // Check for encoded path traversal sequences
+    $decoded = rawurldecode($url);
+    if (preg_match('/\.\.[\/\\\\]|[\/\\\\]\.\./', $decoded)) {
+        return false;
+    }
+
+    // Block null bytes
+    if (strpos($url, "\0") !== false || strpos($decoded, "\0") !== false) {
+        return false;
+    }
+
+    return $url;
+}
+
 class LightOpenID
 {
     public $returnUrl
@@ -456,8 +501,15 @@ class LightOpenID
 
     protected function request($url, $method='GET', $params=array(), $update_claimed_id=false)
     {
+        // Validate URL to prevent path traversal attacks
+        $sanitized_url = steamPathSanitize($url);
+        if ($sanitized_url === false) {
+            throw new ErrorException('Invalid or unsafe URL provided.');
+        }
+        $url = $sanitized_url;
+
         $use_curl = false;
-        
+
         if (function_exists('curl_init')) {
             if (!$use_curl) {
                 # When allow_url_fopen is disabled, PHP streams will not work.
@@ -548,6 +600,13 @@ class LightOpenID
             $url = "https://xri.net/$url";
         }
 
+        // Validate URL to prevent path traversal attacks
+        $sanitized_url = steamPathSanitize($url);
+        if ($sanitized_url === false) {
+            throw new ErrorException('Invalid or unsafe URL provided.');
+        }
+        $url = $sanitized_url;
+
         # We save the original url in case of Yadis discovery failure.
         # It can happen when we'll be lead to an XRDS document
         # which does not have any OpenID2 services.
@@ -570,6 +629,9 @@ class LightOpenID
                 $next = false;
                 if (isset($headers['x-xrds-location'])) {
                     $url = $this->build_url(parse_url($url), parse_url(trim($headers['x-xrds-location'])));
+                    if (steamPathSanitize($url) === false) {
+                        throw new ErrorException('Invalid or unsafe URL in x-xrds-location header.');
+                    }
                     $next = true;
                 }
 
@@ -639,12 +701,18 @@ class LightOpenID
 
                 if (isset($this->headers['x-xrds-location'])) {
                     $url = $this->build_url(parse_url($url), parse_url(trim($this->headers['x-xrds-location'])));
+                    if (steamPathSanitize($url) === false) {
+                        throw new ErrorException('Invalid or unsafe URL in x-xrds-location header.');
+                    }
                     continue;
                 }
 
                 $location = $this->htmlTag($content, 'meta', 'http-equiv', 'X-XRDS-Location', 'content');
                 if ($location) {
                     $url = $this->build_url(parse_url($url), parse_url($location));
+                    if (steamPathSanitize($url) === false) {
+                        throw new ErrorException('Invalid or unsafe URL in X-XRDS-Location meta tag.');
+                    }
                     continue;
                 }
             }

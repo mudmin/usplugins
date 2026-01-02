@@ -1,7 +1,13 @@
 <?php
-$settings = $db->query("SELECT * FROM settings")->first();
 $email = Input::get('email');
-$ip = ipCheck();
-$message = "Someone is trying to reset $email from $ip";
-pushoverNotification($settings->plg_po_key,$message);
+
+// Check if this is an admin account
+$adminCheck = $db->query("SELECT id FROM users WHERE email = ?", [$email])->first();
+$isAdmin = $adminCheck && pushoverIsAdmin($adminCheck->id);
+$event = $isAdmin ? 'forgotPasswordAdmin' : 'forgotPassword';
+
+pushoverSecurityAlert($event, [
+  'user' => $email,
+  'extra' => $isAdmin ? '*** ADMIN ACCOUNT ***' : '',
+]);
 ?>

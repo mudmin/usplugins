@@ -73,6 +73,7 @@ function processDownloadLink($id,$mode,$code){
   }else{
     $file = $fileQ->first();
     //one last check to see if the file actually exists
+
     if(!file_exists($abs_us_root.$us_url_root."usersc/plugins/downloads/files/".$file->location)){
       //let's not delete if from the db in case it's only gone temporarily. We'll disable it. For now.
       //We'll let the error handling below deal with it.

@@ -1,8 +1,8 @@
 <?php
 require '../../../../users/init.php';
 require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';
-if (!securePage($_SERVER['PHP_SELF'])) {
-	die();
+if (!hasPerm(2)) {
+	die("You do not have permission to access this page.");
 }
 if (!pluginActive("store", true)) {
 	die();
@@ -61,6 +61,37 @@ if (!empty($_POST)) {
 		} else {
 			$db->insert('store_categories', $fields);
 			Redirect::to('categories.php?err=Sub+Category+added!');
+		}
+	}
+
+	if (!empty($_POST['deleteCategory'])) {
+		$catId = Input::get('cat_id');
+		if (is_numeric($catId)) {
+			// Check if category has items
+			$hasItems = $db->query("SELECT id FROM store_inventory WHERE category = ?", [$catId])->count();
+			if ($hasItems > 0) {
+				Redirect::to('categories.php?err=Cannot+delete+category+with+items.+Remove+or+reassign+items+first.');
+			} else {
+				// Delete any subcategories first
+				$db->query("DELETE FROM store_categories WHERE subcat_of = ?", [$catId]);
+				// Delete the category
+				$db->query("DELETE FROM store_categories WHERE id = ?", [$catId]);
+				Redirect::to('categories.php?err=Category+deleted!');
+			}
+		}
+	}
+
+	if (!empty($_POST['deleteSubCategory'])) {
+		$subId = Input::get('subcat_id');
+		if (is_numeric($subId)) {
+			// Check if subcategory has items
+			$hasItems = $db->query("SELECT id FROM store_inventory WHERE category = ?", [$subId])->count();
+			if ($hasItems > 0) {
+				Redirect::to('categories.php?err=Cannot+delete+subcategory+with+items.+Remove+or+reassign+items+first.');
+			} else {
+				$db->query("DELETE FROM store_categories WHERE id = ?", [$subId]);
+				Redirect::to('categories.php?err=Sub+Category+deleted!');
+			}
 		}
 	}
 }
@@ -166,39 +197,36 @@ if (!empty($_POST)) {
 														echo "Sub-";
 													} ?>Category</h3>
 					<?php if (!empty($_FILES)) {
+						$prid = !empty($edit) ? $edit : $edits;
+						$targetPath = $abs_us_root . $us_url_root . 'usersc/plugins/store/img/';
+						$tempFile = $_FILES['file']['tmp_name'];
 
-						$date = date('Y-m-d');
-						$prid = $edit;
-						if ($prid == '') {
-							$prid == $edits;
-						}
-						$ds          = '/';  //1
+						$mimeMap = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif'];
+						$fileType = mime_content_type($tempFile);
 
-						$targetPath = $abs_us_root . $us_url_root . 'usersc/plugins/store/img/';   //2
+						if (array_key_exists($fileType, $mimeMap)) {
+							$ext = $mimeMap[$fileType];
+							$uniq_name = "category-" . $prid . '-' . uniqid() . '.' . $ext;
+							$targetFile = $targetPath . $uniq_name;
 
-						$name = $_FILES["file"]["name"];
-						$ext = end((explode(".", $name)));
-						$uniq_name = "category-" . $prid . '-' . uniqid() . '.' . $ext;
+							if (move_uploaded_file($tempFile, $targetFile)) {
+								$fields = ['photo' => $uniq_name];
+								$old = $db->query("SELECT photo FROM store_categories WHERE id = ?", [$prid])->first();
 
-						$tempFile = $_FILES['file']['tmp_name'];          //3
+								if ($old && !empty($old->photo)) {
+									$oldFile = $targetPath . basename($old->photo);
+									if (file_exists($oldFile)) {
+										unlink($oldFile);
+									}
+								}
 
-						$targetFile =  $targetPath . $uniq_name;  //5
-						//$targetFile =  $targetPath. $_FILES['file']['name'];  //5
-
-						if (move_uploaded_file($tempFile, $targetFile)) { //6
-							$fields = array(
-								'photo'   => $uniq_name,
-							);
-							$old = $db->query("SELECT * FORM store_categories WHERE id = ?", [$prid])->first();
-							if (file_exists($abs_us_root . $us_url_root . 'usersc/plugins/store/img/' . $old->photo)) {
-								unlink($abs_us_root . $us_url_root . 'usersc/plugins/store/img/' . $old->photo);
+								$db->update('store_categories', $prid, $fields);
+							} else {
+								logger(1, "photos", "Failed to move photo");
 							}
-							$db->update('store_categories', $prid, $fields);
-							logger(1, 'Photo Fail', $db->errorString());
-						} else {
-							logger(1, "photos", "Failed to move photo, $ferror");
 						}
-					} ?>
+					}
+					?>
 					<meta charset="UTF-8" />
 					<form action="categories.php?edit=<?= $edit ?>" id="my-awesome-dropzone" class="dropzone"></form>
 					<script type="text/javascript">
@@ -232,11 +260,25 @@ if (!empty($_POST)) {
 			<div class="col-12">
 				<h3>Edit Categories (Click to Edit)</h3>
 				<?php foreach ($cats as $c) { ?>
-					<a href="categories.php?edit=<?= $c->id ?>"><?= $c->cat ?></a><br>
+					<div class="mb-2">
+						<a href="categories.php?edit=<?= $c->id ?>"><?= $c->cat ?></a>
+						<form method="post" action="categories.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category? This will also delete all subcategories.');">
+							<input type="hidden" name="deleteCategory" value="1">
+							<input type="hidden" name="cat_id" value="<?= $c->id ?>">
+							<button type="submit" class="btn btn-xs btn-danger" title="Delete Category">X</button>
+						</form>
+					</div>
 					<?php
 					$others = $db->query("SELECT * FROM store_categories WHERE subcat_of = ? ORDER BY cat", [$c->id])->results();
 					foreach ($others as $o) { ?>
-						<a href="categories.php?edits=<?= $o->id ?>">---- <?= $o->cat ?></a><br>
+						<div class="mb-1 ms-4">
+							<a href="categories.php?edits=<?= $o->id ?>">---- <?= $o->cat ?></a>
+							<form method="post" action="categories.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this subcategory?');">
+								<input type="hidden" name="deleteSubCategory" value="1">
+								<input type="hidden" name="subcat_id" value="<?= $o->id ?>">
+								<button type="submit" class="btn btn-xs btn-danger" title="Delete Subcategory">X</button>
+							</form>
+						</div>
 					<?php } ?>
 				<?php } ?>
 			</div>

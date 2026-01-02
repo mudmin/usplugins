@@ -45,9 +45,11 @@ $(document).ready(function () {
    $('.paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
 
 });
+</script>
 <?php
 }  //end duplicate loading protection
 ?>
+<script>
 function copyStringToClipboard (textToCopy) {
   console.log(textToCopy);
   navigator.clipboard.writeText(textToCopy);

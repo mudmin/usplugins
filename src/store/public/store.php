@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 require '../../../../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 //require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-if (!securePage($_SERVER['PHP_SELF'])){die();} $db=DB::getInstance(); if(!pluginActive("store")){die();}
+if(!pluginActive("store")){die();}
 if(!hasPerm([2])){
 	if($settings->open == 0){
 		Redirect::to('store_closed.php');
@@ -54,7 +54,7 @@ if($orderC < 1){
 	}
 }
 
-$cats = $db->query("SELECT * FROM store_categories WHERE is_subcat = 0 ORDER BY cat")->results();
+$cats = $db->query("SELECT * FROM store_categories WHERE is_subcat = 0 AND disabled = 0 ORDER BY cat")->results();
 // if(!empty($_POST)){
 // 	$q = $_POST['qty'];
 //

@@ -39,22 +39,22 @@ $decodedMsgs = array_walk($msgs, function($msg){
 
 $user_ids = [];
 
-// GET ALL MESSAGE USERIDS
 $msgUsers = $db->query("SELECT user_id from plg_chat_messages WHERE event_id = ? GROUP BY user_id",[$event_override])->results();
 foreach($msgUsers as $msg){
   $user_ids[] = $msg->user_id;
 }
-// GET ALL SESSION USRIDS
+
 $sessionUsers = $db->query("SELECT user_id from plg_chat_sessions WHERE event_id = ? GROUP BY user_id",[$event_override])->results();
 foreach($sessionUsers as $session){
   if(!in_array($session->user_id, $user_ids)){
     $user_ids[] = $session->user_id;
   }
 }
+
 $participants = [];
 if(!empty($user_ids)){
-  $userIdString = "'" . implode("', '", $user_ids) . "'";
-
+  // HARDENING: Generate a string of placeholders (?,?,?) based on the number of user IDs
+  $placeholders = implode(',', array_fill(0, count($user_ids), '?'));
 
   $sql = "SELECT 
     users.fname, 
@@ -72,14 +72,15 @@ if(!empty($user_ids)){
   LEFT JOIN 
     user_permission_matches as upm ON users.id = upm.user_id
   WHERE 
-    users.id IN({$userIdString})
+    users.id IN($placeholders)
   GROUP BY 
     users.id, users.fname, users.lname
   ORDER BY 
     session_active DESC, lname, users.fname
 ";
-$participants = $db->query($sql)->results();
 
+  // Pass the $user_ids array as the second parameter to bind them safely
+  $participants = $db->query($sql, $user_ids)->results();
 }
 
 $currentActiveChatters = 0;

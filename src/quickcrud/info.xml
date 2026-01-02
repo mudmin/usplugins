@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.4</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>November 27,2023</release>
+  <release>September 20,2021</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.6.6</tested>
+  <tested>5.3.5</tested>
 
 <!-- What does your plugin do? -->
   <description>This plugin is for backend use only and provides automatic tables with basic CRUD (Create, Read, Update, Delete)

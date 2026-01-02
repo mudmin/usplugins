@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.0.1</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>October 26, 2024</release>
+  <release>January 1, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.7.9</tested>
+  <tested>6.0.0</tested>
 
 <!-- What does your plugin do? -->
   <description>A flexible plugin for various payment gateways.</description>

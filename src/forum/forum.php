@@ -25,15 +25,17 @@ $read = false;
 
 $is_mod = false;
 $can_ban = false;
-if(isset($user) && $user->isLoggedIn() && hasPerm([2],$user->data()->id)){
-  $is_mod = true;
-  $can_ban = true;
-}elseif($settings->forum_mod_perms != ""){
-  $mods = explode(",",$settings->forum_mod_perms);
-  foreach($mods as $m){
-    if($m == "" || $m < 3){continue;}
-    if(hasPerm([$m],$user->data()->id)){
-      $is_mod = true;
+if(isset($user) && $user->isLoggedIn()){
+  if(hasPerm([2],$user->data()->id)){
+    $is_mod = true;
+    $can_ban = true;
+  }elseif($settings->forum_mod_perms != ""){
+    $mods = explode(",",$settings->forum_mod_perms);
+    foreach($mods as $m){
+      if($m == "" || $m < 3){continue;}
+      if(hasPerm([$m],$user->data()->id)){
+        $is_mod = true;
+      }
     }
   }
 }

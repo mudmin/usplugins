@@ -34,7 +34,7 @@
 
             <form class="" action="" method="post">
               <?=tokenHere();?>
-              <textarea name="bad" rows="8" class="form-control"><?php if(!isset($_POST['bad'])){echo $test_string;}else{ echo $_POST['bad'];}?></textarea>
+              <textarea name="bad" rows="8" class="form-control"><?php if(!isset($_POST['bad'])){echo $test_string;}else{ echo htmlspecialchars(Input::get('bad') ?? "", ENT_QUOTES, 'UTF-8');;}?></textarea>
             </form>
 
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>SpicePress Plugin</name>
+  <author>Dan Hoover</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin iteself -->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>April 22,2022</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>5.4.1</tested>
+
+<!-- What does your plugin do? -->
+  <description>SpicePress is a mini API to communicate with WordPress and can help use UserSpice accounts to protect WordPress content.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>SpicePress</button>
+</plugin>

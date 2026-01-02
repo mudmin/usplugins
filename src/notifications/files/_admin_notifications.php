@@ -111,7 +111,7 @@ $count = $adminNotificationsQ->count();
               <tr>
                 <td style="width:85px">
                   <span class="chat-img pull-left" style="padding:5px">
-                    <img src="<?=get_gravatar($db->query("SELECT email FROM users WHERE id = $m->user_id")->first()->email)?>" width="75" class="img-thumbnail">
+                    <img src="<?=get_gravatar($db->query("SELECT email FROM users WHERE id = ?",[$m->user_id])->first()->email)?>" width="75" class="img-thumbnail">
                   </span>
                 </td>
                 <td><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> <?=echouser($m->user_id)?>, <?=time2str($m->date_created)?><br /><?=html_entity_decode($m->message)?>

@@ -28,8 +28,12 @@ if ($taskC < 1) {
 
 $task = $taskQ->first();
 $child_table = $task->child_table;
-$requiredSubsComplete = false;
-$subsQ = $db->query("SELECT * FROM  {$child_table} WHERE task_id = ?", [$id]);
+if (!preg_match('/^[a-zA-Z0-9_]+$/', $child_table)) {
+    usError("Invalid category configuration");
+    Redirect::to($basePage . "method=tasks");
+}
+
+$subsQ = $db->query("SELECT * FROM `{$child_table}` WHERE task_id = ?", [$id]);
 $subsC = $subsQ->count();
 $subs = $subsQ->results();
 foreach ($subs as $s) {
@@ -75,15 +79,23 @@ $action = Input::get('action');
 
 if ($action == "complete_sub") {
     $sub_id = Input::get('sub_id');
-    $sub = $db->query("SELECT * FROM {$child_table} WHERE id = ?", [$sub_id])->first();
-    if ($sub->completed == 1) {
-        usError("Sub " . $plg_settings->single_term . " Already Marked Complete");
-        Redirect::to($basePage . "method=view_task&id=" . $id);
-    } else {
-        $db->update($child_table, $sub_id, ['completed' => 1,'completed_by' => $user->data()->id, 'completed_on' => date("Y-m-d H:i:s")]); //updated to include completed_by and completed_on info
-        usSuccess("Sub " . $plg_settings->single_term . " Marked Complete");
-        notifyTask($task, "sub_complete", $user->data()->id, $message = "");
-        Redirect::to($basePage . "method=view_task&id=" . $id);
+    
+    $subQ = $db->query("SELECT * FROM `{$child_table}` WHERE id = ?", [$sub_id]);
+    if ($subQ->count() > 0) {
+        $sub = $subQ->first();
+        if ($sub->completed == 1) {
+            usError("Sub " . $plg_settings->single_term . " Already Marked Complete");
+            Redirect::to($basePage . "method=view_task&id=" . $id);
+        } else {
+            $db->update($child_table, $sub_id, [
+                'completed' => 1,
+                'completed_by' => $user->data()->id, 
+                'completed_on' => date("Y-m-d H:i:s")
+            ]);
+            usSuccess("Sub " . $plg_settings->single_term . " Marked Complete");
+            notifyTask($task, "sub_complete", $user->data()->id, $message = "");
+            Redirect::to($basePage . "method=view_task&id=" . $id);
+        }
     }
 }
 

@@ -13,7 +13,7 @@
     $messagesCount2 = $messagesQ2->count(); ?>
     <?php if($messagesCount2 > 0) {?><label><input type="checkbox" class="checkAllArchive" />
       <?=lang("GEN_CHECK");?></label><?php } ?>
-      <form name="uthreads" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+      <form name="uthreads" action="" method="post">
         <center><table class="table table-striped">
           <thead>
             <tr>
@@ -27,7 +27,7 @@
                 <?php foreach($messages2 as $m2){ ?>
                   <?php
                   if($m2->msg_from == $user->data()->id) { $findId = $m2->msg_to; } else { $findId = $m2->msg_from; }
-                  $findUser = $db->query("SELECT picture,email FROM users WHERE id = $findId");
+                  $findUser = $db->query("SELECT picture,email FROM users WHERE id = ?", [$findId]);
                   if($findUser->count()==1) $foundUser = $findUser->first()->email;
                   if($findUser->count()==0) $foundUser = "null@null.com";
                   $grav = get_gravatar(strtolower(trim($foundUser))); ?>

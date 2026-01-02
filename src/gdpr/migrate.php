@@ -43,6 +43,13 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00003';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $db->query("ALTER TABLE us_gdpr CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
 
 
   //after all updates are done. Keep this at the bottom.

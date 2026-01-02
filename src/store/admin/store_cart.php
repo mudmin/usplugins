@@ -1,8 +1,8 @@
 <?php
 require '../../../../users/init.php';
 require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';
-if (!securePage($_SERVER['PHP_SELF'])) {
-	die();
+if (!hasPerm(2)) {
+	die("You do not have permission to access this page.");
 }
 if (!pluginActive("store", true)) {
 	die();
@@ -14,17 +14,6 @@ if (!isset($_SESSION['orderno']) || !is_numeric($_SESSION['orderno'])) {
 }
 $order = $_SESSION['orderno'];
 
-// Use HTTP Strict Transport Security to force client to use secure connections only
-$use_sts = true;
-
-// iis sets HTTPS to 'off' for non-SSL requests
-if ($use_sts && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-	header('Strict-Transport-Security: max-age=31536000');
-} elseif ($use_sts) {
-	header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], true, 301);
-	// we are in cleartext at the moment, prevent further execution and output
-	die();
-}
 ?>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <?php

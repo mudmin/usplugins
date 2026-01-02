@@ -84,11 +84,32 @@ if(!Token::check($token)){
       </select>
     </form>
     <?php
-    $tbl = (!empty($_POST["seek"])) ? $_POST["seek"] : "Empty"; ?>
-    <H4>Currently Viewing '<?=ucfirst($tbl)?>' table</H4>
+    $sanitizedTableName = (!empty($_POST["seek"])) ? $_POST["seek"] : "Empty";
+    // Sanitize table name: basename for path traversal, regex for SQL injection
+    $sanitizedTableName = basename($sanitizedTableName);
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedTableName)) {
+        $sanitizedTableName = "Empty";
+    }
+    // Verify table exists in database whitelist
+    if ($sanitizedTableName !== "Empty") {
+        $tableExists = false;
+        foreach ($tables as $table) {
+            if ($table->$t === $sanitizedTableName) {
+                $tableExists = true;
+                break;
+            }
+        }
+        if (!$tableExists) {
+            $sanitizedTableName = "Empty";
+        }
+    }
+    ?>
+    <H4>Currently Viewing '<?=htmlspecialchars(ucfirst($sanitizedTableName), ENT_QUOTES, 'UTF-8')?>' table</H4>
     <?php
-    $query = $db->query("SELECT * FROM $tbl")->results();
-     quickCrud($query,$tbl);
+    if ($sanitizedTableName !== "Empty") {
+        $query = $db->query("SELECT * FROM $sanitizedTableName")->results();
+        quickCrud($query,$sanitizedTableName);
+    }
    }
  }
     // END DROPDOWN ?>

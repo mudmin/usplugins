@@ -27,23 +27,23 @@ if(!function_exists('displayLayout')){
         $codes = substr($s,3);
 
       }else{
-        $type = "txt"; //set a default
+        $type = "txt";
         $codes = $s;
       }
       if($type == 'con'){
         echo htmlspecialchars_decode($content->content);
       }
       if($type == 'nam'){
-        echo $content->title;
+        echo htmlspecialchars($content->title, ENT_QUOTES, 'UTF-8');
       }
       if($type == 'aut'){
         echouser($content->author);
       }
       if($type == 'pub'){
-        echo $content->date_published;
+        echo htmlspecialchars($content->date_published, ENT_QUOTES, 'UTF-8');
       }
       if($type == 'mod'){
-        echo $content->last_modified;
+        echo htmlspecialchars($content->last_modified, ENT_QUOTES, 'UTF-8');
       }
       if($type == 'cat'){
         echo CMSCat($content->category);
@@ -64,15 +64,22 @@ if(!function_exists('displayLayout')){
         if($widgetC > 0){
           $widget = $widgetQ->first();
           if($widget->widget_type == 1){
-            $widget->file = str_replace(" ","",$widget->file);
-            if(file_exists($abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file.".php")){
-                  include $abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file.".php";
-                }elseif($abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file){
-                    include $abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/'.$widget->file;
-                }else{
+            
+            // SECURITY HARDENING: Confine inclusion to the widgets directory
+            $widgetDir = $abs_us_root.$us_url_root.'usersc/plugins/cms/widgets/';
+            $safeFile = basename(str_replace(" ","",$widget->file));
+            
+            // Check for file with and without .php extension
+            $pathWithExt = $widgetDir . $safeFile . ".php";
+            $pathDirect = $widgetDir . $safeFile;
+
+            if(!empty($safeFile) && file_exists($pathWithExt)){
+                  include $pathWithExt;
+            }elseif(!empty($safeFile) && file_exists($pathDirect) && is_file($pathDirect)){
+                  include $pathDirect;
+            }else{
                   echo "<h3 align='center'>Widget not found</h3>";
-                 echo " usersc/plugins/cms/widgets/".$widget->file."php";
-                }
+            }
           }
           if($widget->widget_type == 2){
             echo htmlspecialchars_decode($widget->content);
@@ -89,7 +96,7 @@ if(!function_exists('displayLayout')){
       }
     }
   }else{
-    echo "<h3 align='center'>".$check['msg']."</h3>";
+    echo "<h3 align='center'>".htmlspecialchars($check['msg'], ENT_QUOTES, 'UTF-8')."</h3>";
   }
   }
 }
@@ -98,12 +105,12 @@ if(!function_exists('cmsCatTree')){
   function cmsCatTree($parent_id = 0, $sub_mark = '', $selected = 0){
       global $db;
       $sub_mark .="&nbsp;&nbsp;";
-      $q = $db->query("SELECT * FROM plg_cms_categories WHERE subcat_of = $parent_id ORDER BY category ASC");
+      $q = $db->query("SELECT * FROM plg_cms_categories WHERE subcat_of = ? ORDER BY category ASC", [(int)$parent_id]);
       $c = $q->count();
       if($c > 0){
         $results = $q->results();
           foreach($results as $r){?>
-              <option value="<?=$r->id?>" <?php if($r->id == $selected){echo "selected";}?>><?=$sub_mark.$r->category?></option>
+              <option value="<?=(int)$r->id?>" <?php if($r->id == $selected){echo "selected";}?>><?=$sub_mark.htmlspecialchars($r->category, ENT_QUOTES, 'UTF-8')?></option>
               <?php cmsCatTree($r->id,$sub_mark,$selected);
           }
       }
@@ -113,11 +120,11 @@ if(!function_exists('cmsCatTree')){
 if(!function_exists('echoCMSCat')){
   function echoCMSCat($cat,$sep = " > ", $string = ""){
     global $db;
-    $q = $db->query("SELECT category FROM plg_cms_categories WHERE id = ?",[$cat]);
+    $q = $db->query("SELECT category FROM plg_cms_categories WHERE id = ?",[(int)$cat]);
     $c = $q->count();
     if($c > 0){
       $f = $q->first();
-      echo $f->category;
+      echo htmlspecialchars($f->category, ENT_QUOTES, 'UTF-8');
     }else{
       echo "--";
     }
@@ -127,7 +134,7 @@ if(!function_exists('echoCMSCat')){
 if(!function_exists('CMSCat')){
   function CMSCat($cat,$sep = " > ", $string = ""){
     global $db;
-    $q = $db->query("SELECT category,subcat_of FROM plg_cms_categories WHERE id = ?",[$cat]);
+    $q = $db->query("SELECT category,subcat_of FROM plg_cms_categories WHERE id = ?",[(int)$cat]);
     $c = $q->count();
     if($c > 0){
       $f = $q->first();
@@ -140,7 +147,7 @@ if(!function_exists('CMSCat')){
         $string = CMSCat($f->subcat_of,$sep,$string);
       }
     }
-    return $string;
+    return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
   }
 }
 
@@ -148,7 +155,7 @@ if(!function_exists('cmsPerms')){
   function cmsPerms($article_id){
     global $user,$db;
     $msg = [];
-    $articleQ = $db->query("SELECT id,category,status FROM plg_cms_content WHERE id = ?",[$article_id]);
+    $articleQ = $db->query("SELECT id,category,status FROM plg_cms_content WHERE id = ?",[(int)$article_id]);
     $articleC = $articleQ->count();
     if($articleC < 1){
       $msg = ['status'=>false,"msg"=>"Article not found"];
@@ -167,7 +174,7 @@ if(!function_exists('cmsPerms')){
       return $msg;
     }
 
-    $checkQ = $db->query("SELECT * FROM plg_cms_categories WHERE id = ?",[$article->category]);
+    $checkQ = $db->query("SELECT * FROM plg_cms_categories WHERE id = ?",[(int)$article->category]);
     $checkC = $checkQ->count();
     if($checkC < 1){
       $msg = ['status'=>false,"msg"=>"Category error"];
@@ -196,7 +203,7 @@ if(!function_exists("echoCatPerms")){
 function echoCatPerms($cat){
   global $db;
   $string = "";
-  $permsQ = $db->query("SELECT perms from plg_cms_categories WHERE id = ?",[$cat]);
+  $permsQ = $db->query("SELECT perms from plg_cms_categories WHERE id = ?",[(int)$cat]);
   $permsC = $permsQ->count();
   if($permsC > 0){
     $perms = $permsQ->first();
@@ -206,7 +213,7 @@ function echoCatPerms($cat){
         $string .= "Wide Open, ";
       }else{
 
-        $q = $db->query("SELECT name from permissions WHERE id = ?",[$p]);
+        $q = $db->query("SELECT name from permissions WHERE id = ?",[(int)$p]);
         $c = $q->count();
         if($c > 0){
           $f = $q->first();
@@ -215,8 +222,7 @@ function echoCatPerms($cat){
       }
     }
     $string = substr($string,0,-2);
-    echo $string;
+    echo htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
   }
-
 }
 }

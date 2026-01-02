@@ -1,7 +1,7 @@
 <?php
 function echoCat($id, $showMain = true, $showInv = false)
 {
-	$db = DB::getInstance();
+	global $db;
 	$catQ = $db->query("SELECT * FROM store_categories WHERE id = ?", array($id));
 	$catC = $catQ->count();
 	if ($catC > 0) {
@@ -58,7 +58,7 @@ function fetchStoreSubCats($id)
 	if ($check < 1) {
 		return false;
 	}
-	$catsQ = $db->query("SELECT * FROM store_categories WHERE subcat_of = ? ORDER BY cat", [$id]);
+	$catsQ = $db->query("SELECT * FROM store_categories WHERE subcat_of = ? AND disabled = 0 ORDER BY cat", [$id]);
 	$catsC = $catsQ->count();
 	if ($catsC < 1) {
 		echo "<br>";
@@ -94,11 +94,11 @@ function fetchStoreCats()
 	global $db;
 	$cats = new stdClass();
 	$counter = 0;
-	$primary = $db->query("SELECT * FROM store_categories WHERE is_subcat = 0 ORDER BY cat")->results();
+	$primary = $db->query("SELECT * FROM store_categories WHERE is_subcat = 0 AND disabled = 0 ORDER BY cat")->results();
 	foreach ($primary as $p) {
 		$counter++;
 		$cats->$counter = $p;
-		$subs = $db->query("SELECT * FROM store_categories WHERE subcat_of = ? ORDER BY cat", [$p->id])->results();
+		$subs = $db->query("SELECT * FROM store_categories WHERE subcat_of = ? AND disabled = 0 ORDER BY cat", [$p->id])->results();
 		foreach ($subs as $s) {
 			$counter++;
 			$s->cat = $p->cat . " - " . $s->cat;
@@ -110,7 +110,7 @@ function fetchStoreCats()
 
 function echoItem($id)
 {
-	$db = DB::getInstance();
+	global $db;
 	$catQ = $db->query("SELECT item FROM store_inventory WHERE id = ?", array($id));
 	$catC = $catQ->count();
 	if ($catC > 0) {
@@ -123,7 +123,7 @@ function echoItem($id)
 
 function parsePickup($id)
 {
-	$db = DB::getInstance();
+	global $db;
 	$dateQ = $db->query("SELECT * FROM store_pickup_options WHERE id = ?", array($id));
 	$dateC = $dateQ->count();
 	if ($dateC > 0) {
@@ -136,7 +136,7 @@ function parsePickup($id)
 
 function itemPrice($id)
 {
-	$db = DB::getInstance();
+	global $db;
 	$itemQ = $db->query("SELECT price FROM store_inventory WHERE id = ?", array($id));
 	$itemC = $itemQ->count();
 	if ($itemC > 0) {

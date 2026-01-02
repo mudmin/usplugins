@@ -170,7 +170,7 @@ if (!empty($_POST)) {
 
         <?php if($count > 0) {?><label><input type="checkbox" class="checkAllMsg" />
           <?=lang("GEN_CHECK");?></label><?php } ?>
-          <form name="threads" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+          <form name="threads" action="" method="post">
             <center><table id="paginate" class="table table-striped">
               <thead>
                 <tr>
@@ -183,7 +183,7 @@ if (!empty($_POST)) {
                   <?php if($count > 0) {?>
                     <?php foreach($messages as $m){
                       if($m->msg_from == $user->data()->id) { $findId = $m->msg_to; } else { $findId = $m->msg_from; }
-                      $findUser = $db->query("SELECT picture,email FROM users WHERE id = $findId");
+                      $findUser = $db->query("SELECT picture,email FROM users WHERE id = ?", [$findId]);
                       if($findUser->count()==1) $foundUser = $findUser->first()->email;
                       if($findUser->count()==0) $foundUser = "null@null.com";
                       $grav = get_gravatar(strtolower(trim($foundUser))); ?>
