@@ -5,14 +5,14 @@
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
-<!-- the version of the plugin itself-->
-  <version>2.2.0</version>
+<!-- the version of the plugin iteself -->
+  <version>2.2.1</version>
 
 <!-- release date of THIS version -->
-  <release>August 8, 2025</release>
+  <release>January, 7, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.9.3</tested>
+  <tested>6.0.1</tested>
 
 <!-- What does your plugin do? -->
   <description>Requires UserSpice v5.7+. Google OAuth plugin has been updated for UserSpice 5.8.5 and now supports TOTP.  For older versions, download Google Login Legacy.  </description>
