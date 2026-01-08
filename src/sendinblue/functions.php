@@ -75,6 +75,8 @@ function sendinblue($to, $subject, $body, $to_name = "", $options = []){
   }
   if(isset($options['reply_name'])){
     $send->reply_name = $options['reply_name'];
+  }else{
+    $send->reply_name = $send->from;
   }
 
   $sendSmtpEmail = new Brevo\Client\Model\SendSmtpEmail([
