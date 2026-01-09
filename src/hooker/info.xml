@@ -5,14 +5,14 @@
 <!-- Feel free to include your github repo here -->
   <website>https://www.userspice.com</website>
 
-<!-- the version of the plugin itself-->
-  <version>2.0.4</version>
+<!-- the version of the plugin iteself -->
+  <version>2.1.0</version>
 
 <!-- release date of THIS version -->
-  <release>November 6, 2022</release>
+  <release>January 9, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.5</tested>
+  <tested>6.0.1</tested>
 
 <!-- What does your plugin do? -->
   <description>Sometimes you do not need an entire plugin, you just need to take advantage of the hooks that plugins can use. This does that. It also allows you to manage ALL the hooks on your system.</description>

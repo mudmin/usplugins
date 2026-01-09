@@ -5,6 +5,9 @@ include "plugin_info.php";
 pluginActive($plugin_name);
 $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hooker/hooks');
 $events = [
+'cloakBegin',
+'cloakEnd',
+'createAttempt',
 'hitBanned',
 'forgotPassword',
 'forgotPasswordResponse',
@@ -30,7 +33,7 @@ $events = [
 ];
 
 if(!empty($_POST['addHook'])){
-  $pages = ['account.php','admin.php?view=general','admin.php?view=user','admin.php?view=users','forgot_password.php','join.php','login.php','user_settings.php','verify.php'];
+  $pages = ['account.php','admin.php?view=general','admin.php?view=permission','admin.php?view=social','admin.php?view=user','admin.php?view=users','admin_settings.php','forgot_password.php','join.php','login.php','passwordless.php','user_settings.php','verify.php'];
   $positions = ['pre','post','body','form','bottom'];
   $combined = array_merge($pages,$events);
   $valid = false;
@@ -85,12 +88,16 @@ if(!empty($_POST['deleteHook'])){
               <select class="form-control" name="page" id="pageSelect" required>
                   <option class="nada" value="" disabled selected="selected">--Choose Page--</option>
                   <option class="pg" value="account.php">account.php (no post or form)</option>
-                  <option class="pg" value="admin.php?view=general">admin.php?view=general (no post,form, or bottom)</option>
-                  <option class="pg" value="admin.php?view=user">admin.php?view=user (v5.0.5+)</option>
-                  <option class="pg" value="admin.php?view=users">admin.php?view=users (v5.0.5+)</option>
+                  <option class="pg" value="admin.php?view=general">admin.php?view=general (post and form only)</option>
+                  <option class="pg" value="admin.php?view=permission">admin.php?view=permission (all positions)(v6.0.0+)</option>
+                  <option class="pg" value="admin.php?view=social">admin.php?view=social (body only)(v4.4+)</option>
+                  <option class="pg" value="admin.php?view=user">admin.php?view=user (all positions)(v5.0.5+)</option>
+                  <option class="pg" value="admin.php?view=users">admin.php?view=users (all positions)(v5.0.5+)</option>
+                  <option class="pg" value="admin_settings.php">admin_settings.php (pre and bottom only)(v5.1.5+)</option>
                   <option class="pg" value="forgot_password.php">forgot_password.php (no body or form)</option>
                   <option class="pg" value="join.php">join.php (all positions available)</option>
                   <option class="pg" value="login.php">login.php (all positions available)</option>
+                  <option class="pg" value="passwordless.php">passwordless.php (all positions)(v6.0.1+)</option>
                   <option class="pg" value="user_settings.php">user_settings.php (all positions available)</option>
                   <option class="pg" value="verify.php">verify.php (all positions available)(v5.3.8+)</option>
                   <?php foreach($events as $e){?>
