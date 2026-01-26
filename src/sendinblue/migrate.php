@@ -45,6 +45,43 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00003';
+  if(!in_array($update,$existing)){
+  // Remove orphaned old sendinblue SDK with vulnerable guzzle dependencies
+  $oldSdkPath = $abs_us_root.$us_url_root.'usersc/plugins/sendinblue/vendor/sendinblue';
+  if(is_dir($oldSdkPath)){
+    // Recursively delete the directory
+    $it = new RecursiveDirectoryIterator($oldSdkPath, RecursiveDirectoryIterator::SKIP_DOTS);
+    $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+    foreach($files as $file){
+      if($file->isDir()){
+        rmdir($file->getRealPath());
+      } else {
+        unlink($file->getRealPath());
+      }
+    }
+    rmdir($oldSdkPath);
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - removed orphaned sendinblue SDK");
+  } else {
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - no cleanup needed");
+  }
+  $existing[] = $update;
+  $count++;
+  }
+
+  $update = '00004';
+  if(!in_array($update,$existing)){
+  // Remove composer.lock from brevo-php package (unused dev artifact that triggers security scanners)
+  $brevoLockFile = $abs_us_root.$us_url_root.'usersc/plugins/sendinblue/vendor/getbrevo/brevo-php/composer.lock';
+  if(file_exists($brevoLockFile)){
+    unlink($brevoLockFile);
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - removed brevo-php composer.lock");
+  } else {
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - no cleanup needed");
+  }
+  $existing[] = $update;
+  $count++;
+  }
 
 
   //after all updates are done. Keep this at the bottom.
