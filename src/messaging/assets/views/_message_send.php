@@ -112,7 +112,7 @@ if(!empty($_POST['send_new_direct_message_hook'])){
 
                 <div class="form-group mb-3">
                     <label for="msg">Message</label>
-                    <textarea name="msg" id="" cols="30" rows="8" class="form-control summernote" required></textarea>
+                    <textarea name="msg" id="" cols="30" rows="10" class="form-control summernote" required></textarea>
                 </div>
 
                 <input type="submit" class="col-12 btn btn-primary">
@@ -144,8 +144,8 @@ $(document).ready(function() {
     $(".select2").select2();
 });
 </script>
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" integrity="sha512-ZbehZMIlGA8CTIOtdE+M81uj3mrcgyrh6ZFeG33A4FHECakGrOsTPlPQ8ijjLkxgImrdmSVUHn1j+ApjodYZow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js" integrity="sha512-lVkQNgKabKsM1DA/qbhJRFQU8TuwkLF2vSN3iU/c7+iayKs08Y8GXqfFxxTZr1IcpMovXnf2N/ZZoMgmZep1YQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
         $('.summernote').summernote({

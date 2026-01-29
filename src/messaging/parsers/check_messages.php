@@ -1,5 +1,6 @@
 <?php 
 $resp['success'] = false;
+
 $resp["alert_count"]= 0;
 $resp["notification_count"]= 0;
 $resp["message_count"]= 0;
@@ -9,58 +10,17 @@ require_once "../../../../users/init.php";
 if(!isset($user) || !$user->isLoggedIn()){
     echo json_encode($resp);die;
 }
-
-if(isset($config['session']['session_name'])){
-  $sn = $config['session']['session_name'];
-}else{
-  $sn = "";
-}
-
 $notifCount = fetchPlgMessageCount();
-$allowDing = true;
-$alertsSound = "";
-if(!isset($_SESSION[$sn."msgSettings"])){
-    // $allowDing = false;
-    $plg_settings = $db->query("SELECT * FROM plg_msg_settings")->first();
-    $_SESSION[$sn."msgSettings"] = $plg_settings;
-    $_SESSION[$sn."max_alert_id"] = $notifCount->max_alert_id;
-    $_SESSION[$sn."max_notification_id"] = $notifCount->max_notification_id;
-    $_SESSION[$sn."max_message_id"] = $notifCount->max_message_id;
-}else{
-    $plg_settings = $_SESSION[$sn."msgSettings"];
-}
-
 foreach($notifCount as $key=>$value){
     $resp[$key] = $value;
 }
 $resp['success'] = true;
-
-if($allowDing && $notifCount->max_alert_id > $_SESSION[$sn."max_alert_id"] && $plg_settings->alerts_sound != ""){
-    $alertsSound = $plg_settings->alerts_sound;
-    $_SESSION[$sn."max_alert_id"] = $notifCount->max_alert_id;
-}
-
-if($allowDing && $notifCount->max_notification_id > $_SESSION[$sn."max_notification_id"] && $plg_settings->notifications_sound != ""){
-    $alertsSound = $plg_settings->notifications_sound;
-    $_SESSION[$sn."max_notification_id"] = $notifCount->max_notification_id;
-}
-
-
-if($allowDing && $notifCount->max_message_id > $_SESSION[$sn."max_message_id"] && $plg_settings->messages_sound != ""){
-  
-    $alertsSound = $plg_settings->messages_sound;
-
-    $_SESSION[$sn."max_message_id"] = $notifCount->max_message_id;
-}
-
-$resp['alertsSound'] = $alertsSound;
 
 
 $preview = Input::get('preview');
 
 if($preview == "true"){
     $notifications = fetchPLGMessages(500);
- 
     ob_start();
     if ($notifCount->total_count > 0) { ?>
         <div class="row">

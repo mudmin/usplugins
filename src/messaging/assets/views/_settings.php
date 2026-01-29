@@ -12,6 +12,7 @@ $qs = http_build_query($_GET);
 if (!empty($_POST['update_messages_settings_hook'])) {
   $fields = [
     'ding' => Input::get('ding'),
+    'show_toasts' => Input::get('show_toasts'),
     'ajax' => Input::get('ajax'),
     'ajax_time' => Input::get('ajax_time'),
     'alerts' => Input::get('alerts'),
@@ -149,6 +150,19 @@ if (!empty($_POST['update_messages_settings_hook'])) {
               <input type="number" name="ajax_time" class="form-control" value="<?= $msgSettings->ajax_time ?>" min="5" step="1">
               <small class="form-text text-muted">This is in seconds. The default is 60 seconds.</small>
             </div>
+
+            <div class="form-group mb-3">
+              <label for="">Show Toast Notifications</label>
+              <select class="form-select" name="show_toasts">
+                <option value="1" <?php if (!isset($msgSettings->show_toasts) || $msgSettings->show_toasts == "1") {
+                                    echo "selected";
+                                  } ?>>Yes</option>
+                <option value="0" <?php if (isset($msgSettings->show_toasts) && $msgSettings->show_toasts == "0") {
+                                    echo "selected";
+                                  } ?>>No</option>
+              </select>
+              <small class="form-text text-muted">Display toast popup notifications (usSuccess, usPrimary, etc.) when new messages arrive.</small>
+            </div>
           </div>
         </div>
       </div>
@@ -177,7 +191,7 @@ if (!empty($_POST['update_messages_settings_hook'])) {
 
             <div class="form-group mb-3">
               <label for="">Alerts Sound</label>
-              <select class="form-select" name="alerts_sound" readonly disabled>
+              <select class="form-select" name="alerts_sound">
                 <?php foreach ($sounds as $k => $v) { ?>
                   <option value="<?= $v ?>" <?php if ($msgSettings->alerts_sound == $v) {
                                             echo "selected";
@@ -190,7 +204,7 @@ if (!empty($_POST['update_messages_settings_hook'])) {
 
             <div class="form-group mb-3">
               <label for="">Messages Sound</label>
-              <select class="form-select" name="messages_sound" readonly disabled>
+              <select class="form-select" name="messages_sound">
                 <?php foreach ($sounds as $k => $v) { ?>
                   <option value="<?= $v ?>" <?php if ($msgSettings->messages_sound == $v) {
                                             echo "selected";
@@ -203,7 +217,7 @@ if (!empty($_POST['update_messages_settings_hook'])) {
 
             <div class="form-group mb-3">
               <label for="">Notifications Sound</label>
-              <select class="form-select" name="notifications_sound" readonly disabled>
+              <select class="form-select" name="notifications_sound">
                 <?php foreach ($sounds as $k => $v) { ?>
                   <option value="<?= $v ?>" <?php if ($msgSettings->notifications_sound == $v) {
                                             echo "selected";
@@ -217,4 +231,3 @@ if (!empty($_POST['update_messages_settings_hook'])) {
         </div>
       </div>
     </div>
-    <p class="pt-2">If you appreciate this plugin and would like to make a donation to the author, you can do so at <a style="color:blue;" href="https://UserSpice.com/donate">https://UserSpice.com/donate</a>. Either way, thanks for using UserSpice!</p>

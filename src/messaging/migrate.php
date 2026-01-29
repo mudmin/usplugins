@@ -115,6 +115,37 @@ foreach($menusSearch as $m){
   $count++;
   }
 
+  // Migration 00008: Add indexes for performance, toast setting, and message count cache
+  $update = '00008';
+  if(!in_array($update,$existing)){
+    logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+
+    // Add indexes on plg_msg for faster queries
+    $db->query("ALTER TABLE plg_msg ADD INDEX idx_user_to (user_to)");
+    $db->query("ALTER TABLE plg_msg ADD INDEX idx_msg_read (msg_read)");
+    $db->query("ALTER TABLE plg_msg ADD INDEX idx_deleted (deleted)");
+    $db->query("ALTER TABLE plg_msg ADD INDEX idx_user_unread (user_to, msg_read, deleted)");
+
+    // Add index on plg_msg_messages for type filtering
+    $db->query("ALTER TABLE plg_msg_messages ADD INDEX idx_msg_type (msg_type)");
+
+    // Add show_toasts setting (default 1 = enabled)
+    $db->query("ALTER TABLE plg_msg_settings ADD COLUMN show_toasts tinyint(1) default 1 AFTER ding");
+
+    // Create message count cache table
+    $db->query("CREATE TABLE IF NOT EXISTS `plg_msg_cache` (
+      `user_id` int(11) UNSIGNED NOT NULL PRIMARY KEY,
+      `alert_count` int(11) DEFAULT 0,
+      `notification_count` int(11) DEFAULT 0,
+      `message_count` int(11) DEFAULT 0,
+      `total_count` int(11) DEFAULT 0,
+      `cached_at` datetime DEFAULT NULL
+    )");
+
+    $existing[] = $update;
+    $count++;
+  }
+
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);

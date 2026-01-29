@@ -2,19 +2,12 @@
 //the goal of this section is to create a list of user ids that the message gets sent to
 //use the key you specified at the bottom to allow this module to be the definitive send method
 if(!empty($_POST) && $send_method == "one_user"){
-    $toid = Input::get('send_to_user');
-    if(!is_numeric($toid)){
-        usError("Invalid user selected");
-       
-    }else{
-        $send_to = [];
+    $send_to = [];
 
-        $to = $db->query("SELECT id FROM users WHERE active = 1 AND id = ?",[$toid])->results();
-        foreach($to as $t){
-            $send_to[] = $t->id;
-        }
+    $to = $db->query("SELECT id FROM users WHERE active = 1")->results();
+    foreach($to as $t){
+        $send_to[] = $t->id;
     }
-
 }
 
 //The goal of this section is to create a sending option

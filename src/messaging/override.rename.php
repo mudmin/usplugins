@@ -15,5 +15,6 @@ if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,tr
 //all actions should be performed here.
 
 
-}//do not perform actions outside of this statement
 }
+//do not perform actions outside of this statement
+
