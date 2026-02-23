@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 
 <!-- release date of THIS version -->
-  <release>January 1, 2026</release>
+  <release>February 23, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>6.0.0</tested>
+  <tested>6.0.4</tested>
 
 <!-- What does your plugin do? -->
   <description>A simple chat addon for UserSpice.  It's pretty flexible on how and where you include it and it hovers over your other windows.  Emoji support added in v1.0.1. Support for multiple rooms added in 1.0.3</description>

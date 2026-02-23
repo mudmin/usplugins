@@ -16,4 +16,3 @@ if (in_array($user->data()->id, $master_account) && pluginActive($plugin_name,tr
 
 
 }//do not perform actions outside of this statement
-}

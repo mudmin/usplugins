@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
 <!-- release date of THIS version -->
-  <release>May 28, 2024</release>
+  <release>February 23, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.7.2</tested>
+  <tested>6.0.4</tested>
 
 <!-- What does your plugin do? -->
   <description>HTML Purifier assists in cleaning HTML that the user will see. It adds some additional security to prevent things such as XSS attacks on HTML that will be seen on user-facing pages. This is not a replacement for other security methods, but it is a nice additional step.  </description>

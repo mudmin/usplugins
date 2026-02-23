@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>July 21, 2022</release>
+  <release>February 23, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.4.5</tested>
+  <tested>6.0.4</tested>
 
 <!-- What does your plugin do? -->
   <description>This plugin walks you through the simple steps to enable clean(er) URLs in your UserSpice project.  It essentially strips the .php off.  This is a development tool to help us test bring the feature more mainstream.</description>

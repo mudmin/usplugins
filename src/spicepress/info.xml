@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
 <!-- release date of THIS version -->
-  <release>April 22,2022</release>
+  <release>February 23, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.4.1</tested>
+  <tested>6.0.4</tested>
 
 <!-- What does your plugin do? -->
   <description>SpicePress is a mini API to communicate with WordPress and can help use UserSpice accounts to protect WordPress content.</description>

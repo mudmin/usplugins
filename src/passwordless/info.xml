@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 
 <!-- release date of THIS version -->
-  <release>December 14,2021</release>
+  <release>February 23, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.3.9</tested>
+  <tested>6.0.4</tested>
 
 <!-- What does your plugin do? -->
   <description>This is beta software.  Passwordless logins allow you to login by clicking a "magic" link sent to an email. This plugin stores these links via one way password hashes so they cannot be reproduced and they expire after a certain number of minutes.</description>
