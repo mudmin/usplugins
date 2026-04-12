@@ -70,27 +70,27 @@ document.addEventListener('DOMContentLoaded', function() {
   //this handles err= in the URL
   if(Input::get('err') != ""){
   ?>
-  notify("<?=htmlspecialchars_decode(Input::get('err'))?>", 'primary', 'question-circle', <?=$settings->err_time?>);
+  notify(<?=json_encode(alerts_sanitizeMessage(Input::get('err')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>, 'primary', 'question-circle', <?=$settings->err_time?>);
 
   <?php }
 
   //this handles msg= in the URL
   if(Input::get('msg') != ""){
   ?>
-  notify("<?=htmlspecialchars_decode(Input::get('msg'))?>", 'neutral', 'chat-left-dots', <?=$settings->err_time?>);
+  notify(<?=json_encode(alerts_sanitizeMessage(Input::get('msg')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>, 'neutral', 'chat-left-dots', <?=$settings->err_time?>);
 
   <?php }
 
   //this handles session based error message
   if($usSessionMessages['valErr'] != ""){
   ?>
-  notify("<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>", 'danger', 'exclamation-circle', <?=$settings->err_time?>);
+  notify(<?=json_encode(alerts_sanitizeMessage($usSessionMessages['valErr']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>, 'danger', 'exclamation-circle', <?=$settings->err_time?>);
 
   <?php }
   //this handles session based success message
   if($usSessionMessages['valSuc'] != ""){
   ?>
-  notify("<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>", 'success', 'check', <?=$settings->err_time?>);
+  notify(<?=json_encode(alerts_sanitizeMessage($usSessionMessages['valSuc']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>, 'success', 'check', <?=$settings->err_time?>);
 
   <?php } ?>
 
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //this handles session based success message
   if($usSessionMessages['genMsg'] != ""){
   ?>
-  notify("<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>", 'primary', 'info-square', <?=$settings->err_time?>);
+  notify(<?=json_encode(alerts_sanitizeMessage($usSessionMessages['genMsg']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>, 'primary', 'info-square', <?=$settings->err_time?>);
   <?php } ?>
 });
 </script>

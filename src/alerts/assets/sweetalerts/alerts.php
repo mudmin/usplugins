@@ -41,7 +41,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'question',
-    title: "<?=htmlspecialchars_decode(Input::get('err'))?>",
+    title: <?=json_encode(alerts_sanitizeMessage(Input::get('err')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -53,7 +53,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'info',
-    title: "<?=htmlspecialchars_decode(Input::get('msg'))?>",
+    title: <?=json_encode(alerts_sanitizeMessage(Input::get('msg')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -65,7 +65,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'error',
-    title: "<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>",
+    title: <?=json_encode(alerts_sanitizeMessage($usSessionMessages['valErr']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -77,7 +77,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'success',
-    title: "<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>",
+    title: <?=json_encode(alerts_sanitizeMessage($usSessionMessages['valSuc']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });
@@ -89,7 +89,7 @@ let modals = [];
   ?>
   modals.push({
     icon: 'warning',
-    title: "<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>",
+    title: <?=json_encode(alerts_sanitizeMessage($usSessionMessages['genMsg']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
     timer: <?=$settings->err_time?>*1000,
     timerProgressBar: true
   });

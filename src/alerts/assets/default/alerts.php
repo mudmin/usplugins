@@ -38,14 +38,14 @@ $usSessionMessages = parseSessionMessages();
 <script type="text/javascript">
 $( document ).ready(function() {
   let modals = [];
-  console.log("<?=htmlspecialchars_decode(Input::get('err'))?>");
+  console.log(<?=json_encode(alerts_sanitizeMessage(Input::get('err')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>);
     <?php
     //this handles err= in the URL
     if(Input::get('err') != ""){
     ?>
 
     Toastify({
-      text: "<?=htmlspecialchars_decode(Input::get('err'))?>",
+      text: <?=json_encode(alerts_sanitizeMessage(Input::get('err')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -63,7 +63,7 @@ $( document ).ready(function() {
     if(Input::get('msg') != ""){
     ?>
     Toastify({
-      text: "<?=htmlspecialchars_decode(Input::get('msg'))?>",
+      text: <?=json_encode(alerts_sanitizeMessage(Input::get('msg')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -80,9 +80,9 @@ $( document ).ready(function() {
     //this handles session based error message
     if($usSessionMessages['valErr'] != ""){
     ?>
-    console.log("<?=$usSessionMessages['valErr']?>")
+    console.log(<?=json_encode(alerts_sanitizeMessage($usSessionMessages['valErr']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>)
     Toastify({
-      text: "<?=htmlspecialchars_decode($usSessionMessages['valErr'])?>",
+      text: <?=json_encode(alerts_sanitizeMessage($usSessionMessages['valErr']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -99,7 +99,7 @@ $( document ).ready(function() {
     if($usSessionMessages['valSuc'] != ""){
     ?>
     Toastify({
-      text: "<?=htmlspecialchars_decode($usSessionMessages['valSuc'])?>",
+      text: <?=json_encode(alerts_sanitizeMessage($usSessionMessages['valSuc']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
@@ -116,7 +116,7 @@ $( document ).ready(function() {
     if($usSessionMessages['genMsg'] != ""){
     ?>
     Toastify({
-      text: "<?=htmlspecialchars_decode($usSessionMessages['genMsg'])?>",
+      text: <?=json_encode(alerts_sanitizeMessage($usSessionMessages['genMsg']), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>,
       duration: <?=$settings->err_time?>*1000,
       newWindow: true,
       close: true,
