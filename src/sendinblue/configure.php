@@ -102,6 +102,30 @@ $token = Token::generate();
   <a href="<?= $us_url_root ?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
   <h1>Configure the Brevo (Formerly SendinBlue) Plugin!</h1>
 
+  <?php if ($overrideExists && $overrideRenameExists && sha1_file($overridePath) !== sha1_file($overrideRenamePath)): ?>
+    <div class="alert alert-info" role="alert">
+      <h5><i class="fas fa-code-branch"></i> Override Update Available</h5>
+      <p class="mb-2">Your active <code>override.php</code> differs from the bundled <code>override.RENAME.php</code> shipped with this plugin version. The bundled file may contain bug fixes or improvements that aren't in your active override. You may want to review the differences and consider rolling the update in.</p>
+      <p class="mb-0">
+        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#overrideDiff" aria-expanded="false">
+          <i class="fas fa-eye"></i> Show file contents
+        </button>
+      </p>
+      <div class="collapse mt-3" id="overrideDiff">
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Your active override.php:</strong>
+            <pre style="background-color:#f4f4f4;border:1px solid #ddd;padding:10px;max-height:400px;overflow:auto;"><?= htmlspecialchars(file_get_contents($overridePath), ENT_QUOTES, 'UTF-8') ?></pre>
+          </div>
+          <div class="col-md-6">
+            <strong>Bundled override.RENAME.php:</strong>
+            <pre style="background-color:#f4f4f4;border:1px solid #ddd;padding:10px;max-height:400px;overflow:auto;"><?= htmlspecialchars(file_get_contents($overrideRenamePath), ENT_QUOTES, 'UTF-8') ?></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+
   <?php if (isset($_SESSION['sendinblue_test_result'])): ?>
     <?php $testResult = $_SESSION['sendinblue_test_result']; unset($_SESSION['sendinblue_test_result']); ?>
     <div class="alert alert-<?= $testResult['success'] ? 'success' : 'danger' ?> alert-dismissible fade show" role="alert">

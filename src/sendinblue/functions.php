@@ -53,7 +53,7 @@ function sendinblue($to, $subject, $body, $to_name = "", $options = []){
 
   if($to == "" || $subject == "" || $body == ""){
     logger($user->data()->id,"sendinblue","FAILED: Attempted to send without all required fields");
-    return "All fields are required";
+    return false;
   }
   $to = rawurldecode($to);
   global $db;
@@ -110,7 +110,7 @@ function sendinblue($to, $subject, $body, $to_name = "", $options = []){
   } catch (Exception $e) {
     $msg = $e->getMessage();
     logger($user->data()->id,"sendinblue","ERROR $msg");
-    return $e->getMessage();
+    return false;
   }
 }
 
