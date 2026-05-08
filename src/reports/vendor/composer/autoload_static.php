@@ -14,8 +14,6 @@ class ComposerStaticInitd66b51553f17e23c62cbd33901a3421c
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
-            'Psr\\Http\\Message\\' => 17,
-            'Psr\\Http\\Client\\' => 16,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'M' => 
@@ -37,15 +35,6 @@ class ComposerStaticInitd66b51553f17e23c62cbd33901a3421c
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
-        ),
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'Psr\\Http\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
