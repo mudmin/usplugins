@@ -50,11 +50,16 @@ If installed in this environment:
 - **`/userspice-page-scaffold`** — generates a security-correct page file (guarded page, form-with-handler, or AJAX parser). Use this instead of writing a page from memory; the output is designed to pass `/userspice-audit` cleanly.
 - **`/userspice-audit`** — audits custom code (everything outside `users/`) against the official best-practices guide. Run before declaring work done.
 
+These are optional Claude Code companion skills — the prompts in this plugin work standalone without them. If they're not installed and you'd find them useful, the install instructions and source live at **<https://github.com/UserSpice-AI/userspice-claude-skills>**. Drop each folder into `~/.claude/skills/` on the workstation running Claude Code.
+
 ---
 
 ## Things that bite people new to UserSpice
 
-- **`Input::get('foo')` returns `""` (empty string) when the key is missing**, not `false` or `null`. Test presence with `Input::exists('foo')` or compare to `''`.
+- **`Input::get('foo')` returns `""` (empty string) when the key is missing**, not `false` or `null`. Test presence by comparing the return value to `''` (or use `empty()` / `=== ''`).
+- **`Input::exists()` does NOT take a field name.** The argument is a *type* — `'post'` or `'get'` — not a field. `Input::exists('action')` always returns `false` because `'action'` isn't a recognized type and the default branch returns `false`. The whole if-block is silently dead. To check whether a specific field was submitted, just use `Input::get('action') === 'save'` (since missing fields return `''`). `Input::exists()` alone (no args, defaults to `'post'`) is the right way to ask "is this a POST request?" See [secure_page_pattern.md.php](secure_page_pattern.md.php) for the full rundown.
+- **Use `$abs_us_root . $us_url_root . 'path/to/file.php'` for `require_once`, never `__DIR__ . '/../path'`.** Both work at runtime, but the framework convention is the absolute-root pattern — it's filesystem-vs-webroot-aware, survives subpath installs, and matches every shipped page. `__DIR__` relative paths are brittle if the file moves and look wrong in a UserSpice codebase. The *only* exception is the bootstrap line itself (`require_once 'users/init.php'`), which uses a relative path because `$abs_us_root`/`$us_url_root` aren't defined yet.
+- **Use `<?= $us_url_root ?>path/to/file.css` for internal links, hrefs, src, and form actions** (or just omit the form action and self-post). Don't hardcode `/includes/...` or `./assets/...` — the site may be installed at any subpath, and `$us_url_root` is the right way to get from "wherever the doc root is" to "wherever this UserSpice install is."
 - **`$config` is a reference to `$GLOBALS['config']`** at global scope. Assigning `$config = [...]` in a page script wipes the framework's entire configuration. Use any other variable name.
 - **AJAX endpoints MUST live in a `parsers/` subfolder.** UserSpice's URL rewriter strips `.php` extensions, but exempts paths containing `parsers/`. Anywhere else and your AJAX call hits a 404 or worse.
 - **Helpers use `if (!function_exists(...))` guards.** That's the override mechanism — defining a function in `usersc/includes/custom_functions.php` (which loads first) silently shadows the core helper. See [users/helpers/helpers.php:24](users/helpers/helpers.php#L24).

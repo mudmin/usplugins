@@ -35,9 +35,8 @@ This is a UserSpice site. Before doing substantive work, read:
 
   {$shippedDir}00_start_here.md.php
 
-That file indexes a small library of prompts in the same folder
-(`where_to_look.md.php`, `customizing_core.md.php`, `secure_page_pattern.md.php`,
-`new_project.md.php`) — load the one that matches the current task.
+That file indexes the available task-specific prompts — load the one that
+matches what you're doing.
 
 Local overrides may live alongside in `{$customDir}` —
 files there with the same name win over the shipped versions.

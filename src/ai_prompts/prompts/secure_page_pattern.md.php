@@ -26,6 +26,45 @@ What each line does:
 2. **`prep.php`** — wires the active template (header/footer, nav, system messages). Pages that opt out of the template (raw JSON endpoints, downloads) skip this line.
 3. **`securePage()`** — checks that the visitor is allowed to view this page given the registered permissions in the `permission_page_matches` table. Returns false → `die()`. If you don't call this, the page is wide open.
 
+### Path conventions: `$abs_us_root . $us_url_root` for filesystem, `$us_url_root` for URLs
+
+These two globals exist for a reason — UserSpice can be installed at the document root *or* at any subpath (`/userspice/`, `/myapp/`, `/clientname/`), and every path in the codebase has to keep working in both cases.
+
+- **`$abs_us_root`** is the absolute filesystem path to the document root, e.g. `/var/www/html/`.
+- **`$us_url_root`** is the URL path from the document root to the UserSpice install root, e.g. `/myapp/` (or just `/` if installed at the doc root). It always ends with a slash.
+- **Together**, `$abs_us_root . $us_url_root` is the absolute filesystem path to the UserSpice install root — e.g. `/var/www/html/myapp/`.
+
+That gives the canonical patterns:
+
+```php
+// ✓ require_once / include — absolute filesystem path
+require_once $abs_us_root . $us_url_root . 'usersc/includes/loader.php';
+require_once $abs_us_root . $us_url_root . 'admin/widgets/foo.php';
+
+// ✓ ANY URL emitted to the browser — link, src, href, form action, redirect target
+<link rel="stylesheet" href="<?= $us_url_root ?>assets/site.css">
+<a href="<?= $us_url_root ?>account.php">Account</a>
+<img src="<?= $us_url_root ?>uploads/foo.jpg">
+Redirect::to($us_url_root . 'account.php');
+```
+
+The **only** exception to the `$abs_us_root . $us_url_root` rule for includes is the bootstrap line itself — `require_once '../users/init.php'` (or `'users/init.php'` from the root) — because those two globals don't exist *until* init.php runs.
+
+```php
+// 🚨 Wrong — works at runtime but isn't the framework idiom
+require_once __DIR__ . '/../includes/header.php';
+require_once dirname(__FILE__) . '/../usersc/includes/foo.php';
+
+// 🚨 Wrong — breaks the moment the site is installed at a subpath
+<a href="/account.php">Account</a>            // hardcoded root
+<a href="../account.php">Account</a>          // relative — different per page depth
+<link href="/myapp/style.css" rel="stylesheet">  // hardcoded subpath
+```
+
+If you find yourself reaching for `__DIR__`, `dirname(__FILE__)`, or `realpath()` to build an include path inside a UserSpice page, stop — you almost certainly want `$abs_us_root . $us_url_root . '...'` instead. The same applies to hardcoded URL paths: if you typed a literal `/` at the start of an href or src, you're going to break someone's subpath install. Use `$us_url_root` and the page will work everywhere.
+
+### The relative `../` for init.php
+
 The relative path `'../users/init.php'` assumes the page lives one directory below the project root. From the root itself it's `'users/init.php'`. From two levels deep, `'../../users/init.php'`. Don't try to be clever — the framework expects this exact shape.
 
 ---
@@ -239,7 +278,7 @@ Don't `echo` errors directly into the page — they won't follow the redirect an
 
 ---
 
-## `Input::get()` gotcha (worth re-reading)
+## `Input::get()` and `Input::exists()` gotcha (worth re-reading)
 
 `Input::get('foo')` returns `""` (empty string) when the key is missing — **not** `false`, **not** `null`. So:
 
@@ -248,10 +287,51 @@ if (Input::get('foo') === false) { ... }   // never fires
 if (Input::get('foo') === null) { ... }    // never fires
 if (Input::get('foo') === '')   { ... }    // ✓ correct
 if (empty(Input::get('foo')))   { ... }    // ✓ correct
-if (!Input::exists('foo'))      { ... }    // ✓ best — tests for presence
+```
+
+### `Input::exists()` does NOT take a field name
+
+This is the single most-mis-used helper in UserSpice. Read the signature in [users/classes/Input.php:21](users/classes/Input.php#L21):
+
+```php
+public static function exists($type = 'post'){
+    switch ($type) {
+        case 'post':   return (!empty($_POST)) ? true : false;
+        case 'get':    return (!empty($_GET))  ? true : false;
+        default:       return false;
+    }
+}
+```
+
+The argument is a **TYPE** (`'post'` or `'get'`), not a field name. The default case returns `false`. So:
+
+```php
+if (Input::exists('action')) { ... }       // 🚨 ALWAYS FALSE — 'action' is not a type
+if (Input::exists('rehidden')) { ... }     // 🚨 ALWAYS FALSE
+if (Input::exists('csrf_token')) { ... }   // 🚨 ALWAYS FALSE
+
+if (Input::exists()) { ... }               // ✓ "is this a POST request?"
+if (Input::exists('post')) { ... }         // ✓ same thing, explicit
+if (Input::exists('get')) { ... }          // ✓ "are there any query params?"
+```
+
+To test whether a **specific field** is present, just use `Input::get()` and compare to the empty string (since that's what missing returns):
+
+```php
+// "did the user submit the form?"
+if (Input::exists() && Input::get('action') === 'save') { ... }
+
+// "was the rehide checkbox ticked?"
+$rehidden = Input::get('rehidden') === '1' ? 1 : 0;
+
+// "is there a search term?"
+$q = Input::get('q');
+if ($q !== '') { ... }
 ```
 
 If you need a non-empty default, pass it as the second arg: `Input::get('page', 1)`.
+
+If you've shipped a page that uses `Input::exists('some_field_name')` as a guard, the entire guarded block has been silently dead-code since day one. `/userspice-audit` will not catch this — it's a logic bug, not a security bug.
 
 ---
 
