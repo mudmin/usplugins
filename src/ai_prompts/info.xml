@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>AI Prompts</name>
+  <author>UserSpice Community</author>
+<!-- Feel free to include your github repo here -->
+  <website>https://www.userspice.com</website>
+
+<!-- the version of the plugin itself-->
+  <version>1.0.0</version>
+
+<!-- release date of THIS version -->
+  <release>May 11, 2026</release>
+
+<!-- the last version of UserSpice you tested the plugin with -->
+  <tested>6.0.9</tested>
+
+<!-- you can specify your icon in the userspice menu, but note wider icons look weird  -->
+  <fa_icon>fa fa-robot</fa_icon>
+
+<!-- What does your plugin do? -->
+  <description>A library of AI agent prompts that teach Claude (and other AI coding assistants) how to work correctly on a UserSpice site. Ships with five foundational prompts covering security, the override system, the file map, the secure page recipe, and project bootstrapping. Add your own prompts in custom_prompts/; same-name files there override the shipped ones. All prompt files are protected from public HTTP access by a PHP wrapper.</description>
+
+  <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
+    <button>AI Prompts</button>
+</plugin>
