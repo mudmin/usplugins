@@ -87,6 +87,45 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00004';
+  if(!in_array($update,$existing)){
+    //Deploy the XSS-hardened bio pages (sanitized display + save).
+    $publicPages = [
+    	'edit_profile.php',
+    	'profile.php',
+    	'view_all_users.php',
+    ];
+    foreach($publicPages as $a){
+      $dest = $abs_us_root.$us_url_root."users/".$a;
+      if(file_exists($dest)){
+        unlink($dest);
+      }
+    	copy($abs_us_root.$us_url_root."usersc/plugins/bio/files/".$a, $dest);
+    }
+
+    //Clean every bio already in the database so stored <script> payloads
+    //(and other active content) are neutralized retroactively.
+    if(function_exists('bioSanitizeHtml')){
+      $allProfiles = $db->query("SELECT id,bio FROM profiles")->results();
+      $bioFixed = 0;
+      foreach($allProfiles as $prof){
+        if(trim((string)$prof->bio) === ''){
+          continue;
+        }
+        $cleanBio = bioSanitizeHtml(html_entity_decode((string)$prof->bio, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        if($cleanBio !== $prof->bio){
+          $db->update('profiles',$prof->id,['bio'=>$cleanBio]);
+          $bioFixed++;
+        }
+      }
+      logger($user->data()->id,"Migrations","$update sanitized $bioFixed existing bio(s) for $plugin_name");
+    }
+
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
   $db->update('us_plugins',$plgid,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);

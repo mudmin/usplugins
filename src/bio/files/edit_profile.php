@@ -25,8 +25,9 @@ if(!empty($_POST)) {
   if(!Token::check($token)){
     die('Token doesn\'t match!');
   }else {
-    if ($thisProfile->bio != $_POST['bio']){
-      $newBio = $_POST['bio'];
+    // Sanitize the rich-text bio before it ever touches the database.
+    $newBio = function_exists('bioSanitizeHtml') ? bioSanitizeHtml($_POST['bio']) : strip_tags((string)$_POST['bio']);
+    if ($thisProfile->bio != $newBio){
       $fields=array('bio'=>$newBio);
       $validation->check($_POST,array(
         'bio' => array(
@@ -68,7 +69,7 @@ if(!empty($_POST)) {
 
           <h2>Bio</h2>
           <form name="update_bio" action="edit_profile.php" method="post">
-            <div align="center"><textarea rows="20" cols="80"  id="mytextarea" name="bio" ><?=$thisProfile->bio;?></textarea></div>
+            <div align="center"><textarea rows="20" cols="80"  id="mytextarea" name="bio" ><?=safeReturn($thisProfile->bio)?></textarea></div>
             <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
           </p>
           <p>
@@ -89,7 +90,7 @@ if(!empty($_POST)) {
 
 </div> <!-- /#page-wrapper -->
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 <style>
 /* Fix Summernote font loading issues */
 @font-face {
@@ -104,7 +105,7 @@ if(!empty($_POST)) {
   font-family: FontAwesome, sans-serif !important;
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
 <script>
 $(document).ready(function(){
   $('#mytextarea').summernote({

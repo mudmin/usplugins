@@ -29,7 +29,8 @@ if(isset($userID))
 		}
 
 	$ususername = ucfirst($thatUser->username)."'s Profile";
-	$usbio = html_entity_decode($thatUser->bio);
+	// Bio is user-supplied rich text — strip script/active content before display.
+	$usbio = function_exists('bioSanitizeHtml') ? bioSanitizeHtml($thatUser->bio) : htmlspecialchars((string)$thatUser->bio, ENT_QUOTES, 'UTF-8');
 	}
 else
 	{
@@ -59,7 +60,7 @@ else
 						</div>
 						<div class="col-12 col-md-10">
 						<h1><?php echo $ususername;?></h1>
-							<h2><?php echo $usbio.$editbio;?></h2>
+							<h2><?php echo trustedHtml($usbio).$editbio;?></h2>
 
 						</div>
 					</div>
