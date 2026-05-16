@@ -23,6 +23,10 @@ if(!Token::check($token)){
 <div class="content mt-3">
  		<div class="row">
  			<div class="col-sm-12">
+          <div class="alert alert-light border py-2 px-3 small text-muted mt-3" role="note">
+            <i class="fa fa-info-circle mr-1"></i>
+            <strong>CSP note:</strong> the SweetAlert2 styles load from <code>https://cdnjs.cloudflare.com</code>, and the Shoelace and dark-theme styles from <code>https://cdn.jsdelivr.net</code>. If your site sends a <em>Content-Security-Policy</em> header, add those origins to <code>script-src</code> (and <code>style-src</code>) or those alerts will not load.
+          </div>
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
  					<h1>Configure the Alerts Plugin!</h1>
           <p>The alert styles in this plugin are just the beginning!  You can easily use these as a sample to create your own styles.  Simply copy a folder in usersc/plugins/alerts/assets and rename it and modify to your heart's content. </p>

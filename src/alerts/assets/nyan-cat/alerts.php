@@ -31,7 +31,7 @@ $usSessionMessages = parseSessionMessages();
 // dump($usSessionMessages);
 
 ?>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/10.16.11/sweetalert2.all.min.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
 let modals = [];

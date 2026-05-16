@@ -27,6 +27,10 @@ if(!empty($_POST['parser'])){
       <div class="form-group">
         <p>Don't like our HTML WYSIWYG editor?  You can create a <strong>usersc/includes/cmseditor.php</strong>
         and setup your own! We even provide an example for another editor in <strong>usersc/plugins/cms/assets/cmseditor-alt.php</strong>.</p>
+        <div class="alert alert-light border py-2 px-3 small text-muted" role="note">
+          <i class="fa fa-info-circle mr-1"></i>
+          <strong>CSP note:</strong> the default Summernote editor loads from <code>https://cdnjs.cloudflare.com</code>, and the example CKEditor editor (<code>cmseditor-alt.php</code>) from <code>https://cdn.ckeditor.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add those origins to <code>script-src</code> (and <code>style-src</code>) or the editor will not load.
+        </div>
       </div>
     </form>
   </div>

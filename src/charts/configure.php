@@ -23,6 +23,10 @@ foreach($colors as $k=>$v){
  		<div class="row">
  			<div class="col-sm-12">
           <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
+          <div class="alert alert-light border py-2 px-3 small text-muted mt-3" role="note">
+            <i class="fa fa-info-circle mr-1"></i>
+            <strong>CSP note:</strong> this plugin loads Chart.js from <code>https://cdnjs.cloudflare.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add that origin to <code>script-src</code> or the charts will not render.
+          </div>
  					<h1>Configure the Charts Plugin!</h1>
           <p>This plugin creates very basic charts from database queries and other data sets. Typical usage would look like:</p>
           <p style="background-color:black; color:white;">

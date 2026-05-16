@@ -71,7 +71,7 @@ if (Input::get('action') === 'write_claudemd') {
 <!-- CDN: syntax highlighting (atom-one-dark) + markdown rendering -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 
 <style>
   /* All styles scoped to .aip so we don't bleed into the rest of the admin dashboard. */
@@ -296,6 +296,12 @@ if (Input::get('action') === 'write_claudemd') {
         conventions. Point your AI at one of these files when starting a task and it skips the usual
         rediscovery dance.
       </p>
+    </div>
+
+    <!-- CSP note -->
+    <div class="alert alert-light border py-2 px-3 small text-muted" role="note">
+      <i class="fa fa-info-circle mr-1"></i>
+      <strong>CSP note:</strong> this page loads syntax-highlighting and markdown libraries from <code>https://cdnjs.cloudflare.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add that origin to <code>script-src</code> (and <code>style-src</code>) or the prompt viewer will not render.
     </div>
 
     <!-- Prompt list -->

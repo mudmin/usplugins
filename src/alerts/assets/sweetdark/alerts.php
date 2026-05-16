@@ -32,8 +32,8 @@ $usSessionMessages = parseSessionMessages();
 
 //this css below is the dark theme
 ?>
-<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/10.16.11/sweetalert2.all.min.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
 let modals = [];
