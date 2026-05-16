@@ -13,7 +13,7 @@ require_once $abs_us_root.$us_url_root."usersc/plugins/chat/chat-app/styles/chat
   }
 </style>
 <!-- load additional resources  -->
-<script src="https://kit.fontawesome.com/03bdbd7088.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
 
 <section id="chatWindow" class="hide">

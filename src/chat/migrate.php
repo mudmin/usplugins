@@ -56,6 +56,14 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00004';
+  if(!in_array($update,$existing)){
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+  $db->query("ALTER TABLE `plg_chat_messages` ADD COLUMN `type` tinyint(1) DEFAULT 0");
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
   $db->update('us_plugins',$check->id,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);

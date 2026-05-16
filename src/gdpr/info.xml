@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.8</version>
+  <version>1.1.0</version>
 
 <!-- release date of THIS version -->
-  <release>December 19, 2023</release>
+  <release>May 16, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.6.7</tested>
+  <tested>6.0.9</tested>
 
 <!-- What does your plugin do? -->
   <description>Note: I am not a lawyer and do not make any claims as to the compliance of this plugin with any laws.

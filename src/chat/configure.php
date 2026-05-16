@@ -15,6 +15,10 @@
     <div class="row">
       <div class="col-12">
         <a href="<?=$us_url_root?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
+        <div class="alert alert-light border py-2 px-3 small text-muted mt-3" role="note">
+          <i class="fa fa-info-circle mr-1"></i>
+          <strong>CSP note:</strong> the chat app loads Font Awesome icons from <code>https://cdnjs.cloudflare.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add that origin to <code>style-src</code> (and <code>font-src</code>) or the chat icons will not display.
+        </div>
         <h1>Configure the Chat Plugin!</h1>
         <p class="pb-2">This plugin allows chatting between your users. It's up to you how you include the files.  For instance, you can wrap the includes in hasPerm or hasTag and the chat will only show for certain people. I also built in the concept of "event_ids" where this could <i>potentially</i> be used with each chat group having a unique chat id, but that is just as stub at the moment. It's hard coded to 1 now.</p>
 
@@ -25,13 +29,8 @@
         </p>
         <p class="pb-2">
           There is now a menu snippet for adding the chat toggle button in your UltraMenu using a class. As of <b>1.0.3</b> you can use a class or id to toggle the chat window.  A class is preferred, but an id is available for legacy support.  
-          The legacy way of doing it was...<br>
-      
-          
-          It could be in your header or footer and look like this... <br>
-          <img src="<?=$us_url_root?>usersc/plugins/chat/assets/button.png" alt="">
-          (id or class)
-          <br>
+          The legacy way of doing it was to add a button like this to your header or footer (the id or class is what toggles the chat window)... <br>
+          <pre class="bg-light p-2 border rounded"><code>&lt;a href="#" id="toggleChatWindowBtn" class="nav-item"&gt;&lt;i class="far fa-comments" style="font-size:28px;" aria-hidden="true"&gt;&lt;/i&gt;&lt;/a&gt;</code></pre>
           The chat app looks like this (and should probably be in your footer)...
           <br>
           <code>

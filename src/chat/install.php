@@ -59,7 +59,7 @@ ADD KEY IF NOT EXISTS `user_id` (`user_id`) USING BTREE");
 
 $db->query("ALTER TABLE `plg_chat_messages` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 $db->query("ALTER TABLE `plg_chat_messages` MODIFY `msg` TEXT CHARSET utf8mb4");
-$db->query("ALTER TABLE plg_chat_messages ADD COLUMN IF NOT EXISTS `type` tinyint(1) DEFAULT 0");
+$db->query("ALTER TABLE plg_chat_messages ADD COLUMN `type` tinyint(1) DEFAULT 0");
 //do you want to inject your plugin in the middle of core UserSpice pages?
 //visit https://userspice.com/plugin-hooks/ to get a better understanding of hooks
 $hooks = [];

@@ -7,26 +7,28 @@ if(isset($custom_chat_room) && is_numeric($custom_chat_room)){
   $event_override = $event_id = 1;
 }
 
-$sql = "SELECT 
-msg.*, 
-users.id as user_id, 
-users.fname as user_fname, 
-CASE 
-  WHEN upm.permission_id = 2 THEN CONCAT(users.lname, ' (Admin)')
-  ELSE users.lname 
-END as user_lname, 
+$sql = "SELECT
+msg.*,
+users.id as user_id,
+users.fname as user_fname,
+CASE
+  WHEN MAX(upm.permission_id) = 2 THEN CONCAT(users.lname, ' (Admin)')
+  ELSE users.lname
+END as user_lname,
 users.picture as user_picture
-FROM 
+FROM
 plg_chat_messages as msg
-JOIN 
+JOIN
 users ON msg.user_id = users.id
-LEFT JOIN 
+LEFT JOIN
 user_permission_matches as upm ON users.id = upm.user_id
-WHERE 
+WHERE
 msg.event_id = ?
-ORDER BY 
+GROUP BY
+msg.id
+ORDER BY
 msg.id DESC
-LIMIT 
+LIMIT
 500
 ";
 

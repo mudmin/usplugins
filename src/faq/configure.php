@@ -130,7 +130,7 @@ if (isset($_GET['edit_faq_id'])) {
 }
 ?>
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 <style>
     .fa-bars {
         cursor: grab;
@@ -152,6 +152,11 @@ if (isset($_GET['edit_faq_id'])) {
             </ul>
         </div>
     <?php } ?>
+
+    <div class="alert alert-light border py-2 px-3 small text-muted" role="note">
+        <i class="fa fa-info-circle mr-1"></i>
+        <strong>CSP note:</strong> this page loads the Summernote editor from <code>https://cdnjs.cloudflare.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add that origin to <code>script-src</code> (and <code>style-src</code>) or the editor will not load.
+    </div>
 
     <div class="alert alert-info">
         This plugin allows you to create a FAQ section for your site with categories and questions. You can reorder categories and questions by dragging the <i class="fa fa-bars"></i> icon. FAQs in a deleted category will be moved to "Uncategorized" until you recategorize them. 
@@ -453,7 +458,7 @@ if (isset($_GET['edit_faq_id'])) {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
 <script src="<?= $us_url_root ?>usersc/plugins/faq/assets/js/Sortable.min.js"></script>
 
 <script>
