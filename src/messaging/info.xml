@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 
 <!-- release date of THIS version -->
-  <release>January 29, 2026</release>
+  <release>May 17, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>6.0.2</tested>
+  <tested>6.0.9</tested>
 
 <!-- What does your plugin do? -->
   <description>A unified messaging plugin. It does messaging type things.</description>

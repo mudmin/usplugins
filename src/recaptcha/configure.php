@@ -15,6 +15,10 @@ if(!Token::check($token)){
   <div class="content mt-3">
       <div class="row">
           <div class="col-6 offset-3">
+              <div class="alert alert-light border py-2 px-3 small text-muted" role="note">
+                <i class="fa fa-info-circle mr-1"></i>
+                <strong>CSP note:</strong> reCAPTCHA loads Google's <code>api.js</code> from <code>https://www.google.com</code> (and runtime assets from <code>https://www.gstatic.com</code>) and cannot be self-hosted. If your site sends a <em>Content-Security-Policy</em> header, add those origins to <code>script-src</code> or the captcha will not load.
+              </div>
               <h2>reCAPTCHA Settings</h2>
               <strong>Please Note:</strong> reCAPTCHA requires keys generated from Google.<br>
               You can generate these keys on Google <a href="https://www.google.com/recaptcha/admin">here</a>.<br><br>

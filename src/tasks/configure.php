@@ -17,6 +17,10 @@ if (!empty($_POST)) {
 ?>
 
 <div class="content mt-3">
+  <div class="alert alert-light border py-2 px-3 small text-muted" role="note">
+    <i class="fa fa-info-circle mr-1"></i>
+    <strong>CSP note:</strong> some task screens load the Select2 library from <code>https://cdnjs.cloudflare.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add that origin to <code>script-src</code> (and <code>style-src</code>) or those controls will not load.
+  </div>
   <?php
   include $abs_us_root . $us_url_root . "usersc/plugins/tasks/assets/menu.php";
 

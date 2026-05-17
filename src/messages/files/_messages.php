@@ -187,6 +187,10 @@ if (!empty($_POST)) {
       $csrf = Token::generate();
       ?>
       <div class="content mt-3">
+        <div class="alert alert-light border py-2 px-3 small text-muted" role="note">
+          <i class="fa fa-info-circle mr-1"></i>
+          <strong>CSP note:</strong> the message composer loads the Summernote editor from <code>https://cdnjs.cloudflare.com</code>. If your site sends a <em>Content-Security-Policy</em> header, add that origin to <code>script-src</code> (and <code>style-src</code>) or the editor will not load.
+        </div>
         <?=resultBlock($errors,$successes);?>
         <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
         <h2>Conversations <a href="#" data-toggle="modal" class="nounderline" data-target="#settings"><i class="fa fa-cog"></i></a></h2>
@@ -373,8 +377,8 @@ if (!empty($_POST)) {
                         <script src="../users/js/jwerty.js"></script>
                         <script src="../users/js/combobox.js"></script>
                         <!-- include summernote css/js -->
-                        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.19/dist/summernote.min.css" rel="stylesheet">
-                        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.19/dist/summernote.min.js"></script>
+                        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
                         <script>
                         $(document).ready(function(){
                           $('.combobox').combobox();
