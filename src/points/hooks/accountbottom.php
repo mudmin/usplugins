@@ -1,4 +1,7 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $uc = ucfirst(pointsNameReturn());
 global $user;
 $pntSettings = $db->query("SELECT * FROM plg_points_settings")->first();
@@ -29,7 +32,7 @@ if($pntSettings->show_trans_acct == 1){ ?>
     </tbody>
   </table>
   <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function() {
     $('#paginatePoints').DataTable({"pageLength": 5,"aLengthMenu": [[5, 10, 50, -1], [5, 10, 50, "All"]], "aaSorting": []});
   } );

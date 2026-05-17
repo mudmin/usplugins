@@ -1,4 +1,7 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $action = Input::get('action');
 if($action == ""){
   $action = "content";
@@ -33,17 +36,17 @@ if($action == "content"){
       <tr>
         <td><?=$d->id?></td>
         <td><?=$d->title?></td>
-        <td><button class="btn btn-success" onclick="window.location='<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=cms&action=edit&method=<?=$action?>_edit&id=<?=$d->id?>';">
-            Edit</button>
+        <td><a class="btn btn-success" role="button" href="<?=safeReturn($us_url_root.'users/admin.php?view=plugins_config&plugin=cms&action=edit&method='.$action.'_edit&id='.$d->id)?>">
+            Edit</a>
         </td>
         <?php if($action == "content"){?>
         <td>
-          <button class="btn btn-info" onclick="window.location='<?=$us_url_root?><?=$plg_settings->parser?>?c=<?=$d->slug?>';">
-            View</button>
+          <a class="btn btn-info" role="button" href="<?=safeReturn($us_url_root.$plg_settings->parser.'?c='.$d->slug)?>">
+            View</a>
         </td>
       <?php } ?>
         <td>
-          <form class="" action="" method="post" onsubmit="return confirm('Do you really want to delete this?');">
+          <form class="" action="" method="post" data-us-confirm="Do you really want to delete this?">
             <input type="hidden" name="csrf" value="<?=$token?>">
             <input type="hidden" name="deleteme" value="<?=$d->id?>">
             <input type="submit" name="submit" value="Delete" class="btn btn-danger">
@@ -55,7 +58,7 @@ if($action == "content"){
   </tbody>
 </table>
 <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 
 $(document).ready(function () {
    $('#paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});

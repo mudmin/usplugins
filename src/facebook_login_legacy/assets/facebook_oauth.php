@@ -17,8 +17,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '256684718065631',

@@ -4,6 +4,10 @@
 </style>
 <script type="text/javascript" src="<?=$us_url_root?>usersc/plugins/apibuilder/assets/oce.js"></script>
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
 if(!empty($_POST)){
@@ -191,7 +195,7 @@ $apisettings = $db->query("SELECT * FROM plg_api_settings")->first();
 
   </div>
 
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function() {
     var mode = "<?=$apisettings->api_auth_type?>";
     $('[data-toggle="popover"]').popover();

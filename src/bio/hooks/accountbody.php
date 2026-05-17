@@ -6,8 +6,8 @@ if($check < 1){
 }
 ?>
 <div class="form-group mb-3">
-<button type="button" onclick="window.location.href = 'profile.php?id=<?=$user->data()->id?>';" name="button" class="btn btn-primary btn-block">Your Bio</button>
+<a href="profile.php?id=<?=safeReturn($user->data()->id)?>" role="button" class="btn btn-primary btn-block">Your Bio</a>
 </div>
 <div class="form-group mb-3">
-<button type="button" onclick="window.location.href = 'view_all_users.php';" name="button" class="btn btn-primary btn-block">All Users</button>
+<a href="view_all_users.php" role="button" class="btn btn-primary btn-block">All Users</a>
 </div>

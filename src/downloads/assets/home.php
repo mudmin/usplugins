@@ -16,6 +16,11 @@ if(!empty($_POST['resetDatabase'])){
   $db->query("TRUNCATE TABLE plg_download_links");
   Redirect::to('admin.php?view=plugins_config&plugin=downloads&v=home&err=Your database has been reset');
 }
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
 <div class="row">
   <div class="col-sm-12">
@@ -58,7 +63,7 @@ if(!empty($_POST['resetDatabase'])){
     </form>
 
    
-    <form class="" action="" method="post" onsubmit="return confirm('Do you really want to clear your links and logs? THIS CANNOT BE UNDONE and all links that have been shared will no longer work.');">
+    <form class="" action="" method="post" data-us-confirm="Do you really want to clear your links and logs? THIS CANNOT BE UNDONE and all links that have been shared will no longer work.">
     <h3>Reset Database
     <input type="submit" name="resetDatabase" value="Reset Now" class="btn btn-danger btn-sm">
 
@@ -72,3 +77,11 @@ if(!empty($_POST['resetDatabase'])){
 
     </form>
 </div> <!-- /.row -->
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest && e.target.closest('form[data-us-confirm]');
+    if (form && !window.confirm((form.getAttribute('data-us-confirm') || '').replace(/\n/g, '\n'))) {
+        e.preventDefault();
+    }
+}, true);
+</script>

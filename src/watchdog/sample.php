@@ -10,6 +10,9 @@ if(!pluginActive("watchdog",true)){
   die("plugin is not active");
 }
 
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 
 ?>
 <div class="row">
@@ -95,7 +98,7 @@ if(!pluginActive("watchdog",true)){
 </div>
 <br>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function() {
 function onlineReport(){
   console.log("requesting");

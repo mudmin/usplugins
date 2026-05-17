@@ -24,8 +24,11 @@ $availableWatchdogs["bsmessage"] = [
   "args"=>"{\"class\":\"warning\",\"msg\":\"This is the message\",\"timeout\":15000}"
   ];
 
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   function refresh(){
     location.reload();
   }

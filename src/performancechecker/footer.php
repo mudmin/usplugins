@@ -4,8 +4,11 @@
 $pluginQueryCounter = $db->getQueryCount();
 $mem_usage = memory_get_usage();
 $mem_peak = memory_get_peak_usage();
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 window.onload = function () {
 	var loadTime = window.performance.timing.domContentLoadedEventEnd-window.performance.timing.navigationStart;
   var pluginQueryCounter = "<?=$pluginQueryCounter?>";

@@ -1,5 +1,11 @@
 <?php
 //Include reCAPTCHA v3 for site-wide scoring or form-only usage
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 if ($settings->recap_version == 3) {
     $v3_mode = isset($settings->recap_v3_mode) ? $settings->recap_v3_mode : 'form';
     $hide_badge = isset($settings->recap_hide_badge) && $settings->recap_hide_badge == 1;
@@ -8,7 +14,7 @@ if ($settings->recap_version == 3) {
         // Site-wide mode: Load script and execute on every page for background scoring
         echo '<script src="https://www.google.com/recaptcha/api.js?render=' . $settings->recap_public . '"></script>';
         ?>
-        <script>
+        <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
         grecaptcha.ready(function() {
             // Execute reCAPTCHA for general page scoring
             grecaptcha.execute('<?php echo $settings->recap_public; ?>', {action: 'page_view'}).then(function(token) {

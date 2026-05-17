@@ -1,6 +1,10 @@
 <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
 
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
 
@@ -305,8 +309,8 @@ $token = Token::generate();
                             </div>
                             
                             <div class="mb-3">
-                                <button type="button" class="btn btn-outline-secondary btn-sm me-2" onclick="selectAllFields()">Select All</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearAllFields()">Clear All</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm me-2" id="us-select-all-fields" data-us-select-all-fields>Select All</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="us-clear-all-fields" data-us-clear-all-fields>Clear All</button>
                             </div>
                             
                             <input type="submit" name="plugin_exporter" value="Export to CSV" class="btn btn-success" />
@@ -339,7 +343,7 @@ $additional_fields = [
     </div> <!-- /.row -->
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(function () {
     // Password toggle functionality
     $("#chkShowPassword").bind("click", function () {
@@ -349,6 +353,11 @@ $(function () {
             $(".pwtoggle").hide();
         }
     });
+
+    var selBtn = document.getElementById('us-select-all-fields');
+    if (selBtn) { selBtn.addEventListener('click', selectAllFields); }
+    var clrBtn = document.getElementById('us-clear-all-fields');
+    if (clrBtn) { clrBtn.addEventListener('click', clearAllFields); }
 });
 
 // Export field selection functions

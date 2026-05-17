@@ -3,6 +3,11 @@
   <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
  if(!empty($_POST['plugin_demo'])){
    $token = $_POST['csrf'];
 if(!Token::check($token)){
@@ -142,7 +147,7 @@ if(!Token::check($token)){
       </div>
   </div>
 
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 document.addEventListener('DOMContentLoaded', function() {
     const versionSelect = document.getElementById('recap_version');
     const v3ModeGroup = document.getElementById('v3_mode_group');

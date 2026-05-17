@@ -8,6 +8,11 @@ if (file_exists($abs_us_root . $us_url_root . $plg_settings->alternate_location 
 require_once $abs_us_root . $us_url_root . 'usersc/plugins/tasks/assets/functions.php';
 $is_task_admin = isTaskAdmin();
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 ?>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -94,7 +99,7 @@ $is_task_admin = isTaskAdmin();
     }
 </style>
 
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     function launchTaskConfetti() {
         // Dynamically create the confetti wrapper div and append it to the body
         const confettiWrapper = document.createElement('div');

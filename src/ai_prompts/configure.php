@@ -7,6 +7,11 @@
 include "plugin_info.php";
 pluginActive($plugin_name);
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 if (!empty($_POST)) {
   if (!Token::check(Input::get('csrf'))) {
     include($abs_us_root . $us_url_root . 'usersc/scripts/token_error.php');
@@ -477,7 +482,7 @@ when the prompt is read by `aiPromptRead()`, so the AI sees clean markdown.</cod
 
   </div>
 
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     (function () {
       // Render the selected prompt's markdown body, if any.
       <?php if ($selectedBody !== null && $selectedBody !== false): ?>

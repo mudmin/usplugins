@@ -1,4 +1,8 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 //PHP Goes Here!
 $errors = $successes = [];
 $e = $db->query("SELECT * FROM email")->first();
@@ -348,7 +352,7 @@ foreach($plans as $p){
     <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
     <script src="js/jwerty.js"></script>
 
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
       jwerty.key('esc', function(){
         $('.modal').modal('hide');

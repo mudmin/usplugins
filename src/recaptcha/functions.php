@@ -35,6 +35,10 @@ if(!function_exists('verifyCaptcha')) {
 
 if(!function_exists('addCaptcha')) {
     function addCaptcha($formName, $action = 'form_submit') {
+        // Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+        if (!isset($GLOBALS['userspice_nonce'])) {
+            $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+        }
         $db = DB::getInstance();
         $recaptcha = $db->query("SELECT recap_version, recap_public, recap_type, recap_v3_mode from settings")->first();
         $version = $recaptcha->recap_version;
@@ -46,7 +50,7 @@ if(!function_exists('addCaptcha')) {
             // v2 Checkbox
             ?>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $('#<?=$formName?>').find('[type="submit"]').before(
     '<div class="g-recaptcha" data-sitekey="<?=$siteKey?>" style="padding-bottom: 10px;"></div>'
 );
@@ -57,7 +61,7 @@ $('#<?=$formName?>').find('[type="submit"]').before(
             // v2 Invisible
             ?>
 <script src="https://www.google.com/recaptcha/api.js"></script>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $('#<?=$formName?>').find('[type="submit"]').before(
     '<div class="g-recaptcha" data-sitekey="<?=$siteKey?>" data-size="invisible" data-callback="recaptchaCompleted_<?=$formName?>"></div>'
 );
@@ -83,7 +87,7 @@ window.recaptchaCompleted_<?=$formName?> = function() {
             if ($v3_mode == 'sitewide') {
                 // Site-wide mode: Use existing token or get new one
                 ?>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $('#<?=$formName?>').submit(function(event) {
     var form = this;
 
@@ -117,7 +121,7 @@ $('#<?=$formName?>').submit(function(event) {
             } else {
                 // Form-only mode: Generate token on form submission
                 ?>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $('#<?=$formName?>').submit(function(event) {
     var form = this;
     if (!$('#<?=$formName?>').find('input[name="g-recaptcha-response"]').val()) {

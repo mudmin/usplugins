@@ -1,4 +1,8 @@
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $fieldQ = $db->query("SELECT * FROM $name WHERE id = ?",array($field));
 $fieldC = $fieldQ->count();
 if($fieldC > 0){
@@ -11,7 +15,7 @@ if($fieldC > 0){
 <br>
 <h4 style="color:blue;">Edit your <?=$f->field_type?> options for <?=$f->form_descrip?></h4>
 <br>
-<form class="" action="" method="get" onsubmit="return confirm('Do you really want to do this? This will clear out any saved options you have for this <?=$f->field_type?>!');">
+<form class="" action="" method="get" data-us-confirm="Do you really want to do this? This will clear out any saved options you have for this <?=safeReturn($f->field_type)?>!">
 	<input type="hidden" name="view" value="plugins_config">
 	<input type="hidden" name="newFormView" value="_admin_forms_edit">
 	<input type="hidden" name="edit" value="<?=$edit?>">
@@ -148,7 +152,7 @@ if($fieldC > 0){
 	</form>
 <?php } ?>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function() {
 	$("#add").click(function() {
 		var markup = "<tr class='optRow'><td></td><td><select class='' name='schemakey[]'><option value='col'>DB Column</option><option value='str'>String</option></select><input type='text' name='schemaval[]' value=''><button class='removeMe'>remove</button></td></tr>";

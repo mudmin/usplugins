@@ -1,6 +1,9 @@
 <?php
 global $user;
 if (canMakePlgLinks()) {
+  if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+  }
   $edit = Input::get('edit');
   $p = currentPage();
 
@@ -197,7 +200,7 @@ if (canMakePlgLinks()) {
         ?>
           <tr>
             <td>
-              <button type="button" class=" btn btn-primary me-3" onclick="copyStringToClipboard('<?= $string ?>');">Copy</button><?= $string ?>
+              <button type="button" class=" btn btn-primary me-3" data-us-copy="<?= safeReturn($string) ?>">Copy</button><?= $string ?>
             </td>
             
             <td><?= $l->link_title ?></td>
@@ -228,7 +231,7 @@ if (canMakePlgLinks()) {
       </tbody>
     </table>
     <script type="text/javascript" src="<?= $us_url_root ?>users/js/pagination/datatables.min.js"></script>
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function() {
         $('.paginate').DataTable({
           "pageLength": 25,
@@ -240,7 +243,7 @@ if (canMakePlgLinks()) {
         });
       });
     </script>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $("#link_name").change(function() { //use event delegation
         var value = $(this).val();
         var length = value.length;
@@ -288,10 +291,16 @@ if (canMakePlgLinks()) {
 
       });
     </script>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       function copyStringToClipboard(textToCopy) {
         navigator.clipboard.writeText(textToCopy)
       }
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest && e.target.closest('[data-us-copy]');
+        if (btn) {
+          copyStringToClipboard(btn.getAttribute('data-us-copy'));
+        }
+      });
     </script>
 
   <?php } //end permission check

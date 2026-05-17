@@ -39,6 +39,11 @@ if(!empty($_POST['updatelink'])){
   $db->update("plg_download_links",$l,$fields);
   Redirect::to("admin.php?view=plugins_config&plugin=downloads&v=links&folder=".$folder."&err=Link Updated");
 }
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
 
 <div class="row">
@@ -48,7 +53,7 @@ if(!empty($_POST['updatelink'])){
     This form allows you to create one off links for your files with very granular permissions. It's up to you to not put dumb values in here :)
     <div class="row">
       <div class="col-6 col-sm-4 col-md-2">
-        <form class="" action="" method="post" onsubmit="return confirm('Do you really want to delete this link?');">
+        <form class="" action="" method="post" data-us-confirm="Do you really want to delete this link?">
           <input type="hidden" name="csrf" value="<?=$token?>">
           <input type="hidden" name="folder" value="<?=$folder?>">
           <input type="hidden" name="link" value="<?=$l?>">
@@ -110,3 +115,11 @@ if(!empty($_POST['updatelink'])){
 
   </div>
 </div>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest && e.target.closest('form[data-us-confirm]');
+    if (form && !window.confirm((form.getAttribute('data-us-confirm') || '').replace(/\n/g, '\n'))) {
+        e.preventDefault();
+    }
+}, true);
+</script>

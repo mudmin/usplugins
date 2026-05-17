@@ -1,5 +1,11 @@
+<?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+?>
 <script src="<?=$us_url_root?>usersc/plugins/chat/chat-app/emoji-button.min.js?cb=<?=$cb?>"></script>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 var chatTimer;
 
 function ajax(url, data, callback, methodType){
@@ -226,6 +232,11 @@ window.addEventListener('load',function(){
 
   const dragHandle = document.getElementById('chat-window-drag-handle');
   dragHandle.addEventListener('mousedown', dragHandleClicked);
+
+  document.getElementById('chat-close-btn').addEventListener('click', function(evt){
+    evt.preventDefault();
+    closeChat();
+  });
 });
 
 function formatChatDate(isoDateString) {

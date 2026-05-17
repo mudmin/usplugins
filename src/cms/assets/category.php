@@ -1,4 +1,7 @@
 <?php if(count(get_included_files()) ==1) die("died"); //Direct Access Not Permitted
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $action = Input::get('action');
 $id = Input::get('id');
 if($action == 'edit'){
@@ -129,13 +132,13 @@ if($action == "new" || $e){
         <tr>
           <td><?=$d->id?></td>
           <td><?=$d->title?></td>
-          <td><button class="btn btn-success" onclick="window.location='<?=$us_url_root?>users/admin.php?view=plugins_config&plugin=cms&action=edit&method=<?=$action?>_edit&id=<?=$d->id?>';">
-              Edit</button>
+          <td><a class="btn btn-success" role="button" href="<?=safeReturn($us_url_root.'users/admin.php?view=plugins_config&plugin=cms&action=edit&method='.$action.'_edit&id='.$d->id)?>">
+              Edit</a>
           </td>
 
           <td>
-            <button class="btn btn-info" onclick="window.location='<?=$us_url_root?><?=$plg_settings->parser?>?c=<?=$d->slug?>';">
-              View</button>
+            <a class="btn btn-info" role="button" href="<?=safeReturn($us_url_root.$plg_settings->parser.'?c='.$d->slug)?>">
+              View</a>
           </td>
         </tr>
 
@@ -179,7 +182,7 @@ if($action == "delete"){
 }
 ?>
 <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 
 $(document).ready(function () {
    $('#paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});

@@ -17,6 +17,9 @@ if(!usermanSecurity($highest)){
 
 
 //PHP Goes Here!
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $errors = $successes = [];
 $query = $db->query("SELECT * FROM email");
 $results = $query->first();
@@ -323,7 +326,7 @@ if (!empty($_POST)) {
         <script src="./../../../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script>
         <script src="./../../../users/js/pagination/dataTables.js" type="text/javascript"></script>
         <script src="./../../../users/js/jwerty.js"></script>
-        <script>
+        <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
         $(document).ready(function() {
           jwerty.key('esc', function(){
             $('.modal').modal('hide');
@@ -350,7 +353,7 @@ if (!empty($_POST)) {
         </script>
 
         <?php if($settings->auto_assign_un==0) { ?>
-          <script type="text/javascript">
+          <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
           $(document).ready(function(){
             var x_timer;
             $("#username").keyup(function (e){

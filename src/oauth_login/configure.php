@@ -31,6 +31,11 @@ if (!empty($_POST)) {
     include($abs_us_root . $us_url_root . 'usersc/scripts/token_error.php');
   }
 }
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
 
 <div class="content mt-1">
@@ -224,7 +229,7 @@ if (!empty($_POST)) {
     </div>
     <a href="https://www.flaticon.com/free-icons/authentication" title="authentication icons" class="mt-4">Authentication icons created by Freepik - Flaticon</a>
   </div>
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 
     $("#client_icon").change(function() {
       var icon = $(this).val();

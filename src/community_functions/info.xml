@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 
 <!-- release date of THIS version -->
-  <release>April 26, 2024</release>
+  <release>May 17, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.7.0</tested>
+  <tested>6.0.9</tested>
 
 <!-- What does your plugin do? -->
   <description>Install community-provided and optional functions for your UserSpice project.</description>

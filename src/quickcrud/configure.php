@@ -1,6 +1,9 @@
   <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
 
 <?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
  if(!empty($_POST['plugin_quickcrud'])){
@@ -70,7 +73,7 @@ if(!Token::check($token)){
       Thanks so much for your help.
     <?php }else{ ?>
     <form action="" name="form" method="post" >
-      <select id="tables" name="seek" onchange="this.form.submit()">
+      <select id="tables" name="seek" data-us-submit-on-change="1">
        <option value="">Choose Table</option>
     <?php
     // populate select box
@@ -83,6 +86,14 @@ if(!Token::check($token)){
     <?php } ?>
       </select>
     </form>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+      document.addEventListener('change', function (e) {
+        var sel = e.target;
+        if (sel && sel.matches && sel.matches('select[data-us-submit-on-change]') && sel.form) {
+          sel.form.submit();
+        }
+      }, true);
+    </script>
     <?php
     $sanitizedTableName = (!empty($_POST["seek"])) ? $_POST["seek"] : "Empty";
     // Sanitize table name: basename for path traversal, regex for SQL injection

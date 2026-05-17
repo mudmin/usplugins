@@ -1,6 +1,10 @@
 <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
 
   <?php
+  // Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+  if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+  }
   include "plugin_info.php";
   pluginActive($plugin_name);
   require_once $abs_us_root.$us_url_root.'usersc/plugins/cronpro/vendor/autoload.php';
@@ -256,7 +260,7 @@
                         <td><textarea class="form-control" rows="1" readonly><?=$u->calldata?></textarea></td>
                         <td><?=$u->go_time?></td>
                         <td>
-                          <form class="" action="" method="post" onsubmit="return confirm('This cannot be undone! Note that deleting a recurring job will delete the job and prevent it from ever happening again.');">
+                          <form class="" action="" method="post" data-us-confirm="This cannot be undone! Note that deleting a recurring job will delete the job and prevent it from ever happening again.">
                             <input type="hidden" name="csrf" value="<?=$token?>">
                             <input type="hidden" name="cronToDelete" value="<?=$u->id?>">
                             <input type="submit" name="delCron" value="Delete" class="btn btn-danger">
@@ -303,7 +307,7 @@
         </div>
       </div>
 
-        <script type="text/javascript">
+        <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
         $(document).ready(function() {
           $( "#freqdrop" ).change(function() {
             var value = $(this).val();

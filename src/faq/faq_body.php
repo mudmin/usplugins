@@ -1,4 +1,7 @@
 <?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $categories = $db->query("SELECT * FROM plg_faq_categories ORDER BY display_order")->results();
 $faqs = [];
 foreach ($categories as $category) {
@@ -113,7 +116,7 @@ if (file_exists($abs_us_root . $us_url_root . 'usersc/plugins/faq/faq_custom.php
     }
     ?>
 
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('faq-search');
             const faqItems = document.querySelectorAll('.faq-item');

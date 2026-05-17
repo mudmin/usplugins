@@ -2,6 +2,11 @@
 $admin_page = true;
 $customPage = $abs_us_root . $us_url_root . $plg_settings->alternate_location . '/includes/during_task_assignment.php';
 taskSecure();
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $notifyAssign = false;
 $id = Input::get('id');
 $taskQ = $db->query("SELECT 
@@ -475,7 +480,7 @@ if ($subsC > 0 && $task->closed == 0 && $subsOpen == false) { ?>
 <?php require_once $abs_us_root . $us_url_root . 'usersc/plugins/tasks/assets/_comments.php'; ?>
 <br>
 
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
 
         $("#addSubTask").click(function() {

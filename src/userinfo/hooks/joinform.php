@@ -1,5 +1,8 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 global $user;
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 
 $check = $db->query("SELECT id FROM users_form")->count();
 if($check > 0){
@@ -24,7 +27,7 @@ if($check > 0){
     $string = randomstring(10);
 
     if($e->fname == 1){ ?>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $("#fname-group").hide();
       <?php if(!$us){?>  $("#fname").val("<?=$string?>"); <?php } ?>
     </script>
@@ -32,7 +35,7 @@ if($check > 0){
     }
 
     if($e->lname == 1){?>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $("#lname-group").hide();
       <?php if(!$us){?>  $("#lname").val("<?=$string?>"); <?php } ?>
     </script>
@@ -40,7 +43,7 @@ if($check > 0){
     }
 
     if($e->uname == 1){?>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $("#email-group").hide();
       <?php if(!$us){?>  $("#email").val("<?=$string?>@<?=$e->domain?>"); <?php } ?>
     </script>
@@ -48,7 +51,7 @@ if($check > 0){
     }
 
     if($e->uname == 2){?>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $("#username-group").hide();
       <?php if(!$us){?>  $("#username").val("<?=$string?>"); <?php } ?>
     </script>

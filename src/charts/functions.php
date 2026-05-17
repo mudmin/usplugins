@@ -12,6 +12,10 @@
 // }
 
 function createChart($data,$opts=[]){
+  // Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+  if (!isset($GLOBALS['userspice_nonce'])) {
+      $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+  }
   $db = DB::getInstance();
 //example $data = $db->query("SELECT username, logins FROM users LIMIT 10")->results();
 if(!array_key_exists('id',$opts)){$opts['id'] = "x".uniqid();}
@@ -45,7 +49,7 @@ $values = implode(', ',$values);
 
    ?>
   <canvas id="<?=$opts['id']?>" height="<?=$opts['height']?>" width="<?=$opts['height']?>"></canvas>
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   new Chart(document.getElementById("<?=$opts['id']?>"), {
   	type: "<?=$opts['type']?>",
   	data: {

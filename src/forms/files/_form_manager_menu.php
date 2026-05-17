@@ -2,6 +2,10 @@
 if(!in_array($user->data()->id,$master_account)){
   Redirect::to($us_url_root.'users/admin.php?err=You+do+not+have+permission');
 }
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 //Errors Successes
 $errors = [];
 $successes = [];
@@ -54,7 +58,7 @@ if(!empty($_POST['deleteThisForm'])){
       <a href="#" data-bs-toggle="modal" data-toggle="modal" data-bs-target="#fromDB" data-target="#fromDB" class="show-tooltip" title="Create form from existing db table"><i class="fa fa-tasks"></i></a>
       <a href="admin.php?view=plugins_config&plugin=forms&newFormView=_admin_forms_views" class="show-tooltip" title="Manage form views"><i class="fa fa-eye"></i></a>
       <a href="#" data-bs-toggle="modal" data-toggle="modal" data-bs-target="#deleteForm" data-target="#deleteForm" class="show-tooltip" title="Delete a form"><i class="fa fa-times-circle"></i></a>
-      <a href="#" onclick=" window.open('https://userspice.com/using-the-form-manager/','_blank')" class="show-tooltip" title="Help with forms"><i class="fa fa-question-circle"></i></a>
+      <a href="https://userspice.com/using-the-form-manager/" target="_blank" rel="noopener" class="show-tooltip" title="Help with forms"><i class="fa fa-question-circle"></i></a>
     </h2>
     Please note: While the forms are designed to be filled out by the end user, the forms manager is not designed to be accessable to the public. Please keep it as master account only.
     <?=resultBlock($errors,$successes);?>
@@ -176,7 +180,7 @@ if(!empty($_POST['deleteThisForm'])){
         <p>Please choose a form to delete:</p>
         <div class="form-group">
           <form autocomplete="off" class="inline-form" action="" method="POST" id="deleteForm" required
-          onsubmit="return confirm('Please understand what you are doing. If you choose to delete a form, you will not be able to create a new one with the same name unless you choose the Create Form from an Existing Table option.  If you choose to delete the Form and Related Table, YOU WILL LOSE ALL THE DATA THAT WAS SUBMITTED FROM YOUR FORM and all data entirely if you created the form from an existing table. Use this feature carefully.  You cannot delete the users form.');"
+          data-us-confirm="Please understand what you are doing. If you choose to delete a form, you will not be able to create a new one with the same name unless you choose the Create Form from an Existing Table option.  If you choose to delete the Form and Related Table, YOU WILL LOSE ALL THE DATA THAT WAS SUBMITTED FROM YOUR FORM and all data entirely if you created the form from an existing table. Use this feature carefully.  You cannot delete the users form."
           >
             <select class="form-control" name="deleteThisForm">
               <option disabled selected="selected">--choose a form--</option>
@@ -216,7 +220,7 @@ if(!empty($_POST['deleteThisForm'])){
 
   <script src="../users/js/jwerty.js"></script>
   <script src="<?=$us_url_root?>usersc/plugins/forms/assets/combobox.js"></script>
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function() {
     $('.show-tooltip').tooltip();
 

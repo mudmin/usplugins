@@ -6,6 +6,10 @@
   <?php
   include "plugin_info.php";
   include "assets/local_functions.php";
+  // Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+  if (!isset($GLOBALS['userspice_nonce'])) {
+      $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+  }
   $upset = $db->query("SELECT * FROM plg_uptime_settings")->first();
   $methods = [];
   $email = $db->query("SELECT * FROM email")->first();
@@ -135,7 +139,7 @@
         </form>
       </div>
       <div class="col-12 col-sm-2">
-        <form class="" action="" method="post" onsubmit="return confirm('Do you really want to do this? It cannot be undone.');">
+        <form class="" action="" method="post" data-us-confirm="Do you really want to do this? It cannot be undone.">
           <input type="hidden" name="csrf" value="<?= Token::generate(); ?>">
           <input type="submit" name="clearDowntime" value="Clear Downtime Data" class="btn btn-danger">
         </form>
@@ -223,7 +227,7 @@
                 } ?>
               </td>
               <td>
-                <form class="" action="admin.php?view=plugins_config&plugin=uptime" method="get" onsubmit="return confirm('Do you really want to do this? It cannot be undone');">
+                <form class="" action="admin.php?view=plugins_config&plugin=uptime" method="get" data-us-confirm="Do you really want to do this? It cannot be undone">
                   <input type="hidden" name="view" value="plugins_config">
                   <input type="hidden" name="plugin" value="uptime">
                   <input type="hidden" name="delme" value="<?= $e->id ?>">
@@ -283,7 +287,7 @@
                     echo $dt->dt . " mins";
                   } ?></td>
               <td>
-                <form class="" action="" method="get" onsubmit="return confirm('Do you really want to do this? It cannot be undone');">
+                <form class="" action="" method="get" data-us-confirm="Do you really want to do this? It cannot be undone">
                   <input type="hidden" name="view" value="plugins_config">
                   <input type="hidden" name="plugin" value="uptime">
                   <input type="hidden" name="delme" value="<?= $s->id ?>">
@@ -316,7 +320,7 @@
     </div>
   <?php } ?>
 
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $("#method").change(function() {
       var method = $(this).val();
       if (method == "email") {
@@ -337,7 +341,7 @@
     <script type="text/javascript" src="<?= $us_url_root ?>users/js/pagination/datatables.min.js"></script>
 
 
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function() {
         $('.paginate').DataTable({
           "pageLength": 25,

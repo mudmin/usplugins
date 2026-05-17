@@ -1,5 +1,9 @@
 <?php
 global $abs_us_root,$us_url_root;
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $valCount = 1;
 $opt = $db->query('SELECT * FROM us_form_validation')->results();?>
 <div class="form-group">
@@ -27,12 +31,19 @@ $opt = $db->query('SELECT * FROM us_form_validation')->results();?>
           <input type="text" name="value" value="true" class="form-control" id="trueInput" readonly>
           <input type="text" name="value" value="" class="form-control" id="textInput" placeholder="Enter a value">
         </td>
-        <td><input id="addVal" type="button" class="form-control" value="Add" name="task[]" value="<?=$o->id?>" data-id="<?=$o->id?>" onclick="updateValidation(event);"></td>
+        <td><input id="addVal" type="button" class="form-control" value="Add" name="task[]" value="<?=$o->id?>" data-id="<?=$o->id?>"></td>
       </tr>
     </tbody>
   </table>
 </div>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+
+document.addEventListener('DOMContentLoaded', function () {
+  var addValBtn = document.getElementById('addVal');
+  if (addValBtn) {
+    addValBtn.addEventListener('click', updateValidation);
+  }
+});
 
 function updateValidation(evt){
   var valID = $("#validation").find(':selected').attr('data-valID');
@@ -73,7 +84,7 @@ function updateValidationSuccess(resp){
 }
 </script>
 
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function () {
   toggleFields();
   // this will call our toggleFields function every time the selection value of our other field changes

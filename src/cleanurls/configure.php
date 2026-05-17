@@ -1,6 +1,10 @@
   <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
 
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
  if(!empty($_POST['plugin_cleanurls'])){
@@ -29,7 +33,7 @@ if(!Token::check($token)){
             <b>Step 1:</b><br>
               Copy the following code snippet to the bottom of usersc/includes/analytics.php (after the closing php tag)
               <xmp>
-                <script type="text/javascript">
+                <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
                     $( document ).ready(function() {
                     	$("form").each(function() {
                     		var method = $(this).attr('method');

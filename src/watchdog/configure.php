@@ -3,6 +3,9 @@
 <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $wdSettingsQ = $db->query("SELECT * FROM plg_watchdog_settings");
 $wdSettingsC = $wdSettingsQ->count();
 if($wdSettingsC < 1){
@@ -246,7 +249,7 @@ if(!empty($_POST['updateSettings'])){
       </div>
 
 </div>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function() {
 $( "#wd_func" ).change(function() { //use event delegation
   var value = $(this).val();

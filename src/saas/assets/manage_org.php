@@ -1,4 +1,8 @@
 <?php if (count(get_included_files()) == 1) die(); //Direct Access Not Permitted
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $org = Input::get('o');
 $orgQ = $db->query("SELECT * FROM us_saas_orgs WHERE id = ?", [$org]);
 $orgC = $orgQ->count();
@@ -139,11 +143,11 @@ foreach ($plans as $p) {
         <h4>Manage Org</h4>
       </div>
       <div class="card-body">
-        <form class="" action="" method="post" onclick="return confirm('Are you sure?');">
+        <form class="" action="" method="post" data-us-confirm="Are you sure?">
           <input type="submit" name="deact" value="Deactivate Org and All Its Users" class="btn btn-outline-danger mb-5">
         </form>
-        <form class="" action="" method="post">
-          <input type="submit" name="transfer" value="Deactivate and Transfer users to..." class="btn btn-warning mb-3" onclick="return confirm('Are you sure?');">
+        <form class="" action="" method="post" data-us-confirm="Are you sure?">
+          <input type="submit" name="transfer" value="Deactivate and Transfer users to..." class="btn btn-warning mb-3">
           <select class="form-control mb-5" name="transfer_to" required>
             <option value="" selected disalbled>--------</option>
             <option value="1">Reserved/Default Org</option>
@@ -164,3 +168,11 @@ foreach ($plans as $p) {
     </div>
   </div>
 </div>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest && e.target.closest('form[data-us-confirm]');
+    if (form && !window.confirm((form.getAttribute('data-us-confirm') || '').replace(/\\n/g, '\n'))) {
+        e.preventDefault();
+    }
+}, true);
+</script>

@@ -57,6 +57,11 @@ if(!empty($_POST['savetodb'])){
   }
   Redirect::to("admin.php?view=plugins_config&plugin=downloads&err=Processed&v=files&folder=".$folder);
 }
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
 
 <div class="row">
@@ -176,7 +181,7 @@ if(!empty($_POST['savetodb'])){
                 <a href="<?=$plgSet->baseurl?><?=$plgSet->parser?>?id=<?=$check->id?>&mode=1&code=<?=$check->dlcode?>"><?=$plgSet->baseurl?><?=$plgSet->parser?>?id=<?=$check->id?>&mode=1&code=<?=$check->dlcode?></a>
               </td>
               <td>
-                  <button type="button" class=" btn btn-primary" onclick="copyStringToClipboard('<?=$plgSet->baseurl?><?=$plgSet->parser?>?id=<?=$check->id?>&mode=1&code=<?=$check->dlcode?>');">Copy</button>
+                  <button type="button" class=" btn btn-primary" data-us-copy="<?=safeReturn($plgSet->baseurl.$plgSet->parser.'?id='.$check->id.'&mode=1&code='.$check->dlcode)?>">Copy</button>
               </td>
               <td><?=bin($check->disabled);?></td>
               <td>
@@ -203,8 +208,12 @@ if(!empty($_POST['savetodb'])){
   </div>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $( document ).ready(function() {
+  $(document).on('click', '[data-us-copy]', function () {
+    copyStringToClipboard(this.getAttribute('data-us-copy'));
+  });
+
   $("#addall").change(function(){
    if($(this).is(':checked')){
      $(".addtodb").each(function() {

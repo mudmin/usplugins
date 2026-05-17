@@ -1,6 +1,10 @@
 <?php
 if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 if(!pluginActive("spicebin",true)){ die ("SpiceBin is disabled");}
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $pset = $db->query("SELECT * FROM plg_spicebin_settings")->first();
 if(!canIPaste()){
   die("You are not allowed to ".$pset->product_single);
@@ -89,7 +93,7 @@ if(file_exists($abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_custom_
   <?php }?>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 function qsa(sel) {
   return Array.apply(null, document.querySelectorAll(sel));
 }

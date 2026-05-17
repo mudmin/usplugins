@@ -2,9 +2,9 @@
 <plugin>
     <name>FAQ</name>
     <author>mjaj72</author>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <!-- release date of THIS version -->
-    <release>May 16, 2026</release>
+    <release>May 17, 2026</release>
     <!-- the last version of UserSpice you tested the plugin with -->
     <tested>6.0.9</tested>
     <description>A simple FAQ plugin with an admin interface for managing questions and categories.</description>

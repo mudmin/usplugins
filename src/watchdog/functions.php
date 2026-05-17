@@ -63,6 +63,9 @@ if(!function_exists('watchdogHere')) {
   function watchdogHere(){
     $db = DB::getInstance();
     global $abs_us_root,$us_url_root;
+    if (!isset($GLOBALS['userspice_nonce'])) {
+        $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+    }
     $directory = $abs_us_root.$us_url_root."usersc/plugins/watchdog/assets/";
     $funcFiles = glob($directory . "*.php");
     $availableFuncs = [];
@@ -76,7 +79,7 @@ if(!function_exists('watchdogHere')) {
 
 
     ?>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
     function watchdog(){
       console.log("requesting");

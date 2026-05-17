@@ -4,6 +4,10 @@
 ?>
 
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+  $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
 $show = Input::get('show');
@@ -117,10 +121,10 @@ if (!function_exists('tableFromQueryPlugin')) {
       <a href="<?= $us_url_root ?>users/admin.php?view=plugins">Return to the Plugin Manager</a><br>
       <p class="text-danger text-center"><b>This is a very powerful plugin. Use at your own risk.</b></p>
       <?php if ($show == "browser") { ?>
-        <button type="button" onclick="window.location.href = 'admin.php?view=plugins_config&plugin=mysql';" class="btn btn-primary">Show Saved Queries</button>
+        <a href="admin.php?view=plugins_config&plugin=mysql" class="btn btn-primary" role="button">Show Saved Queries</a>
       <?php } ?>
       <?php if ($show != "browser") { ?>
-        <button type="button" onclick="window.location.href = 'admin.php?view=plugins_config&plugin=mysql&show=browser';" class="btn btn-warning ">Show Table Browser</button>
+        <a href="admin.php?view=plugins_config&plugin=mysql&show=browser" class="btn btn-warning" role="button">Show Table Browser</a>
       <?php } ?>
     </div>
   </div>
@@ -224,7 +228,7 @@ if (!function_exists('tableFromQueryPlugin')) {
   <p>Donations: <a href="https://UserSpice.com/donate">UserSpice Donate</a></p>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function() {
     $("#queryForm").submit(function(e) {
       var query = $("#querySave").val().toLowerCase();

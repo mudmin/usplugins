@@ -1,6 +1,10 @@
 <?php
 if(count(get_included_files()) == 1) die(); //Direct Access Not Permitted
 if(!pluginActive("spicebin",true)){ die ("SpiceBin is disabled");}
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $pset = $db->query("SELECT * FROM plg_spicebin_settings")->first();
 $paste = canIViewPaste();
 if(!$paste){
@@ -45,7 +49,7 @@ if(isset($user) && $user->isLoggedIn() && $paste->user == $user->data()->id || h
       <form class="" action="" method="post">
         <h4>
           Manage this <?=$pset->product_single?>
-          <button type="button" class="btn btn-primary" onclick="copyStringToClipboard('<?=$actual_link_js?>');">Copy Link</button>
+          <button type="button" class="btn btn-primary" data-us-copy="<?=$actual_link_safe?>">Copy Link</button>
           <span style="display:none; color:blue;" id="copyLink">Link Copied</span>
 
           <input type="hidden" name="csrf" value="<?=Token::generate();?>">
@@ -129,7 +133,7 @@ if(!$deleted){
   <?php } ?>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 function qsa(sel) {
   return Array.apply(null, document.querySelectorAll(sel));
 }
@@ -151,4 +155,10 @@ function copyStringToClipboard (textToCopy) {
   $("#copyLink").fadeIn();
   $("#copyLink").fadeOut(3500);
 }
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest && e.target.closest('[data-us-copy]');
+  if (btn) {
+    copyStringToClipboard(btn.getAttribute('data-us-copy'));
+  }
+});
 </script>

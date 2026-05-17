@@ -1,3 +1,8 @@
+<?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+?>
 <style>
   .openMessageButton:hover{
     cursor:pointer;
@@ -23,7 +28,7 @@
 
 
 </style>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 
 <?php
  $notifSettings = $db->query("SELECT * FROM plg_msg_settings")->first();

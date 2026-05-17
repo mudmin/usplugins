@@ -1,6 +1,9 @@
   <?php if(!in_array($user->data()->id,$master_account)){ Redirect::to($us_url_root.'users/admin.php');} //only allow master accounts to manage plugins! ?>
 
 <?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
 if(!empty($_POST)){
@@ -118,7 +121,7 @@ $lsettings = $db->query("SELECT * FROM plg_links_settings WHERE id = 1")->first(
             <?php foreach($links as $l){?>
               <tr>
                 <td>
-                  <button type="button" class=" btn btn-primary" onclick="copyStringToClipboard('<?=generatePluginLink($l->id)?>');">Copy</button>
+                  <button type="button" class=" btn btn-primary" data-us-copy="<?=safeReturn(generatePluginLink($l->id))?>">Copy</button>
                 </td>
                 <td><?=$l->link_name?></td>
                 <td><?=$l->link?></td>
@@ -172,7 +175,7 @@ $lsettings = $db->query("SELECT * FROM plg_links_settings WHERE id = 1")->first(
       <script type="text/javascript" src="<?= $us_url_root ?>users/js/pagination/datatables.min.js"></script>
 
 
-      <script>
+      <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
         $(document).ready(function() {
           $('.paginate').DataTable({
             "pageLength": 25,
@@ -185,8 +188,14 @@ $lsettings = $db->query("SELECT * FROM plg_links_settings WHERE id = 1")->first(
         });
       </script>
     <?php } ?>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     function copyStringToClipboard (textToCopy) {
       navigator.clipboard.writeText(textToCopy)
     }
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-us-copy]');
+      if (btn) {
+        copyStringToClipboard(btn.getAttribute('data-us-copy'));
+      }
+    });
     </script>

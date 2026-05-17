@@ -1,11 +1,14 @@
 <?php if(count(get_included_files()) ==1) die();
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
 <script src="<?=$us_url_root?>usersc/plugins/profile_pic/assets/js/dropzone.js"></script>
 <link href="<?=$us_url_root?>usersc/plugins/profile_pic/assets/css/dropzone.css" type="text/css" rel="stylesheet" />
 <?php
 global $userdetails;
 if($userdetails->profile_pic != ''){ ?>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(".img-thumbnail, .profile-replacer").attr("src", "<?=$us_url_root?>usersc/plugins/profile_pic/files/<?=$userdetails->profile_pic?>");
 </script>
 <?php } ?>
@@ -60,7 +63,7 @@ if (!empty($_FILES)) {
 <form action="admin.php?view=user&id=<?=$userdetails->id?>" id="my-awesome-dropzone" class="dropzone"></form>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 Dropzone.options.myAwesomeDropzone = {
   maxFiles: 1,
   dictDefaultMessage: "Drag a photo here (png,jpg)<br>or click this box to open your file manager.",

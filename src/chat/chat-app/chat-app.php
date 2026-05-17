@@ -22,7 +22,7 @@ require_once $abs_us_root.$us_url_root."usersc/plugins/chat/chat-app/styles/chat
       <div>Chat as <?= $user->data()->fname?> <?= $user->data()->lname?></div>
       <div>
         <a href="#" id="chat-window-drag-handle" class="grip"><i class="fas fa-grip-vertical"></i></a>
-        <a href="#" onclick="closeChat();" class="close"><i class="fas fa-times"></i></a>
+        <a href="#" id="chat-close-btn" class="close"><i class="fas fa-times"></i></a>
       </div>
 
     </header>

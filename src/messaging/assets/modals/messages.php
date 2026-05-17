@@ -1,4 +1,7 @@
 <?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if (isset($plgMessages)) {
 
   $type = Input::get('type');
@@ -313,7 +316,7 @@ if (isset($plgMessages)) {
       </div>
     </div>
 
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function() {
 
         let deleted = [];

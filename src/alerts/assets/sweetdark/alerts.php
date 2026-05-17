@@ -24,6 +24,11 @@ https://sweetalert2.github.io/#examples
 
 */
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 $usSessionMessages = parseSessionMessages();
 // $usSessionMessages['valErr'] = "Something went wrong!@!!!";
 // $usSessionMessages['valSuc'] = "Every little thing....is gonna be alright";
@@ -34,7 +39,7 @@ $usSessionMessages = parseSessionMessages();
 ?>
 <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/10.16.11/sweetalert2.all.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $( document ).ready(function() {
 let modals = [];
   <?php

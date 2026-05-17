@@ -7,6 +7,11 @@ include 'plugin_info.php';
 $db = DB::getInstance();
 pluginActive($plugin_name);
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 
 //check for permission to use the plugin in general
 if($user->data()->commentmod != 1){
@@ -102,7 +107,7 @@ $token = Token::generate();
   <script src="./../../../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script>
   <script src="./../../../users/js/pagination/dataTables.js" type="text/javascript"></script>
   <script src="./../../../users/js/jwerty.js"></script>
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function() {
     $('#paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], "aaSorting": []});
 

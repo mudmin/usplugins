@@ -1,6 +1,9 @@
 <?php
 //Please don't load code on the footer of every page if you don't need it on the footer of every page.
 //bold("<br>Demo Footer Loaded");
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if($settings->notifications == 1){
   if($currentPage != "admin.php"){
   // $getNotifQ = $db->query("SELECT * FROM notifications WHERE user_id = ? AND is_archived = 0 ORDER BY id DESC",[$user->data()->id]);
@@ -16,7 +19,7 @@ if($settings->notifications == 1){
       $db->update("notifications",$getNotif->id,$fields);
     }
     ?>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 var data = [];
 data['class'] = "<?=$getNotif->class?>";
 data['msg'] = "<?=$getNotif->message?>";

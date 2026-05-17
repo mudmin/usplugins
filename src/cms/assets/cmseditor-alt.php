@@ -2,6 +2,9 @@
 //You do not have to use the built in editor! You can create a file called
 //cmseditor.php in usersc/includes and put your own editor javascript in there!
 //make sure to have it target #editor
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 ?>
 
 
@@ -12,7 +15,7 @@
    min-height: 400px;
  }
  </style>
- <script>
+ <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
      ClassicEditor
          .create( document.querySelector( '#editor' ) )
          .catch( error => {

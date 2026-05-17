@@ -1,4 +1,9 @@
-
+<?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+?>
   <?php require_once($abs_us_root.$us_url_root.'usersc/plugins/forms/files/_form_manager_menu.php');?>
 
 
@@ -126,7 +131,7 @@
           <p>Please choose a form to delete:</p>
           <div class="form-group">
             <form autocomplete="off" class="inline-form" action="" method="POST" id="deleteForm" required
-            onsubmit="return confirm('Please understand what you are doing. If you choose to delete a form, you will not be able to create a new one with the same name unless you choose the Create Form from an Existing Table option.  If you choose to delete the Form and Related Table, YOU WILL LOSE ALL THE DATA THAT WAS SUBMITTED FROM YOUR FORM and all data entirely if you created the form from an existing table. Use this feature carefully.  You cannot delete the users form.');"
+            data-us-confirm="Please understand what you are doing. If you choose to delete a form, you will not be able to create a new one with the same name unless you choose the Create Form from an Existing Table option.  If you choose to delete the Form and Related Table, YOU WILL LOSE ALL THE DATA THAT WAS SUBMITTED FROM YOUR FORM and all data entirely if you created the form from an existing table. Use this feature carefully.  You cannot delete the users form."
             >
               <select class="form-control" name="deleteThisForm">
                 <option disabled selected="selected">--choose a form--</option>
@@ -168,7 +173,7 @@
 
     <script src="../users/js/jwerty.js"></script>
     <script src="<?=$us_url_root?>usersc/plugins/forms/assets/combobox.js"></script>
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
       $('.show-tooltip').tooltip();
 

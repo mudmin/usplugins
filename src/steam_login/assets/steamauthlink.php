@@ -2,6 +2,10 @@
 // require '../../../../users/init.php';
 // $db = DB::getInstance();
 // $settings = $db->query("SELECT * FROM settings")->first();
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 function loginbutton($buttonstyle = "square") {
 	$button['rectangle'] = "01";
 	$button['square'] = "02";
@@ -40,7 +44,7 @@ if (isset($_GET['login'])){
 					exit;
 				} else {
 					?>
-					<script type="text/javascript">
+					<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 						window.location.href="<?=$steamauth['loginpage']?>";
 					</script>
 					<noscript>

@@ -22,6 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ?>
 <?php require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
+if (!isset($GLOBALS['userspice_nonce'])) {
+  $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 
 if (!hasPerm([1],$user->data()->id)){die();}
 if($settings->messaging != 1){
@@ -372,7 +375,7 @@ $csrf = Token::generate();
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
             <script src="../users/js/jwerty.js"></script>
-            <script>
+            <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
             $('#mytextarea').summernote();
             jwerty.key('esc', function () {
               $('.modal').modal('hide');

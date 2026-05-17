@@ -22,6 +22,9 @@ Special thanks to user Brandin for the mods!
 */
 require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
+if (!isset($GLOBALS['userspice_nonce'])) {
+  $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 
 if (!hasPerm([1],$user->data()->id)){die();}
 if($settings->messaging != 1){
@@ -263,7 +266,7 @@ if (!empty($_POST)) {
             <!-- include summernote css/js -->
             <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
-            <script>
+            <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
             $(document).ready(function(){
               $('.combobox').combobox();
             });
@@ -281,7 +284,7 @@ if (!empty($_POST)) {
             });
           </script>
 
-          <script>
+          <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
           $(document).ready(function() {
             $('#paginate').DataTable(
               {  searching: false,

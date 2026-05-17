@@ -2,6 +2,10 @@
 require_once "../../../users/init.php";
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 if(!pluginActive("tickets",true)){ die("Tickets plugin not active");}
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if(!isset($user) || !$user->isLoggedIn()){ ?>
   <a href="<?=$us_url_root?>users/login.php">Sorry, you must login.</a>
   <?php
@@ -175,7 +179,7 @@ if(!empty($_POST)){
   </div>
 </div>
 <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function () {
   $('.paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
 });

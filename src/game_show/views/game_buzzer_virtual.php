@@ -1,5 +1,9 @@
 <?php
 require_once $abs_us_root.$us_url_root."usersc/plugins/game_show/assets/functions.php";
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $vbuzz = Input::get('vbuzz');
 $key = Input::get('key');
 $owner = Input::get('owner');
@@ -103,7 +107,7 @@ if (!empty($_POST)) {
 
 </form>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $( document ).ready(function() {
   setTimeout(
     function() {

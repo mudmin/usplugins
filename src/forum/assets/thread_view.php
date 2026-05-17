@@ -3,6 +3,10 @@ if(!pluginActive('forum',true)){die;}
 if(!$read){
   Redirect::to($currentPage."?err=Board+not+available");
 }
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 
 
 
@@ -309,7 +313,7 @@ if(!empty($_POST) && $write){
   </div>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 
 $(".replyButton").on('click', function () {
   var reply = $(this).attr("data-reply");

@@ -4,6 +4,9 @@
   ?>
 
   <?php
+  if (!isset($GLOBALS['userspice_nonce'])) {
+      $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+  }
   include "plugin_info.php";
   pluginActive($plugin_name);
   if (!empty($_POST['updateSettings'])) {
@@ -233,7 +236,7 @@
 
     </div>
     <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function() {
         $('#paginate').DataTable({
           "pageLength": 25,

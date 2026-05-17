@@ -4,6 +4,10 @@
 ?>
 
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+  $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 include "plugin_info.php";
 pluginActive($plugin_name);
 if (!empty($_POST)) {
@@ -481,7 +485,7 @@ $all_tables_cols = [];
     }
   </style>
 
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     var allTables = <?php echo json_encode($all_tables); ?>;
     var allTablesCols = <?php echo json_encode($all_tables_cols); ?>;
 

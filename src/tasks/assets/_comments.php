@@ -1,6 +1,11 @@
 <?php
 
-$comments = $db->query("SELECT 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
+$comments = $db->query("SELECT
 c.*,
 u.fname,
 u.lname
@@ -139,7 +144,7 @@ foreach ($comments as $comment) { ?>
     </div>
 </div>
 
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     document.addEventListener("DOMContentLoaded", function() {
         var images = document.querySelectorAll('.photo');
         images.forEach(function(img) {

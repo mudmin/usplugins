@@ -1,3 +1,9 @@
+<?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+?>
 <form autocomplete="off" class="" action="" method="post">
   <div class="form-group">
     <label for="">Field type</label>
@@ -71,7 +77,7 @@
 
   <input type="submit" name="create_field" value="Create Field" class="btn btn-outline-primary">
 </form>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function () {
   toggleOpts();
 

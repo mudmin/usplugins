@@ -1,4 +1,8 @@
-<?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted ?>
+<?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if (!isset($GLOBALS['userspice_nonce'])) {
+  $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+?>
 <div class="col-sm-8">
   <div class="page-header float-right">
     <div class="page-title">
@@ -379,7 +383,7 @@ if (!empty($_POST)) {
                         <!-- include summernote css/js -->
                         <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
-                        <script>
+                        <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
                         $(document).ready(function(){
                           $('.combobox').combobox();
                         });

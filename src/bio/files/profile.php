@@ -81,9 +81,13 @@ else
 
 <!-- Place any per-page javascript here -->
 
-<?php   if($settings->recaptcha == 1){ ?>
+<?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+if($settings->recaptcha == 1){ ?>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   function submitForm() {
 	document.getElementById("login-form").submit();
   }

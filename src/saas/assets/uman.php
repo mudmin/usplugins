@@ -1,4 +1,8 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 global $lang;
 $random_password = randomstring(15);
 if(saasMgr()){
@@ -271,7 +275,7 @@ if(saasMgr()){
           <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
           <script src="js/jwerty.js"></script>
 
-          <script>
+          <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
           $(document).ready(function() {
             jwerty.key('esc', function(){
               $('.modal').modal('hide');
@@ -298,7 +302,7 @@ if(saasMgr()){
         </script>
 
         <?php if($settings->auto_assign_un==0) { ?>
-          <script type="text/javascript">
+          <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
           $(document).ready(function(){
             var x_timer;
             $("#username").keyup(function (e){
@@ -328,7 +332,7 @@ if(saasMgr()){
         </script>
       <?php } ?>
 
-      <script>
+      <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function() {
         $('.paginate').DataTable(
           {  searching: true,

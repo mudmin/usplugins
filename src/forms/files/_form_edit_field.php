@@ -2,6 +2,10 @@
 <p>Please note that only certain options can be edited once a field is created.  If you need to edit the others,
 	delete the field and create a new one or CAREFULLY edit the database.</p>
 	<?php
+	// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+	if (!isset($GLOBALS['userspice_nonce'])) {
+		$GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+	}
 	$fieldQ = $db->query("SELECT * FROM $name WHERE id = ?",array($field));
 	$fieldC = $fieldQ->count();
 	if($fieldC > 0){
@@ -81,7 +85,7 @@
 			</table>
 		</div>
 
-		<script type="text/javascript">
+		<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 		$(document).ready(function() {
 			  console.log("ready2");
 			$("#add").click(function() {

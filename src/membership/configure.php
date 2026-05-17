@@ -102,7 +102,7 @@ $token = Token::generate();
     <div class="col-12">
       <a href="<?= $us_url_root ?>users/admin.php?view=plugins">Return to the Plugin Manager</a>
       <h2>Configure Membership Levels
-        <button type="button" onclick="window.location.href = '<?= $us_url_root ?>usersc/plugins/membership/manage_members.php';" name="button" class="btn btn-primary">Manage Members</button>
+        <a href="<?= safeReturn($us_url_root . 'usersc/plugins/membership/manage_members.php') ?>" class="btn btn-primary">Manage Members</a>
       </h2><br>
       <form class="" action="" method="post">
         <div class="card">
@@ -310,7 +310,7 @@ $token = Token::generate();
               <td><?= $l->icon ?></td>
               <td><?= $l->ordering ?></td>
               <td>
-                <form class="" action="" method="post" onsubmit="return confirm('Do you really want to delete this level?');">
+                <form class="" action="" method="post" data-us-confirm="Do you really want to delete this level?">
                   <input type="hidden" name="csrf" value="<?= $token ?>" />
                   <input type="hidden" name="disableThis" value="<?= $l->id ?>" />
                   <input type="submit" name="disableButton" value="Delete" class="btn btn-danger">
@@ -350,7 +350,7 @@ $token = Token::generate();
                 <td><?= $c->descrip ?></td>
                 <td><?= $c->days ?></td>
                 <td><?= $c->cost ?></td>
-                <td><button type="button" onclick="window.location.href = '<?= $us_url_root ?>usersc/plugins/membership/paymentOption.php?edit=<?= $c->id ?>';" name="button" class="btn btn-success">Edit</button></td>
+                <td><a href="<?= safeReturn($us_url_root . 'usersc/plugins/membership/paymentOption.php?edit=' . $c->id) ?>" class="btn btn-success">Edit</a></td>
               </tr>
 
             <?php }  ?>

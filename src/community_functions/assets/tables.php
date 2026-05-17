@@ -1,6 +1,10 @@
 <?php
 if(!function_exists('tableFromQuery')) {
 function tableFromQuery($results,$opts = []){
+  // Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+  if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+  }
   if(!isset($opts['class'])) {$opts['class'] = "table table-striped"; }
   if(!isset($opts['thead'])) {$opts['thead'] = ""; }
   if(!isset($opts['tbody'])) {$opts['tbody'] = ""; }
@@ -38,7 +42,7 @@ function tableFromQuery($results,$opts = []){
   </table>
   <link href="<?=$us_url_root?>users/js/pagination/datatables.min.css" rel="stylesheet">
   <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
-  <script>
+  <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 
   $(document).ready(function () {
     $('.paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});

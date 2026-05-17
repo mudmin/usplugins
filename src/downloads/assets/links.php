@@ -45,6 +45,11 @@ if(!empty($_POST['createlinks'])){
   }
   Redirect::to("admin.php?view=plugins_config&plugin=downloads&v=links&folder=".$folder."&err=Links Created");
 }
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 // ?>
 
 <div class="row">
@@ -77,7 +82,7 @@ if(!empty($_POST['createlinks'])){
 <br>
 <div class="row">
   <div class="col-12" style="background-color:#ebebeb;">
-    <form class="" action="" method="post" onsubmit="return confirm('Do you really want to delete these links? This cannot be undone.');">
+    <form class="" action="" method="post" data-us-confirm="Do you really want to delete these links? This cannot be undone.">
     <div class="row">
       <div class="col-6">
         <h4>Existing Links</h4>
@@ -132,7 +137,7 @@ if(!empty($_POST['createlinks'])){
                 <a href="<?=$plgSet->baseurl?><?=$plgSet->parser?>?id=<?=$l->id?>&mode=2&code=<?=$l->dlcode?>"><?=$plgSet->baseurl?><?=$plgSet->parser?>?id=<?=$l->id?>&mode=2&code=<?=$l->dlcode?></a>
               </td>
               <td>
-                  <button type="button" class=" btn btn-primary" onclick="copyStringToClipboard('<?=$plgSet->baseurl?><?=$plgSet->parser?>?id=<?=$l->id?>&mode=2&code=<?=$l->dlcode?>');">Copy</button>
+                  <button type="button" class=" btn btn-primary" data-us-copy="<?=safeReturn($plgSet->baseurl.$plgSet->parser.'?id='.$l->id.'&mode=2&code='.$l->dlcode)?>">Copy</button>
               </td>
               <td><?=bin($l->disabled);?></td>
               <td>
@@ -217,8 +222,19 @@ if(!empty($_POST['createlinks'])){
     <?php tableFromQuery($db->query("SELECT id, fname,lname,email FROM users")->results());?>
   </div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest && e.target.closest('form[data-us-confirm]');
+    if (form && !window.confirm((form.getAttribute('data-us-confirm') || '').replace(/\n/g, '\n'))) {
+        e.preventDefault();
+    }
+}, true);
+
 $( document ).ready(function() {
+  $(document).on('click', '[data-us-copy]', function () {
+    copyStringToClipboard(this.getAttribute('data-us-copy'));
+  });
+
   $("#delAll").change(function(){
    if($(this).is(':checked')){
      $(".delMe").each(function() {

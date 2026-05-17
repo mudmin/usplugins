@@ -1,6 +1,10 @@
 <?php
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 require_once $abs_us_root.$us_url_root."usersc/plugins/game_show/assets/functions.php";
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 writeGameBannedFile();
 //show all buzzers
 $buzzers = fetchBuzzers(true);
@@ -200,7 +204,7 @@ if (!empty($_POST)) {
       </div>
     </div>
   </form>
-  <form class="" action="" method="post" class="mt-5" style="margin-left:5em;"  onsubmit="return confirm('Do you really want to do this? It cannot be undone.');">
+  <form class="" action="" method="post" class="mt-5" style="margin-left:5em;"  data-us-confirm="Do you really want to do this? It cannot be undone.">
     <?=tokenHere(); ?>
     <label for="">Delete Buzzer</label>
     <div class="input-group">
@@ -215,4 +219,12 @@ if (!empty($_POST)) {
     </div>
 
   </form>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest && e.target.closest('form[data-us-confirm]');
+    if (form && !window.confirm((form.getAttribute('data-us-confirm') || '').replace(/\\n/g, '\n'))) {
+        e.preventDefault();
+    }
+}, true);
+</script>
   <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

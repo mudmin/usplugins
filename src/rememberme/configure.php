@@ -140,14 +140,14 @@ $token = Token::generate();
             <input type="hidden" name="csrf" value="<?= $token ?>">
 
             <div class="mb-3">
-              <button type="submit" name="purge_expired" value="1" class="btn btn-warning" onclick="return confirm('Purge all expired sessions?');">
+              <button type="submit" name="purge_expired" value="1" class="btn btn-warning" data-us-confirm="Purge all expired sessions?">
                 Purge Expired Sessions
               </button>
               <small class="text-muted">Remove sessions older than the cookie expiry (<?= $cookie_expiry_days ?> day(s))</small>
             </div>
 
             <div class="mb-3">
-              <button type="submit" name="purge_orphaned" value="1" class="btn btn-warning" onclick="return confirm('Purge all orphaned sessions without timestamps?');">
+              <button type="submit" name="purge_orphaned" value="1" class="btn btn-warning" data-us-confirm="Purge all orphaned sessions without timestamps?">
                 Purge Orphaned Sessions
               </button>
               <small class="text-muted">Remove legacy sessions that have no timestamp (created before this update)</small>
@@ -158,7 +158,7 @@ $token = Token::generate();
             <div class="mb-3">
               <div class="input-group" style="max-width: 400px;">
                 <input type="number" name="purge_days" class="form-control" placeholder="Days" min="1" value="30">
-                <button type="submit" name="purge_older_than" value="1" class="btn btn-warning" onclick="return confirm('Purge sessions older than the specified days?');">
+                <button type="submit" name="purge_older_than" value="1" class="btn btn-warning" data-us-confirm="Purge sessions older than the specified days?">
                   Purge Older Than X Days
                 </button>
               </div>
@@ -167,7 +167,7 @@ $token = Token::generate();
             <hr>
 
             <div class="mb-3">
-              <button type="submit" name="purge_all" value="1" class="btn btn-danger" onclick="return confirm('WARNING: This will log out ALL users with remembered sessions. Are you sure?');">
+              <button type="submit" name="purge_all" value="1" class="btn btn-danger" data-us-confirm="WARNING: This will log out ALL users with remembered sessions. Are you sure?">
                 Purge ALL Sessions
               </button>
               <small class="text-danger">Warning: This will force all users to log in again if their session is expired!</small>

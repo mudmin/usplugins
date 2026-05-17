@@ -1,4 +1,7 @@
 <?php if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if(pluginActive('payments',true)){
 $status = "";
 global $user,$settings;
@@ -136,7 +139,7 @@ if($formInfo['processed'] == true && $formInfo['success'] == false && $membershi
 }
 ?>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $( document ).ready(function() {
   $('.planOption').each(function() {
     $(this).hide();

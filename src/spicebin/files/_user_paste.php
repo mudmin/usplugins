@@ -1,6 +1,10 @@
 <?php
 if(count(get_included_files()) ==1) die(); //Direct Access Not Permitted
 if(!pluginActive("spicebin",true)){ die ("SpiceBin is disabled");}
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if(hasPerm([2]) && is_numeric(Input::get('user'))){
   $uid = Input::get('user');
 }else{
@@ -57,7 +61,7 @@ include $abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_last_ten_logic
 
     if($pastesC > 0){ ?>
       <h2>Your <?=$pset->product_plural?></h2>
-      <form class="" action="" method="post" onsubmit="return confirm('Do you really want to do this? It cannot be undone.');">
+      <form class="" action="" method="post" data-us-confirm="Do you really want to do this? It cannot be undone.">
         <input type="hidden" name="csrf" value="<?=Token::generate();?>">
         <div class="text-right" style="margin-bottom:2em;">
           <input type="submit" name="deleteSelected" value="Delete Selected" class="btn btn-danger">
@@ -117,7 +121,13 @@ include $abs_us_root.$us_url_root."usersc/plugins/spicebin/files/_last_ten_logic
   <?php }?>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest && e.target.closest('form[data-us-confirm]');
+    if (form && !window.confirm((form.getAttribute('data-us-confirm') || '').replace(/\\n/g, '\n'))) {
+        e.preventDefault();
+    }
+}, true);
 $('#checkall').change(function () {
   if($(this).is(":checked")) {
     console.log("checked");
@@ -129,7 +139,7 @@ $('#checkall').change(function () {
 });
 </script>
 <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $(document).ready(function () {
   $('.paginate').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
 });

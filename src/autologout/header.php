@@ -1,4 +1,8 @@
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if(isset($user) && $user->isLoggedIn() && $settings->plg_al > 0){
 $plg_time = $settings->plg_al_time * 60000;
 ?>
@@ -11,7 +15,7 @@ if(
   ($settings->plg_al == 2 && !hasPerm([2],$user->data()->id)) ||
   ($settings->plg_al == 3)
   ){ ?>
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function() {
     var timeoutInMilliseconds = "<?=$plg_time?>";
     var timeoutId;

@@ -3,6 +3,12 @@
 <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
+
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 $files = scandir($abs_us_root.$us_url_root.'/usersc/plugins/hooker/hooks');
 $events = [
 'cloakBegin',
@@ -171,7 +177,7 @@ if(!empty($_POST['deleteHook'])){
         Either way, thanks for using UserSpice!
       </div>
     </div>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $("#pageSelect").change(function () {
        var cl = $('select[name="page"] :selected').attr('class');
        if(cl == "event"){

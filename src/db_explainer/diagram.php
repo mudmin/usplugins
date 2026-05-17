@@ -2,6 +2,11 @@
 require_once "../../../users/init.php";
 require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 
 $db_id = Input::get('db_id');
 if (is_numeric($db_id)) {
@@ -145,7 +150,7 @@ if (is_numeric($db_id)) {
         background-color: lightpink;
     }
 </style>
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
         // Initialize tooltips
         $('[data-bs-toggle="tooltip"]').tooltip();

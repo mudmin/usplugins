@@ -26,8 +26,8 @@ if($action == 'edit'){
           <input type="submit" name="Submit" value="Edit" class="btn btn-primary">
         </div>
         <div class="col-6 text-right">
-          <button class="btn btn-danger" onclick="window.location='<?=$us_url_root?>admin.php?view=plugins_config&plugin=cms';">
-            Go Back </button>
+          <a class="btn btn-danger" role="button" href="<?=safeReturn($us_url_root.'admin.php?view=plugins_config&plugin=cms')?>">
+            Go Back </a>
         </div>
       </div>
     </form>

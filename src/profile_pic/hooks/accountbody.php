@@ -2,6 +2,9 @@
 <script src="<?= $us_url_root ?>usersc/plugins/profile_pic/assets/js/dropzone.js"></script>
 <link href="<?= $us_url_root ?>usersc/plugins/profile_pic/assets/css/dropzone.css" type="text/css" rel="stylesheet" />
 <?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 global $user;
 $change = Input::get('change');
 $requestUri = $_SERVER['REQUEST_URI'];
@@ -15,7 +18,7 @@ if (strpos($requestUri, '.php') === false && strpos($scriptName, '.php') !== fal
 if ($change != "pic") {
 ?>
   <div class="form-group">
-    <button type="button" onclick="window.location.href = 'account.php?change=pic';" class="btn btn-primary btn-block">Change Photo</button>
+    <a href="account.php?change=pic" class="btn btn-primary btn-block" role="button">Change Photo</a>
   </div>
 <?php
 }
@@ -70,14 +73,22 @@ if ($change == 'pic') {
 ?>
 
   <form action="<?= $target ?>" id="my-awesome-dropzone" class="dropzone"></form>
-  <button class="btn btn-danger btn-block" style="margin-top:10px;"
-    onclick="if(confirm('Are you sure you want to delete your profile picture?')) {
-      window.location.href='account.php?change=pic&delete=1';
-    }">
+  <button type="button" class="btn btn-danger btn-block" style="margin-top:10px;"
+    data-us-confirm="Are you sure you want to delete your profile picture?"
+    data-href="account.php?change=pic&delete=1">
     Delete Photo
   </button>
 
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-us-confirm][data-href]');
+      if (btn) {
+        e.preventDefault();
+        if (window.confirm((btn.getAttribute('data-us-confirm') || '').replace(/\\n/g, '\n'))) {
+          window.location.href = btn.getAttribute('data-href');
+        }
+      }
+    }, true);
     Dropzone.options.myAwesomeDropzone = {
       maxFiles: 1,
       dictDefaultMessage: "Drag a photo here (png,jpg,gif)<br>or click this box to open your file manager.",
@@ -104,7 +115,7 @@ if ($change == 'pic') {
 </style>
 
 <?php if ($user->data()->profile_pic != '' && file_exists($abs_us_root . $us_url_root . 'usersc/plugins/profile_pic/files/' . $user->data()->profile_pic)) { ?>
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
       $(".img-thumbnail, .profile-replacer").attr("src", "<?= $us_url_root ?>usersc/plugins/profile_pic/files/<?= $user->data()->profile_pic ?>");
     });

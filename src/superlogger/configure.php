@@ -3,6 +3,11 @@
 <?php
 include "plugin_info.php";
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 pluginActive($plugin_name);
  if(!empty($_POST['plugin_superlogger'])){
    $token = $_POST['csrf'];
@@ -160,7 +165,7 @@ if(!Token::check($token)){
       </div>
     </div>
     <script type="text/javascript" src="js/pagination/datatables.min.js"></script>
-    <script>
+    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
       $('#paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], "aaSorting": []});
     } );

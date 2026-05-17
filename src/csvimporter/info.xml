@@ -6,13 +6,13 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 
 <!-- release date of THIS version -->
-  <release>June 9, 205</release>
+  <release>May 17, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>5.8.5</tested>
+  <tested>6.0.9</tested>
 
 <!-- What does your plugin do? -->
   <description>Flexible plugin for bulk user creation/import from as little as just an email address per user. You can specify plain text or bcrypt encrypted passwords, usernames, and real names. You can also force password reset and even specify a list of permission levels per user on import. Version 1.2.0 added the ability to export users.  The exporter gives you several options for exporting various fields. See page for documentation. </description>

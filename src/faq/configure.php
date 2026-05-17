@@ -6,6 +6,9 @@ $purifier = new HTMLPurifier($purifier_config);
 if (count(get_included_files()) == 1) {
     die();
 } //Direct Access Not Permitted
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if (!in_array($user->data()->id, $master_account)) {
     Redirect::to($us_url_root . 'users/admin.php');
 }
@@ -188,7 +191,7 @@ if (isset($_GET['edit_faq_id'])) {
                                         <td><?= hed($category->menu_text) ?></td>
                                         <td class="text-right">
                                             <a href="?view=plugins_config&plugin=faq&edit_category_id=<?= $category->id ?>" class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this category? All its FAQs will be moved to Uncategorized.');" class="d-inline">
+                                            <form action="" method="post" data-us-confirm="Are you sure you want to delete this category? All its FAQs will be moved to Uncategorized." class="d-inline">
                                                 <input type="hidden" name="csrf" value="<?= Token::generate() ?>">
                                                 <input type="hidden" name="id" value="<?= $category->id ?>">
                                                 <button type="submit" name="delete_category" value="1" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -263,7 +266,7 @@ if (isset($_GET['edit_faq_id'])) {
                                         <td><?= hed($faq->category_name) ?></td>
                                         <td class="text-right">
                                             <a href="?view=plugins_config&plugin=faq&edit_faq_id=<?= $faq->id ?>" class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this FAQ?');" class="d-inline">
+                                            <form action="" method="post" data-us-confirm="Are you sure you want to delete this FAQ?" class="d-inline">
                                                 <input type="hidden" name="csrf" value="<?= Token::generate() ?>">
                                                 <input type="hidden" name="id" value="<?= $faq->id ?>">
                                                 <button type="submit" name="delete_faq" value="1" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -461,7 +464,7 @@ if (isset($_GET['edit_faq_id'])) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
 <script src="<?= $us_url_root ?>usersc/plugins/faq/assets/js/Sortable.min.js"></script>
 
-<script>
+<script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
     $(document).ready(function() {
         $('#answer').summernote({
             height: 200,

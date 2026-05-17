@@ -26,6 +26,11 @@ IMPORTANT - If you use this as an example, you will see that the toastify librar
 */
 
 
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 $usSessionMessages = parseSessionMessages();
 // $usSessionMessages['valErr'] = "Something went wrong!@!!!";
 // $usSessionMessages['valSuc'] = "Every little thing....is gonna be alright";
@@ -35,7 +40,7 @@ $usSessionMessages = parseSessionMessages();
 ?>
 <link rel="stylesheet" type="text/css" href="<?=$us_url_root?>usersc/plugins/alerts/assets/default/toastify.min.css">
 <script type="text/javascript" src="<?=$us_url_root?>usersc/plugins/alerts/assets/default/toastify-js.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 $( document ).ready(function() {
   let modals = [];
   console.log(<?=json_encode(alerts_sanitizeMessage(Input::get('err')), JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)?>);

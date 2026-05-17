@@ -176,7 +176,7 @@ LEFT OUTER JOIN plg_badges_cats c on b.cat_id = c.id
               <h5>Delete a Badge</h5>
             </div>
             <div class="card-body">
-              <form class="" action="" method="post" onsubmit="return confirm('Do you really want to do this? It cannot be undone.');">
+              <form class="" action="" method="post" data-us-confirm="Do you really want to do this? It cannot be undone.">
 
                 <input type="hidden" name="csrf" value="<?= Token::generate(); ?>">
                 <select class="form-control" name="badge">

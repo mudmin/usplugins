@@ -6,6 +6,10 @@ if(!isset($user) || !$user->isLoggedIn()){
   die("Not logged in");
 }
 $pset = $db->query("SELECT * FROM plg_spicebin_settings")->first();
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 $access = false;
 if($pset->mng_tag != "" && pluginActive("usertags",true)){
   if(hasTag($pset->mng_tag)){
@@ -161,7 +165,7 @@ if($mode == ""){
 <h3 class="text-center"><?=$label?></h3>
 <?php
 if($c > 0){ ?>
-  <form class="" action="" method="post" onsubmit="return confirm('Do you really want to do this? It cannot be undone.');">
+  <form class="" action="" method="post" data-us-confirm="Do you really want to do this? It cannot be undone.">
     <input type="hidden" name="csrf" value="<?=Token::generate();?>">
   <div class="text-right" style="margin-bottom:2em;">
     <input type="submit" name="deleteSelected" value="Delete Selected" class="btn btn-danger">
@@ -201,7 +205,7 @@ if($c > 0){ ?>
       </form>
     </tbody>
   </table>
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $('#checkall').change(function () {
    if($(this).is(":checked")) {
      console.log("checked");
@@ -213,7 +217,7 @@ if($c > 0){ ?>
   });
   </script>
   <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
   $(document).ready(function () {
      $('.paginate').DataTable({"pageLength": 500,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
     });

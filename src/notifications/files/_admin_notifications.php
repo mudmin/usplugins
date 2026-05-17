@@ -12,6 +12,9 @@
 </div>
 </header>
 <?php
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
 if($settings->notifications != 1){
   Redirect::to($us_url_root.'users/admin.php?err=Notifications+are+disabled');
 }else{
@@ -181,7 +184,7 @@ $count = $adminNotificationsQ->count();
             </div>
 
 
-            <script>
+            <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
             $(document).ready(function() {
               $('#paginate').DataTable(
                 {  searching: true,

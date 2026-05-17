@@ -1,4 +1,9 @@
 <?php
+// Reuse core's nonce if present; otherwise self-provide one (older UserSpice).
+if (!isset($GLOBALS['userspice_nonce'])) {
+    $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+}
+
 $usSessionMessages = parseSessionMessages();
 // $usSessionMessages['valErr'] = "Something went wrong!@!!!";
 // $usSessionMessages['valSuc'] = "Every little thing....is gonna be alright";
@@ -10,7 +15,7 @@ $settings->err_time = $settings->err_time * 1000;
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css" />
 <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"></script>
 
-<script type="module">
+<script type="module" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
 // Always escape HTML for text arguments!
 function escapeHtml(html) {
   const div = document.createElement('div');

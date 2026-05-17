@@ -2,6 +2,9 @@
 if(!function_exists('quickCrud')) {
   function quickCrud($query,$table, $opts = []){
     global $db,$user,$abs_us_root,$us_url_root,$formNumber;
+    if (!isset($GLOBALS['userspice_nonce'])) {
+        $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
+    }
     if(hasPerm([2],$user->data()->id)){
     if(!isset($formNumber) || $formNumber == ""){
       $formNumber = 0;
@@ -86,12 +89,12 @@ if(!function_exists('quickCrud')) {
       </div>
       <script src="<?=$us_url_root?>usersc/plugins/quickcrud/assets/editable.js"></script>
       <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
-      <script>
+      <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function () {
          $('.editable').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
         });
       </script>
-      <script type="text/javascript">
+      <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
         $('.editable').editableTableWidget();
         $('#editable td.uneditable').on('change', function(evt, newValue) {
           	return false;
