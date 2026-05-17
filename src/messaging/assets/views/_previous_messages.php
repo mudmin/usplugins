@@ -22,10 +22,10 @@
                     <tbody>
                         <?php foreach($messages as $m){ ?>
                             <tr>
-                                <td><?=$m->id?></td>
+                                <td><?=safeReturn($m->id)?></td>
                                 <td>
-                                <a href="message_audit.php?id=<?=$m->id?>" target="_blank">
-                                    <?=$m->title?>
+                                <a href="admin.php?view=plugins_config&plugin=messaging&mode=admin_message_audit&id=<?=$m->id?>">
+                                    <?=safeReturn($m->title)?>
                                 </a>
                                 </td>
                                 <td class="text-center"><?=formatMsgDate($m->msg_sent_on)?></td>
@@ -37,9 +37,9 @@
                                     text-danger
                                 <?php } ?>
                                 "><?=formatMsgDate($m->msg_expires_on,false)?></td>
-                                <td class="text-center"><?=$m->send_method?></td>
+                                <td class="text-center"><?=safeReturn($m->send_method)?></td>
                                 <td>
-                                    <a href="message_audit.php?id=<?=$m->id?>" class="btn btn-sm btn-outline-primary" target="_blank">Audit</a>
+                                    <a href="admin.php?view=plugins_config&plugin=messaging&mode=admin_message_audit&id=<?=$m->id?>" class="btn btn-sm btn-outline-primary">Audit</a>
                                 </td>
                             </tr>
                         

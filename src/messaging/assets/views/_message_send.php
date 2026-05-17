@@ -13,7 +13,15 @@ if(file_exists($abs_us_root . $us_url_root . 'usersc/plugins/messaging/send_vari
 }
 
 
-$qs = http_build_query($_GET);
+// Rebuild the return query string from a known whitelist instead of raw $_GET.
+$qsParts = [];
+foreach (['view', 'plugin', 'mode'] as $qsKey) {
+    $qsVal = Input::get($qsKey);
+    if ($qsVal !== '') {
+        $qsParts[$qsKey] = $qsVal;
+    }
+}
+$qs = http_build_query($qsParts);
 $send_options = [];
 $optsDir = $abs_us_root . $us_url_root . 'usersc/plugins/messaging/send_modules/';
 $send_options = [];
@@ -29,7 +37,12 @@ foreach ($items as $k=>$item) {
 }
 
 
-if(!empty($_POST['send_new_direct_message_hook'])){
+if(Input::get('send_new_direct_message_hook')){
+
+    if(!Token::check(Input::get('csrf'))){
+        usError("Invalid or expired form token. Please try again.");
+        Redirect::to(currentPage() . "?" . $qs);
+    }
 
     $msg_type = Input::get('msg_type');
     $expires = Input::get('msg_expires_on');

@@ -44,6 +44,7 @@ if (!isset($GLOBALS['userspice_nonce'])) {
       var ajaxTime = <?= $notifSettings->ajax_time ?> * 1000;
       var formData = {
         'preview' 		  : plg_message_previewer,
+        'csrf'          : '<?= Token::generate(); ?>',
       };
 
       // === NOTIFICATION SOUND & TOAST SYSTEM ===

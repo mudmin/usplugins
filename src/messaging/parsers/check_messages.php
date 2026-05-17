@@ -7,6 +7,9 @@ $resp["message_count"]= 0;
 $resp["total_count"]= 0;
 $resp['preview'] = "";
 require_once "../../../../users/init.php";
+if(!Token::check(Input::get('csrf'))){
+    echo json_encode($resp);die;
+}
 if(!isset($user) || !$user->isLoggedIn()){
     echo json_encode($resp);die;
 }

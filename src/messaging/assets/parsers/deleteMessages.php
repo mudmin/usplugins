@@ -1,6 +1,10 @@
 <?php 
 require_once "../../../../../users/init.php";
-global $user;
+global $user, $db;
+
+if(!Token::check(Input::get('csrf'))){
+  echo json_encode(["success"=>false,"msg"=>"Invalid token"]);die;
+}
 
 if(!isset($user) ||  !$user->isLoggedIn()){
   $response = ["success"=>false,"msg"=>"You are not logged in", "reload"=>true];
@@ -10,7 +14,8 @@ if(!isset($user) ||  !$user->isLoggedIn()){
 $checked = Input::get('checked');
 if(is_array($checked)){
     foreach($checked as $id){
-        $db->update("plg_msg", $id, ["deleted"=>1]);
+        // Scope the delete to the current user so a user cannot delete others' messages.
+        $db->query("UPDATE plg_msg SET deleted = 1 WHERE id = ? AND user_to = ?", [(int)$id, $user->data()->id]);
     }
     $msg = ['success'=>true, 'msg'=>'Deleted'];
 }else{

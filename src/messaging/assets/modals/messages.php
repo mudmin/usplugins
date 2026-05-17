@@ -730,6 +730,7 @@ if (isset($plgMessages)) {
         function loadSpecificMessage(messageId) {
           var formData = {
             'id': messageId, // Use messageId instead of id
+            'csrf': '<?= Token::generate(); ?>',
           };
 
 
@@ -809,6 +810,7 @@ if (isset($plgMessages)) {
 
             var formData = {
               'checked': checked,
+              'csrf': '<?= Token::generate(); ?>',
             };
 
             $.ajax({

@@ -6,10 +6,22 @@ foreach ($sounds as $k => $v) {
   $sounds[$k] = str_replace($abs_us_root . $us_url_root . 'usersc/plugins/messaging/assets/sounds/', '', $v);
 }
 
-$qs = http_build_query($_GET);
+// Rebuild the return query string from a known whitelist instead of raw $_GET.
+$qsParts = [];
+foreach (['view', 'plugin', 'mode'] as $qsKey) {
+  $qsVal = Input::get($qsKey);
+  if ($qsVal !== '') {
+    $qsParts[$qsKey] = $qsVal;
+  }
+}
+$qs = http_build_query($qsParts);
 
 
-if (!empty($_POST['update_messages_settings_hook'])) {
+if (Input::get('update_messages_settings_hook')) {
+  if (!Token::check(Input::get('csrf'))) {
+    usError("Invalid or expired form token. Please try again.");
+    Redirect::to(currentPage() . "?" . $qs);
+  }
   $fields = [
     'ding' => Input::get('ding'),
     'show_toasts' => Input::get('show_toasts'),
