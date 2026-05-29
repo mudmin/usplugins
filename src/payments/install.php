@@ -33,12 +33,16 @@ $keysQ = $db->query('SELECT * FROM `keys`');
 $keysC = $keysQ->count();
 if($keysC < 1){
   $db->query("TRUNCATE TABLE `keys`");
-  $db->insert("`keys`",['currency'=>'usd']);
-  $keys = $keysQ->first();
+  // `keys` is a MySQL reserved word. Use raw query() (unsanitized on both old
+  // and new DB classes) instead of insert(), which rejects backticked names on
+  // new versions and requires them on old ones.
+  $db->query("INSERT INTO `keys` (`currency`) VALUES (?)",['usd']);
+  // Re-query fresh: $keysQ is the stale (empty) result from before the insert
+  $keys = $db->query('SELECT * FROM `keys`')->first();
 }else{
   $keys = $keysQ->first();
   if($keys->currency == ''){
-    $db->update('`keys`',$keys->id,['currency'=>'usd']);
+    $db->query("UPDATE `keys` SET `currency` = ? WHERE id = ?",['usd',$keys->id]);
     $keys->currency = 'usd';
   }
 }
@@ -66,9 +70,10 @@ CREATE TABLE `plg_payments_options` (
 $dirs = glob($abs_us_root . $us_url_root . 'usersc/plugins/payments/assets/*', GLOB_ONLYDIR);
 foreach($dirs as $d){
 	$asset = str_replace($abs_us_root . $us_url_root . 'usersc/plugins/payments/assets/','',$d);
-	$check = $db->query("SELECT * FROM plg_payments_options WHERE option = ?",[$asset])->count();
+	// `option` is also a reserved word; backtick it in raw SQL and avoid insert()
+	$check = $db->query("SELECT * FROM plg_payments_options WHERE `option` = ?",[$asset])->count();
 	if($check < 1){
-		$db->insert('plg_payments_options',['option'=>$asset]);
+		$db->query("INSERT INTO plg_payments_options (`option`) VALUES (?)",[$asset]);
 	}
 }
 $db->query("ALTER TABLE `keys` ADD COLUMN currency varchar(3) default 'usd'");

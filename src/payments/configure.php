@@ -12,24 +12,30 @@ if(!Token::check($token)){
 }
  $token = Token::generate();
  $dirs = glob($abs_us_root . $us_url_root . 'usersc/plugins/payments/assets/*', GLOB_ONLYDIR);
- if(!isset($keys)){$keys = $db->query("SELECT * FROM `keys`")->first();}
+ // Ensure a keys row exists, then always load it fresh so $keys is a valid object
+ if($db->query("SELECT id FROM `keys`")->count() < 1){
+   $db->query("INSERT INTO `keys` (`currency`) VALUES (?)",['usd']);
+ }
+ $keys = $db->query("SELECT * FROM `keys` ORDER BY id ASC LIMIT 1")->first();
  if(!empty($_POST['updateGlobal'])){
    $options = $_POST['options'];
    $db->query("TRUNCATE TABLE plg_payments_options");
    foreach($options as $k=>$v){
      if($v == 1 || $v == 0){
-       $fields = array(
-         'option'=>Input::sanitize($k),
-         'enabled'=>$v,
-       );
-       $db->insert('plg_payments_options',$fields);
+       // `option` is a reserved word; use raw query() so this works on both
+       // old (no auto-backtick) and new (rejects backticked identifiers) DB classes
+       $db->query("INSERT INTO plg_payments_options (`option`,`enabled`) VALUES (?,?)",[Input::sanitize($k),$v]);
      }
    }
    if(strlen(Input::get('currency')) > 3 || strlen(Input::get('currency')) < 3){
-     Redirect::to('admin.php?view=plugins_config&plugin=payments&err=Invalid+currency+code');
+     // Use the session flash instead of an ?err= param so the message shows once
+     // (the active alerts plugin also toasts the err/msg GET param, causing a duplicate)
+     usError('Invalid currency code');
+     Redirect::to('admin.php?view=plugins_config&plugin=payments');
    }
-   $db->update('`keys`',$keys->id,['currency'=>strtoupper(Input::get('currency'))]);
-   Redirect::to('admin.php?view=plugins_config&plugin=payments&err=Globals+saved');
+   $db->query("UPDATE `keys` SET `currency` = ? WHERE id = ?",[strtoupper(Input::get('currency')),$keys->id]);
+   usSuccess('Globals saved');
+   Redirect::to('admin.php?view=plugins_config&plugin=payments');
  }
  ?>
 <div class="content mt-3">
@@ -43,7 +49,7 @@ if(!Token::check($token)){
               <div class="col-6">
                 <label for="">Set currency for site (3 letter code)</label>
                 <div class="form-group">
-                  <input type="text" name="currency" value="<?=$keys->currency?>" required>
+                  <input type="text" name="currency" value="<?=$keys->currency ?? ''?>" required>
                 </div>
               </div>
               <div class="col-6">
@@ -52,7 +58,7 @@ if(!Token::check($token)){
                 foreach($dirs as $d){
 
                 	$asset = str_replace($abs_us_root . $us_url_root . 'usersc/plugins/payments/assets/','',$d);
-                	$checkQ = $db->query("SELECT * FROM plg_payments_options WHERE option = ?",[$asset]);
+                	$checkQ = $db->query("SELECT * FROM plg_payments_options WHERE `option` = ?",[$asset]);
                   $checkC = $checkQ->count();
                   ?>
                   <div class="form-group">
