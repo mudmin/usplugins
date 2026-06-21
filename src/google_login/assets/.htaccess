@@ -1,9 +1,14 @@
-<Files "composer.json">
-Order Allow,Deny
-Deny from all
-</Files>
-
-<Files "composer.lock">
-Order Allow,Deny
-Deny from all
-</Files>
+# Block direct web access to composer metadata. Guarded so it works on
+# Apache 2.4 (mod_authz_core) and 2.2 without 500ing on either; ignored
+# harmlessly on servers that don't read .htaccess (nginx, Caddy).
+<IfModule mod_authz_core.c>
+  <FilesMatch "^composer\.(json|lock)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^composer\.(json|lock)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
