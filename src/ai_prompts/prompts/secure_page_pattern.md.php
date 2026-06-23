@@ -41,7 +41,8 @@ That gives the canonical patterns:
 require_once $abs_us_root . $us_url_root . 'usersc/includes/loader.php';
 require_once $abs_us_root . $us_url_root . 'admin/widgets/foo.php';
 
-// ✓ ANY URL emitted to the browser — link, src, href, form action, redirect target
+// ✓ ANY URL emitted to the browser — link, src, href, redirect target
+//   (forms normally have NO action — they self-post; see "Self-post" below)
 <link rel="stylesheet" href="<?= $us_url_root ?>assets/site.css">
 <a href="<?= $us_url_root ?>account.php">Account</a>
 <img src="<?= $us_url_root ?>uploads/foo.jpg">
@@ -123,6 +124,27 @@ if (!empty($validate) && !$validate->passed()) {
 ```
 
 The order matters: **CSRF → validate → write → redirect**. Each step gates the next. If the CSRF check fails, never proceed to validation. If validation fails, never write. After a successful write, redirect (so refresh doesn't double-submit).
+
+### Self-post — leave the form `action` empty
+
+Notice the form above has **no `action` attribute**. That's deliberate. A form with no action (or an explicit `action=""`) submits to the page's own URL — which is exactly what this recipe expects, because the POST handler lives at the top of the *same file*. Both forms are equivalent:
+
+```php
+<form method="post">           <!-- ✓ self-posts to this page -->
+<form action="" method="post"> <!-- ✓ also fine — explicit self-post -->
+```
+
+Use whichever you prefer (omitting is valid HTML; `action=""` signals intent more loudly). What you must **not** do is hand-write a path into the action:
+
+```php
+<form action="contacts.php">                    <!-- 🚨 the rewriter strips .php — this 404s or misroutes -->
+<form action="<?= $us_url_root ?>contacts.php"> <!-- 🚨 posts to the wrong page unless you truly mean to -->
+<form action="parsers/save.php">                <!-- 🚨 hit a parser with $.ajax, not a form action -->
+<form action="#">                               <!-- 🚨 appends a fragment instead of self-posting -->
+<form action=".">                               <!-- 🚨 resolves to the directory, not this page -->
+```
+
+UserSpice's `.php`-stripping URL rewriter plus subpath installs (`/myapp/`, `/clientname/`) make hand-built action URLs wrong far more often than right — a wrong action either 404s the POST or routes it to the wrong handler. The form just needs to post back to itself, and an empty action does that on every install path. The **only** time you set a real action is when the form genuinely targets a *different* page (rare); for AJAX, post to a `parsers/` endpoint with `$.ajax({url: 'parsers/x.php'})`, never a form action.
 
 ---
 
