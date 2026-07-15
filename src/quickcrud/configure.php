@@ -11,116 +11,66 @@ pluginActive($plugin_name);
 if(!Token::check($token)){
   include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
 }
-   // Redirect::to('admin.php?err=I+agree!!!');
  }
  $token = Token::generate();
  ?>
 <div class="content mt-3">
- 		<div class="row">
- 			<div class="col-sm-12">
-        <h3>Basic Instructions</h3>
-        <p>This is a quick and dirty plugin that allows you to make CRUD Tables based on DB queries. Simply
-        pass it a db query and a table name and it will automatically generate a directly editable table with
-        copy and delete buttons. At the bottom of the table will also be a form to insert a new row.
-      </p>
-      <p>Usage<br>
-        <code>
-        $query = $db->query("SELECT * FROM permissions")->results();<br>
-        $table = "permissions";<br>
-        quickCrud($query,$table);<br>
-      </code>
-      </p>
-      <p>Optional Parameters<br>
-        You can pass a third parameter ($opts) with these options.<br>
-        <code>
-          $opts = [<br>
-            'noid'=>1, //hides the id column from the table<br>
-            'nodupe'=>1, //hides duplicate button<br>
-            'nodel'=>1, //hides delete button<br>
-            'class'=>"classname", //optional class for entire table<br>
-            'thead'=>"classname", //optional class for table head<br>
-            'tbody'=>"classname", //optional class for table body <br>
-          ];<br>
-        </code>
-      </p>
-      <h3>IMPORTANT NOTICE</h3>
-      <p>While there is some basic sanitization, <strong>THIS IS NOT FOR FRONT END USE</strong>.  This
-        is to simplify making "control panel" type things for administrators. The parsers will not fire
-        for non-admins and if you edit it to do so, it is totally at your own risk.
-      </p>
- 			</div> <!-- /.col -->
- 		</div> <!-- /.row -->
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-3">Quick CRUD</h2>
 
-<?php if(in_array($user->data()->id,$master_account)){ ?>
-    <h3>Database Editor</h3>
-    <p>Please note, this database editor is very powerful. It is only recommended that you edit things if you know what you're doing.</p>
-    <?php // BEGIN DROPDOWN
-    $tables = $db->query('SHOW TABLES')->results();
-    $q = "";
-    $t = "Tablesin" . Config::get('mysql/db');
-    if(isset($tables[0]->$t)){
-      $q = $t;
-    }
+      <div class="card mb-3">
+        <div class="card-header"><strong>Basic Usage</strong></div>
+        <div class="card-body">
+          <p>Quick CRUD generates a directly editable table from any database query. Click a cell to edit it in
+            place, duplicate or delete rows with one click, and insert new rows with the form below the table.
+            Simply pass it a query and a table name:</p>
+          <pre class="border rounded p-3 mb-0"><code>$query = $db->query("SELECT * FROM permissions")->results();
+quickCrud($query, "permissions");</code></pre>
+        </div>
+      </div>
 
-    $t = "Tables_in_" . Config::get('mysql/db');
-    if(isset($tables[0]->$t)){
-      $q = $t;
-    }
-    if($q == ""){ ?>
+      <div class="card mb-3">
+        <div class="card-header"><strong>Options</strong></div>
+        <div class="card-body">
+          <p>Pass an optional third parameter with any of these keys:</p>
+          <table class="table table-sm table-striped">
+            <thead>
+              <tr><th>Option</th><th>Effect</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>'noid'=>1</code></td><td>Hides the id column from the table</td></tr>
+              <tr><td><code>'nodupe'=>1</code></td><td>Hides the Duplicate button</td></tr>
+              <tr><td><code>'nodel'=>1</code></td><td>Hides the Delete button</td></tr>
+              <tr><td><code>'class'=>"classname"</code></td><td>Optional class for the entire table</td></tr>
+              <tr><td><code>'thead'=>"classname"</code></td><td>Optional class for the table head</td></tr>
+              <tr><td><code>'tbody'=>"classname"</code></td><td>Optional class for the table body</td></tr>
+            </tbody>
+          </table>
+          <pre class="border rounded p-3 mb-0"><code>quickCrud($query, "permissions", ['noid'=>1, 'nodel'=>1]);</code></pre>
+        </div>
+      </div>
 
-      Your database schema will work with the Quick Crud plugin, however, it will not work with the automated database editor.  If you'd like to help us, please consider filling out a ticket at <a href="https://bugs.userspice.com">https://bugs.userspice.com</a> and passing along this diagnistic information:<br>
-      <?php dump($table[0]);?>
-      Thanks so much for your help.
-    <?php }else{ ?>
-    <form action="" name="form" method="post" >
-      <select id="tables" name="seek" data-us-submit-on-change="1">
-       <option value="">Choose Table</option>
-    <?php
-    // populate select box
+      <div class="card mb-3">
+        <div class="card-header"><strong>Embedding the Database Editor</strong></div>
+        <div class="card-body">
+          <p>The table picker and editor below live in their own file, so you can offer them on any page of your
+            site (a custom admin panel, for example), not just this plugin config screen. On a page that has
+            already loaded <code>users/init.php</code>:</p>
+          <pre class="border rounded p-3 mb-2"><code>include $abs_us_root.$us_url_root.'usersc/plugins/quickcrud/db_editor.php';</code></pre>
+          <p class="mb-0">The editor only renders for logged-in users with Admin permission (level 2), and the
+            AJAX endpoints enforce the same permission server-side. Including the file on a page visible to other
+            users simply outputs nothing for them.</p>
+        </div>
+      </div>
 
+      <div class="alert alert-danger">
+        <strong>Important:</strong> while there is some basic sanitization, <strong>this is not for front-end
+        use</strong>. Quick CRUD is for building "control panel" style tools for administrators. The parsers will
+        not fire for non-admins, and if you edit them to do so, it is totally at your own risk.
+      </div>
+    </div> <!-- /.col -->
+  </div> <!-- /.row -->
 
-    foreach($tables as $table){
-
-      ?>
-    <option value='<?=$table->$t?>'><?=$table->$t?></option>
-    <?php } ?>
-      </select>
-    </form>
-    <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
-      document.addEventListener('change', function (e) {
-        var sel = e.target;
-        if (sel && sel.matches && sel.matches('select[data-us-submit-on-change]') && sel.form) {
-          sel.form.submit();
-        }
-      }, true);
-    </script>
-    <?php
-    $sanitizedTableName = (!empty($_POST["seek"])) ? $_POST["seek"] : "Empty";
-    // Sanitize table name: basename for path traversal, regex for SQL injection
-    $sanitizedTableName = basename($sanitizedTableName);
-    if (!preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedTableName)) {
-        $sanitizedTableName = "Empty";
-    }
-    // Verify table exists in database whitelist
-    if ($sanitizedTableName !== "Empty") {
-        $tableExists = false;
-        foreach ($tables as $table) {
-            if ($table->$t === $sanitizedTableName) {
-                $tableExists = true;
-                break;
-            }
-        }
-        if (!$tableExists) {
-            $sanitizedTableName = "Empty";
-        }
-    }
-    ?>
-    <H4>Currently Viewing '<?=htmlspecialchars(ucfirst($sanitizedTableName), ENT_QUOTES, 'UTF-8')?>' table</H4>
-    <?php
-    if ($sanitizedTableName !== "Empty") {
-        $query = $db->query("SELECT * FROM $sanitizedTableName")->results();
-        quickCrud($query,$sanitizedTableName);
-    }
-   }
- }
-    // END DROPDOWN ?>
+  <?php include "db_editor.php"; ?>
+</div>

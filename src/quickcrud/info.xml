@@ -6,18 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin itself-->
-  <version>1.0.5</version>
+  <version>1.1.0</version>
 
 <!-- release date of THIS version -->
-  <release>May 17, 2026</release>
+  <release>July 15, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>6.0.9</tested>
+  <tested>6.1.4</tested>
 
 <!-- What does your plugin do? -->
-  <description>This plugin is for backend use only and provides automatic tables with basic CRUD (Create, Read, Update, Delete)
-    functionality. It is just for quick and dirty use on the backend when it doesn't make sense to code a full page for each feature. Thanks to user Zoza it also includes a direct database editor.  Users with Master Account access can directly edit any table in their database with this plugin.
-  </description>
+  <description>This plugin is for backend use only and provides automatic tables with basic CRUD (Create, Read, Update, Delete) functionality. It is just for quick and dirty use on the backend when it doesn&apos;t make sense to code a full page for each feature. Thanks to user Zoza it also includes a direct database editor with a searchable table picker. Admins can edit any table in their database from the plugin settings page, and the editor can now also be included on your own admin pages - see the instructions on the settings page.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Quick CRUD</button>

@@ -12,7 +12,7 @@ if(!function_exists('quickCrud')) {
       $formNumber = $formNumber + 1;
     }
 
-    if(!isset($opts['class'])) {$opts['class'] = "table table-striped paginate"; }
+    if(!isset($opts['class'])) {$opts['class'] = "table table-striped"; }
     if(!isset($opts['thead'])) {$opts['thead'] = ""; }
     if(!isset($opts['tbody'])) {$opts['tbody'] = ""; }
 
@@ -91,7 +91,11 @@ if(!function_exists('quickCrud')) {
       <script type="text/javascript" src="<?=$us_url_root?>users/js/pagination/datatables.min.js"></script>
       <script nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
       $(document).ready(function () {
-         $('.editable').DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
+         $('.editable').each(function () {
+           if (!$.fn.DataTable.isDataTable(this)) {
+             $(this).DataTable({"pageLength": 25,"stateSave": true,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, 250, 500]], "aaSorting": []});
+           }
+         });
         });
       </script>
       <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
