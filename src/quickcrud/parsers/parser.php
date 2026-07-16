@@ -6,7 +6,7 @@ if(!pluginActive('quickcrud',true)){
   die("inactive");
 }
 
-if(!isset($user) || !$user->isLoggedIn() || !hasPerm([2],$user->data()->id)){
+if(!function_exists('quickCrudHasPerm') || !quickCrudHasPerm()){
   die();
 }
 

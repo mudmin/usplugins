@@ -1,11 +1,25 @@
 <?php
+if(!function_exists('quickCrudHasPerm')) {
+  //central permission check for the editor, quickCrud(), and the AJAX parser
+  //rename permissions.override.php to permissions.php in this folder to customize it
+  function quickCrudHasPerm(){
+    global $user;
+    if(!isset($user) || !$user->isLoggedIn()){ return false; }
+    $override = __DIR__.'/permissions.php';
+    if(file_exists($override)){
+      return (bool)(include $override);
+    }
+    return hasPerm([2],$user->data()->id);
+  }
+}
+
 if(!function_exists('quickCrud')) {
   function quickCrud($query,$table, $opts = []){
     global $db,$user,$abs_us_root,$us_url_root,$formNumber;
     if (!isset($GLOBALS['userspice_nonce'])) {
         $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));
     }
-    if(hasPerm([2],$user->data()->id)){
+    if(quickCrudHasPerm()){
     if(!isset($formNumber) || $formNumber == ""){
       $formNumber = 0;
     }else{

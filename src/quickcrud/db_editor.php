@@ -7,13 +7,14 @@
  *
  *   include $abs_us_root.$us_url_root.'usersc/plugins/quickcrud/db_editor.php';
  *
- * Only renders for logged-in users with permission level 2 (Admin).
- * The AJAX parser (parsers/parser.php) enforces the same permission
- * server-side, so including this on a public page outputs nothing for
- * other visitors.
+ * Only renders for logged-in users with permission level 2 (Admin) by
+ * default — rename permissions.override.php to permissions.php in this
+ * folder to customize the check. The AJAX parser (parsers/parser.php)
+ * enforces the same permission server-side, so including this on a
+ * public page outputs nothing for other visitors.
  */
-if (!isset($user) || !function_exists('hasPerm')) { return; } // must be included after users/init.php
-if (!$user->isLoggedIn() || !hasPerm([2], $user->data()->id)) { return; }
+if (!isset($user) || !function_exists('quickCrudHasPerm')) { return; } // must be included after users/init.php
+if (!quickCrudHasPerm()) { return; }
 
 if (!isset($GLOBALS['userspice_nonce'])) {
     $GLOBALS['userspice_nonce'] = base64_encode(random_bytes(16));

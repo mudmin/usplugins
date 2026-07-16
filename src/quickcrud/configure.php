@@ -70,6 +70,17 @@ quickCrud($query, "permissions");</code></pre>
         </div>
       </div>
 
+      <div class="card mb-3">
+        <div class="card-header"><strong>Customizing Permissions</strong></div>
+        <div class="card-body">
+          <p class="mb-0">By default, QuickCRUD requires permission level 2 (Admin) everywhere. To change that,
+            rename <code>permissions.override.php</code> (in the plugin folder) to <code>permissions.php</code> and
+            adjust the <code>hasPerm()</code> call inside — it ships allowing levels 2 and 3. Once
+            <code>permissions.php</code> exists, it replaces the built-in check for the database editor,
+            <code>quickCrud()</code> tables, and the AJAX endpoints, and it survives plugin updates.</p>
+        </div>
+      </div>
+
       <div class="alert alert-danger">
         <strong>Important:</strong> while there is some basic sanitization, <strong>this is not for front-end
         use</strong>. Quick CRUD is for building "control panel" style tools for administrators. The parsers will
