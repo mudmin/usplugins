@@ -18,7 +18,13 @@ if(!Token::check($token)){
   <div class="row">
     <div class="col-12">
       <h2 class="mb-3">Quick CRUD</h2>
+    </div>
+  </div>
 
+  <?php include "db_editor.php"; ?>
+
+  <div class="row mt-4">
+    <div class="col-12">
       <div class="card mb-3">
         <div class="card-header"><strong>Basic Usage</strong></div>
         <div class="card-body">
@@ -71,6 +77,4 @@ quickCrud($query, "permissions");</code></pre>
       </div>
     </div> <!-- /.col -->
   </div> <!-- /.row -->
-
-  <?php include "db_editor.php"; ?>
 </div>
