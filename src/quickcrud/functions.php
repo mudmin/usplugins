@@ -21,8 +21,17 @@ if(!function_exists('quickCrud')) {
         $opts['keys'][] = $k;
       }
     }
+    $hasId = isset($query[0]) && property_exists($query[0], 'id');
+    if(!$hasId){
+      //update, duplicate, and delete all require an id column
+      $opts['nodupe'] = true;
+      $opts['nodel'] = true;
+    }
     if($query != []){
       $row = "";
+      if(!$hasId){
+        echo "<div class='alert alert-warning'>Table `".htmlspecialchars($table)."` has no id column, so inline editing, duplicating, and deleting are disabled.</div>";
+      }
       ?>
       <table class="<?=$opts['class']?> editable" id="paginate">
         <thead class="<?=$opts['thead']?>">
@@ -43,7 +52,7 @@ if(!function_exists('quickCrud')) {
         </thead>
         <tbody class="<?=$opts['tbody']?>">
           <?php foreach($query as $r){
-            $id = $r->id;
+            $id = $hasId ? $r->id : '';
             $row = $r;
             ?>
             <tr>
@@ -99,6 +108,7 @@ if(!function_exists('quickCrud')) {
         });
       </script>
       <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
+        <?php if($hasId){ ?>
         $('.editable').editableTableWidget();
         $('#editable td.uneditable').on('change', function(evt, newValue) {
           	return false;
@@ -117,6 +127,7 @@ if(!function_exists('quickCrud')) {
         		});
         	;
         });
+        <?php } ?>
 
         $(".trigger").click(function(data) {
 
