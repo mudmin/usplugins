@@ -13,6 +13,101 @@ if(!function_exists('quickCrudHasPerm')) {
   }
 }
 
+if(!function_exists('quickCrudTableExists')) {
+  //validates a table name against the actual database schema
+  function quickCrudTableExists($table){
+    static $tables = null;
+    if(!is_string($table) || !preg_match('/^[a-zA-Z0-9_]+$/', $table)){ return false; }
+    if($tables === null){
+      $db = DB::getInstance();
+      $tables = [];
+      foreach($db->query('SHOW TABLES')->results(true) as $row){
+        $tables[] = (string)array_values($row)[0];
+      }
+    }
+    return in_array($table, $tables, true);
+  }
+}
+
+if(!function_exists('quickCrudKey')) {
+  /**
+   * Detects the key quickCrud uses to address rows in a table.
+   * Prefers the primary key (composite keys included); falls back to the
+   * first single-column unique index on a NOT NULL column.
+   * Returns ['cols'=>[...], 'auto'=>'colname'|null], or null when the
+   * table has no usable key.
+   */
+  function quickCrudKey($table){
+    static $cache = [];
+    if(array_key_exists($table, $cache)){ return $cache[$table]; }
+    if(!quickCrudTableExists($table)){ return $cache[$table] = null; }
+    $db = DB::getInstance();
+    $columns = $db->query("SHOW COLUMNS FROM `$table`")->results();
+    $notNull = [];
+    $auto = null;
+    foreach($columns as $c){
+      if($c->Null === 'NO'){ $notNull[] = $c->Field; }
+      if(stripos($c->Extra ?? '', 'auto_increment') !== false){ $auto = $c->Field; }
+    }
+    $indexes = [];
+    foreach($db->query("SHOW KEYS FROM `$table` WHERE Non_unique = 0")->results() as $k){
+      $indexes[$k->Key_name][(int)$k->Seq_in_index] = $k->Column_name;
+    }
+    $cols = [];
+    if(isset($indexes['PRIMARY'])){
+      ksort($indexes['PRIMARY']);
+      $cols = array_values($indexes['PRIMARY']);
+    }else{
+      foreach($indexes as $keyCols){
+        if(count($keyCols) == 1 && in_array(reset($keyCols), $notNull, true)){
+          $cols = array_values($keyCols);
+          break;
+        }
+      }
+    }
+    if(empty($cols)){ return $cache[$table] = null; }
+    return $cache[$table] = [
+      'cols' => $cols,
+      'auto' => in_array($auto, $cols, true) ? $auto : null,
+    ];
+  }
+}
+
+if(!function_exists('quickCrudRowToken')) {
+  //JSON token identifying one row by its key column values, e.g. {"id":5}
+  function quickCrudRowToken($row, $crudKey){
+    $vals = [];
+    foreach($crudKey['cols'] as $c){
+      if(!property_exists($row, $c)){ return null; }
+      $vals[$c] = $row->$c;
+    }
+    return json_encode($vals);
+  }
+}
+
+if(!function_exists('quickCrudRowWhere')) {
+  //turns a row token back into a DB.php where array; accepts a bare value
+  //for single-column keys. Returns null if the row can't be addressed.
+  function quickCrudRowWhere($table, $token){
+    $crudKey = quickCrudKey($table);
+    if($crudKey === null){ return null; }
+    $vals = json_decode((string)$token, true);
+    if(!is_array($vals)){
+      if(count($crudKey['cols']) == 1 && $token !== null && $token !== ''){
+        $vals = [$crudKey['cols'][0] => $token];
+      }else{
+        return null;
+      }
+    }
+    $where = ['and'];
+    foreach($crudKey['cols'] as $c){
+      if(!array_key_exists($c, $vals) || is_array($vals[$c])){ return null; }
+      $where[] = [$c, '=', $vals[$c]];
+    }
+    return count($crudKey['cols']) == 1 ? $where[1] : $where;
+  }
+}
+
 if(!function_exists('quickCrud')) {
   function quickCrud($query,$table, $opts = []){
     global $db,$user,$abs_us_root,$us_url_root,$formNumber;
@@ -35,16 +130,26 @@ if(!function_exists('quickCrud')) {
         $opts['keys'][] = $k;
       }
     }
-    $hasId = isset($query[0]) && property_exists($query[0], 'id');
-    if(!$hasId){
-      //update, duplicate, and delete all require an id column
+    $crudKey = quickCrudKey($table);
+    if($crudKey !== null && isset($query[0])){
+      foreach($crudKey['cols'] as $c){
+        //the caller's query has to select the key columns or rows can't be addressed
+        if(!property_exists($query[0], $c)){ $crudKey = null; break; }
+      }
+    }
+    $keyCols = ($crudKey !== null) ? $crudKey['cols'] : [];
+    if($crudKey === null){
+      //update, duplicate, and delete all need a way to address a single row
       $opts['nodupe'] = true;
       $opts['nodel'] = true;
+    }elseif($crudKey['auto'] === null){
+      //duplicate relies on the database minting a fresh auto_increment value
+      $opts['nodupe'] = true;
     }
     if($query != []){
       $row = "";
-      if(!$hasId){
-        echo "<div class='alert alert-warning'>Table `".htmlspecialchars($table)."` has no id column, so inline editing, duplicating, and deleting are disabled.</div>";
+      if($crudKey === null){
+        echo "<div class='alert alert-warning'>No usable primary or unique key was found for table `".htmlspecialchars($table)."` (or your query does not select its column(s)), so inline editing, duplicating, and deleting are disabled.</div>";
       }
       ?>
       <table class="<?=$opts['class']?> editable" id="paginate">
@@ -52,7 +157,7 @@ if(!function_exists('quickCrud')) {
           <tr>
 
             <?php foreach($opts['keys'] as $k){
-              if(isset($opts['noid']) && $k == "id"){ continue; };
+              if(isset($opts['noid']) && in_array($k, ($keyCols ?: ['id']), true)){ continue; };
               ?>
               <th><?php echo $k;?></th>
             <?php } ?>
@@ -66,17 +171,17 @@ if(!function_exists('quickCrud')) {
         </thead>
         <tbody class="<?=$opts['tbody']?>">
           <?php foreach($query as $r){
-            $id = $hasId ? $r->id : '';
+            $id = ($crudKey !== null) ? htmlspecialchars((string)quickCrudRowToken($r, $crudKey), ENT_QUOTES, 'UTF-8') : '';
             $row = $r;
             ?>
             <tr>
               <?php foreach($r as $k=>$v){
-                if(isset($opts['noid']) && $k == "id"){ continue; };
+                if(isset($opts['noid']) && in_array($k, ($keyCols ?: ['id']), true)){ continue; };
               ?>
 
                 <td
                  data-key="<?=$k?>" data-row="<?=$id?>" data-method="update"
-                <?php if($k == "id"){echo "class='uneditable'";}?>
+                <?php if(in_array($k, $keyCols, true)){echo "class='uneditable'";}?>
                   ><?=$v?></td>
               <?php } ?>
               <?php if(!isset($opts['nodupe'])){?>
@@ -98,12 +203,13 @@ if(!function_exists('quickCrud')) {
           <h4>Insert into <?=$table?></h4>
           <form class="editableForm" action="" method="post" id="form<?=$formNumber?>" >
             <?php
-            foreach ($row as $key => $value) {
-              if($key == 'id'){continue;}
+            foreach ($row as $col => $value) {
+              //auto_increment keys are minted by the database; everything else (including non-auto keys) is enterable
+              if($crudKey !== null && $col === $crudKey['auto']){continue;}
                ?>
               <div class="form-group">
-                <label for=""><?=$key?></label><br>
-                <input class="form-control" type="text" name="<?=$key?>" value="">
+                <label for=""><?=$col?></label><br>
+                <input class="form-control" type="text" name="<?=$col?>" value="">
               </div>
             <?php } ?>
             <button type="button" name="button" data-form="<?=$formNumber?>" class="btn btn-info insert">Insert</button><br><br>
@@ -122,7 +228,7 @@ if(!function_exists('quickCrud')) {
         });
       </script>
       <script type="text/javascript" nonce="<?= htmlspecialchars($GLOBALS['userspice_nonce'] ?? '') ?>">
-        <?php if($hasId){ ?>
+        <?php if($crudKey !== null){ ?>
         $('.editable').editableTableWidget();
         $('#editable td.uneditable').on('change', function(evt, newValue) {
           	return false;

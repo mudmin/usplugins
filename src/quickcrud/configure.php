@@ -30,7 +30,10 @@ if(!Token::check($token)){
         <div class="card-body">
           <p>Quick CRUD generates a directly editable table from any database query. Click a cell to edit it in
             place, duplicate or delete rows with one click, and insert new rows with the form below the table.
-            Simply pass it a query and a table name:</p>
+            The table's primary key is detected automatically (composite keys work too, and tables without a
+            primary key fall back to a single-column unique index), so your table does not need a column literally
+            named <code>id</code> — just make sure your query selects the key column(s). Simply pass it a query
+            and a table name:</p>
           <pre class="border rounded p-3 mb-0"><code>$query = $db->query("SELECT * FROM permissions")->results();
 quickCrud($query, "permissions");</code></pre>
         </div>
@@ -45,7 +48,7 @@ quickCrud($query, "permissions");</code></pre>
               <tr><th>Option</th><th>Effect</th></tr>
             </thead>
             <tbody>
-              <tr><td><code>'noid'=>1</code></td><td>Hides the id column from the table</td></tr>
+              <tr><td><code>'noid'=>1</code></td><td>Hides the key column(s) from the table</td></tr>
               <tr><td><code>'nodupe'=>1</code></td><td>Hides the Duplicate button</td></tr>
               <tr><td><code>'nodel'=>1</code></td><td>Hides the Delete button</td></tr>
               <tr><td><code>'class'=>"classname"</code></td><td>Optional class for the entire table</td></tr>
