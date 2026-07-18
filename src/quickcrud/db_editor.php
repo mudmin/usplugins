@@ -93,7 +93,7 @@ if ($sanitizedTableName !== "Empty") {
 <?php
 if ($sanitizedTableName !== "Empty") {
     ?>
-    <h4>Currently Viewing '<?= htmlspecialchars(ucfirst($sanitizedTableName), ENT_QUOTES, 'UTF-8') ?>' table</h4>
+    <h4>Currently Viewing '<?= htmlspecialchars($sanitizedTableName, ENT_QUOTES, 'UTF-8') ?>' table</h4>
     <?php
     $query = $db->query("SELECT * FROM $sanitizedTableName")->results();
     quickCrud($query, $sanitizedTableName);
