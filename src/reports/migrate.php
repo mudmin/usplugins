@@ -36,6 +36,39 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00002';
+  if(!in_array($update,$existing)){
+  // The plugin zip unpacks OVER the existing install, so files dropped from the
+  // package still linger. zipstream-php moved 3.2.2 -> 3.1.1 (3.2.2 requires
+  // php-64bit ^8.3, which broke installs on the supported 8.1 floor), and these
+  // three files only ever existed in 3.2.2.
+  $pluginRoot = $abs_us_root.$us_url_root.'usersc/plugins/reports';
+  $removed = 0;
+  $staleFiles = [
+    'vendor/maennchen/zipstream-php/src/Stream/CallbackStreamWrapper.php',
+    'vendor/maennchen/zipstream-php/guides/LargeFilesToS3.rst',
+    'vendor/maennchen/zipstream-php/test/CallbackOutputTest.php',
+  ];
+  foreach($staleFiles as $f){
+    $full = $pluginRoot.'/'.$f;
+    if(file_exists($full) && is_file($full)){
+      unlink($full);
+      $removed++;
+    }
+  }
+  // directories left empty by the sweep (rmdir is a no-op unless empty)
+  foreach(['vendor/maennchen/zipstream-php/test','vendor/maennchen/zipstream-php/guides','vendor/maennchen/zipstream-php/src/Stream'] as $d){
+    $dp = $pluginRoot.'/'.$d;
+    if(is_dir($dp)){
+      @rmdir($dp);
+    }
+  }
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - removed $removed stale file(s)");
+
+  $existing[] = $update; //add the update you just did to the existing update array
+  $count++;
+  }
+
 
 
 

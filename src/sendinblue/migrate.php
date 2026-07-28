@@ -83,6 +83,35 @@ if($checkC > 0){
   $count++;
   }
 
+  $update = '00005';
+  if(!in_array($update,$existing)){
+  // The plugin zip unpacks OVER the existing install, so files dropped from the
+  // package still linger. These were left behind by the guzzle 7.10.0 -> 7.15.2
+  // and promises 2.3.0 -> 2.5.1 upgrades. promises' functions.php helpers are no
+  // longer wired into autoload_files.php, and package-lock.json is the same class
+  // of unused dev artifact that migration 00004 cleaned off brevo-php.
+  $pluginRoot = $abs_us_root.$us_url_root.'usersc/plugins/sendinblue';
+  $removed = 0;
+  $staleFiles = [
+    'vendor/guzzlehttp/guzzle/package-lock.json',
+    'vendor/guzzlehttp/promises/Makefile',
+    'vendor/guzzlehttp/promises/src/functions.php',
+    'vendor/guzzlehttp/promises/src/functions_include.php',
+    'vendor/symfony/deprecation-contracts/.gitignore',
+  ];
+  foreach($staleFiles as $f){
+    $full = $pluginRoot.'/'.$f;
+    if(file_exists($full) && is_file($full)){
+      unlink($full);
+      $removed++;
+    }
+  }
+  logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name - removed $removed stale file(s)");
+
+  $existing[] = $update;
+  $count++;
+  }
+
 
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
