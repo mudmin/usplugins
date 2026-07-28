@@ -64,8 +64,6 @@ use ZipStream\Exception\ResourceActionException;
  * // write archive footer to stream
  * $zip->finish();
  * ```
- *
- * @api
  */
 class ZipStream
 {
@@ -693,7 +691,7 @@ class ZipStream
     /**
      * Write zip footer to stream.
      *
-     * The class is left in an unusable state after `finish`.
+     * The clase is left in an unusable state after `finish`.
      *
      * ##### Example
      *
@@ -714,9 +712,9 @@ class ZipStream
         }
 
         // Add 64bit headers (if applicable)
-        if (count($this->centralDirectoryRecords) >= 0xFFFF
-            || $centralDirectoryStartOffsetOnDisk > 0xFFFFFFFF
-            || $sizeOfCentralDirectory > 0xFFFFFFFF) {
+        if (count($this->centralDirectoryRecords) >= 0xFFFF ||
+            $centralDirectoryStartOffsetOnDisk > 0xFFFFFFFF ||
+            $sizeOfCentralDirectory > 0xFFFFFFFF) {
             if (!$this->enableZip64) {
                 throw new OverflowException();
             }
@@ -772,13 +770,7 @@ class ZipStream
         if (is_resource($outputStream)) {
             return $outputStream;
         }
-        $resource = fopen('php://output', 'wb');
-
-        if ($resource === false) {
-            throw new RuntimeException('fopen of php://output failed');
-        }
-
-        return $resource;
+        return fopen('php://output', 'wb');
     }
 
     /**

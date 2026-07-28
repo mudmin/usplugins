@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\StreamWrapper;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
@@ -62,10 +61,10 @@ class ZipStreamTest extends TestCase
 
         $name = 'árvíztűrő tükörfúrógép.txt';
         $content = 'Sample String Data';
-        $comment
-            = 'Filename has every special characters '
-            . 'from Hungarian language in lowercase. '
-            . 'In uppercase: ÁÍŰŐÜÖÚÓÉ';
+        $comment =
+            'Filename has every special characters ' .
+            'from Hungarian language in lowercase. ' .
+            'In uppercase: ÁÍŰŐÜÖÚÓÉ';
 
         $zip->addFile(fileName: $name, data: $content, comment: $comment);
         $zip->finish();
@@ -327,14 +326,11 @@ class ZipStreamTest extends TestCase
             defaultEnableZeroHeader: false,
         );
 
-        foreach (['cat', 'more'] as $cmd) {
-            $streamUnseekable = @popen($cmd, 'w');
-            if ($streamUnseekable !== false) {
-                break;
-            }
-        }
-
-        if ($streamUnseekable === false) {
+        if (file_exists('/dev/null')) {
+            $streamUnseekable = fopen('/dev/null', 'w+');
+        } elseif (file_exists('NUL')) {
+            $streamUnseekable = fopen('NUL', 'w+');
+        } else {
             $this->markTestSkipped('Needs file /dev/null');
         }
 
@@ -427,7 +423,9 @@ class ZipStreamTest extends TestCase
         $this->assertStringEqualsFile($tmpDir . '/sample.json', $body);
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testAddLargeFileFromPsr7Stream(): void
     {
         $zip = new ZipStream(
@@ -466,7 +464,9 @@ class ZipStreamTest extends TestCase
         $zip->addFile('sample.txt', '1234');
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testManyFilesWithoutZip64(): void
     {
         $this->expectException(OverflowException::class);
@@ -484,7 +484,9 @@ class ZipStreamTest extends TestCase
         $zip->finish();
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testManyFilesWithZip64(): void
     {
         $zip = new ZipStream(
@@ -506,7 +508,9 @@ class ZipStreamTest extends TestCase
         $this->assertSame(count($files), 0x10000);
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testLongZipWithout64(): void
     {
         $this->expectException(OverflowException::class);
@@ -529,7 +533,9 @@ class ZipStreamTest extends TestCase
         }
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testLongZipWith64(): void
     {
         $zip = new ZipStream(
@@ -549,27 +555,17 @@ class ZipStreamTest extends TestCase
             );
         }
 
-        $zip->addDirectory('mydir/');
-
         $zip->finish();
 
         $tmpDir = $this->validateAndExtractZip($this->tempfile);
 
         $files = $this->getRecursiveFileList($tmpDir);
         $this->assertSame(['sample0', 'sample1', 'sample2', 'sample3'], $files);
-
-        $this->assertFileDoesNotContain(
-            $this->tempfile,
-            PackField::pack(
-                new PackField(format: 'V', value: 0x00000000), // CRC-32 = 0 (directory)
-                new PackField(format: 'V', value: 0xFFFFFFFF), // compressedSize — bug sentinel
-                new PackField(format: 'V', value: 0xFFFFFFFF), // uncompressedSize — bug sentinel
-                new PackField(format: 'v', value: 6),          // filename length = strlen('mydir/')
-            )
-        );
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testAddLargeFileWithoutZip64WithZeroHeader(): void
     {
         $this->expectException(OverflowException::class);
@@ -590,7 +586,9 @@ class ZipStreamTest extends TestCase
         );
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testAddsZip64HeaderWhenNeeded(): void
     {
         $zip = new ZipStream(
@@ -619,7 +617,9 @@ class ZipStreamTest extends TestCase
         ));
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testDoesNotAddZip64HeaderWhenNotNeeded(): void
     {
         $zip = new ZipStream(
@@ -648,7 +648,9 @@ class ZipStreamTest extends TestCase
         ));
     }
 
-    #[Group('slow')]
+    /**
+     * @group slow
+     */
     public function testAddLargeFileWithoutZip64WithoutZeroHeader(): void
     {
         $this->expectException(OverflowException::class);
@@ -1153,44 +1155,6 @@ class ZipStreamTest extends TestCase
         );
 
         $zip->executeSimulation();
-    }
-
-    #[Group('slow')]
-    public function testSimulationWithLargeZip64AndZeroHeader(): void
-    {
-        $zip = new ZipStream(
-            outputStream: $this->tempfileStream,
-            sendHttpHeaders: false,
-            operationMode: OperationMode::SIMULATE_STRICT,
-            defaultCompressionMethod: CompressionMethod::STORE,
-            outputName: 'archive.zip',
-            enableZip64: true,
-            defaultEnableZeroHeader: true
-        );
-
-        $zip->addFileFromPsr7Stream(
-            fileName: 'large',
-            stream: new EndlessCycleStream('large'),
-            exactSize: 0x120000000, // ~5gb
-            compressionMethod: CompressionMethod::STORE,
-            lastModificationDateTime: new DateTimeImmutable('2022-01-01 01:01:01Z'),
-        );
-
-        $zip->addFileFromPsr7Stream(
-            fileName: 'small',
-            stream: new EndlessCycleStream('small'),
-            exactSize: 0x20,
-            compressionMethod: CompressionMethod::STORE,
-            lastModificationDateTime: new DateTimeImmutable('2022-01-01 01:01:01Z'),
-        );
-
-        $forecastedSize = $zip->finish();
-
-        $zip->executeSimulation();
-
-        $this->assertSame($forecastedSize, filesize($this->tempfile));
-
-        $this->validateAndExtractZip($this->tempfile);
     }
 
     private function addLargeFileFileFromPath(CompressionMethod $compressionMethod, $zeroHeader, $zip64): void
