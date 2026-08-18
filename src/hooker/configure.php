@@ -85,8 +85,18 @@ if(!empty($_POST['deleteHook'])){
           to create a whole plugin to do it! Simply create a hook in the hooks folder of this plugin and register it below!
           For a table of where plugin hooks show up on the page, see <a href="https://userspice.com/plugin-hooks/">https://userspice.com/plugin-hooks/</a>.
           Please note that uninstalling this plugin will remove all hooks and if you reinstall, you will have to manually add them again.<br><br>
-          There is a sample_hook.php file in the hooks folder you can play with to get started. <strong>If you are not on the latest version of UserSpice,
-          please check the plugin hooks page to make sure that the hook you want to use is included in your version.
+          The hooks folder ships with a small sample hook for each position that you can register, look at, and edit to get started:
+          <ul>
+            <li><code>hooker_sample_pre.php</code> &ndash; runs before the page builds its output. Sets up a value for the body sample to print.</li>
+            <li><code>hooker_sample_body.php</code> &ndash; prints something the user can see in the page.</li>
+            <li><code>hooker_sample_form.php</code> &ndash; adds a field inside the page's existing form.</li>
+            <li><code>hooker_sample_post.php</code> &ndash; saves that field. Register the form and post samples on <code>user_settings.php</code>
+              and add the column (<code>ALTER TABLE users ADD nickname VARCHAR(50) NULL;</code>) to see one database field updated end to end.</li>
+            <li><code>hooker_sample_bottom.php</code> &ndash; adds javascript at the bottom of the page, with the CSP nonce it needs.</li>
+            <li><code>hooker_sample_event.php</code> &ndash; for event hooks such as loginSuccess. Events always use the body position.</li>
+          </ul>
+          <strong>If you are not on the latest version of UserSpice,
+          please check the plugin hooks page to make sure that the hook you want to use is included in your version.</strong>
 
           <form class="" action="" method="post">
             <div class="form-group" id="pages">
