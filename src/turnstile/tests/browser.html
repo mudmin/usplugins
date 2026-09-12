@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Turnstile browser regression tests</title>
+<script src="browser.js"></script>
+<script defer src="../assets/turnstile.js"></script>
+</head><body>
+<h1>Turnstile browser regression tests</h1>
+<form id="contact">
+  <div class="us-turnstile" data-sitekey="test" data-action="contact" data-theme="auto" data-size="normal" data-language="auto" data-response-field="cf-turnstile-response"><div class="us-turnstile-widget"></div><p class="us-turnstile-status"></p></div>
+  <button type="submit">Send</button>
+</form>
+<div id="reset-widget" class="us-turnstile" hidden data-target="[name='resetPassword']" data-sitekey="test" data-action="reset_password" data-theme="dark" data-size="compact" data-language="auto" data-response-field="cf-turnstile-response"><div class="us-turnstile-widget"></div><p class="us-turnstile-status"></p></div>
+<form id="reset"><p><input type="submit" name="resetPassword" value="Reset"></p></form>
+<form id="forgot"><p><input type="submit" name="forgotten_password" value="Email"></p></form>
+<div id="forgot-widget" class="us-turnstile" hidden data-target="[name='forgotten_password']" data-sitekey="test" data-action="forgot_password" data-theme="auto" data-size="normal" data-language="auto" data-response-field="cf-turnstile-response"><div class="us-turnstile-widget"></div><p class="us-turnstile-status"></p></div>
+<div id="no-form" class="us-turnstile" hidden data-target="[name='nonexistent']" data-sitekey="test"><div class="us-turnstile-widget"></div><p class="us-turnstile-status"></p></div>
+<pre id="test-results">Running…</pre>
+</body></html>

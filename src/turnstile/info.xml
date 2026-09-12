@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <name>Cloudflare Turnstile</name>
+  <author>Dan Hoover</author>
+  <website>https://userspice.com</website>
+  <version>1.0.0</version>
+  <release>September 12, 2026</release>
+  <tested>6.1.7</tested>
+  <fa_icon>fa fa-shield</fa_icon>
+  <description>Add Cloudflare Turnstile to any form, with optional protection for UserSpice account forms.</description>
+  <button>Configure Turnstile</button>
+</plugin>
