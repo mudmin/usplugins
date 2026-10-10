@@ -2,11 +2,14 @@
 
 <?php
 global $validation;
+global $validated;
 global $settings;
 if ($settings->recaptcha == 1) {
     if(!verifyCaptcha()) {
         $str = lang("ERR_CAP");
         $validation->addError(["reCAPTCHA $str","g-recaptcha-response"]);
+        // UserSpice <= 6.1.7 copied passed() into $validated before this hook ran, so the error above was ignored
+        $validated = false;
     }
 }
 ?>

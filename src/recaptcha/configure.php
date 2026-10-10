@@ -16,6 +16,10 @@ if(!Token::check($token)){
    // Redirect::to('admin.php?err=I+agree!!!');
  }
  $token = Token::generate();
+ // Enabling with blank keys fails every captcha check, which locks everyone out of login
+ // install.php seeds placeholder keys ("Your-reCAPTCHA-...-Key"), so treat those as blank too
+ $recapKeyOk = function($k) { $k = trim((string)$k); return $k !== '' && stripos($k, 'Your-reCAPTCHA-') !== 0; };
+ $recapKeysSet = $recapKeyOk($settings->recap_public) && $recapKeyOk($settings->recap_private);
  ?>
   <div class="content mt-3">
       <div class="row">
@@ -28,19 +32,26 @@ if(!Token::check($token)){
               <strong>Please Note:</strong> reCAPTCHA requires keys generated from Google.<br>
               You can generate these keys on Google <a href="https://www.google.com/recaptcha/admin">here</a>.<br><br>
               Do not enable reCAPTCHA on public facing pages without setting valid keys first. This can lock you out
-              from logging in.
+              from logging in. If that happens, turn it back off in the database with
+              <code>UPDATE settings SET recaptcha = 0;</code>
               <br><br>
               <div class="form-group">
                   <label for="recaptcha">Enable reCAPTCHA on public UserSpice pages (Join, Login, Forgot
                       Password)</label>
                   <span style="float:right;">
                       <label class="switch switch-text switch-success">
-                          <input id="recaptcha" type="checkbox" class="switch-input toggle" data-desc="reCAPTCHA"
-                              <?php if($settings->recaptcha==1) echo 'checked="true"'; ?>>
+                          <div class="form-check form-switch">
+                            <input id="recaptcha" type="checkbox" role="switch" class="form-check-input switch-input toggle" data-desc="reCAPTCHA"
+                                <?php if($settings->recaptcha==1) echo 'checked="true"'; ?>
+                                <?php if(!$recapKeysSet && $settings->recaptcha!=1) echo 'disabled'; ?>>
+                          </div>
                           <span data-on="Yes" data-off="No" class="switch-label"></span>
                           <span class="switch-handle"></span>
                       </label>
                   </span>
+                  <small id="recap_keys_note" class="form-text text-danger" style="display: <?php echo $recapKeysSet ? 'none' : 'block'; ?>;">
+                      Enter both the Site Key and Secret Key before enabling reCAPTCHA.
+                  </small>
               </div>
               <div class="form-group">
                   <label for="recap_public">reCAPTCHA Site Key</label>
@@ -80,8 +91,10 @@ if(!Token::check($token)){
                   <label for="recap_hide_badge">Hide reCAPTCHA v3 Badge</label>
                   <span style="float:right;">
                       <label class="switch switch-text switch-success">
-                          <input id="recap_hide_badge" type="checkbox" class="switch-input toggle" data-desc="Hide reCAPTCHA Badge"
-                              <?php if(isset($settings->recap_hide_badge) && $settings->recap_hide_badge==1) echo 'checked="true"'; ?>>
+                          <div class="form-check form-switch">
+                            <input id="recap_hide_badge" type="checkbox" role="switch" class="form-check-input switch-input toggle" data-desc="Hide reCAPTCHA Badge"
+                                <?php if(isset($settings->recap_hide_badge) && $settings->recap_hide_badge==1) echo 'checked="true"'; ?>>
+                          </div>
                           <span data-on="Yes" data-off="No" class="switch-label"></span>
                           <span class="switch-handle"></span>
                       </label>
@@ -163,5 +176,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     versionSelect.addEventListener('change', toggleV3Options);
     toggleV3Options(); // Run on page load
+
+    // Keep the enable switch locked until both keys are filled in (it stays usable while on, so it can be turned off)
+    const recapToggle = document.getElementById('recaptcha');
+    const keysNote = document.getElementById('recap_keys_note');
+    const keyInputs = [document.getElementById('recap_public'), document.getElementById('recap_private')];
+
+    function checkKeys() {
+        const keysSet = keyInputs.every(function(el) {
+            const k = el.value.trim();
+            return k !== '' && k.toLowerCase().indexOf('your-recaptcha-') !== 0;
+        });
+        keysNote.style.display = keysSet ? 'none' : 'block';
+        if (!recapToggle.checked) {
+            recapToggle.disabled = !keysSet;
+        }
+    }
+
+    keyInputs.forEach(function(el) { el.addEventListener('input', checkKeys); });
+    recapToggle.addEventListener('change', checkKeys);
 });
 </script>
