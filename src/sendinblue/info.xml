@@ -6,16 +6,16 @@
   <website>https://www.userspice.com</website>
 
 <!-- the version of the plugin iteself -->
-  <version>1.6.2</version>
+  <version>1.8.0</version>
 
 <!-- release date of THIS version -->
-  <release>July 28, 2026</release>
+  <release>October 10, 2026</release>
 
 <!-- the last version of UserSpice you tested the plugin with -->
-  <tested>6.1.4</tested>
+  <tested>6.1.6</tested>
 
 <!-- What does your plugin do? -->
-  <description>Brevo (formerly Sendinblue) replaces phpmailer and allows you to send emails via an API to avoid a lot of the headaches of traditional SMTP. Sendinblue lets you send 300 emails per day, free of charge (no credit card required), which is perfect for password resets etc for most UserSpice projects.  Now accepts attachments. New features allow you to send test emails as well as override all core email functions in UserSpice. </description>
+  <description>Brevo (formerly Sendinblue) sends UserSpice email through an API instead of SMTP; the free plan covers 300 emails a day. Optionally override all core email, use templates and attachments, tag mail for Brevo&apos;s stats and webhooks, and check delivery evidence for each message.</description>
 
   <!-- This is the launch button in the plugin manager. If it is blank or missing, Configure Plugin will show up. -->
     <button>Brevo Sendinblue</button>

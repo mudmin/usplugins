@@ -112,7 +112,102 @@ if($checkC > 0){
   $count++;
   }
 
-
+  $update = '00006';
+  if(!in_array($update,$existing)){
+    // Keep only delivery evidence. Never store passwordless subjects or bodies:
+    // some UserSpice passwordless modes put the one-time code in the subject.
+    $db->query("CREATE TABLE IF NOT EXISTS plg_sendinblue_messages (
+      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      message_id VARCHAR(191) NOT NULL,
+      recipient_email VARCHAR(255) NOT NULL,
+      sender_email VARCHAR(255) NOT NULL,
+      kind VARCHAR(32) NOT NULL,
+      status VARCHAR(32) NOT NULL,
+      accepted_at DATETIME NOT NULL,
+      delivered_at DATETIME NULL,
+      last_event_at DATETIME NULL,
+      last_checked_at DATETIME NULL,
+      last_reason VARCHAR(255) NULL,
+      UNIQUE KEY message_id (message_id),
+      KEY recipient_accepted (recipient_email(128), accepted_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    if(!$db->error()){
+      $existing[] = $update;
+      $count++;
+      logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+    } else {
+      logger($user->data()->id,"Migrations","$update migration failed for $plugin_name: ".$db->errorString());
+    }
+  }
+  $update = '00007';
+  if(!in_array($update,$existing)){
+    $migrationOk = true;
+    if(!$db->columnExists('plg_sendinblue_messages', 'delivered_at')){
+      $db->query('ALTER TABLE plg_sendinblue_messages ADD COLUMN delivered_at DATETIME NULL AFTER accepted_at');
+      $migrationOk = $migrationOk && !$db->error();
+    }
+    if(!$db->columnExists('plg_sendinblue', 'public_delivery_status')){
+      $db->query('ALTER TABLE plg_sendinblue ADD COLUMN public_delivery_status TINYINT(1) NOT NULL DEFAULT 0');
+      $migrationOk = $migrationOk && !$db->error();
+    }
+    if(!$db->columnExists('plg_sendinblue', 'public_delivery_status_seeded')){
+      $db->query('ALTER TABLE plg_sendinblue ADD COLUMN public_delivery_status_seeded TINYINT(1) NOT NULL DEFAULT 0');
+      $migrationOk = $migrationOk && !$db->error();
+    }
+    if($migrationOk){
+      $existing[] = $update;
+      $count++;
+      logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+    } else {
+      logger($user->data()->id,"Migrations","$update migration failed for $plugin_name: ".$db->errorString());
+    }
+  }
+  $update = '00008';
+  if(!in_array($update,$existing)){
+    // Brevo tags. functions.php treats plg_sendinblue.tag_mode as the marker that
+    // plg_sendinblue_messages.tags exists too, so add the messages column first.
+    $migrationOk = true;
+    if(!$db->columnExists('plg_sendinblue_messages', 'tags')){
+      $db->query('ALTER TABLE plg_sendinblue_messages ADD COLUMN tags VARCHAR(255) NULL AFTER kind');
+      $migrationOk = $migrationOk && !$db->error();
+    }
+    if($migrationOk && !$db->columnExists('plg_sendinblue', 'tag_fixed')){
+      $db->query("ALTER TABLE plg_sendinblue ADD COLUMN tag_fixed VARCHAR(64) NOT NULL DEFAULT ''");
+      $migrationOk = $migrationOk && !$db->error();
+    }
+    if($migrationOk && !$db->columnExists('plg_sendinblue', 'tag_mode')){
+      $db->query("ALTER TABLE plg_sendinblue ADD COLUMN tag_mode VARCHAR(10) NOT NULL DEFAULT 'off'");
+      $migrationOk = $migrationOk && !$db->error();
+    }
+    if($migrationOk){
+      $existing[] = $update;
+      $count++;
+      logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+    } else {
+      logger($user->data()->id,"Migrations","$update migration failed for $plugin_name: ".$db->errorString());
+    }
+  }
+  $update = '00009';
+  if(!in_array($update,$existing)){
+    // configure.php used to save settings through Input::get(), which HTML-encodes,
+    // so "Bob & Co" was stored and sent to recipients as "Bob &amp; Co". Settings
+    // are now stored as plain text; decode what earlier versions saved.
+    $row = $db->query('SELECT id, `from`, from_name, reply FROM plg_sendinblue')->first();
+    if($row){
+      $db->update('plg_sendinblue', $row->id, [
+        'from' => html_entity_decode((string)$row->from, ENT_QUOTES, 'UTF-8'),
+        'from_name' => html_entity_decode((string)$row->from_name, ENT_QUOTES, 'UTF-8'),
+        'reply' => html_entity_decode((string)$row->reply, ENT_QUOTES, 'UTF-8'),
+      ]);
+    }
+    if(!$db->error()){
+      $existing[] = $update;
+      $count++;
+      logger($user->data()->id,"Migrations","$update migration triggered for $plugin_name");
+    } else {
+      logger($user->data()->id,"Migrations","$update migration failed for $plugin_name: ".$db->errorString());
+    }
+  }
   //after all updates are done. Keep this at the bottom.
   $new = json_encode($existing);
   $db->update('us_plugins',$check->id,['updates'=>$new,'last_check'=>date("Y-m-d H:i:s")]);

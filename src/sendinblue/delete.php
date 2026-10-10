@@ -12,8 +12,12 @@ global $db;
 include "plugin_info.php";
 
 //all actions should be performed here.
-// Example:
-// $db->query("DELETE TABLE plg_sendinblue_content");
+// Deleting the plugin removes its data: the settings row holds the Brevo API key
+// and the messages table holds recipient addresses. Deactivating keeps both.
+$db->query("DROP TABLE IF EXISTS plg_sendinblue_messages");
+$db->query("DROP TABLE IF EXISTS plg_sendinblue");
+$db->query("DELETE FROM us_plugin_hooks WHERE folder = ?", [$plugin_name]);
+logger($user->data()->id, "USPlugins", $plugin_name . " data deleted");
 
 
 } //do not perform actions outside of this statement
