@@ -9,4 +9,4 @@ if (!pluginActive('handrail', true)) {
 if (!function_exists('handrailTriggerUrl')) {
     require_once $abs_us_root . $us_url_root . 'usersc/plugins/handrail/assets/includes/settings.php';
 }
-echo '<li class="nav-item"><a class="nav-link" href="' . safeReturn(handrailTriggerUrl()) . '"><i class="fa fa-universal-access" aria-hidden="true"></i> Accessibility</a></li>';
+echo '<li class="nav-item"><a class="nav-link d-flex align-items-center gap-1" href="' . safeReturn(handrailTriggerUrl()) . '">' . handrailIconSvg(18) . ' Accessibility</a></li>';

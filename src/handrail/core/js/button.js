@@ -54,9 +54,21 @@
     loadScript: loadScript
   };
 
-  // A handrail: a curved rail on two posts.
-  var ICON = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10c5-5 13-5 18 0"/><path d="M7 7.2V20"/><path d="M17 7.2V20"/><path d="M3 20h18"/></svg>';
-  w.Handrail.icons.handrail = ICON;
+  // The button and panel icon the site chose (core/icons.json holds the same markup for PHP).
+  // person: the accessibility figure; handrail: a curved rail on two posts.
+  var GLYPHS = {
+    'person': '<circle cx="12" cy="3.9" r="2.4" fill="currentColor" stroke="none"/><path d="M3.5 8.3l8.5 1.9 8.5-1.9"/><path d="M12 10.2v4.8"/><path d="M12 15l-4 6.5"/><path d="M12 15l4 6.5"/>',
+    'person-circle': '<circle cx="12" cy="12" r="10.4" stroke-width="1.8"/><circle cx="12" cy="6.6" r="1.6" fill="currentColor" stroke="none"/><path d="M6.6 9.6l5.4 1.2 5.4-1.2" stroke-width="1.9"/><path d="M12 10.8v3.4" stroke-width="1.9"/><path d="M12 14.2l-2.6 4.2M12 14.2l2.6 4.2" stroke-width="1.9"/>',
+    'handrail': '<path d="M3 10c5-5 13-5 18 0"/><path d="M7 7.2V20"/><path d="M17 7.2V20"/><path d="M3 20h18"/>',
+    'sliders': '<path d="M4 6h8"/><path d="M16 6h4"/><circle cx="14" cy="6" r="2"/><path d="M4 12h2"/><path d="M10 12h10"/><circle cx="8" cy="12" r="2"/><path d="M4 18h10"/><path d="M18 18h2"/><circle cx="16" cy="18" r="2"/>',
+    'eye': '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>'
+  };
+  function svg(inner, size) {
+    return '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + inner + '</svg>';
+  }
+  for (var g in GLYPHS) w.Handrail.icons[g] = svg(GLYPHS[g], 26);
+  w.Handrail.icon = w.Handrail.icons[Object.prototype.hasOwnProperty.call(GLYPHS, cfg.icon) ? cfg.icon : 'person'];
+  var ICON = w.Handrail.icon;
 
   // True when an adjustment has color-inverted the whole page (our UI flips itself back).
   w.Handrail.pageInverted = function () {

@@ -37,6 +37,7 @@ switch ($hrAction) {
         $hrS['offset_y'] = $hrInt('offset_y', 0, 400, 16);
         $hrS['size'] = $hrPick('size', ['small', 'medium', 'large'], 'medium');
         $hrS['label'] = $hrPick('label', ['icon', 'text', 'tab', 'handle'], 'icon');
+        $hrS['icon'] = $hrPick('icon', array_keys(handrailIcons()), 'person');
         $hrS['hide_on_mobile'] = $hrBool('hide_on_mobile');
         $hrS['on_dashboard'] = $hrBool('on_dashboard');
         $hrAccent = handrailHex($hrPost('brand_accent'));

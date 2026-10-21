@@ -14,6 +14,8 @@ The panel shows a small "Accessibility tools by Handrail" link. If Handrail help
 
 ## Putting the button somewhere else
 
+Under **Look and placement** you can choose the icon on the button, the panel heading and the UltraMenu snippet: a person (the default), a person in a circle, the handrail, sliders or an eye.
+
 Any link to the statement page ending in `#handrail` opens the panel, and without JavaScript it still goes to the statement. Add `-report` or `-check` to open those tabs.
 
 ```php

@@ -28,6 +28,28 @@ $hrAccent = $hrS['brand_accent'] !== '' ? $hrS['brand_accent'] : '#0b6e69';
     </fieldset>
   </div></div>
 
+  <style nonce="<?= safeReturn($userspice_nonce ?? '') ?>">
+  .hr-icon-swatch { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: <?= safeReturn($hrAccent) ?>; color: <?= safeReturn(handrailTextOn($hrAccent)) ?>; }
+  </style>
+  <div class="card mb-3"><div class="card-body">
+    <h2 class="h4">Icon</h2>
+    <fieldset aria-describedby="hr-icon-d">
+      <legend class="visually-hidden">Icon</legend>
+      <div class="d-flex flex-wrap gap-4">
+        <?php foreach (handrailIcons() as $hrId => $hrLabel) { ?>
+          <div class="form-check d-flex align-items-center gap-2">
+            <input class="form-check-input mt-0" type="radio" name="icon" id="hr-icon-<?= safeReturn($hrId) ?>" value="<?= safeReturn($hrId) ?>"<?= handrailIcon() === $hrId ? ' checked' : '' ?>>
+            <label class="form-check-label d-inline-flex align-items-center gap-2" for="hr-icon-<?= safeReturn($hrId) ?>">
+              <span class="hr-icon-swatch"><?= handrailIconSvg(22, $hrId) ?></span>
+              <?= safeReturn($hrLabel) ?>
+            </label>
+          </div>
+        <?php } ?>
+      </div>
+    </fieldset>
+    <div class="form-text" id="hr-icon-d">On the floating button, at the top of the panel, and on the UltraMenu snippet.</div>
+  </div></div>
+
   <div class="card mb-3"><div class="card-body">
     <h2 class="h4">Floating button</h2>
     <div class="form-check mb-3">

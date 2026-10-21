@@ -113,6 +113,7 @@ if (!function_exists('handrailConfigData')) {
             'version' => HANDRAIL_US_VERSION,
             'base' => handrailCoreUrl(),
             'style' => isset($styles[$s['style']]) ? $s['style'] : 'sheet',
+            'icon' => handrailIcon(),
             'placement' => [
                 'floating' => $s['floating'] ? [
                     'corner' => $s['corner'],

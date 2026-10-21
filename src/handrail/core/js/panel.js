@@ -137,7 +137,7 @@
     }
 
     var title = el('h2', { id: 'hr-title', className: 'title' }, [
-      el('span', { className: 'logo', 'aria-hidden': 'true', html: H.icons.handrail }),
+      el('span', { className: 'logo', 'aria-hidden': 'true', html: H.icon || H.icons.handrail }),
       (cfg.brand && cfg.brand.title) || S.title
     ]);
     var close = el('button', { type: 'button', className: 'close', 'aria-label': S.close, onclick: closePanel, html: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 0 0-1.4 1.4l4.9 4.9-4.9 4.9a1 1 0 1 0 1.4 1.4l4.9-4.9 4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4z"/></svg>' });

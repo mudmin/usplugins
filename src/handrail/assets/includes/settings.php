@@ -4,7 +4,7 @@ if (count(get_included_files()) === 1) { exit('Direct access not permitted.'); }
 // Loaded on every page by functions.php, so nothing here queries until it's asked for.
 
 if (!defined('HANDRAIL_US_VERSION')) {
-    define('HANDRAIL_US_VERSION', '1.0.0');
+    define('HANDRAIL_US_VERSION', '1.0.1');
     define('HANDRAIL_HOME', 'https://makewpcompliant.com/handrail/');
     define('HANDRAIL_DONATE', 'https://makewpcompliant.com/donate/?for=handrail-userspice');
     define('HANDRAIL_MAX_PRESETS', 6);
@@ -23,6 +23,7 @@ if (!function_exists('handrailDefaults')) {
             'offset_y' => 16,
             'size' => 'medium',
             'label' => 'icon',
+            'icon' => 'person',
             'hide_on_mobile' => 0,
             'on_dashboard' => 0,
             // Tools.
@@ -130,6 +131,40 @@ if (!function_exists('handrailTools')) {
 }
 
 if (!function_exists('handrailStyles')) {
+    /** Icons for the button, the panel heading and the Accessibility link. The markup is in core/icons.json. */
+    function handrailIcons()
+    {
+        return [
+            'person' => 'Person',
+            'person-circle' => 'Person in a circle',
+            'handrail' => 'Handrail',
+            'sliders' => 'Sliders',
+            'eye' => 'Eye',
+        ];
+    }
+
+    /** The icon to use: the saved one if it still exists. */
+    function handrailIcon()
+    {
+        $icon = handrailSettings()['icon'];
+        return isset(handrailIcons()[$icon]) ? $icon : 'person';
+    }
+
+    /** An icon as inline SVG (decorative: screen readers skip it). */
+    function handrailIconSvg($size = 24, $icon = null)
+    {
+        static $glyphs = null;
+        if ($glyphs === null) {
+            $glyphs = json_decode((string) @file_get_contents(dirname(__DIR__, 2) . '/core/icons.json'), true);
+            $glyphs = is_array($glyphs) ? $glyphs : [];
+        }
+        $icon = $icon ?? handrailIcon();
+        if (empty($glyphs[$icon])) {
+            return '';
+        }
+        return '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $glyphs[$icon] . '</svg>';
+    }
+
     function handrailStyles()
     {
         return [
