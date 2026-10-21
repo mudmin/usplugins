@@ -1,0 +1,135 @@
+/*! Handrail Pro adjustments. Same convention as the free ones: html.handrail-{tool}-{step}. */
+
+@font-face {
+  font-family: "Handrail OpenDyslexic";
+  src: url("../vendor/fonts/opendyslexic-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Handrail OpenDyslexic";
+  src: url("../vendor/fonts/opendyslexic-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Dyslexia font wins over the readable font when both are on. */
+html.handrail-dyslexia-font-1 body :not(i):not(svg):not(svg *):not([class*="icon"]):not([class*="Icon"]):not([class^="fa"]):not([class*=" fa"]):not(.dashicons):not([class*="dashicons-"]):not([class*="genericon"]):not(.material-icons):not(.material-symbols-outlined):not(code):not(pre):not(kbd):not(samp) {
+  font-family: "Handrail OpenDyslexic", "Comic Sans MS", Verdana, sans-serif !important;
+}
+
+/* Left-aligned text: justified and centered paragraphs are hard to track. */
+html.handrail-text-align-1 body p,
+html.handrail-text-align-1 body li,
+html.handrail-text-align-1 body td,
+html.handrail-text-align-1 body dd,
+html.handrail-text-align-1 body blockquote,
+html.handrail-text-align-1 body figcaption,
+html.handrail-text-align-1 body h1,
+html.handrail-text-align-1 body h2,
+html.handrail-text-align-1 body h3,
+html.handrail-text-align-1 body h4,
+html.handrail-text-align-1 body h5,
+html.handrail-text-align-1 body h6 { text-align: left !important; }
+html[dir="rtl"].handrail-text-align-1 body :is(p, li, td, dd, blockquote, figcaption, h1, h2, h3, h4, h5, h6) { text-align: right !important; }
+
+/* Large cursors (data URIs, so nothing is fetched). */
+html.handrail-cursor-1,
+html.handrail-cursor-1 body * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M4 2l15 8-7 2-3 7z' fill='%23000' stroke='%23fff' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 6 3, auto !important;
+}
+html.handrail-cursor-2,
+html.handrail-cursor-2 body * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M4 2l15 8-7 2-3 7z' fill='%23fff' stroke='%23000' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 6 3, auto !important;
+}
+html.handrail-cursor-1 body a[href], html.handrail-cursor-1 body button, html.handrail-cursor-1 body [role="button"], html.handrail-cursor-1 body label, html.handrail-cursor-1 body select,
+html.handrail-cursor-2 body a[href], html.handrail-cursor-2 body button, html.handrail-cursor-2 body [role="button"], html.handrail-cursor-2 body label, html.handrail-cursor-2 body select {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M9 11V4.5a1.5 1.5 0 0 1 3 0V10h.5V8.5a1.5 1.5 0 0 1 3 0V10h.5V9.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4.3 14a1.5 1.5 0 0 1 2.4-1.8L9 15z' fill='%23000' stroke='%23fff' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") 12 3, pointer !important;
+}
+
+/* Color filters live on <html>, the one element where a filter doesn't break fixed positioning. */
+html.handrail-color-filter-1 { filter: grayscale(1) !important; }
+html.handrail-color-filter-2 { filter: saturate(0.45) !important; }
+html.handrail-color-filter-3 { filter: saturate(1.9) !important; }
+html.handrail-color-filter-4 { filter: invert(1) hue-rotate(180deg) !important; }
+/* Inverted: flip photos and video back so they look normal. The Handrail panel and button
+   flip themselves back (a filter on their host element would break their fixed positioning). */
+html.handrail-color-filter-4 body img,
+html.handrail-color-filter-4 body picture,
+html.handrail-color-filter-4 body video,
+html.handrail-color-filter-4 body canvas,
+html.handrail-color-filter-4 body iframe,
+html.handrail-color-filter-4 body svg[role="img"],
+html.handrail-color-filter-4 #handrail-marker,
+html.handrail-color-filter-4 #handrail-reading-layer,
+html.handrail-color-filter-4 #handrail-pro-bar {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Hide images: keeps the layout, removes the pictures. */
+html.handrail-hide-images-1 body img,
+html.handrail-hide-images-1 body picture,
+html.handrail-hide-images-1 body video,
+html.handrail-hide-images-1 body svg[role="img"],
+html.handrail-hide-images-1 body figure > svg { visibility: hidden !important; }
+html.handrail-hide-images-1 body *:not(#handrail-root):not(#handrail-button-root) { background-image: none !important; }
+
+/* Reading guide and mask */
+#handrail-reading-layer { position: fixed; inset: 0; z-index: 2147482000; pointer-events: none; }
+#handrail-reading-layer > div { display: none; position: fixed; left: 0; right: 0; pointer-events: none; }
+#handrail-reading-layer.hr-guide .hr-guide {
+  display: block;
+  height: 10px;
+  background: #ffbf47;
+  border-top: 2px solid #0b0c0c;
+  border-bottom: 2px solid #0b0c0c;
+  opacity: 0.9;
+}
+#handrail-reading-layer.hr-mask .hr-mask-top,
+#handrail-reading-layer.hr-mask .hr-mask-bottom { display: block; background: rgba(0, 0, 0, 0.62); }
+#handrail-reading-layer.hr-mask .hr-mask-top { top: 0; }
+#handrail-reading-layer.hr-mask .hr-mask-bottom { bottom: 0; }
+
+/* Read aloud */
+html.handrail-read-aloud-1 body p:hover,
+html.handrail-read-aloud-1 body li:hover,
+html.handrail-read-aloud-1 body :is(h1, h2, h3, h4, h5, h6, td, th, blockquote, figcaption):hover { outline: 2px dashed #0b6e69; outline-offset: 2px; cursor: pointer; }
+.hr-reading { background: #fff3bf !important; color: #0b0c0c !important; outline: 3px solid #ffbf47 !important; outline-offset: 2px; }
+/* Centered at the bottom so it never sits under the floating button in either bottom corner. */
+#handrail-pro-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 16px;
+  z-index: 2147482500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 150px);
+  padding: 8px 10px 8px 14px;
+  border: 2px solid #0b6e69;
+  border-radius: 10px;
+  background: #fff;
+  color: #16181d;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  font: 600 15px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+#handrail-pro-bar[hidden] { display: none; }
+#handrail-pro-bar button {
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 2px solid #0b6e69;
+  border-radius: 8px;
+  background: #0b6e69;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+#handrail-pro-bar button:focus-visible { outline: 3px solid #0b6e69; outline-offset: 2px; box-shadow: 0 0 0 6px #ffbf47; }
+#handrail-pro-bar .hr-bar-hint { font-weight: 500; }
+
+@media print {
+  #handrail-reading-layer, #handrail-pro-bar { display: none !important; }
+}

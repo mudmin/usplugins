@@ -1,0 +1,117 @@
+/*! Handrail adjustments. Each one is a class on <html>: handrail-{tool}-{step}. Loaded only for visitors who turned something on. */
+
+@font-face {
+  font-family: "Handrail Atkinson Hyperlegible";
+  src: url("../vendor/fonts/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Handrail Atkinson Hyperlegible";
+  src: url("../vendor/fonts/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Elements that draw icons with a font keep their font. */
+html.handrail-font-1 body :not(i):not(svg):not(svg *):not([class*="icon"]):not([class*="Icon"]):not([class^="fa"]):not([class*=" fa"]):not(.dashicons):not([class*="dashicons-"]):not([class*="genericon"]):not(.material-icons):not(.material-symbols-outlined):not(code):not(pre):not(kbd):not(samp) {
+  font-family: "Handrail Atkinson Hyperlegible", Verdana, Tahoma, sans-serif !important;
+}
+
+/* Line height */
+html.handrail-line-height-1 body :not(svg *) { line-height: 1.5 !important; }
+html.handrail-line-height-2 body :not(svg *) { line-height: 1.8 !important; }
+html.handrail-line-height-3 body :not(svg *) { line-height: 2.1 !important; }
+
+/* Text spacing: step 1 is exactly WCAG 1.4.12; step 2 goes further. */
+html.handrail-spacing-1 body :not(svg *) { letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+html.handrail-spacing-1 body p { margin-bottom: 2em !important; }
+html.handrail-spacing-2 body :not(svg *) { letter-spacing: 0.18em !important; word-spacing: 0.3em !important; }
+html.handrail-spacing-2 body p { margin-bottom: 2.4em !important; }
+
+/* Highlight links */
+html.handrail-links-1 body a[href] {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+  outline: 2px dashed currentColor !important;
+  outline-offset: 2px !important;
+}
+html.handrail-links-1 body a[href]:hover { text-decoration-thickness: 4px !important; }
+
+/* Stronger focus ring: a two-tone ring that shows on any background. */
+html.handrail-focus-1 body *:focus-visible,
+html.handrail-focus-1 body *:focus {
+  outline: 4px solid #ffbf47 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 7px #0b0c0c !important;
+  border-radius: 2px;
+}
+
+/* Stop animations */
+html.handrail-motion-1,
+html.handrail-motion-1 *,
+html.handrail-motion-1 *::before,
+html.handrail-motion-1 *::after {
+  animation-duration: 0.001ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+
+/* Contrast 1: dark. Everything gets a dark surface and light text; media is left alone. */
+html.handrail-contrast-1,
+html.handrail-contrast-1 body { background: #121212 !important; color: #f2f2f2 !important; }
+html.handrail-contrast-1 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *) {
+  background-color: #121212 !important;
+  color: #f2f2f2 !important;
+  border-color: #8a8a8a !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+html.handrail-contrast-1 body a[href],
+html.handrail-contrast-1 body a[href] * { color: #ffd84d !important; }
+html.handrail-contrast-1 body button,
+html.handrail-contrast-1 body input,
+html.handrail-contrast-1 body select,
+html.handrail-contrast-1 body textarea,
+html.handrail-contrast-1 body [role="button"] {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 2px solid #f2f2f2 !important;
+}
+html.handrail-contrast-1 body ::placeholder { color: #c8c8c8 !important; }
+html.handrail-contrast-1 body svg:not([fill]) { fill: currentColor; }
+html.handrail-contrast-1 body :focus-visible { outline: 3px solid #ffd84d !important; outline-offset: 2px !important; }
+
+/* Contrast 2: light high contrast. Pure white surfaces, black text, blue underlined links. */
+html.handrail-contrast-2,
+html.handrail-contrast-2 body { background: #fff !important; color: #000 !important; }
+html.handrail-contrast-2 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *) {
+  background-color: #fff !important;
+  color: #000 !important;
+  border-color: #000 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+html.handrail-contrast-2 body a[href],
+html.handrail-contrast-2 body a[href] * { color: #0000c8 !important; text-decoration: underline !important; }
+html.handrail-contrast-2 body button,
+html.handrail-contrast-2 body input,
+html.handrail-contrast-2 body select,
+html.handrail-contrast-2 body textarea,
+html.handrail-contrast-2 body [role="button"] {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #000 !important;
+}
+html.handrail-contrast-2 body ::placeholder { color: #444 !important; }
+html.handrail-contrast-2 body :focus-visible { outline: 3px solid #0000c8 !important; outline-offset: 2px !important; }
+
+@media print {
+  html.handrail-on body * { background: transparent !important; color: #000 !important; }
+}
