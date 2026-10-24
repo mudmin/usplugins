@@ -67,7 +67,7 @@
   for (var ic in ICONS) if (!H.icons[ic]) H.icons[ic] = ICONS[ic];
   H.iconSvg = icon;
 
-  var host, root, sheet, live, tabs = {}, panels = {}, content = {}, current = null, trigger = null, built = false, cssReady = null;
+  var host, root, sheet, heading, live, tabs = {}, panels = {}, content = {}, current = null, trigger = null, built = false, cssReady = null;
   var headExtra = null, footActions = null;
   // Every control that shows a tool's or preset's state registers here; syncState feeds them.
   var toolViews = {}, presetViews = {};
@@ -136,7 +136,8 @@
       root.appendChild(el('style', { text: ':host{--hr-accent:' + cfg.brand.accent + ';--hr-accent-text:' + (cfg.brand.accentText || '#fff') + '}' }));
     }
 
-    var title = el('h2', { id: 'hr-title', className: 'title' }, [
+    // Focus lands here on open, so a screen reader starts at the top: title, intro, then the controls.
+    heading = el('h2', { id: 'hr-title', className: 'title', tabindex: '-1' }, [
       el('span', { className: 'logo', 'aria-hidden': 'true', html: H.icon || H.icons.handrail }),
       (cfg.brand && cfg.brand.title) || S.title
     ]);
@@ -195,8 +196,8 @@
     live = el('div', { className: 'sr', 'aria-live': 'polite', role: 'status' });
     var peekBar = el('div', { className: 'peekbar', hidden: true });
 
-    sheet = el('div', { className: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'hr-title', tabindex: '-1' }, [
-      el('div', { className: 'head' }, [title, headExtra, close]),
+    sheet = el('div', { className: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'hr-title' }, [
+      el('div', { className: 'head' }, [heading, headExtra, close]),
       tablist,
       body,
       foot,
@@ -226,7 +227,7 @@
     var f = focusables();
     if (!f.length) return;
     var first = f[0], last = f[f.length - 1], active = root.activeElement;
-    if (e.shiftKey && (active === first || active === sheet)) { e.preventDefault(); last.focus(); }
+    if (e.shiftKey && (active === first || active === heading)) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
   }
 
@@ -274,7 +275,7 @@
     var from = current;
     showTab('adjust', false);
     var b = footActions && footActions.querySelector('[data-go="' + from + '"]');
-    (b || focusables(panels.adjust)[0] || sheet).focus();
+    (b || focusables(panels.adjust)[0] || heading).focus();
   }
 
   // Text size makes the panel bigger too, up to 150%.
@@ -299,12 +300,7 @@
     sheet.classList.remove('peek');
     syncState();
     // Focus once the stylesheet has made the sheet visible.
-    cssReady.then(function () {
-      var t = tabs[current];
-      // The dock keeps its quick settings in the header: start there.
-      var first = current === 'adjust' && headExtra && focusables(headExtra)[0];
-      (t || first || focusables(panels[current])[0] || focusables()[0] || sheet).focus();
-    });
+    cssReady.then(function () { heading.focus(); });
   }
 
   function closePanel() {
@@ -352,8 +348,8 @@
 
     var presets = presetList();
     if (presets.length) {
-      p.appendChild(el('h3', { text: S.quick }));
-      var row = el('div', { className: 'presets' });
+      p.appendChild(el('h3', { id: 'hr-h-quick', text: S.quick }));
+      var row = list('presets', 'hr-h-quick');
       presets.forEach(function (pr) {
         var b = el('button', {
           type: 'button', className: 'preset', 'aria-pressed': 'false',
@@ -363,14 +359,15 @@
           pr.desc ? el('span', { className: 'pdesc', text: pr.desc }) : null
         ]);
         onPreset(pr, function (on) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
-        row.appendChild(b);
+        row.appendChild(el('li', null, [b]));
       });
       p.appendChild(row);
     }
 
     toolGroups().forEach(function (x) {
-      if (x.group.label) p.appendChild(el('h3', { text: x.group.label }));
-      var grid = el('div', { className: 'grid' });
+      var hid = x.group.label ? 'hr-h-' + x.group.id : null;
+      if (hid) p.appendChild(el('h3', { id: hid, text: x.group.label }));
+      var grid = list('grid', hid);
       x.tools.forEach(function (t) {
         var dots = null;
         if (t.steps.length > 1) {
@@ -392,7 +389,7 @@
           state.textContent = stepLabel(t, step);
           if (dots) Array.prototype.forEach.call(dots.children, function (dot, i) { dot.className = i < step ? 'on' : ''; });
         });
-        grid.appendChild(b);
+        grid.appendChild(el('li', null, [b]));
       });
       p.appendChild(grid);
     });
@@ -418,17 +415,18 @@
       if (dock) {
         headExtra.appendChild(chips(presets));
       } else {
-        p.appendChild(el('h3', { text: S.quick }));
-        p.appendChild(chips(presets));
+        p.appendChild(el('h3', { id: 'hr-h-quick', text: S.quick }));
+        p.appendChild(chips(presets, 'hr-h-quick'));
       }
     }
     var wrap = el('div', { className: 'groups' });
     toolGroups().forEach(function (x) {
-      var sec = el('div', { className: 'group' }, [x.group.label ? el('h3', { text: x.group.label }) : null]);
+      var hid = x.group.label ? 'hr-h-' + x.group.id : null;
+      var rows = list('rows', hid);
       x.tools.forEach(function (t) {
-        sec.appendChild(toolRow(t, t.steps.length > 1 ? choicesFor : switchFor));
+        rows.appendChild(toolRow(t, t.steps.length > 1 ? choicesFor : switchFor));
       });
-      wrap.appendChild(sec);
+      wrap.appendChild(el('div', { className: 'group' }, [hid ? el('h3', { id: hid, text: x.group.label }) : null, rows]));
     });
     p.appendChild(wrap);
   }
@@ -454,7 +452,7 @@
       var v = el('div', { role: 'tabpanel', id: 'hr-gp-' + pg.id, 'aria-labelledby': 'hr-g-' + pg.id, className: 'gpanel', hidden: true });
       if (pg.id === 'start') {
         v.appendChild(el('p', { className: 'intro', text: S.pickIntro }));
-        var list = el('div', { className: 'plist' });
+        var plist = list('plist');
         presets.forEach(function (pr) {
           var b = el('button', { type: 'button', className: 'pitem', 'aria-pressed': 'false', onclick: function () { togglePreset(pr); } }, [
             el('span', { className: 'dot', 'aria-hidden': 'true' }),
@@ -464,11 +462,13 @@
             ])
           ]);
           onPreset(pr, function (on) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
-          list.appendChild(b);
+          plist.appendChild(el('li', null, [b]));
         });
-        v.appendChild(list);
+        v.appendChild(plist);
       } else {
-        pg.tools.forEach(function (t) { v.appendChild(toolRow(t, t.steps.length > 1 ? stepperFor : switchFor)); });
+        var rows = list('rows');
+        pg.tools.forEach(function (t) { rows.appendChild(toolRow(t, t.steps.length > 1 ? stepperFor : switchFor)); });
+        v.appendChild(rows);
       }
       views[pg.id] = v;
     });
@@ -497,27 +497,34 @@
     pick(ids[0]);
   }
 
-  function chips(list) {
-    var row = el('div', { className: 'chips' });
-    list.forEach(function (pr) {
+  // A list, so screen readers say how many settings a section has and which one they're on.
+  // role="list" because Safari drops list semantics once list-style is none.
+  function list(className, labelledby, label) {
+    return el('ul', { className: className, role: 'list', 'aria-labelledby': labelledby, 'aria-label': labelledby ? null : label });
+  }
+
+  // The dock shows its chips in the header with no heading, so the list names itself.
+  function chips(presets, labelledby) {
+    var row = list('chips', labelledby, S.quick);
+    presets.forEach(function (pr) {
       var b = el('button', { type: 'button', className: 'chip', 'aria-pressed': 'false', onclick: function () { togglePreset(pr); } }, [
         pr.label,
         pr.desc ? el('span', { className: 'sr', text: ': ' + pr.desc }) : null
       ]);
       onPreset(pr, function (on) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
-      row.appendChild(b);
+      row.appendChild(el('li', null, [b]));
     });
     return row;
   }
 
-  // One tool as a row: its name and description, then the control the style uses.
+  // One tool as a list item: its name and description, then the control the style uses.
   function toolRow(t, control) {
     var ids = { name: 'hr-n-' + t.id, desc: t.desc ? 'hr-d-' + t.id : null };
     var txt = el('div', { className: 'txt' }, [
       el('div', { className: 'name', id: ids.name, text: t.label }),
       t.desc ? el('div', { className: 'desc', id: ids.desc, text: t.desc }) : null
     ]);
-    var row = el('div', { className: 'row' + (t.steps.length > 1 ? ' multi' : ''), 'data-row': t.id }, [txt]);
+    var row = el('li', { className: 'row' + (t.steps.length > 1 ? ' multi' : ''), 'data-row': t.id }, [txt]);
     row.appendChild(control(t, ids, txt));
     return row;
   }

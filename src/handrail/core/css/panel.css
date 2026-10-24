@@ -74,7 +74,6 @@
   word-spacing: normal;
 }
 .sheet.peek { display: none; }
-.sheet:focus { outline: none; }
 
 .head {
   display: flex;
@@ -91,6 +90,8 @@
   font-size: 1.25em;
   font-weight: 700;
 }
+/* Focused on open for screen readers; it isn't a control, so no ring. */
+.title:focus { outline: none; }
 .logo {
   display: inline-flex;
   align-items: center;
@@ -161,6 +162,10 @@ h3 {
 }
 h4 { margin: 14px 0 6px; font-size: 1em; }
 
+/* Lists for screen readers only: they look the same as before. */
+.presets, .grid, .chips, .rows, .plist { list-style: none; margin: 0; padding: 0; }
+.presets > li, .grid > li { display: flex; }
+.presets > li > .preset, .grid > li > .tool { flex: 1 1 auto; width: 100%; }
 .presets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .preset {
   display: flex;
@@ -468,6 +473,7 @@ textarea { resize: vertical; }
 .gtabs [aria-selected="true"] { color: var(--hr-text); border-bottom-color: var(--hr-accent); }
 :host([data-style="card"]) .row { margin: 8px 0; padding: 10px 12px; border: 0; border-radius: 12px; background: var(--hr-surface); }
 .plist { display: flex; flex-direction: column; gap: 8px; }
+.plist > li { display: flex; }
 .pitem {
   display: flex;
   align-items: center;

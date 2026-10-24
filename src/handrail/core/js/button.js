@@ -142,7 +142,15 @@
       '</button>';
     var btn = root.querySelector('button');
     btn.addEventListener('click', function () { open(null, btn); });
-    d.body.appendChild(host);
+    // Near the top of the page, so screen readers and the Tab key reach it first instead of
+    // last. It's position:fixed, so this doesn't move it on screen. A skip link that is a direct
+    // child of <body> stays first; we never go inside a wrapper, since one with a transform
+    // would break position:fixed.
+    // No box of its own, so it never takes a row in a page that lays out <body> as a grid.
+    host.style.display = 'contents';
+    var skip = d.body.querySelector('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (skip && skip.parentNode === d.body && /^#./.test(skip.getAttribute('href') || '')) d.body.insertBefore(host, skip.nextSibling);
+    else d.body.insertBefore(host, d.body.firstChild);
     var sync = function () { host.toggleAttribute('data-invert', w.Handrail.pageInverted()); };
     sync();
     w.addEventListener('handrail:prefs', sync);
