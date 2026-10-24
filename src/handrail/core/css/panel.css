@@ -91,7 +91,7 @@
   font-weight: 700;
 }
 /* Focused on open for screen readers; it isn't a control, so no ring. */
-.title:focus { outline: none; }
+.title:focus { outline: none; box-shadow: none; }
 .logo {
   display: inline-flex;
   align-items: center;
@@ -275,7 +275,7 @@ textarea { resize: vertical; }
   color: var(--hr-text);
   font-weight: 600;
 }
-.done:focus { outline: none; }
+.done:focus { outline: none; box-shadow: none; }
 .ok { margin: 18px 0 8px; padding: 12px; border-left: 5px solid var(--hr-ok); background: var(--hr-surface); font-weight: 600; }
 
 /* check */

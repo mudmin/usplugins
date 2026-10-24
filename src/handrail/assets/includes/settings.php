@@ -4,7 +4,7 @@ if (count(get_included_files()) === 1) { exit('Direct access not permitted.'); }
 // Loaded on every page by functions.php, so nothing here queries until it's asked for.
 
 if (!defined('HANDRAIL_US_VERSION')) {
-    define('HANDRAIL_US_VERSION', '1.0.2');
+    define('HANDRAIL_US_VERSION', '1.1.3');
     define('HANDRAIL_HOME', 'https://makewpcompliant.com/handrail/');
     define('HANDRAIL_DONATE', 'https://makewpcompliant.com/donate/?for=handrail-userspice');
     define('HANDRAIL_MAX_PRESETS', 6);
