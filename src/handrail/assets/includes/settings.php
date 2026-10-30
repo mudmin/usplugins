@@ -4,7 +4,7 @@ if (count(get_included_files()) === 1) { exit('Direct access not permitted.'); }
 // Loaded on every page by functions.php, so nothing here queries until it's asked for.
 
 if (!defined('HANDRAIL_US_VERSION')) {
-    define('HANDRAIL_US_VERSION', '1.1.3');
+    define('HANDRAIL_US_VERSION', '1.2.1');
     define('HANDRAIL_HOME', 'https://makewpcompliant.com/handrail/');
     define('HANDRAIL_DONATE', 'https://makewpcompliant.com/donate/?for=handrail-userspice');
     define('HANDRAIL_MAX_PRESETS', 6);
@@ -105,7 +105,7 @@ if (!function_exists('handrailTools')) {
     /**
      * The tool catalog. Each tool: label, desc, steps (one label per step), group,
      * js (needs the prefs runtime before first paint), excludes.
-     * On UserSpice every tool is free, including the ones that are Pro on WordPress.
+     * Every tool, including the ones from pro/ (the Handrail Pro add-on on WordPress until 1.2.0).
      */
     function handrailTools($withCustom = true)
     {
@@ -116,7 +116,7 @@ if (!function_exists('handrailTools')) {
             'line-height' => ['label' => 'Line height', 'desc' => 'More space between lines', 'steps' => ['1.5', '1.8', '2.1'], 'group' => 'text'],
             'spacing' => ['label' => 'Text spacing', 'desc' => 'More room between letters and words', 'steps' => ['Wider', 'Widest'], 'group' => 'text'],
             'text-align' => ['label' => 'Align text left', 'desc' => 'No centered or justified text', 'steps' => ['On'], 'group' => 'text'],
-            'contrast' => ['label' => 'Contrast', 'desc' => 'Stronger text and backgrounds', 'steps' => ['Dark', 'High contrast'], 'group' => 'color'],
+            'contrast' => ['label' => 'Contrast', 'desc' => 'Stronger text and backgrounds', 'steps' => ['Dark', 'High contrast'], 'group' => 'color', 'js' => true],
             'color-filter' => ['label' => 'Color filter', 'desc' => 'Change how colors look', 'steps' => ['Grayscale', 'Soft colors', 'Strong colors', 'Inverted'], 'group' => 'color'],
             'hide-images' => ['label' => 'Hide images', 'desc' => 'Only text and controls', 'steps' => ['On'], 'group' => 'color'],
             'read-aloud' => ['label' => 'Read aloud', 'desc' => 'Click any text to hear it', 'steps' => ['On'], 'group' => 'reading', 'js' => true],
@@ -193,7 +193,7 @@ if (!function_exists('handrailPresets')) {
             'dyslexia' => ['label' => 'Dyslexia friendly', 'desc' => 'Dyslexia font, left-aligned, taller lines', 'tools' => ['dyslexia-font' => 1, 'line-height' => 1, 'text-align' => 1]],
             // Not "seizure safe": stopping CSS animation can't promise anything about flashing
             // video or GIFs, so the name says only what it does.
-            'seizure' => ['label' => 'Reduce motion', 'desc' => 'Stops animations and softens colors', 'tools' => ['motion' => 1, 'color-filter' => 2]],
+            'seizure' => ['label' => 'Reduce motion', 'desc' => 'Stops animations and moving video', 'tools' => ['motion' => 1]],
             'keyboard' => ['label' => 'Keyboard', 'desc' => 'Always see where you are', 'tools' => ['focus' => 1, 'links' => 1]],
             'focus' => ['label' => 'Fewer distractions', 'desc' => 'Reading mask and no animations', 'tools' => ['mask' => 1, 'motion' => 1]],
         ];

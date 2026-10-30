@@ -3,8 +3,8 @@
   <name>Handrail</name>
   <author>MakeWPCompliant</author>
   <website>https://makewpcompliant.com/handrail/</website>
-  <version>1.1.3</version>
-  <release>October 24, 2026</release>
+  <version>1.2.1</version>
+  <release>October 30, 2026</release>
   <tested>6.1.8</tested>
   <fa_icon>fa fa-universal-access</fa_icon>
   <description>An accessibility panel for your visitors: adjust how the site looks and reads, report a barrier, and (for admins) check the page and see who can fix each problem.</description>

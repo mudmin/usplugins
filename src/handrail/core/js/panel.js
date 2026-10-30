@@ -72,7 +72,7 @@
   // Every control that shows a tool's or preset's state registers here; syncState feeds them.
   var toolViews = {}, presetViews = {};
 
-  // Panel styles: a settings sheet (default), the classic tile grid, and (Pro) a floating card or a dock.
+  // Panel styles: a settings sheet (default), the classic tile grid, a floating card or a dock.
   var STYLES = ['sheet', 'tiles', 'card', 'dock'];
   var style = STYLES.indexOf(cfg.style) !== -1 ? cfg.style : 'sheet';
   var tiles = style === 'tiles';
@@ -602,9 +602,23 @@
     var map = {};
     var on = presetActive(pr, prefs);
     for (var id in pr.tools) map[id] = on ? 0 : pr.tools[id];
+    // Turning a preset off leaves alone the tools another preset that's still on needs:
+    // switching off "Fewer distractions" shouldn't undo "Reduce motion". Unless that would
+    // leave nothing to change (all of this preset is inside another): then the button
+    // would do nothing, so it turns its tools off after all.
+    if (on) {
+      var keep = {};
+      presetList().forEach(function (other) {
+        if (other === pr || !presetActive(other, prefs)) return;
+        for (var oid in other.tools) if (oid in map) keep[oid] = true;
+      });
+      if (Object.keys(keep).length < Object.keys(map).length) {
+        for (var k in keep) delete map[k];
+      }
+    }
     // Respect tools that can't run together (the reading guide and mask): turning a preset on
     // switches off whatever its tools exclude, even if the visitor had it on. If a preset itself
-    // lists both, the later tool in the panel wins (the mask, matching Pro's settings check).
+    // lists both, the later tool in the panel wins (the mask, matching the custom quick settings check).
     if (!on) {
       cfg.tools.slice().reverse().forEach(function (t) {
         if (map[t.id] && t.excludes) t.excludes.forEach(function (x) { map[x] = 0; });

@@ -448,6 +448,7 @@ textarea { resize: vertical; }
   left: auto;
   width: min(400px, calc(100vw - 24px));
   max-height: min(680px, calc(100vh - 108px));
+  max-height: min(680px, calc(100dvh - 108px));
   border: 1px solid var(--hr-line);
   border-radius: 20px;
   overflow: hidden;
@@ -513,6 +514,7 @@ textarea { resize: vertical; }
   bottom: 0;
   width: 100%;
   max-height: min(58vh, 500px);
+  max-height: min(58dvh, 500px);
   border-left: 0;
   border-top: 1px solid var(--hr-line);
   box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.22);
@@ -540,7 +542,10 @@ textarea { resize: vertical; }
     right: 0;
     bottom: 0;
     width: 100vw;
+    /* dvh, not vh: on iOS, vh is the height with the toolbars hidden, which pushed the
+       top of the sheet (and its close button) off the screen. */
     max-height: 88vh;
+    max-height: 88dvh;
     border: 0;
     border-radius: 18px 18px 0 0;
     overflow-y: auto;

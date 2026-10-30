@@ -68,13 +68,10 @@ html.handrail-color-filter-4 #handrail-pro-bar {
   filter: invert(1) hue-rotate(180deg) !important;
 }
 
-/* Hide images: keeps the layout, removes the pictures. */
-html.handrail-hide-images-1 body img,
-html.handrail-hide-images-1 body picture,
-html.handrail-hide-images-1 body video,
-html.handrail-hide-images-1 body svg[role="img"],
-html.handrail-hide-images-1 body figure > svg { visibility: hidden !important; }
-html.handrail-hide-images-1 body *:not(#handrail-root):not(#handrail-button-root) { background-image: none !important; }
+/* Hide images: keeps the layout, removes the pictures. Anything inside a button stays: there an
+   image is a control (an ad's close X), not content. */
+html.handrail-hide-images-1 body :is(img, picture, video, svg[role="img"], figure > svg):not(:is(button, [role="button"]) *) { visibility: hidden !important; }
+html.handrail-hide-images-1 body *:not(#handrail-root):not(#handrail-button-root):not(:is(button, [role="button"])):not(:is(button, [role="button"]) *) { background-image: none !important; }
 
 /* Reading guide and mask */
 #handrail-reading-layer { position: fixed; inset: 0; z-index: 2147482000; pointer-events: none; }

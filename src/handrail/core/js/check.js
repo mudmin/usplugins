@@ -132,6 +132,10 @@
     'server-side-image-map': 'A server-side image map cannot be used with a keyboard',
     'summary-name': 'An expandable summary has no name',
     'tabindex': 'An element jumps ahead in the keyboard order',
+    'page-has-heading-one': 'The page has no main heading (H1)',
+    'handrail-one-h1': 'The page has more than one main heading (H1)',
+    'landmark-one-main': 'The main content is not marked up as the main area',
+    'empty-heading': 'A heading has no text',
     'no-autoplay-audio': 'Audio plays on its own'
   };
 
@@ -376,6 +380,36 @@
     return H.loadScript(cfg.base + 'vendor/axe-core/axe.min.js?ver=' + cfg.version);
   }
 
+  // Not WCAG failures on their own, but they decide whether a screen reader user can find
+  // their way around a page, so they run with the WCAG rules. axe has no rule for more than
+  // one H1, so that one is ours.
+  var EXTRA_RULES = ['page-has-heading-one', 'handrail-one-h1', 'landmark-one-main', 'empty-heading'];
+  function addRules() {
+    if (w.axe.getRules().some(function (r) { return r.ruleId === 'handrail-one-h1'; })) return;
+    w.axe.configure({
+      checks: [{
+        id: 'handrail-h1-count',
+        evaluate: function () {
+          var dom = w.axe.commons.dom;
+          var h1s = Array.prototype.filter.call(d.querySelectorAll('h1, [role="heading"][aria-level="1"]'), function (h) {
+            return dom.isVisibleToScreenReaders ? dom.isVisibleToScreenReaders(h) : true;
+          });
+          this.relatedNodes(h1s);
+          return h1s.length <= 1;
+        }
+      }],
+      rules: [{
+        id: 'handrail-one-h1',
+        selector: 'html',
+        tags: ['cat.semantics', 'best-practice'],
+        metadata: { description: 'Ensures the page has at most one level-one heading', help: 'Page should contain only one level-one heading' },
+        all: [],
+        any: ['handrail-h1-count'],
+        none: []
+      }]
+    });
+  }
+
   function context() {
     var ex = [['#handrail-root'], ['#handrail-button-root'], ['#handrail-marker']];
     (C.skip || []).forEach(function (s) { ex.push([s]); });
@@ -400,7 +434,11 @@
     var byCat = {}, catOrder = [];
     loadAxe().then(function () {
       if (C.locale) { try { w.axe.configure({ locale: C.locale }); } catch (e) {} }
-      w.axe.getRules(tags).forEach(function (r) {
+      addRules();
+      var picked = {};
+      w.axe.getRules(tags).concat(w.axe.getRules().filter(function (r) { return EXTRA_RULES.indexOf(r.ruleId) !== -1; })).forEach(function (r) {
+        if (picked[r.ruleId]) return;
+        picked[r.ruleId] = true;
         var cat = (r.tags || []).filter(function (t) { return t.indexOf('cat.') === 0; })[0] || 'other';
         if (!byCat[cat]) { byCat[cat] = []; catOrder.push(cat); }
         byCat[cat].push(r.ruleId);

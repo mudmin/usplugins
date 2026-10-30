@@ -63,15 +63,21 @@ html.handrail-motion-1 *::after {
   scroll-behavior: auto !important;
 }
 
-/* Contrast 1: dark. Everything gets a dark surface and light text; media is left alone. */
+/* Contrast 1: dark. Every element gets a dark surface and light text; media is left alone, and
+   so are Handrail's own reading layers. prefs.js marks see-through overlays (the invisible
+   full-screen boxes ads leave over a page) data-handrail-clear, so they stay see-through
+   instead of becoming a black box; data-handrail-measure lets it read an element's own
+   background. Without prefs.js, everything is still painted and readable. */
 html.handrail-contrast-1,
 html.handrail-contrast-1 body { background: #121212 !important; color: #f2f2f2 !important; }
-html.handrail-contrast-1 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *) {
-  background-color: #121212 !important;
+html.handrail-contrast-1 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *):not(:where(#handrail-reading-layer, #handrail-reading-layer *, #handrail-pro-bar, #handrail-pro-bar *, #handrail-marker)) {
   color: #f2f2f2 !important;
   border-color: #8a8a8a !important;
   text-shadow: none !important;
   box-shadow: none !important;
+}
+html.handrail-contrast-1 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *):not(:where([data-handrail-clear], [data-handrail-measure], #handrail-reading-layer, #handrail-reading-layer *, #handrail-pro-bar, #handrail-pro-bar *, #handrail-marker)) {
+  background-color: #121212 !important;
 }
 html.handrail-contrast-1 body a[href],
 html.handrail-contrast-1 body a[href] * { color: #ffd84d !important; }
@@ -81,6 +87,7 @@ html.handrail-contrast-1 body select,
 html.handrail-contrast-1 body textarea,
 html.handrail-contrast-1 body [role="button"] {
   background-color: #000 !important;
+  background-image: none !important;
   color: #fff !important;
   border: 2px solid #f2f2f2 !important;
 }
@@ -88,15 +95,21 @@ html.handrail-contrast-1 body ::placeholder { color: #c8c8c8 !important; }
 html.handrail-contrast-1 body svg:not([fill]) { fill: currentColor; }
 html.handrail-contrast-1 body :focus-visible { outline: 3px solid #ffd84d !important; outline-offset: 2px !important; }
 
-/* Contrast 2: light high contrast. Pure white surfaces, black text, blue underlined links. */
+/* While prefs.js reads an element's own background, a transition would hand it ours instead. */
+html.handrail-on body [data-handrail-measure] { transition: none !important; }
+
+/* Contrast 2: light high contrast. Pure white surfaces, black text, blue underlined links.
+   Overlays are left see-through as in contrast 1. */
 html.handrail-contrast-2,
 html.handrail-contrast-2 body { background: #fff !important; color: #000 !important; }
-html.handrail-contrast-2 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *) {
-  background-color: #fff !important;
+html.handrail-contrast-2 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *):not(:where(#handrail-reading-layer, #handrail-reading-layer *, #handrail-pro-bar, #handrail-pro-bar *, #handrail-marker)) {
   color: #000 !important;
   border-color: #000 !important;
   text-shadow: none !important;
   box-shadow: none !important;
+}
+html.handrail-contrast-2 body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *):not(:where([data-handrail-clear], [data-handrail-measure], #handrail-reading-layer, #handrail-reading-layer *, #handrail-pro-bar, #handrail-pro-bar *, #handrail-marker)) {
+  background-color: #fff !important;
 }
 html.handrail-contrast-2 body a[href],
 html.handrail-contrast-2 body a[href] * { color: #0000c8 !important; text-decoration: underline !important; }
@@ -106,6 +119,7 @@ html.handrail-contrast-2 body select,
 html.handrail-contrast-2 body textarea,
 html.handrail-contrast-2 body [role="button"] {
   background-color: #fff !important;
+  background-image: none !important;
   color: #000 !important;
   border: 2px solid #000 !important;
 }
