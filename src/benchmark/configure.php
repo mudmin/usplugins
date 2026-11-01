@@ -186,7 +186,7 @@ if($go == 1){
 
   //string functions
   $run = -microtime(true);
-  $stringFunctions = array("addslashes", "chunk_split", "metaphone", "strip_tags", "md5", "sha1", "strtoupper", "strtolower", "strrev", "strlen", "soundex", "ord");
+  $stringFunctions = array("addslashes", "chunk_split", "strip_tags", "md5", "sha1", "strtoupper", "strtolower", "strrev", "strlen", "soundex", "ord");
   $string = 'the quick brown fox jumps over the lazy dog';
   for ($i = 0; $i < $count; $i++) {
       foreach ($stringFunctions as $function) {
@@ -234,7 +234,7 @@ if($results){ ?>
       <h4 align="center">US Ver: <?=$user_spice_ver?> - PHP Ver: <?=PHP_VERSION?> - OS: <?=PHP_OS?></h4>
       <h3 align="center">Your Time: <?=$data['time'];?></h3>
       <h3 align="center">Official Score: <font color="red"> <?=$data['score'];?></font></h3>
-      <p align="center">Benchmark Version 2.0.0</p>
+      <p align="center">Benchmark Version 2.0.1</p>
       <table class="table table-striped">
         <thead>
           <tr>

@@ -532,7 +532,7 @@ class MeekroDB {
 
   protected function intval($var) {
     if (PHP_INT_SIZE == 8) return intval($var);
-    return floor(doubleval($var));
+    return floor(floatval($var));
   }
 
   protected function parseQueryParams() {
@@ -560,7 +560,7 @@ class MeekroDB {
 
       if ($type == 's') $result = $this->escape($arg);
       else if ($type == 'i') $result = $this->intval($arg);
-      else if ($type == 'd') $result = doubleval($arg);
+      else if ($type == 'd') $result = floatval($arg);
       else if ($type == 'b') $result = $this->formatTableName($arg);
       else if ($type == 'l') $result = $arg;
       else if ($type == 'ss') $result = $this->escape("%" . str_replace(array('%', '_'), array('\%', '\_'), $arg) . "%");
@@ -568,7 +568,7 @@ class MeekroDB {
 
       else if ($type == 'ls') $result = array_map(array($this, 'escape'), $arg);
       else if ($type == 'li') $result = array_map(array($this, 'intval'), $arg);
-      else if ($type == 'ld') $result = array_map('doubleval', $arg);
+      else if ($type == 'ld') $result = array_map('floatval', $arg);
       else if ($type == 'lb') $result = array_map(array($this, 'formatTableName'), $arg);
       else if ($type == 'll') $result = $arg;
       else if ($type == 'lt') $result = array_map(array($this, 'escape'), array_map(array($this, 'parseTS'), $arg));

@@ -34,10 +34,9 @@ LIMIT
 
 $msgs = $db->query($sql,[$event_override])->results();
 $lastId = !empty($msgs)? $msgs[0]->id : '';
-$decodedMsgs = array_walk($msgs, function($msg){
+foreach ($msgs as $msg) {
   $msg->msg = html_entity_decode($msg->msg, ENT_QUOTES);
-  return $msg;
-});
+}
 
 $user_ids = [];
 
