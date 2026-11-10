@@ -58,6 +58,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 		"email" => $userProfile->getEmail(),
 	];
 	
-	//login using userspice's built in social login function and pass the login type for totp
-	socialLogin($userProfile->getEmail(), null, ["oauth_uid"=>$userProfile->getId()], $fields, "google");
+	//login using userspice's built in social login function and pass the login type for totp.
+	//The last argument tells core whether Google verified the email (ignored by cores before 6.2.0).
+	socialLogin($userProfile->getEmail(), null, ["oauth_uid"=>$userProfile->getId()], $fields, "google", $userProfile->getEmailVerified() === true);
 }
