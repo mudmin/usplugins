@@ -142,9 +142,9 @@ if($ldapconn) {
             foreach ($groups as $group) {
                 foreach ($groupsQ as $ldapGroup) {
                     if ($group === $ldapGroup->ldap) {
-                        $matchC = $db->query("SELECT * FROM user_permission_matches WHERE user_id = ? and permission_id = ?", [$lookup->id, $ldapGroup->permission])->count();
+                        $matchC = $db->query("SELECT * FROM user_permission_matches WHERE user_id = ? and permission_id = ?", [$theNewId, $ldapGroup->permission])->count();
                         if ($matchC === 0) {
-                            $db->insert("user_permission_matches", ["user_id"=>$lookup->id, "permission_id"=>$ldapGroup->permission]);
+                            $db->insert("user_permission_matches", ["user_id"=>$theNewId, "permission_id"=>$ldapGroup->permission]);
                         }
                     }
                 }

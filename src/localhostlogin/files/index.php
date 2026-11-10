@@ -1,7 +1,9 @@
 <?php
 require_once '../../../../users/init.php';
-if(!isLocalhost()) {
-  logger(1,"Localhost Login","ACCESS DENIED: Attempted to access localhost login from nonlocalhost server.");
+// Needs a genuinely local request AND define('US_LOCALHOST_LOGIN', true) in users/init.php,
+// so turning the plugin on can't expose this page wherever the code is deployed.
+if(!isLocalhost() || !defined('US_LOCALHOST_LOGIN') || US_LOCALHOST_LOGIN !== true) {
+  logger(1,"Localhost Login","ACCESS DENIED: not a local request, or US_LOCALHOST_LOGIN is not defined in users/init.php.");
   Redirect::to('../../../../users/login.php');
   die();
 }
@@ -10,7 +12,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 ?>
 <?php
 if($user->isLoggedIn()) {
-  Redirect::to($abs_us_root.$us_url_root.'index.php');
+  Redirect::to($us_url_root.'index.php');
 }
 
 if (Input::exists()) {
