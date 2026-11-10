@@ -291,6 +291,12 @@ if (Input::get('action') === 'write_claudemd') {
 
 <div class="content mt-3">
   <div class="aip">
+    <?php if (file_exists($abs_us_root . $us_url_root . 'users/helpers/ai_prompts.php')) { ?>
+      <div class="alert alert-info" role="status">
+        <strong>AI Prompts is now built into UserSpice.</strong> The prompts live in <code>users/ai/</code> and are kept current by UserSpice updates. Manage them on the
+        <a href="<?= $us_url_root ?>users/admin.php?view=ai">AI Assistants</a> page (Tools), copy your custom prompts to <code>usersc/ai/</code> there, then uninstall this plugin.
+      </div>
+    <?php } ?>
 
     <!-- Hero -->
     <div class="aip-hero">
