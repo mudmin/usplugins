@@ -4,9 +4,10 @@
 if(!empty($_POST) && $send_method == "one_user"){
     $send_to = [];
 
-    $to = $db->query("SELECT id FROM users WHERE active = 1")->results();
-    foreach($to as $t){
-        $send_to[] = $t->id;
+    //send only to the selected user, and only if that user is active
+    $toId = (int)Input::get('send_to_user');
+    if($toId > 0 && $db->query("SELECT id FROM users WHERE id = ? AND active = 1",[$toId])->count() > 0){
+        $send_to[] = $toId;
     }
 }
 

@@ -24,11 +24,6 @@ if (!isset($user) || !$user->isLoggedIn()) {
 
 			if (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir'))
 				include($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir');
-
-			if (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script'))
-				include($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script');
-
-			Redirect::to($us_url_root.$settings->redirect_uri_after_login);
 		} else {
 			$checkUn  = $db->query("SELECT id FROM users WHERE username = ?",[$steamprofile['personaname']])->count();
 			$username = $steamprofile['personaname'];
@@ -66,12 +61,26 @@ if (!isset($user) || !$user->isLoggedIn()) {
 
 				$db->insert('user_permission_matches',$fields);
 				include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
-				Redirect::to($us_url_root.$settings->redirect_uri_after_login);
 			} else {
 				$_SESSION = [];
 				Redirect::to($us_url_root.'users/login.php?msg=There+was+a+problem+with+your+Steam+login');
 			}
 		}
+
+		// Logged in. Go to the page captured before login (session only), else the default.
+		$user = new User();
+		$dest = function_exists('consumeLoginDest') ? consumeLoginDest() : '';
+		unset($_SESSION['redirect'], $_SESSION['dest']);
+		$successHooks = getMyHooks(['page' => 'loginSuccess']);
+		includeHook($successHooks, 'body');
+
+		if (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php'))
+			require_once $abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php';
+
+		$redirectMethod = method_exists('Redirect', 'sanitized') ? 'sanitized' : 'to';
+		if ($dest !== '')
+			Redirect::$redirectMethod($dest);
+		Redirect::$redirectMethod($us_url_root.$settings->redirect_uri_after_login);
 	}
 } else
 	Redirect::to($us_url_root."users/account.php");

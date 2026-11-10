@@ -2,7 +2,8 @@
 require_once "../../../../../users/init.php";
 global $user, $db;
 
-if(!Token::check(Input::get('csrf'))){
+//this changes message state, so it only accepts a POST with a valid token
+if($_SERVER['REQUEST_METHOD'] !== 'POST' || !Token::check(Input::get('csrf'))){
   echo json_encode(["success"=>false,"msg"=>"Invalid token"]);die;
 }
 

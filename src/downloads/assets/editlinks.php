@@ -27,7 +27,7 @@ if(!empty($_POST['enableMe'])){
 
 if(!empty($_POST['updatelink'])){
   $fields = array(
-    'file'=>$link->id,
+    'file'=>$link->file,
     'folder'=>$link->folder,
     'user'=>Input::get('user'),
     'perms'=>Input::get('perms'),

@@ -3,12 +3,13 @@
 <?php
 include "plugin_info.php";
 pluginActive($plugin_name);
- if(!empty($_POST['plugin_downloads'])){
-   $token = $_POST['csrf'];
+ //every POST handled by this page and its views (home, files, links, createlink, editlinks) needs a valid token
+ if(!empty($_POST)){
+   $token = Input::get('csrf');
 if(!Token::check($token)){
   include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
+  die();
 }
-   // Redirect::to('admin.php?err=I+agree!!!');
  }
  $token = Token::generate();
 

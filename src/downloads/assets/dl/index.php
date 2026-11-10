@@ -39,12 +39,15 @@ if($resp['success'] != true){
   die("<h1 align='center'>".$resp['msg']."</h1>");
 }
 
-// Security Hardening: Ensure file is confined to the specific downloads folder
-$downloadFolder = $abs_us_root . $us_url_root . "usersc/plugins/downloads/files/";
-$safeFile = basename($resp['location']); 
-$path = $downloadFolder . $safeFile;
+// Serve the stored relative path (subfolders included) and confirm it resolves inside the files folder
+$downloadFolder = realpath($abs_us_root . $us_url_root . "usersc/plugins/downloads/files");
+$relPath = ltrim(str_replace('\\', '/', (string)$resp['location']), '/');
+$path = false;
+if ($downloadFolder !== false && $relPath !== '' && strpos($relPath, "\0") === false) {
+    $path = realpath($downloadFolder . DIRECTORY_SEPARATOR . $relPath);
+}
 
-if (!empty($safeFile) && file_exists($path) && is_file($path)) {
+if ($path !== false && strpos($path, $downloadFolder . DIRECTORY_SEPARATOR) === 0 && is_file($path)) {
     $mime_type = mime_content_type($path);
     $fileSize = filesize($path);
 

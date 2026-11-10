@@ -240,7 +240,8 @@ if(!function_exists('quickCrud')) {
             key: $(this).attr("data-key"),
             row: $(this).attr("data-row"),
             method: $(this).attr("data-method"),
-            table: "<?=$table?>"
+            table: "<?=$table?>",
+            csrf: "<?=Token::generate()?>"
            })
         		.done(function( data ) {
             			if(data != ""){alert(data);}
@@ -254,7 +255,8 @@ if(!function_exists('quickCrud')) {
           var formData = {
             row: $(this).attr("data-row"),
             method: $(this).attr("data-method"),
-            table: "<?=$table?>"
+            table: "<?=$table?>",
+            csrf: "<?=Token::generate()?>"
           };
           $.ajax({
             type 		: 'POST',
@@ -277,7 +279,8 @@ if(!function_exists('quickCrud')) {
           var formData = {
             data: $("#form<?=$formNumber?>").serialize(),
             method: "insert",
-            table: "<?=$table?>"
+            table: "<?=$table?>",
+            csrf: "<?=Token::generate()?>"
           };
           $.ajax({
             type 		: 'POST',

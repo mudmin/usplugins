@@ -21,7 +21,7 @@ if(!empty($_POST['delTheseLinks'])){
   $delMe = Input::get('delMe');
   if(is_array($delMe)){
     foreach($delMe as $d){
-      $db->query("DELETE FROM plg_download_links WHERE id = ?",[$d]);
+      $db->query("DELETE FROM plg_download_links WHERE id = ?",[(int)$d]);
     }
   }else{
     $db->query("DELETE FROM plg_download_links WHERE id = ?",[$delMe]);
@@ -141,7 +141,7 @@ if (!isset($GLOBALS['userspice_nonce'])) {
               </td>
               <td><?=bin($l->disabled);?></td>
               <td>
-                <input type="checkbox" class="delMe" name="delMe" value="<?=$l->id?>">
+                <input type="checkbox" class="delMe" name="delMe[]" value="<?=$l->id?>">
               </td>
               <td>
                 <a name="button" href="admin.php?view=plugins_config&plugin=downloads&v=editlinks&folder=<?=$folder?>&submit=Go&link=<?=$l->id?>" class="btn btn-primary">Edit</button>

@@ -62,14 +62,57 @@ function checkSpicePressSession($code){
 }
 
 //we're going through the urls in the db and looking for a valid one
+//a match needs the same scheme, host and port, and the path has to sit at or under the authorized path
 function verifyReturnUrl($url){
   global $db;
+  $req = spicePressParseUrl($url);
+  if($req === false){
+    return false;
+  }
   $list = $db->query("SELECT * FROM plg_spicepress_authorized_urls")->results();
   foreach($list as $l){
-      if (strpos($url, $l->url) !== false) {
-        return true;
-      }
+    $auth = spicePressParseUrl(trim((string)$l->url));
+    if($auth === false){
+      continue;
+    }
+    if($req['scheme'] !== $auth['scheme'] || $req['host'] !== $auth['host'] || $req['port'] !== $auth['port']){
+      continue;
+    }
+    $authPath = rtrim($auth['path'], '/');
+    if($authPath === '' || $req['path'] === $authPath || strpos($req['path'], $authPath.'/') === 0){
+      return true;
+    }
   }
   //finished searching all urls without a match, so return false
   return false;
+}
+
+//splits an absolute url into lowercase scheme and host, port (default filled in) and path
+//returns false for relative urls, urls with userinfo, or urls with backslashes, whitespace or control characters
+function spicePressParseUrl($url){
+  if(!is_string($url) || $url === '' || preg_match('/[\\\\\s\x00-\x1f\x7f]/', $url)){
+    return false;
+  }
+  $parts = parse_url($url);
+  if($parts === false || empty($parts['scheme']) || empty($parts['host'])){
+    return false;
+  }
+  if(isset($parts['user']) || isset($parts['pass'])){
+    return false;
+  }
+  $scheme = strtolower($parts['scheme']);
+  $defaults = ['http'=>80, 'https'=>443];
+  if(isset($parts['port'])){
+    $port = (int)$parts['port'];
+  }elseif(isset($defaults[$scheme])){
+    $port = $defaults[$scheme];
+  }else{
+    $port = null;
+  }
+  return [
+    'scheme' => $scheme,
+    'host'   => strtolower($parts['host']),
+    'port'   => $port,
+    'path'   => isset($parts['path']) && $parts['path'] !== '' ? $parts['path'] : '/',
+  ];
 }

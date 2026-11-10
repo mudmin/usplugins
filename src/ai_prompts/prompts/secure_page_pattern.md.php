@@ -209,7 +209,8 @@ If you write any of these patterns the "raw PHP" way, your code is wrong:
 |---|---|---|
 | `$_POST['x']` / `$_GET['x']` | `Input::get('x')` | Trims + escapes, recursively sanitizes arrays |
 | `$_SERVER['HTTP_HOST']` | `Server::get('HTTP_HOST')` | Type-checked, sanitized, works in CLI |
-| `$_SERVER['REMOTE_ADDR']` | `Server::getClientIp($trustedProxies)` | Proxy-aware, only honors forwarded headers from trusted CIDRs |
+| `$_SERVER['REMOTE_ADDR']` | `ipCheck()` for logs, rate limits, bans; `ClientIP::peer()` for an IP allowlist that is the only gate | `ipCheck()` resolves the visitor through the trusted proxies in Admin → Proxy & CDN; `peer()` is the raw connection, never header-derived |
+| `$_SERVER['HTTPS']` / `$ip === '127.0.0.1'` | `ClientIP::isHttps()` / `ClientIP::isLocal()` | Correct behind a TLS-terminating proxy, same-server proxy, or Cloudflare Tunnel |
 | `htmlspecialchars($v)` | `safeReturn($v)` | Same escaping + understood by the Psalm taint analyzer |
 | In JS: `<?= json_encode($v) ?>` | `<?= safeJsonEncodeForJs($v) ?>` | Escapes `<`, `>`, `&`, `'`, `"` so it can't break out of the script tag |
 | `header('Location: ' . $_GET['next'])` | `Redirect::sanitized(Input::get('next'), null, 302, ['same_origin' => true])` | Strips CRLF, blocks `//evil.com` and `javascript:` |
@@ -464,12 +465,12 @@ Every login, registration, password-reset, 2FA-verify, and "expensive write" end
 
 ```php
 $rl = new RateLimit();
-if (!$rl->check('login', ['ip' => Server::getClientIp(), 'email' => $email])) {
+if (!$rl->check('login', ['ip' => ipCheck(), 'email' => $email])) {
     http_response_code(429);
     die('Too many attempts. Try again later.');
 }
 // ...attempt the auth...
-$rl->record('login', ['ip' => Server::getClientIp(), 'email' => $email], $success);
+$rl->record('login', ['ip' => ipCheck(), 'email' => $email], $success);
 ```
 
 Limits are configured per-action in `usersc/includes/rate_limits.php`. The class sanitizes identifiers internally — don't pre-clean them.
@@ -478,27 +479,40 @@ The default action names that ship with limits configured: `login`, `register`, 
 
 ---
 
-## Server::getClientIp and trusted proxies
+## Client IP, local requests, and HTTPS behind proxies
 
-`$_SERVER['REMOTE_ADDR']` is the IP of whatever immediately connected to the web server. Behind a load balancer, CDN, or reverse proxy (Cloudflare, Nginx, Traefik, ELB), that's *the proxy*, not the actual user. The real client IP is in a forwarded header like `X-Forwarded-For` — but you can only trust that header if it came from a proxy *you control*. Otherwise any visitor can spoof their IP by sending the header themselves.
+`$_SERVER['REMOTE_ADDR']` is the IP of whatever immediately connected to the web server. Behind a load balancer, CDN, or reverse proxy (Cloudflare, Nginx, Traefik, ELB), that's *the proxy*, not the actual user. The real client IP is in a forwarded header like `X-Forwarded-For` or `CF-Connecting-IP` — but you can only trust that header if it came from a proxy *you control*. Otherwise any visitor can spoof their IP by sending the header themselves.
 
-`Server::getClientIp($trustedProxyCidrs)` does the right thing:
+UserSpice resolves this once, in the `ClientIP` class, using the trusted proxies configured in **Admin → Proxy & CDN** (`users/admin.php?view=proxy`, or `usersc/includes/trusted_proxies.php`). Don't pass proxy CIDRs around in page code. Pick the call by what the IP is *for*:
+
+| Need | Use | Why |
+|---|---|---|
+| Logging, audit rows, rate limits, bans | `ipCheck()` (same as `ClientIP::get()`) | The resolved visitor. Forwarded headers count only from a configured trusted proxy. |
+| An IP allowlist that is the only gate (cron or webhook endpoint, admin-by-IP) | `ClientIP::peer()` | The raw connection address, never header-derived, so it can't be spoofed with a header. |
+| An IP allowlist that is a second check on top of a secret (e.g. a signed webhook) | `ipCheck()` | The secret is the real gate; the resolved IP keeps the check working behind a CDN. |
+| "Is this request from this machine?" | `ClientIP::isLocal()` | True for CLI, or a loopback connection with no forwarding headers and a localhost Host. |
+| "Is this request HTTPS?" | `ClientIP::isHttps()` | Honors `X-Forwarded-Proto` only from a trusted proxy. |
 
 ```php
-// No proxies at all — direct-to-PHP server
-$ip = Server::getClientIp();   // returns REMOTE_ADDR
+// An allowlist that is the only gate: compare the connection, not a header
+$allowed = ['203.0.113.10'];
+if (!ClientIP::isLocal() && !in_array(ClientIP::peer(), $allowed, true)) {
+    http_response_code(403);
+    die('Forbidden');
+}
 
-// You sit behind Cloudflare. Pass Cloudflare's CIDRs as trusted.
-$cloudflare = ['173.245.48.0/20', '103.21.244.0/22', '...etc']; // from cloudflare.com/ips
-$ip = Server::getClientIp($cloudflare);
-// If REMOTE_ADDR matches one of those CIDRs, the function honors X-Forwarded-For;
-// otherwise it falls back to REMOTE_ADDR. Spoofed forwarded headers from random
-// internet IPs are ignored.
+// Require HTTPS, including behind Cloudflare or a load balancer that terminates TLS
+if (!ClientIP::isHttps() && !ClientIP::isLocal()) {
+    http_response_code(403);
+    die('HTTPS required');
+}
 ```
 
-Same `$trustedProxyCidrs` argument works for `Server::getScheme()` (returns `'http'`/`'https'`, honors `X-Forwarded-Proto` from trusted proxies), `Server::getHost()`, and `Server::getOrigin()`. Use these instead of `$_SERVER['HTTPS']` and `$_SERVER['HTTP_HOST']` — they're proxy-aware and CLI-safe (cron jobs work).
+Never compare an IP to `'127.0.0.1'` or `'::1'` to decide a request is local or trusted. Behind a same-server proxy (Nginx in front of Apache or PHP-FPM) or a Cloudflare Tunnel, *every* visitor arrives from 127.0.0.1. Use `ClientIP::isLocal()`. For dev hostnames other than `localhost`, add `define('US_LOCAL_HOSTS', ['mysite.test']);` to `users/init.php`.
 
-If you don't pass any CIDRs, the helpers fall back to the raw `$_SERVER` values without honoring any forwarded headers. That's the safe default.
+Don't read `$_SERVER['HTTPS']` directly either: it's empty when a proxy terminates TLS (Cloudflare Flexible SSL, a load balancer), so the check rejects every real visitor. `Server::getHost()` and `Server::getOrigin()` are still the way to read the host and origin.
+
+`ClientIP` exists from UserSpice 6.1.6; `isLocal()` and `isHttps()` from 6.1.8. Code that must run on older cores should check `method_exists('ClientIP', 'isLocal')` first. `Server::getClientIp()` still works but is legacy; use `ipCheck()`.
 
 ---
 

@@ -53,8 +53,8 @@ if($ldapconn) {
                 $lookupC = $lookupQ->count();
         if($lookupC > 0){
             $lookup = $lookupQ->first();
-            $user = new User;
             Session::put($sessionName, $lookup->id);
+            $user = new User;
             $fields = array(
             'fname' => Input::sanitize($data[0]["givenname"][0]),
             'lname' => Input::sanitize($data[0]["sn"][0])
@@ -89,15 +89,22 @@ if($ldapconn) {
             
 
             $_SESSION['ldaplogin'] = 1;
+            // Page captured before login (session only; never from the request)
+            $dest = function_exists('consumeLoginDest') ? consumeLoginDest() : '';
+            unset($_SESSION['redirect'], $_SESSION['dest']);
             $hooks = getMyHooks(['page'=>'loginSuccess']);
             includeHook($hooks,'body'); //Allow for other hooks like 2 Factor Authentication
             if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir')){
             include($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script_no_redir');
             }
-            if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script')){
-            include($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script');
+            if(file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')){
+            require_once $abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php';
             }
-            Redirect::to($us_url_root.'users/account.php');
+            $redirectMethod = method_exists('Redirect', 'sanitized') ? 'sanitized' : 'to';
+            if($dest !== ''){
+            Redirect::$redirectMethod($dest);
+            }
+            Redirect::$redirectMethod($us_url_root.'users/account.php');
         }else {
             $checkUn = $db->query("SELECT id FROM users WHERE email = ?",[$email])->count();
             if($checkUn < 1){
@@ -122,8 +129,8 @@ if($ldapconn) {
             );
             $db->insert('users',$fields);
             $theNewId = $db->lastId();
-            $user = new User;
             Session::put($sessionName, $theNewId);
+            $user = new User;
             
             $fields = array(
             'user_id'=>$theNewId,
@@ -143,10 +150,19 @@ if($ldapconn) {
                 }
             }
             include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
+            $_SESSION['ldaplogin'] = 1;
+            $dest = function_exists('consumeLoginDest') ? consumeLoginDest() : '';
+            unset($_SESSION['redirect'], $_SESSION['dest']);
+            $hooks = getMyHooks(['page'=>'loginSuccess']);
+            includeHook($hooks,'body');
             if (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
             require_once $abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php';
             }
-            Redirect::to($us_url_root.'users/joinThankYou.php');
+            $redirectMethod = method_exists('Redirect', 'sanitized') ? 'sanitized' : 'to';
+            if($dest !== ''){
+            Redirect::$redirectMethod($dest);
+            }
+            Redirect::$redirectMethod($us_url_root.'users/joinThankYou.php');
         }
 
         }

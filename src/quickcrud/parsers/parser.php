@@ -13,6 +13,14 @@ if(!function_exists('quickCrudHasPerm') || !quickCrudHasPerm()){
 $method = Input::get('method');
 $table = Input::get('table');
 
+//every method changes data, so require a POST with a valid token
+if($_SERVER['REQUEST_METHOD'] !== 'POST' || !Token::check(Input::get('csrf'))){
+  if($method == 'update'){
+    echo "Invalid token. Reload the page and try again."; die;
+  }
+  echo json_encode(['reload'=>false,'msg'=>'Invalid token. Reload the page and try again.']);die;
+}
+
 if(!quickCrudTableExists($table)){
   if($method == 'update'){
     echo "Unknown table."; die;

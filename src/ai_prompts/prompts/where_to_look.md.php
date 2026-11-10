@@ -69,7 +69,8 @@ All live in `users/classes/` and are autoloaded.
 |---|---|
 | Database | `$db` (global) → `query`, `results`, `first`, `count`, `lastId`, `findAll`, `findById`, `get`, `cell`, `insert`, `update`, `delete`, `deleteById`, `tableExists`, `columnExists`, `addColumn`, `addIndex`, `beginTransaction`, `commit`, `rollBack` |
 | User input | `Input::get`, `Input::exists`, `Input::sanitize` |
-| Server vars | `Server::get`, `Server::getClientIp`, `Server::getHost`, `Server::getOrigin` |
+| Server vars | `Server::get`, `Server::getHost`, `Server::getOrigin` |
+| Client IP and proxies | `ipCheck()` (logs, rate limits), `ClientIP::peer` (allowlists), `ClientIP::isLocal`, `ClientIP::isHttps` |
 | CSRF | `Token::generate`, `Token::check` |
 | Sessions | `Session::put`, `Session::get`, `Session::flash`, `Session::delete`, `Session::exists` |
 | Cookies | `Cookie::get`, `Cookie::put`, `Cookie::delete`, `Cookie::exists` |

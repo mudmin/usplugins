@@ -55,32 +55,24 @@ if(!empty($_POST['email'])){
       $try = authenticatePasswordlessEmail($pwl);
       if($try){
         $user = new User();
+        # page captured before login (session only; never from the request)
+        $dest = function_exists('consumeLoginDest') ? consumeLoginDest() : '';
+        unset($_SESSION['redirect'], $_SESSION['dest']);
         $hooks =  getMyHooks(['page'=>'loginSuccess']);
         includeHook($hooks,'body');
-        $dest = sanitizedDest('dest');
-        # if user was attempting to get to a page before login, go there
         $_SESSION['last_confirm']=date("Y-m-d H:i:s");
 
-        if (!empty($dest)) {
-          $redirect=html_entity_decode(Input::get('redirect'));
-          if(!empty($redirect) || $redirect!==''){
-
-            Redirect::to($redirect);
-          } else {
-
-            Redirect::to($dest);
-          }
-        } elseif (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
-
-          # if site has custom login script, use it
-          # Note that the custom_login_script.php normally contains a Redirect::to() call
+        # custom_login_script.php normally redirects on its own
+        if (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
           require_once $abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php';
-        } else {
-          if (($dest = Config::get('homepage')) ||
-          ($dest = 'account.php')) {
-            Redirect::to($dest);
-          }
         }
+        if ($dest !== '') {
+          if (method_exists('Redirect', 'sanitized')) {
+            Redirect::sanitized($dest);
+          }
+          Redirect::to($dest);
+        }
+        Redirect::to(Config::get('homepage') ?: 'account.php');
 
       } else {
         $eventhooks =  getMyHooks(['page'=>'loginFail']);
